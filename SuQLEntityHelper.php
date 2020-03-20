@@ -7,4 +7,9 @@ class SuQLEntityHelper
 			|| ord($ch) >= 97 && ord($ch) <= 122
 			|| $ch === '_';
 	}
+
+	public static function isS($ch)
+	{
+		return in_array(ord($ch), [32, 13, 10]);
+	}
 }
