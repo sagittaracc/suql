@@ -8,14 +8,23 @@
 require('SuQL.php');
 $sql = "
   users {
-    id@_id,
-    name
-  } ~ _id = 2 and (name = ?)
-  [id <-- group_id]
+    id@uid,
+    name@uname
+  } ~ uid between 1 and 3 and uid <> 2
+
+  [uid --> user_id]
+
+  user_group {
+    *,
+    group_id@ug_gi
+  } ~ ug_gi <> 2
+
+  [group_id --> gid]
+
   groups {
-    id,
-    group_id@gid
-  };
+    id@gid,
+    name@gname
+  } ~ gname = 'admin';
 ";
 $tmp = (new SuQL($sql))->pureSQL();
 ?>

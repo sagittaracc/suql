@@ -23,9 +23,19 @@ class SuQLEntityHelper
 		return $ch === '>' || $ch === '<' || $ch === '=';
 	}
 
+	public static function isJoinEntitySymbol($ch)
+	{
+		return $ch === '>' || $ch === '<' || $ch === '-';
+	}
+
 	public static function isPlaceholderSymbol($ch)
 	{
 		return $ch === '?';
+	}
+
+	public static function isQuote($ch)
+	{
+		return $ch === '\'' || $ch === '"';
 	}
 
 	public static function isWhereClausePossibleSymbol($ch)
@@ -34,6 +44,14 @@ class SuQLEntityHelper
 				|| self::isS($ch)
 				|| self::isParentheses($ch)
 				|| self::isComparisonSymbol($ch)
-				|| self::isPlaceholderSymbol($ch);
+				|| self::isPlaceholderSymbol($ch)
+				|| self::isQuote($ch);
+	}
+
+	public static function isJoinClausePossibleSymbol($ch)
+	{
+		return self::isI($ch)
+				|| self::isS($ch)
+				|| self::isJoinEntitySymbol($ch);
 	}
 }
