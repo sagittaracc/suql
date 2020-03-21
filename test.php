@@ -1,14 +1,21 @@
 <?php
+/*
+ * Примечания
+ * 1. В Where clause обращения к полям должно быть по алиасам.
+ *    Так как в select clause будут выполнятся некоторые функциональные
+ *    преобразования столбов.
+ */
 require('SuQL.php');
 $sql = "
-  #t1 = users
-  {
+  users {
     id@_id,
-    name@_name,
-    surname@_surname
-  } ~ id = ? and (name = ? or surname = ?);
-
-  t1{*};
+    name
+  } ~ _id = 2 and (name = ?)
+  [id <-- group_id]
+  groups {
+    id,
+    group_id@gid
+  };
 ";
 $tmp = (new SuQL($sql))->pureSQL();
 ?>

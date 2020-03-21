@@ -107,8 +107,9 @@ class SuQL
 						else throw new Exception($i);
 						break;
 					case 'where_clause':
-						if ($this->tm->ch === ';') $this->tm->go('0');
-						else $this->tm->stay('where_clause');
+						if (SuQLEntityHelper::isWhereClausePossibleSymbol($this->tm->ch)) $this->tm->stay('where_clause');
+						else if ($this->tm->ch === ';') $this->tm->go('0');
+						else throw new Exception($i);
 						break;
 				}
 			}

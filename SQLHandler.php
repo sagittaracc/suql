@@ -1,7 +1,7 @@
 <?php
 class SQLHandler
 {
-  protected function buildField($name, $alias = null) {
-    return $name . ( $alias ? " as $alias" : '');
+  protected function buildField($table, $field, $alias = null) {
+    return ($table ? "$table." : '') . $field . ($alias ? " as $alias" : '');
   }
 }
