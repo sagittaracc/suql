@@ -12,15 +12,24 @@ class SuQL
 	private $tm = null;
 	private $SQLBuilder = null;
 
+	private $error = null;
+
 	function __construct($suql)
 	{
 		$this->suql = trim($suql);
 	}
 
+	public function getError()
+	{
+		return $this->error;
+	}
+
 	public function pureSQL()
 	{
-		return $this->interpret()
-								->buildSQL();
+		if ($this->interpret())
+			return $this->buildSQL();
+
+		return false;
 	}
 
 	private function interpret()
@@ -155,10 +164,11 @@ class SuQL
 				}
 			}
 		} catch (Exception $e) {
-			SuQLLog::error($this->suql, $e->getMessage());
+			$this->error = SuQLLog::error($this->suql, $e->getMessage());
+			return false;
 		}
 
-		return $this;
+		return true;
 	}
 
 	private function buildSQL()

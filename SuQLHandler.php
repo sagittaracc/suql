@@ -92,7 +92,7 @@ class SuQLHandler extends SQLHandler
 	}
 
 	public function TM_GO_where_clause_end($ch) {
-		$this->osuql['queries'][$this->query]['where'][] = $this->stringBuffer1;
+		$this->osuql['queries'][$this->query]['where'][] = trim($this->stringBuffer1);
 		$this->stringBuffer1 = '';
 	}
 

@@ -1,4 +1,9 @@
 <?php
+
+function dump($var) {
+?><pre><?php print_r($var); ?></pre><?php
+}
+
 /*
  * Примечания
  * 1. В Where clause обращения к полям должно быть по алиасам.
@@ -26,8 +31,12 @@ $sql = "
     name@gname
   } ~ gname = 'admin';
 ";
-$tmp = (new SuQL($sql))->pureSQL();
-?>
-<pre>
-<?php print_r($tmp); ?>
-</pre>
+
+$suql = new SuQL($sql);
+
+$tmp = $suql->pureSQL();
+
+if (!$tmp)
+  echo $suql->getError();
+else
+  dump($tmp);

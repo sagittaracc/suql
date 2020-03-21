@@ -3,7 +3,7 @@ class SuQLLog
 {
   public static function error($suql, $index)
   {
-    die(
+    return (
       "<p style='font-family: courier;'>".
         substr($suql, 0, $index).
         "<span style='color: white; font-weight: bold; background: red;'>".
