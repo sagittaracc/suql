@@ -1,10 +1,14 @@
 <?php
 require('SuQL.php');
 $sql = "
-  users {
-    id,
-    name@_name
-  };
+  #t1 = users
+  {
+    id@_id,
+    name@_name,
+    surname@_surname
+  } ~ id = ? and (name = ? or surname = ?);
+
+  t1{*};
 ";
 $tmp = (new SuQL($sql))->pureSQL();
 ?>

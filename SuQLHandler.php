@@ -14,7 +14,7 @@ class SuQLHandler extends SQLHandler
 	function __construct() {
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
-		$this->canonicalQuery = ['select' => [], 'from' => null];
+		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => ''];
 		$this->query = 'main';
 		$this->osuql['queries'][$this->query] = $this->canonicalQuery;
 	}
@@ -46,7 +46,7 @@ class SuQLHandler extends SQLHandler
 	}
 
 	public function TM_GO_new_select($ch) {
-		$this->osuql['queries'][$this->query]['from'] = $this->buildField($this->stringBuffer1);
+		$this->osuql['queries'][$this->query]['from'] = $this->stringBuffer1;
 		$this->stringBuffer1 = '';
 	}
 
@@ -59,14 +59,14 @@ class SuQLHandler extends SQLHandler
 	}
 
 	public function TM_GO_new_field($ch) {
-		$this->osuql['queries'][$this->query]['select'][] = $this->buildField($this->stringBuffer1, $this->stringBuffer2);
+		$this->osuql['queries'][$this->query]['select'][$this->stringBuffer1] = $this->stringBuffer2;
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 	}
 
 	public function TM_GO_select_end($ch) {
 		if ($this->stringBuffer1)
-			$this->osuql['queries'][$this->query]['select'][] = $this->buildField($this->stringBuffer1, $this->stringBuffer2);
+			$this->osuql['queries'][$this->query]['select'][$this->stringBuffer1] = $this->stringBuffer2;
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 	}
@@ -77,5 +77,9 @@ class SuQLHandler extends SQLHandler
 
 	public function TM_STAY_field_alias($ch) {
 		$this->stringBuffer2 .= $ch;
+	}
+
+	public function TM_STAY_where_clause($ch) {
+		$this->osuql['queries'][$this->query]['where'] .= $ch;
 	}
 }

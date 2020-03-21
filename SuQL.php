@@ -73,7 +73,9 @@ class SuQL
 						else throw new Exception($i);
 						break;
 					case 'select_end':
-						if ($this->tm->ch === ';') $this->tm->go('0');
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === '~') $this->tm->go('where_clause');
+						else if ($this->tm->ch === ';') $this->tm->go('0');
 						else throw new Exception($i);
 						break;
 					case 'new_field_expects':
@@ -103,6 +105,10 @@ class SuQL
 						else if ($this->tm->ch === ',') $this->tm->go('new_field');
 						else if ($this->tm->ch === '}') $this->tm->go('select_end');
 						else throw new Exception($i);
+						break;
+					case 'where_clause':
+						if ($this->tm->ch === ';') $this->tm->go('0');
+						else $this->tm->stay('where_clause');
 						break;
 				}
 			}
