@@ -3,21 +3,21 @@ require('TuringMachine.php');
 require('SuQLHandler.php');
 require('SuQLEntityHelper.php');
 require('SuQLLog.php');
+require('SQLBuilder.php');
 
 class SuQL
 {
 	private $suql = null;
-	private $params = [];
 
 	private $tm = null;
+	private $SQLBuilder = null;
 
-	function __construct($suql, $params)
+	function __construct($suql)
 	{
 		$this->suql = trim($suql);
-		$this->params = $params;
 	}
 
-	public function execute()
+	public function pureSQL()
 	{
 		return $this->interpret()
 								->buildSQL();
@@ -66,18 +66,42 @@ class SuQL
 						break;
 					case 'field':
 						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->stay('field');
-						else if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_field_expects');
 						else if ($this->tm->ch === ',') $this->tm->go('new_field');
 						else if ($this->tm->ch === '}') $this->tm->go('select_end');
+						else if ($this->tm->ch === '@') $this->tm->go('field_alias_expects');
 						else throw new Exception($i);
 						break;
 					case 'select_end':
 						if ($this->tm->ch === ';') $this->tm->go('0');
 						else throw new Exception($i);
 						break;
+					case 'new_field_expects':
+						if ($this->tm->ch === ',') $this->tm->go('new_field');
+						else if ($this->tm->ch === '}') $this->tm->go('select_end');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else throw new Exception($i);
+						break;
 					case 'new_field':
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('field');
+						else throw new Exception($i);
+						break;
+					case 'field_alias_expects':
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('field_alias');
+						else throw new Exception($i);
+						break;
+					case 'field_alias':
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->stay('field_alias');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_aliased_field_expects');
+						else if ($this->tm->ch === ',') $this->tm->go('new_field');
+						else if ($this->tm->ch === '}') $this->tm->go('select_end');
+						else throw new Exception($i);
+						break;
+					case 'new_aliased_field_expects':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === ',') $this->tm->go('new_field');
+						else if ($this->tm->ch === '}') $this->tm->go('select_end');
 						else throw new Exception($i);
 						break;
 				}
@@ -91,6 +115,8 @@ class SuQL
 
 	private function buildSQL()
 	{
-		return $this->tm->output();
+		$this->SQLBuilder = new SQLBuilder($this->tm->output());
+		$this->SQLBuilder->run();
+		return $this->SQLBuilder->getSql();
 	}
 }

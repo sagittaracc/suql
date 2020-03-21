@@ -1,11 +1,12 @@
 <?php
 require('SuQL.php');
 $sql = "
-  #t1 = users { * };
-  #t2 = t1{ id, name };
-  t2{ id };
+  users {
+    id,
+    name@_name
+  };
 ";
-$tmp = (new SuQL($sql, [1]))->execute();
+$tmp = (new SuQL($sql))->pureSQL();
 ?>
 <pre>
 <?php print_r($tmp); ?>
