@@ -12,11 +12,15 @@ function dump($var) {
  */
 require('SuQL.php');
 $sql = "
-  users{
-    name,
-    name@count.group.count.desc,
-    surname@count1.group.count.asc
-  } ~ name = 'yuriy';
+  users { id@uid }
+
+  [uid <--> user_id]
+
+  user_group {}
+
+  [group_id <--> gid]
+  
+  groups { id@gid, name, name@count.group.count };
 ";
 
 $suql = new SuQL($sql);
