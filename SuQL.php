@@ -113,6 +113,41 @@ class SuQL
 						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_aliased_field_expects');
 						else if ($this->tm->ch === ',') $this->tm->go('new_field');
 						else if ($this->tm->ch === '}') $this->tm->go('select_end');
+						else if ($this->tm->ch === '.') $this->tm->go('field_modifier');
+						else throw new Exception($i);
+						break;
+					case 'field_modifier':
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->stay('field_modifier');
+						else if ($this->tm->ch === ',') {
+							$this->tm->go('field_modifier');
+							$this->tm->go('apply_field_modifiers');
+						}
+						else if ($this->tm->ch === '}') {
+							$this->tm->go('field_modifier');
+							$this->tm->go('apply_field_modifiers');
+						}
+						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_field_modifier_expects');
+						else if ($this->tm->ch === '.') $this->tm->go('field_modifier');
+						else throw new Exception($i);
+						break;
+					case 'new_field_modifier_expects':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === ',') {
+							$this->tm->go('field_modifier');
+							$this->tm->go('apply_field_modifiers');
+						}
+						else if ($this->tm->ch === '}') {
+							$this->tm->go('field_modifier');
+							$this->tm->go('apply_field_modifiers');
+						}
+						else throw new Exception($i);
+						break;
+					case 'apply_field_modifiers':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('field');
+						else if ($this->tm->ch === ';') $this->tm->go('0');
+						else if ($this->tm->ch === '~') $this->tm->go('where_clause');
+						else if ($this->tm->ch === '[') $this->tm->go('join_clause');
 						else throw new Exception($i);
 						break;
 					case 'new_aliased_field_expects':

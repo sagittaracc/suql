@@ -5,9 +5,11 @@ class SuQLHandler extends SQLHandler
 {
 	private $stringBuffer1;
 	private $stringBuffer2;
+	private $stringBuffer3;
+	private $arrayBuffer1;
 	private $canonicalQuery;
 	private $osuql = [
-		'queries' => []
+		'queries' => [],
 	];
 	private $query;
 	private $table;
@@ -19,7 +21,9 @@ class SuQLHandler extends SQLHandler
 	function __construct() {
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
-		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'join' => []];
+		$this->stringBuffer3 = '';
+		$this->arrayBuffer1 = [];
+		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'join' => [], 'group' => [], 'order' => []];
 		$this->query = 'main';
 		$this->table = null;
 		$this->osuql['queries'][$this->query] = $this->canonicalQuery;
@@ -120,5 +124,48 @@ class SuQLHandler extends SQLHandler
 		$this->table = $this->stringBuffer2;
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
+	}
+
+	public function TM_GO_field_modifier($ch) {
+		if ($this->stringBuffer3)
+			$this->arrayBuffer1[] = $this->stringBuffer3;
+
+		$this->stringBuffer3 = '';
+	}
+
+	public function TM_STAY_field_modifier($ch) {
+		$this->stringBuffer3 .= $ch;
+	}
+
+	public function TM_GO_apply_field_modifiers($ch) {
+		foreach ($this->arrayBuffer1 as $modifier) {
+			$modifier_handler = "mod_$modifier";
+			if (method_exists($this, $modifier_handler))
+				$this->$modifier_handler($this->table, $this->stringBuffer1, $this->stringBuffer2);
+		}
+
+		$this->stringBuffer1 = '';
+		$this->stringBuffer2 = '';
+		$this->arrayBuffer1 = [];
+	}
+
+	private function mod_group($table, $field, $alias) {
+		$this->osuql['queries'][$this->query]['group'][] = $this->buildField($table, $field);
+	}
+
+	private function mod_count($table, $field, $alias) {
+		$this->osuql['queries'][$this->query]['select'][$this->buildField($table, $field, null, 'count')] = $alias;
+	}
+
+	private function mod_desc($table, $field, $alias) {
+		$this->osuql['queries'][$this->query]['order'][] = $this->buildOrderExpression($table, $field, 'desc');
+	}
+
+	private function mod_asc($table, $field, $alias) {
+		$this->osuql['queries'][$this->query]['order'][] = $this->buildOrderExpression($table, $field, 'asc');
+	}
+
+	private function mod_max($table, $field, $alias) {
+		$this->osuql['queries'][$this->query]['select'][$this->buildField($table, $field, null, 'max')] = $alias;
 	}
 }
