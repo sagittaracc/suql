@@ -1,25 +1,44 @@
 <?php
 class SQLBuilder
 {
-  private $SQLObject = null;
-  private $sql = null;
+  protected function buildSelect($select) {
+    if (empty($select))
+      return '';
 
-  function __construct($SQLObject)
-  {
-    $this->SQLObject = $SQLObject;
-  }
+    $s = [];
 
-  public function getSql()
-  {
-    return $this->sql;
-  }
-
-  public function run()
-  {
-    if ($this->SQLObject)
-    {
-      // Building sql...
-      $this->sql = $this->SQLObject;
+    foreach ($select as $field => $alias) {
+      $s[] = $field . ($alias ? " as $alias" : '');
     }
+
+    return 'select ' . implode(', ', $s);
+  }
+
+  protected function buildFrom($from) {
+    return $from ? "from $from" : '';
+  }
+
+  protected function buildJoin($join) {
+    if (empty($join))
+      return '';
+
+    $s = [];
+    foreach ($join as $_join) {
+      $s[] = "{$_join['type']} join {$_join['table']} on {$_join['on']}";
+    }
+
+    return implode(' ', $s);
+  }
+
+  protected function buildGroup($group) {
+    return !empty($group) ? 'group by ' . implode(', ', $group) : '';
+  }
+
+  protected function buildWhere($where) {
+    return !empty($where) ? 'having ' . implode(' and ', $where) : '';
+  }
+
+  protected function buildOrder($order) {
+    return !empty($order) ? 'order by ' . implode(', ', $order) : '';
   }
 }

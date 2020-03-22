@@ -3,7 +3,7 @@ require('TuringMachine.php');
 require('SuQLHandler.php');
 require('SuQLEntityHelper.php');
 require('SuQLLog.php');
-require('SQLBuilder.php');
+require('SuQLBuilder.php');
 
 class SuQL
 {
@@ -208,8 +208,8 @@ class SuQL
 
 	private function buildSQL()
 	{
-		$this->SQLBuilder = new SQLBuilder($this->tm->output());
-		$this->SQLBuilder->run();
-		return $this->SQLBuilder->getSql();
+		$this->SuQLBuilder = new SuQLBuilder($this->tm->output());
+		$this->SuQLBuilder->run();
+		return $this->SuQLBuilder->getSql();
 	}
 }

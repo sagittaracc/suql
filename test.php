@@ -11,16 +11,32 @@ function dump($var) {
  *    преобразования столбов.
  */
 require('SuQL.php');
+// $sql = "
+//   users { id@uid }
+//
+//   [uid --> user_id]
+//
+//   user_group {}
+//
+//   [group_id <--> gid]
+//
+//   groups { id@gid, name@gname, name@count.group.count.desc };
+// ";
 $sql = "
-  users { id@uid }
+  #t1 = users {
+    id@uid
+  } ~ uid > 1;
 
+  t1{
+    uid@uid
+  }
   [uid <--> user_id]
-
   user_group {}
-
   [group_id <--> gid]
-  
-  groups { id@gid, name, name@count.group.count };
+  groups{
+    id@gid,
+    name@gname.group.count
+  };
 ";
 
 $suql = new SuQL($sql);
