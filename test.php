@@ -22,18 +22,32 @@ require('SuQL.php');
 //
 //   groups { id@gid, name@gname, name@count.group.count.desc };
 // ";
-$sql = "
-  #t1 = users {
-    id@uid
-  };
+// $sql = "
+//   #t1 = users {
+//     id@uid
+//   };
+//
+//   t1{
+//     uid@uid
+//   }
+//   [uid <--> user_id]
+//   user_group {}
+//   [group_id <--> gid]
+//   groups{
+//     id@gid,
+//     name@gname,
+//     name@count.group.count
+//   } ~ gname = 'admin';
+// ";
 
-  t1{
-    uid@uid
-  }
+$sql = "
+  users {
+    id@uid
+  } ~ uid > 1
   [uid <--> user_id]
   user_group {}
   [group_id <--> gid]
-  groups{
+  groups {
     id@gid,
     name@gname,
     name@count.group.count

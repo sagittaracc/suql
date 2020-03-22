@@ -9,12 +9,8 @@ class SuQLHandler
 	private $osuql = [
 		'queries' => [],
 	];
-	private $query;
-	private $table;
-
-	const LEFT_JOIN = '<--';
-	const RIGHT_JOIN = '-->';
-	const INNER_JOIN = '<-->';
+	private $query; //Текущий подзапрос или запрос
+	private $table;	//Текущий select таблицы
 
 	function __construct() {
 		$this->stringBuffer1 = '';
@@ -69,9 +65,9 @@ class SuQLHandler
 	}
 
 	public function TM_GO_new_field($ch) {
-		$this->osuql['queries'][$this->query]['select'][$this->stringBuffer2] = [
+		$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? " as $this->stringBuffer2" : '')] = [
 			'field' => "$this->table.$this->stringBuffer1",
-			'function' => null,
+			'alias' => $this->stringBuffer2,
 		];
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
@@ -79,9 +75,9 @@ class SuQLHandler
 
 	public function TM_GO_select_end($ch) {
 		if ($this->stringBuffer1)
-			$this->osuql['queries'][$this->query]['select'][$this->stringBuffer2] = [
+			$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? " as $this->stringBuffer2" : '')] = [
 				'field' => "$this->table.$this->stringBuffer1",
-				'function' => null,
+				'alias' => $this->stringBuffer2,
 			];
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
@@ -158,9 +154,9 @@ class SuQLHandler
 	}
 
 	private function mod_count($table, $field, $alias) {
-		$this->osuql['queries'][$this->query]['select'][$alias] = [
-			'field' => "$table.$field",
-			'function' => 'count',
+		$this->osuql['queries'][$this->query]['select']["count($table.$field)" . ($alias ? " as $alias" : '')] = [
+			'field' => "count($table.$field)",
+			'alias' => $alias,
 		];
 	}
 
@@ -175,13 +171,6 @@ class SuQLHandler
 		$this->osuql['queries'][$this->query]['order'][] = [
 			'field' => "$table.$field",
 			'direction' => 'asc',
-		];
-	}
-
-	private function mod_max($table, $field, $alias) {
-		$this->osuql['queries'][$this->query]['select'][$alias] = [
-			'field' => "$table.$field",
-			'function' => 'max',
 		];
 	}
 }

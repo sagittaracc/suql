@@ -5,13 +5,13 @@ class SQLBuilder
     if (empty($select))
       return '';
 
-    $s = [];
+    // $s = [];
+    //
+    // foreach ($select as $field => $alias) {
+    //   $s[] = $field . ($alias ? " as $alias" : '');
+    // }
 
-    foreach ($select as $alias => $field) {
-      $s[] = $field . ($alias ? " as $alias" : '');
-    }
-
-    return 'select ' . implode(', ', $s);
+    return 'select ' . implode(', ', array_keys($select));
   }
 
   protected function buildFrom($from) {

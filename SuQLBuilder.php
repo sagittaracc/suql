@@ -3,6 +3,10 @@ require('SQLBuilder.php');
 
 class SuQLBuilder extends SQLBuilder
 {
+  const LEFT_JOIN = '<--';
+  const RIGHT_JOIN = '-->';
+  const INNER_JOIN = '<-->';
+
   private $SuQLObject = null;
   private $sql = null;
 
@@ -26,7 +30,9 @@ class SuQLBuilder extends SQLBuilder
 
   private function parseJoinFields($on, $select)
   {
-    return str_replace(array_keys($select), array_values($select), $on);
+    $a = array_column($select, 'field');
+    $b = array_column($select, 'alias');
+    return str_replace($b, $a, $on);
   }
 
   private function parseJoin($join, $select)
@@ -36,15 +42,15 @@ class SuQLBuilder extends SQLBuilder
 
       $on = $this->parseJoinFields($on, $select);
 
-      if (count(explode('<-->', $on)) === 2) {
+      if (count(explode(self::INNER_JOIN, $on)) === 2) {
         $_join['type'] = 'inner';
-        $_join['on'] = implode(' = ', explode('<-->', $on));
-      } else if (count(explode('-->', $on)) === 2) {
+        $_join['on'] = implode(' = ', explode(self::INNER_JOIN, $on));
+      } else if (count(explode(self::RIGHT_JOIN, $on)) === 2) {
         $_join['type'] = 'right';
-        $_join['on'] = implode(' = ', explode('-->', $on));
-      } else if (count(explode('<--', $on)) === 2) {
+        $_join['on'] = implode(' = ', explode(self::RIGHT_JOIN, $on));
+      } else if (count(explode(self::LEFT_JOIN, $on)) === 2) {
         $_join['type'] = 'left';
-        $_join['on'] = implode(' = ', explode('<--', $on));
+        $_join['on'] = implode(' = ', explode(self::LEFT_JOIN, $on));
       } else {
 
       }
@@ -56,9 +62,15 @@ class SuQLBuilder extends SQLBuilder
 
   protected function buildSelect($select)
   {
-    foreach ($select as $alias => $params) {
-      $select[$alias] = ($params['function'] ? "{$params['function']}(" : '') . $params['field'] . ($params['function'] ? ')' : '');
-    }
+    // foreach ($select as $field => $params) {
+    //   if ($params['function']) {
+    //     $select["{$params['function']}(" . $field . ')'] = $params['alias'];
+    //     unset($select[$field]);
+    //   } else {
+    //     $select[$field] = $params['alias'];
+    //   }
+    // }
+    // return $select;
     return $select;
   }
 
