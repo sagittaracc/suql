@@ -25,7 +25,7 @@ require('SuQL.php');
 $sql = "
   #t1 = users {
     id@uid
-  } ~ uid > 1;
+  };
 
   t1{
     uid@uid
@@ -35,8 +35,9 @@ $sql = "
   [group_id <--> gid]
   groups{
     id@gid,
-    name@gname.group.count
-  };
+    name@gname,
+    name@count.group.count
+  } ~ gname = 'admin';
 ";
 
 $suql = new SuQL($sql);

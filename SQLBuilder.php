@@ -7,7 +7,7 @@ class SQLBuilder
 
     $s = [];
 
-    foreach ($select as $field => $alias) {
+    foreach ($select as $alias => $field) {
       $s[] = $field . ($alias ? " as $alias" : '');
     }
 
@@ -39,6 +39,14 @@ class SQLBuilder
   }
 
   protected function buildOrder($order) {
-    return !empty($order) ? 'order by ' . implode(', ', $order) : '';
+    if (empty($order))
+      return '';
+
+    $s = [];
+    foreach ($order as $_order) {
+      $s[] = "{$_order['field']} {$_order['direction']}";
+    }
+
+    return 'order by ' . implode(', ', $s);
   }
 }

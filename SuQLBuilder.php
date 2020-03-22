@@ -26,7 +26,6 @@ class SuQLBuilder extends SQLBuilder
 
   private function parseJoinFields($on, $select)
   {
-    $select = array_flip($select);
     return str_replace(array_keys($select), array_values($select), $on);
   }
 
@@ -55,6 +54,14 @@ class SuQLBuilder extends SQLBuilder
     return $join;
   }
 
+  protected function buildSelect($select)
+  {
+    foreach ($select as $alias => $params) {
+      $select[$alias] = ($params['function'] ? "{$params['function']}(" : '') . $params['field'] . ($params['function'] ? ')' : '');
+    }
+    return $select;
+  }
+
   private function buildQuery($query)
   {
     $sqlTemplate = "
@@ -67,8 +74,9 @@ class SuQLBuilder extends SQLBuilder
     ";
 
     $queryObject = $this->SuQLObject['queries'][$query];
+    $queryObject['select'] = $this->buildSelect($queryObject['select']);
 
-    $sqlTemplate = str_replace('#select#', $this->buildSelect($queryObject['select']), $sqlTemplate);
+    $sqlTemplate = str_replace('#select#', parent::buildSelect($queryObject['select']), $sqlTemplate);
     if (isset($this->SuQLObject['queries'][$queryObject['from']]))
       $sqlTemplate = str_replace('#from#', 'from (' . $this->buildQuery($queryObject['from']) . ') ' . $queryObject['from'], $sqlTemplate);
     else

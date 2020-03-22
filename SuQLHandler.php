@@ -1,7 +1,5 @@
 <?php
-require ('SQLHandler.php');
-
-class SuQLHandler extends SQLHandler
+class SuQLHandler
 {
 	private $stringBuffer1;
 	private $stringBuffer2;
@@ -71,14 +69,20 @@ class SuQLHandler extends SQLHandler
 	}
 
 	public function TM_GO_new_field($ch) {
-		$this->osuql['queries'][$this->query]['select'][$this->buildField($this->table, $this->stringBuffer1)] = $this->stringBuffer2;
+		$this->osuql['queries'][$this->query]['select'][$this->stringBuffer2] = [
+			'field' => "$this->table.$this->stringBuffer1",
+			'function' => null,
+		];
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 	}
 
 	public function TM_GO_select_end($ch) {
 		if ($this->stringBuffer1)
-			$this->osuql['queries'][$this->query]['select'][$this->buildField($this->table, $this->stringBuffer1)] = $this->stringBuffer2;
+			$this->osuql['queries'][$this->query]['select'][$this->stringBuffer2] = [
+				'field' => "$this->table.$this->stringBuffer1",
+				'function' => null,
+			];
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 	}
@@ -150,22 +154,34 @@ class SuQLHandler extends SQLHandler
 	}
 
 	private function mod_group($table, $field, $alias) {
-		$this->osuql['queries'][$this->query]['group'][] = $this->buildField($table, $field);
+		$this->osuql['queries'][$this->query]['group'][] = "$table.$field";
 	}
 
 	private function mod_count($table, $field, $alias) {
-		$this->osuql['queries'][$this->query]['select'][$this->buildField($table, $field, null, 'count')] = $alias;
+		$this->osuql['queries'][$this->query]['select'][$alias] = [
+			'field' => "$table.$field",
+			'function' => 'count',
+		];
 	}
 
 	private function mod_desc($table, $field, $alias) {
-		$this->osuql['queries'][$this->query]['order'][] = $this->buildOrderExpression($table, $field, 'desc');
+		$this->osuql['queries'][$this->query]['order'][] = [
+			'field' => "$table.$field",
+			'direction' => 'desc',
+		];
 	}
 
 	private function mod_asc($table, $field, $alias) {
-		$this->osuql['queries'][$this->query]['order'][] = $this->buildOrderExpression($table, $field, 'asc');
+		$this->osuql['queries'][$this->query]['order'][] = [
+			'field' => "$table.$field",
+			'direction' => 'asc',
+		];
 	}
 
 	private function mod_max($table, $field, $alias) {
-		$this->osuql['queries'][$this->query]['select'][$this->buildField($table, $field, null, 'max')] = $alias;
+		$this->osuql['queries'][$this->query]['select'][$alias] = [
+			'field' => "$table.$field",
+			'function' => 'max',
+		];
 	}
 }
