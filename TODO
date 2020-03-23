@@ -1,0 +1,52 @@
+#t1 = counter {
+	Obj_Id_Counter@meterId,
+	Obj_Id_User@oiu,
+	SerialNumber@id,
+	Id_Resurs@rid,
+	State@state,
+	Name@CName,
+	Battery@battery,
+	NextVerification@nextVerif,
+	PreviousVerification@prevVerif
+}
+[rid <--> id]
+resurs {
+	id_Resurs@id,
+	Name_Resurs@type
+}
+[meterId <-- foic]
+fix_consumption {
+	Obj_Id_Counter@foic,
+	DeltaConsumption@dc
+} ~ oiu = ?;
+
+t1{
+	*			(1*)
+} ~ id = ?		(1*)
+
+// Функции и функции с переменными?
+// Join через таблицу по принципу не 1 с 2 и 2 с 3, а 1 с 2 и 1 с 3
+// Возможно ли сделать where во внешнем запросе, если запросил все поля? (метка 1*)
+// Составное условие в JOIN ?
+// Решить проблему с видимостью полей в select
+
+
+#cd = consumption {
+	Obj_Id_Counter@Obj_Id_Counter.group,
+	AI_Consumption@AI_Consumption.max.desc
+};
+
+consumption {
+	Obj_Id_Counter@Id_Counter,
+	AI_Tarif@Id_Tarif,
+	Obj_Id_Tarif,
+	Expires
+}
+[Id_Counter <--> Obj_Id_Counter and ...]
+cd {
+	*
+}
+[ ... ]
+tarif {
+	
+}
