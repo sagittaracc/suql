@@ -1,3 +1,5 @@
+!!!Избавиться от SuQLBuilder на один только SQLBuilder
+
 #t1 = counter {
 	Obj_Id_Counter@meterId,
 	Obj_Id_User@oiu,
