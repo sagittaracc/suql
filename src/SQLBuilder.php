@@ -103,14 +103,7 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $sqlTemplate = "
-      #select#
-      #from#
-      #join#
-      #group#
-      #where#
-      #order#
-    ";
+    $sqlTemplate = "#select# #from# #join# #group# #where# #order#";
 
     $queryObject = $this->SQLObject['queries'][$query];
 

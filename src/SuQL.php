@@ -26,6 +26,16 @@ class SuQL
 		return false;
 	}
 
+	public static function fromString($suql)
+	{
+		return new self($suql);
+	}
+
+	public function __toString()
+	{
+		return $this->pureSQL();
+	}
+
 	private function interpret()
 	{
 		$this->tm = new TuringMachine();

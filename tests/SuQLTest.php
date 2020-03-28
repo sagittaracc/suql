@@ -3,11 +3,19 @@ use PHPUnit\Framework\TestCase;
 
 final class SuQLTest extends TestCase
 {
-  public function testSimpleSelect(): void
+  public function testSelect(): void
   {
     $this->assertEquals(
-      str_replace(["\r\n", "\t", ' '], '', 'select users.* from users'),
-      str_replace(["\r\n", "\t", ' '], '', (new SuQL('users {*};'))->pureSQL())
+      'select users.* from users',
+      SuQL::fromString('users {*};')
+    );
+  }
+
+  public function testSelectFields(): void
+  {
+    $this->assertEquals(
+      'select users.id as uid, users.name as uname from users',
+      SuQL::fromString('users {id@uid, name@uname};')
     );
   }
 }
