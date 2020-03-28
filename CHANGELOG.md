@@ -13,6 +13,8 @@
 - Some unit tests
 - Change log
 
+---
+
 ## v1.0 - Mar. 23, 2020
 
 Initial release
