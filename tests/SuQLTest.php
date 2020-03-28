@@ -32,6 +32,19 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testSelectAllFieldsUsingWhere(): void
+  {
+    $this->assertEquals(
+      "",
+      SuQL::toSql("
+        users {
+          *,
+          id@uid
+        } ~ uid > 5;
+      ")
+    );
+  }
+
   public function testGroup(): void
   {
     $this->assertEquals(
