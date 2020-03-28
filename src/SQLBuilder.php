@@ -119,7 +119,7 @@ class SQLBuilder
 
     $sqlTemplate = str_replace('#select#', $this->buildSelect($queryObject['select']), $sqlTemplate);
     if (isset($this->SQLObject['queries'][$queryObject['from']]))
-      $sqlTemplate = str_replace('#from#', 'from (' . $this->buildQuery($queryObject['from']) . ') ' . $queryObject['from'], $sqlTemplate);
+      $sqlTemplate = str_replace('#from#', ' from (' . $this->buildQuery($queryObject['from']) . ') ' . $queryObject['from'], $sqlTemplate);
     else
       $sqlTemplate = str_replace('#from#', $this->buildFrom($queryObject['from']), $sqlTemplate);
     $sqlTemplate = str_replace('#join#', $this->buildJoin($this->parseJoin($queryObject['join'], $queryObject['select'])), $sqlTemplate);

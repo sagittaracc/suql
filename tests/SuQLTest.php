@@ -35,7 +35,7 @@ final class SuQLTest extends TestCase
   public function testSelectAllFieldsUsingWhere(): void
   {
     $this->assertEquals(
-      "",
+      "select users.*, users.id as uid from users where users.id > 5",
       SuQL::toSql("
         users {
           *,
@@ -86,6 +86,91 @@ final class SuQLTest extends TestCase
         users {
           id,
           id@uid.desc
+        };
+      ")
+    );
+  }
+
+  public function testSQLObject(): void
+  {
+    $this->assertEquals(
+      [
+        'queries' => [
+          'main' => [
+            'select' => [
+              't1.gname' => ['field' => 't1.gname', 'alias' => ''],
+              't1.cnt' => ['field' => 't1.cnt', 'alias' => ''],
+            ],
+            'from' => 't1',
+            'where' => [],
+            'join' => [],
+            'group' => [],
+            'order' => [],
+          ],
+          't1' => [
+            'select' => [
+              'users.id as uid' => ['field' => 'users.id', 'alias' => 'uid'],
+              'groups.id as gid' => ['field' => 'groups.id', 'alias' => 'gid'],
+              'groups.name as gname' => ['field' => 'groups.name', 'alias' => 'gname'],
+              'count(groups.name) as cnt' => ['field' => 'count(groups.name)', 'alias' => 'cnt'],
+            ],
+            'from' => 'users',
+            'where' => [
+              0 => 'uid > 1',
+              1 => 'gid > 2',
+            ],
+            'join' => [
+              0 => ['table' => 'user_group', 'on' => 'uid <--> user_id'],
+              1 => ['table' => 'groups', 'on' => 'group_id <--> gid'],
+            ],
+            'group' => [
+              0 => 'groups.name'
+            ],
+            'order' => []
+          ]
+        ]
+      ],
+      SuQL::toSqlObject("
+        #t1 = users {
+          id@uid
+        } ~ uid > 1
+        [uid <--> user_id]
+        user_group {}
+        [group_id <--> gid]
+        groups {
+          id@gid,
+          name@gname,
+          name@cnt.group.count
+        } ~ gid > 2;
+
+        t1 {
+          gname,
+          cnt
+        };
+      ")
+    );
+  }
+
+  public function testNestedQuery(): void
+  {
+    $this->assertEquals(
+      'select t1.gname, t1.cnt from (select users.id as uid, groups.id as gid, groups.name as gname, count(groups.name) as cnt from users inner join user_group on users.id  =  user_id inner join groups on group_id  =  groups.id where users.id > 1 and groups.id > 2 group by groups.name) t1',
+      SuQL::toSql("
+        #t1 = users {
+          id@uid
+        } ~ uid > 1
+        [uid <--> user_id]
+        user_group {}
+        [group_id <--> gid]
+        groups {
+          id@gid,
+          name@gname,
+          name@cnt.group.count
+        } ~ gid > 2;
+
+        t1 {
+          gname,
+          cnt
         };
       ")
     );

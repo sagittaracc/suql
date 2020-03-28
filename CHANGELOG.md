@@ -21,3 +21,4 @@ Initial release
 
 **Added:**
 - Basic SQL (SELECT, JOIN, WHERE, GROUP BY, ORDER BY)
+- Nested queries
