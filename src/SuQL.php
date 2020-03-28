@@ -26,9 +26,22 @@ class SuQL
 		return false;
 	}
 
-	public static function fromString($suql)
+	public function getSQLObject()
+	{
+		if ($this->interpret())
+			return $this->tm->output();
+		else
+			return null;
+	}
+
+	public static function toSql($suql)
 	{
 		return new self($suql);
+	}
+
+	public static function toSqlObject($suql)
+	{
+		return (new self($suql))->getSQLObject();
 	}
 
 	public function __toString()

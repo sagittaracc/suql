@@ -26,11 +26,11 @@ class SQLBuilder
     $this->sql = trim($this->buildQuery('main'));
   }
 
-  private function parseJoinFields($on, $select)
+  private function parseFields($cond, $select)
   {
     $a = array_column($select, 'field');
     $b = array_column($select, 'alias');
-    return str_replace($b, $a, $on);
+    return str_replace($b, $a, $cond);
   }
 
   private function parseJoin($join, $select)
@@ -38,7 +38,7 @@ class SQLBuilder
     foreach ($join as &$_join) {
       $on = $_join['on'];
 
-      $on = $this->parseJoinFields($on, $select);
+      $on = $this->parseFields($on, $select);
 
       if (count(explode(self::INNER_JOIN, $on)) === 2) {
         $_join['type'] = 'inner';
@@ -58,6 +58,16 @@ class SQLBuilder
     return $join;
   }
 
+  private function parseWhere($where, $select)
+  {
+    foreach ($where as &$_where) {
+      $_where = $this->parseFields($_where, $select);
+    }
+    unset($_where);
+
+    return $where;
+  }
+
   private function buildSelect($select) {
     if (empty($select))
       return '';
@@ -66,7 +76,7 @@ class SQLBuilder
   }
 
   private function buildFrom($from) {
-    return $from ? "from $from" : '';
+    return $from ? " from $from" : '';
   }
 
   private function buildJoin($join) {
@@ -78,15 +88,15 @@ class SQLBuilder
       $s[] = "{$_join['type']} join {$_join['table']} on {$_join['on']}";
     }
 
-    return implode(' ', $s);
+    return ' ' . implode(' ', $s);
   }
 
   private function buildGroup($group) {
-    return !empty($group) ? 'group by ' . implode(', ', $group) : '';
+    return !empty($group) ? ' group by ' . implode(', ', $group) : '';
   }
 
   private function buildWhere($where) {
-    return !empty($where) ? 'having ' . implode(' and ', $where) : '';
+    return !empty($where) ? ' where ' . implode(' and ', $where) : '';
   }
 
   private function buildOrder($order) {
@@ -98,12 +108,12 @@ class SQLBuilder
       $s[] = "{$_order['field']} {$_order['direction']}";
     }
 
-    return 'order by ' . implode(', ', $s);
+    return ' order by ' . implode(', ', $s);
   }
 
   private function buildQuery($query)
   {
-    $sqlTemplate = "#select# #from# #join# #group# #where# #order#";
+    $sqlTemplate = "#select##from##join##where##group##order#";
 
     $queryObject = $this->SQLObject['queries'][$query];
 
@@ -114,7 +124,7 @@ class SQLBuilder
       $sqlTemplate = str_replace('#from#', $this->buildFrom($queryObject['from']), $sqlTemplate);
     $sqlTemplate = str_replace('#join#', $this->buildJoin($this->parseJoin($queryObject['join'], $queryObject['select'])), $sqlTemplate);
     $sqlTemplate = str_replace('#group#', $this->buildGroup($queryObject['group']), $sqlTemplate);
-    $sqlTemplate = str_replace('#where#', $this->buildWhere($queryObject['where']), $sqlTemplate);
+    $sqlTemplate = str_replace('#where#', $this->buildWhere($this->parseWhere($queryObject['where'], $queryObject['select'])), $sqlTemplate);
     return str_replace('#order#', $this->buildOrder($queryObject['order']), $sqlTemplate);
   }
 }
