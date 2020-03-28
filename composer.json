@@ -1,0 +1,21 @@
+{
+    "name": "sagittaracc/suql",
+    "description": "Sugar SQL",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "sagittaracc",
+            "email": "sagittaracc@gmail.com"
+        }
+    ],
+    "autoload": {
+      "classmap": [
+        "src/"
+      ]
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
