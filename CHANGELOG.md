@@ -1,9 +1,10 @@
 # Change log
 
-## v1.0.1 - Mar. 28, 2020
+## v1.0.1 - Mar. 29, 2020
 
 **Bug fixes:**
 - Use WHERE instead of HAVING
+- Refactor
 
 **New features:**
 - Build the library into one .phar file
