@@ -5,6 +5,7 @@
 **Bug fixes:**
 - Use WHERE instead of HAVING
 - Refactor
+- Order fields weren't in select
 
 **New features:**
 - Build the library into one .phar file

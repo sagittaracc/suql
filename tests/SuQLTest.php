@@ -81,11 +81,11 @@ final class SuQLTest extends TestCase
   public function testOrder(): void
   {
     $this->assertEquals(
-      "select users.id from users order by users.id desc",
+      "select users.name as uname, users.id as uid from users order by users.name desc, users.id asc",
       SuQL::toSql("
         users {
-          id,
-          id@uid.desc
+          name@uname.desc,
+          id@uid.asc
         };
       ")
     );

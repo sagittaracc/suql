@@ -161,6 +161,10 @@ class SuQLHandler
 	}
 
 	private function mod_desc($table, $field, $alias) {
+		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')] = [
+			'field' => "$table.$field",
+			'alias' => $alias,
+		];
 		$this->osuql['queries'][$this->query]['order'][] = [
 			'field' => "$table.$field",
 			'direction' => 'desc',
@@ -168,6 +172,10 @@ class SuQLHandler
 	}
 
 	private function mod_asc($table, $field, $alias) {
+		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')] = [
+			'field' => "$table.$field",
+			'alias' => $alias,
+		];
 		$this->osuql['queries'][$this->query]['order'][] = [
 			'field' => "$table.$field",
 			'direction' => 'asc',
