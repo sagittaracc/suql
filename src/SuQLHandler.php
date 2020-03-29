@@ -4,7 +4,9 @@ class SuQLHandler
 	private $stringBuffer1;
 	private $stringBuffer2;
 	private $stringBuffer3;
+	private $stringBuffer4;
 	private $arrayBuffer1;
+	private $arrayBuffer2;
 	private $canonicalQuery;
 	private $osuql = [
 		'queries' => [],
@@ -16,7 +18,9 @@ class SuQLHandler
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 		$this->stringBuffer3 = '';
+		$this->stringBuffer4 = '';
 		$this->arrayBuffer1 = [];
+		$this->arrayBuffer2 = [];
 		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'join' => [], 'group' => [], 'order' => []];
 		$this->query = 'main';
 		$this->table = null;
@@ -128,20 +132,36 @@ class SuQLHandler
 
 	public function TM_GO_field_modifier($ch) {
 		if ($this->stringBuffer3)
-			$this->arrayBuffer1[] = $this->stringBuffer3;
+			$this->arrayBuffer1[$this->stringBuffer3] = $this->arrayBuffer2;
 
 		$this->stringBuffer3 = '';
+		$this->arrayBuffer2 = [];
 	}
 
 	public function TM_STAY_field_modifier($ch) {
 		$this->stringBuffer3 .= $ch;
 	}
 
+	public function TM_GO_field_modifier_param_expects($ch) {
+		if ($this->stringBuffer4)
+			$this->arrayBuffer2[] = $this->stringBuffer4;
+
+		$this->stringBuffer4 = '';
+	}
+
+	public function TM_GO_field_modifier_param($ch) {
+		$this->stringBuffer4 .= $ch;
+	}
+
+	public function TM_STAY_field_modifier_param($ch) {
+		$this->stringBuffer4 .= $ch;
+	}
+
 	public function TM_GO_apply_field_modifiers($ch) {
-		foreach ($this->arrayBuffer1 as $modifier) {
+		foreach ($this->arrayBuffer1 as $modifier => $params) {
 			$modifier_handler = "mod_$modifier";
 			if (method_exists($this, $modifier_handler))
-				$this->$modifier_handler($this->table, $this->stringBuffer1, $this->stringBuffer2);
+				$this->$modifier_handler($this->table, $this->stringBuffer1, $this->stringBuffer2, $params);
 		}
 
 		$this->stringBuffer1 = '';
@@ -149,18 +169,18 @@ class SuQLHandler
 		$this->arrayBuffer1 = [];
 	}
 
-	private function mod_group($table, $field, $alias) {
+	private function mod_group($table, $field, $alias, $params) {
 		$this->osuql['queries'][$this->query]['group'][] = "$table.$field";
 	}
 
-	private function mod_count($table, $field, $alias) {
+	private function mod_count($table, $field, $alias, $params) {
 		$this->osuql['queries'][$this->query]['select']["count($table.$field)" . ($alias ? " as $alias" : '')] = [
 			'field' => "count($table.$field)",
 			'alias' => $alias,
 		];
 	}
 
-	private function mod_desc($table, $field, $alias) {
+	private function mod_desc($table, $field, $alias, $params) {
 		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')] = [
 			'field' => "$table.$field",
 			'alias' => $alias,
@@ -171,7 +191,7 @@ class SuQLHandler
 		];
 	}
 
-	private function mod_asc($table, $field, $alias) {
+	private function mod_asc($table, $field, $alias, $params) {
 		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')] = [
 			'field' => "$table.$field",
 			'alias' => $alias,
@@ -180,5 +200,31 @@ class SuQLHandler
 			'field' => "$table.$field",
 			'direction' => 'asc',
 		];
+	}
+
+	private function mod_somefunc($table, $field, $alias, $params) {
+		if (!isset($this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')])) {
+			$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')] = [
+				'field' => "$table.$field",
+				'alias' => $alias,
+				'modifier' => []
+			];
+		}
+
+		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')]['modifier']['somefunc'] = $params;
+
+	}
+
+	private function mod_anotherfunc($table, $field, $alias, $params) {
+		if (!isset($this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')])) {
+			$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')] = [
+				'field' => "$table.$field",
+				'alias' => $alias,
+				'modifier' => []
+			];
+		}
+
+
+		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')]['modifier']['anotherfunc'] = $params;
 	}
 }

@@ -54,4 +54,11 @@ class SuQLEntityHelper
 				|| self::isS($ch)
 				|| self::isJoinEntitySymbol($ch);
 	}
+
+	public static function isParamPossibleSymbol($ch)
+	{
+		return self::isI($ch)
+				|| self::isQuote($ch)
+				|| $ch === '.';
+	}
 }

@@ -1,6 +1,6 @@
 # Change log
 
-## v1.0.1 - Mar. 29, 2020
+## v1.1 - Mar. 29, 2020
 
 **Bug fixes:**
 - Use WHERE instead of HAVING
@@ -10,6 +10,7 @@
 **New features:**
 - Build the library into one .phar file
 - Use PHPUnit
+- Function chain calling
 
 **Added:**
 - Some unit tests

@@ -6,7 +6,7 @@ class TuringMachine
 	public $ch = null;
 
 	function __construct(){}
-	
+
 	public function go($state)
 	{
 		$this->currentState = $state;
@@ -16,7 +16,7 @@ class TuringMachine
 				$this->handler->$methodName($this->ch);
 		}
 	}
-	
+
 	public function stay($state)
 	{
 		if ($this->handler) {
@@ -25,17 +25,22 @@ class TuringMachine
 				$this->handler->$methodName($this->ch);
 		}
 	}
-	
+
+	public function swith($state)
+	{
+		$this->currentState = $state;
+	}
+
 	public function setHandler($handler)
 	{
 		$this->handler = $handler;
 	}
-	
+
 	public function getCurrentState()
 	{
 		return $this->currentState;
 	}
-	
+
 	public function output()
 	{
 		return $this->handler->output();

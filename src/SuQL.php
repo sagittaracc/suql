@@ -143,8 +143,23 @@ class SuQL
 							$this->tm->go('field_modifier');
 							$this->tm->go('apply_field_modifiers');
 						}
+						else if ($this->tm->ch === '(') $this->tm->go('field_modifier_param_expects');
 						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_field_modifier_expects');
 						else if ($this->tm->ch === '.') $this->tm->go('field_modifier');
+						else {throw new Exception($i);}
+						break;
+					case 'field_modifier_param_expects':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if (SuQLEntityHelper::isParamPossibleSymbol($this->tm->ch)) $this->tm->go('field_modifier_param');
+						else {throw new Exception($i);}
+						break;
+					case 'field_modifier_param':
+						if (SuQLEntityHelper::isParamPossibleSymbol($this->tm->ch)) $this->tm->stay('field_modifier_param');
+						else if ($this->tm->ch === ',') $this->tm->go('field_modifier_param_expects');
+						else if ($this->tm->ch === ')') {
+							$this->tm->go('field_modifier_param_expects');
+							$this->tm->swith('field_modifier');
+						}
 						else {throw new Exception($i);}
 						break;
 					case 'new_field_modifier_expects':
