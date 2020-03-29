@@ -26,6 +26,30 @@ class SQLBuilder
     $this->sql = trim($this->buildQuery('main'));
   }
 
+  private function getQuery($query)
+  {
+    if (isset($this->SQLObject['queries'][$query]))
+      return $this->SQLObject['queries'][$query];
+    else
+      return false;
+  }
+
+  private function buildQuery($query)
+  {
+    $sqlTemplate = "#select##from##join##where##group##order#";
+
+    $queryObject = $this->getQuery($query);
+
+    $sqlTemplate = str_replace('#select#', $this->buildSelect($queryObject), $sqlTemplate);
+    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($queryObject), $sqlTemplate);
+    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($queryObject), $sqlTemplate);
+    $sqlTemplate = str_replace('#group#' , $this->buildGroup($queryObject), $sqlTemplate);
+    $sqlTemplate = str_replace('#where#' , $this->buildWhere($queryObject), $sqlTemplate);
+    $sqlTemplate = str_replace('#order#' , $this->buildOrder($queryObject), $sqlTemplate);
+
+    return $sqlTemplate;
+  }
+
   private function parseFields($cond, $select)
   {
     $a = array_column($select, 'field');
@@ -33,8 +57,11 @@ class SQLBuilder
     return str_replace($b, $a, $cond);
   }
 
-  private function parseJoin($join, $select)
+  private function parseJoin($queryObject)
   {
+    $join = $queryObject['join'];
+    $select = $queryObject['select'];
+
     foreach ($join as &$_join) {
       $on = $_join['on'];
 
@@ -58,8 +85,11 @@ class SQLBuilder
     return $join;
   }
 
-  private function parseWhere($where, $select)
+  private function parseWhere($queryObject)
   {
+    $where = $queryObject['where'];
+    $select = $queryObject['select'];
+
     foreach ($where as &$_where) {
       $_where = $this->parseFields($_where, $select);
     }
@@ -68,18 +98,32 @@ class SQLBuilder
     return $where;
   }
 
-  private function buildSelect($select) {
+  private function buildSelect($queryObject) {
+    $select = $queryObject['select'];
+
     if (empty($select))
       return '';
 
     return 'select ' . implode(', ', array_keys($select));
   }
 
-  private function buildFrom($from) {
-    return $from ? " from $from" : '';
+  private function buildFrom($queryObject) {
+    $from = $queryObject['from'];
+
+    if (empty($from))
+      return '';
+
+    if ($this->getQuery($from)) {
+      $nestedQuery = $this->buildQuery($from);
+      return " from ($nestedQuery) {$from}";
+    } else {
+      return " from $from";
+    }
   }
 
-  private function buildJoin($join) {
+  private function buildJoin($queryObject) {
+    $join = $this->parseJoin($queryObject);
+
     if (empty($join))
       return '';
 
@@ -91,15 +135,19 @@ class SQLBuilder
     return ' ' . implode(' ', $s);
   }
 
-  private function buildGroup($group) {
+  private function buildGroup($queryObject) {
+    $group = $queryObject['group'];
     return !empty($group) ? ' group by ' . implode(', ', $group) : '';
   }
 
-  private function buildWhere($where) {
+  private function buildWhere($queryObject) {
+    $where = $this->parseWhere($queryObject);
     return !empty($where) ? ' where ' . implode(' and ', $where) : '';
   }
 
-  private function buildOrder($order) {
+  private function buildOrder($queryObject) {
+    $order = $queryObject['order'];
+
     if (empty($order))
       return '';
 
@@ -109,22 +157,5 @@ class SQLBuilder
     }
 
     return ' order by ' . implode(', ', $s);
-  }
-
-  private function buildQuery($query)
-  {
-    $sqlTemplate = "#select##from##join##where##group##order#";
-
-    $queryObject = $this->SQLObject['queries'][$query];
-
-    $sqlTemplate = str_replace('#select#', $this->buildSelect($queryObject['select']), $sqlTemplate);
-    if (isset($this->SQLObject['queries'][$queryObject['from']]))
-      $sqlTemplate = str_replace('#from#', ' from (' . $this->buildQuery($queryObject['from']) . ') ' . $queryObject['from'], $sqlTemplate);
-    else
-      $sqlTemplate = str_replace('#from#', $this->buildFrom($queryObject['from']), $sqlTemplate);
-    $sqlTemplate = str_replace('#join#', $this->buildJoin($this->parseJoin($queryObject['join'], $queryObject['select'])), $sqlTemplate);
-    $sqlTemplate = str_replace('#group#', $this->buildGroup($queryObject['group']), $sqlTemplate);
-    $sqlTemplate = str_replace('#where#', $this->buildWhere($this->parseWhere($queryObject['where'], $queryObject['select'])), $sqlTemplate);
-    return str_replace('#order#', $this->buildOrder($queryObject['order']), $sqlTemplate);
   }
 }
