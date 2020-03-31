@@ -109,17 +109,17 @@ final class SuQLTest extends TestCase
           ],
           't1' => [
             'select' => [
-              'users.id as uid' => [
-                'field' => 'users.id',
-                'alias' => 'uid',
-                'modifier' => [
-                  'somefunc' => ['1', '3'],
-                  'anotherfunc' => ['1', 'false']
-                ]
-              ],
+              'users.id as uid' => ['field' => 'users.id', 'alias' => 'uid'],
               'groups.id as gid' => ['field' => 'groups.id', 'alias' => 'gid'],
               'groups.name as gname' => ['field' => 'groups.name', 'alias' => 'gname'],
-              'count(groups.name) as cnt' => ['field' => 'count(groups.name)', 'alias' => 'cnt'],
+              'groups.name as cnt' => [
+                'field' => 'groups.name',
+                'alias' => 'cnt',
+                'modifier' => [
+                  'group' => [],
+                  'count' => []
+                ]
+              ],
             ],
             'from' => 'users',
             'where' => [
@@ -130,16 +130,14 @@ final class SuQLTest extends TestCase
               0 => ['table' => 'user_group', 'on' => 'uid <--> user_id'],
               1 => ['table' => 'groups', 'on' => 'group_id <--> gid'],
             ],
-            'group' => [
-              0 => 'groups.name'
-            ],
+            'group' => [],
             'order' => []
           ]
         ]
       ],
       SuQL::toSqlObject("
         #t1 = users {
-          id@uid.somefunc(1, 3).anotherfunc(1, false)
+          id@uid
         } ~ uid > 1
         [uid <--> user_id]
         user_group {}
