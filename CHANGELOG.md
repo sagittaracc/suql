@@ -2,6 +2,9 @@
 
 ## v1.2 - Mar. 31, 2020
 
+**New features:**
+- SQLModifier class to process custom SuQL and base SQL functions
+
 **Bug fixes:**
 - Refactor
 
