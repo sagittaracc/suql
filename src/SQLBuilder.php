@@ -99,36 +99,6 @@ class SQLBuilder
     return $where;
   }
 
-  private function mod_asc(&$queryObject, $field) {
-    $queryObject['order'][] = [
-      'field' => $queryObject['select'][$field]['field'],
-      'direction' => 'asc',
-    ];
-  }
-
-  private function mod_desc(&$queryObject, $field) {
-    $queryObject['order'][] = [
-      'field' => $queryObject['select'][$field]['field'],
-      'direction' => 'desc',
-    ];
-  }
-
-  private function mod_group(&$queryObject, $field) {
-    $queryObject['group'][] = $queryObject['select'][$field]['field'];
-  }
-
-  private function mod_count(&$queryObject, $field) {
-    $fieldName = $queryObject['select'][$field]['field'];
-    $aliasName = $queryObject['select'][$field]['alias'];
-
-    $queryObject['select']["count($fieldName)" . ($aliasName ? " as $aliasName" : '')] = [
-			'field' => "count($fieldName)",
-			'alias' => $aliasName,
-		];
-
-    unset($queryObject['select'][$field]);
-  }
-
   private function processModifiers($queryObject) {
     foreach ($queryObject['select'] as $field => $options) {
       if (empty($options['modifier']))
@@ -136,8 +106,8 @@ class SQLBuilder
 
       foreach ($options['modifier'] as $modifier => $params) {
         $modifier_handler = "mod_$modifier";
-  			if (method_exists($this, $modifier_handler))
-  				$this->$modifier_handler($queryObject, $field);
+  			if (method_exists(SQLModifier::class, $modifier_handler))
+  				SQLModifier::$modifier_handler($queryObject, $field);
       }
     }
 
