@@ -106,6 +106,7 @@ final class SuQLTest extends TestCase
             'join' => [],
             'group' => [],
             'order' => [],
+            'having' => [],
           ],
           't1' => [
             'select' => [
@@ -116,7 +117,7 @@ final class SuQLTest extends TestCase
                 'field' => 'groups.name',
                 'alias' => 'cnt',
                 'modifier' => [
-                  'group' => [],
+                  'group' => ['admin'],
                   'count' => []
                 ]
               ],
@@ -131,7 +132,8 @@ final class SuQLTest extends TestCase
               1 => ['table' => 'groups', 'on' => 'group_id <--> gid'],
             ],
             'group' => [],
-            'order' => []
+            'order' => [],
+            'having' => [],
           ]
         ]
       ],
@@ -145,7 +147,7 @@ final class SuQLTest extends TestCase
         groups {
           id@gid,
           name@gname,
-          name@cnt.group.count
+          name@cnt.group(admin).count
         } ~ gid > 2;
 
         t1 {
@@ -176,6 +178,26 @@ final class SuQLTest extends TestCase
         t1 {
           gname,
           cnt
+        };
+      ")
+    );
+  }
+
+  public function testHaving(): void
+  {
+    $this->assertEquals(
+      "select users.id as uid, groups.id as gid, groups.name as uname, count(groups.name) as cnt from users inner join user_group on users.id  =  user_id inner join groups on group_id  =  groups.id group by groups.name having uname = 'admin'",
+      SuQL::toSql("
+        users {
+          id@uid
+        }
+        [uid <--> user_id]
+        user_group {}
+        [group_id <--> gid]
+        groups {
+          id@gid,
+          name@uname.group('admin'),
+          name@cnt.count
         };
       ")
     );

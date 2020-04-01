@@ -36,7 +36,7 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $sqlTemplate = "#select##from##join##where##group##order#";
+    $sqlTemplate = "#select##from##join##where##group##having##order#";
 
     $queryObject = $this->getQuery($query);
     $queryObject = $this->processModifiers($queryObject);
@@ -46,6 +46,7 @@ class SQLBuilder
     $sqlTemplate = str_replace('#join#'  , $this->buildJoin($queryObject), $sqlTemplate);
     $sqlTemplate = str_replace('#group#' , $this->buildGroup($queryObject), $sqlTemplate);
     $sqlTemplate = str_replace('#where#' , $this->buildWhere($queryObject), $sqlTemplate);
+    $sqlTemplate = str_replace('#having#', $this->buildHaving($queryObject), $sqlTemplate);
     $sqlTemplate = str_replace('#order#' , $this->buildOrder($queryObject), $sqlTemplate);
 
     return $sqlTemplate;
@@ -159,6 +160,11 @@ class SQLBuilder
   private function buildWhere($queryObject) {
     $where = $this->parseWhere($queryObject);
     return !empty($where) ? ' where ' . implode(' and ', $where) : '';
+  }
+
+  private function buildHaving($queryObject) {
+    $having = $queryObject['having'];
+    return !empty($having) ? ' having ' . implode(' and ', $having) : '';
   }
 
   private function buildOrder($queryObject) {

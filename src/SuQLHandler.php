@@ -21,7 +21,7 @@ class SuQLHandler
 		$this->stringBuffer4 = '';
 		$this->arrayBuffer1 = [];
 		$this->arrayBuffer2 = [];
-		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'join' => [], 'group' => [], 'order' => []];
+		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'having' => [], 'join' => [], 'group' => [], 'order' => []];
 		$this->query = 'main';
 		$this->table = null;
 		$this->osuql['queries'][$this->query] = $this->canonicalQuery;
