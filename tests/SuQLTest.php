@@ -206,16 +206,16 @@ final class SuQLTest extends TestCase
   public function testJoin(): void
   {
     $this->assertEquals(
-      "select table1.id as t1id, table2.id as t2id, table3.id as t3id from table1 inner join table2 on table1.id  =  table2.id inner join table3 on table1.id  =  table3.id",
+      "select table1.*, table2.id as t2id, table3.id as t3id from table1 inner join table2 on table1.id  =  table2.id inner join table3 on table1.id  =  table3.id",
       SuQL::toSql("
         table1 {
-          id@t1id
+          *
         }
-        [t1id <--> t2id]
+        [table1.id <--> t2id]
         table2 {
           id@t2id
         }
-        [t1id <--> t3id]
+        [table1.id <--> t3id]
         table3 {
           id@t3id
         };
