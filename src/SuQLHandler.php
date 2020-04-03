@@ -69,7 +69,7 @@ class SuQLHandler
 	}
 
 	public function TM_GO_new_field($ch) {
-		$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? " as $this->stringBuffer2" : '')] = [
+		$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? "@$this->stringBuffer2" : '')] = [
 			'field' => "$this->table.$this->stringBuffer1",
 			'alias' => $this->stringBuffer2,
 		];
@@ -79,7 +79,7 @@ class SuQLHandler
 
 	public function TM_GO_select_end($ch) {
 		if ($this->stringBuffer1)
-			$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? " as $this->stringBuffer2" : '')] = [
+			$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? "@$this->stringBuffer2" : '')] = [
 				'field' => "$this->table.$this->stringBuffer1",
 				'alias' => $this->stringBuffer2,
 			];
@@ -162,7 +162,7 @@ class SuQLHandler
 		$field = $this->stringBuffer1;
 		$alias = $this->stringBuffer2;
 
-		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? " as $alias" : '')] = [
+		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? "@$alias" : '')] = [
 			'field' => "$table.$field",
 			'alias' => $alias,
 			'modifier' => $this->arrayBuffer1,

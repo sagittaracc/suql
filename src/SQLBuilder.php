@@ -116,12 +116,17 @@ class SQLBuilder
   }
 
   private function buildSelect($queryObject) {
-    $select = $queryObject['select'];
+    $select = array_keys($queryObject['select']);
 
     if (empty($select))
       return '';
 
-    return 'select ' . implode(', ', array_keys($select));
+    foreach ($select as &$field) {
+      $field = str_replace('@', ' as ', $field);
+    }
+    unset($field);
+
+    return 'select ' . implode(', ', $select);
   }
 
   private function buildFrom($queryObject) {

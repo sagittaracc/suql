@@ -29,7 +29,7 @@ class SQLBaseModifier
     $fieldName = $queryObject['select'][$field]['field'];
     $aliasName = $queryObject['select'][$field]['alias'];
 
-    $queryObject['select']["count($fieldName)" . ($aliasName ? " as $aliasName" : '')] = [
+    $queryObject['select']["count($fieldName)" . ($aliasName ? "@$aliasName" : '')] = [
 			'field' => "count($fieldName)",
 			'alias' => $aliasName,
 		];

@@ -110,10 +110,10 @@ final class SuQLTest extends TestCase
           ],
           't1' => [
             'select' => [
-              'users.id as uid' => ['field' => 'users.id', 'alias' => 'uid'],
-              'groups.id as gid' => ['field' => 'groups.id', 'alias' => 'gid'],
-              'groups.name as gname' => ['field' => 'groups.name', 'alias' => 'gname'],
-              'groups.name as cnt' => [
+              'users.id@uid' => ['field' => 'users.id', 'alias' => 'uid'],
+              'groups.id@gid' => ['field' => 'groups.id', 'alias' => 'gid'],
+              'groups.name@gname' => ['field' => 'groups.name', 'alias' => 'gname'],
+              'groups.name@cnt' => [
                 'field' => 'groups.name',
                 'alias' => 'cnt',
                 'modifier' => [
