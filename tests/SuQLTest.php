@@ -106,20 +106,23 @@ final class SuQLTest extends TestCase
             'join' => [],
             'group' => [],
             'order' => [],
+            'having' => [],
           ],
           't1' => [
             'select' => [
-              'users.id as uid' => [
-                'field' => 'users.id',
-                'alias' => 'uid',
+              'users.id@uid' => ['field' => 'users.id', 'alias' => 'uid'],
+              'groups.id@gid' => ['field' => 'groups.id', 'alias' => 'gid'],
+              'groups.name@gname' => ['field' => 'groups.name', 'alias' => 'gname'],
+              'groups.name@cnt' => [
+                'field' => 'groups.name',
+                'alias' => 'cnt',
                 'modifier' => [
-                  'somefunc' => ['1', '3'],
-                  'anotherfunc' => ['1', 'false']
+                  'group' => [
+                    0 => 'admin'
+                  ],
+                  'count' => []
                 ]
               ],
-              'groups.id as gid' => ['field' => 'groups.id', 'alias' => 'gid'],
-              'groups.name as gname' => ['field' => 'groups.name', 'alias' => 'gname'],
-              'count(groups.name) as cnt' => ['field' => 'count(groups.name)', 'alias' => 'cnt'],
             ],
             'from' => 'users',
             'where' => [
@@ -131,15 +134,16 @@ final class SuQLTest extends TestCase
               1 => ['table' => 'groups', 'on' => 'group_id <--> gid'],
             ],
             'group' => [
-              0 => 'groups.name'
             ],
-            'order' => []
+            'order' => [],
+            'having' => [
+            ],
           ]
         ]
       ],
       SuQL::toSqlObject("
         #t1 = users {
-          id@uid.somefunc(1, 3).anotherfunc(1, false)
+          id@uid
         } ~ uid > 1
         [uid <--> user_id]
         user_group {}
@@ -147,14 +151,14 @@ final class SuQLTest extends TestCase
         groups {
           id@gid,
           name@gname,
-          name@cnt.group.count
+          name@cnt.group(admin).count
         } ~ gid > 2;
 
         t1 {
           gname,
           cnt
         };
-      ")
+      ", 'beforePreparing')
     );
   }
 
@@ -180,6 +184,54 @@ final class SuQLTest extends TestCase
           cnt
         };
       ")
+    );
+  }
+
+  public function testHaving(): void
+  {
+    $this->assertEquals(
+      "select users.id as uid, groups.id as gid, groups.name as uname, count(groups.name) as cnt from users inner join user_group on users.id  =  user_id inner join groups on group_id  =  groups.id group by groups.name having uname = 'admin'",
+      SuQL::toSql("
+        users {
+          id@uid
+        }
+        [uid <--> user_id]
+        user_group {}
+        [group_id <--> gid]
+        groups {
+          id@gid,
+          name@uname.group('admin'),
+          name@cnt.count
+        };
+      ")
+    );
+  }
+
+  public function testJoin(): void
+  {
+    $this->assertEquals(
+      "select table1.*, table2.Id as t2id, table3.id as t3id from table1 inner join table2 on table1.id  =  table2.Id inner join table3 on table1.id  =  table3.id",
+      SuQL::toSql("
+        table1 {
+          *
+        }
+        [table1.id <--> t2id]
+        table2 {
+          Id@t2id
+        }
+        [table1.id <--> t3id]
+        table3 {
+          id@t3id
+        };
+      ")
+    );
+  }
+
+  public function testSuQLWordsToSQL(): void
+  {
+    $this->assertEquals(
+      ['word1', 'word2', 'now()', 'word3'],
+      SuQLReservedWords::toSql(['word1', 'word2', 'now', 'word3'])
     );
   }
 }

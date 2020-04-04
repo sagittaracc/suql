@@ -5,6 +5,7 @@ class SuQLEntityHelper
 	{
 		return ord($ch) >= 48 && ord($ch) <= 57
 			|| ord($ch) >= 97 && ord($ch) <= 122
+			|| ord($ch) >= 65 && ord($ch) <= 90
 			|| $ch === '_';
 	}
 
@@ -52,7 +53,8 @@ class SuQLEntityHelper
 	{
 		return self::isI($ch)
 				|| self::isS($ch)
-				|| self::isJoinEntitySymbol($ch);
+				|| self::isJoinEntitySymbol($ch)
+				|| $ch === '.';
 	}
 
 	public static function isParamPossibleSymbol($ch)

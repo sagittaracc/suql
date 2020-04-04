@@ -1,5 +1,19 @@
 # Change log
 
+## v1.2 - Apr. 04, 2020
+
+**New features:**
+- SQLModifier class to process custom SuQL and base SQL functions
+- Add HAVING
+- Testing an SQLObject before and after preparing it
+- Add default modifier handler
+- Convert SuQL reserved words to SQL
+
+**Bug fixes:**
+- Refactor
+
+---
+
 ## v1.1 - Mar. 29, 2020
 
 **Bug fixes:**
