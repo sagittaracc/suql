@@ -72,8 +72,6 @@ class SQLBuilder
         $modifier_handler = "mod_$modifier";
   			if (method_exists(SQLModifier::class, $modifier_handler))
   				SQLModifier::$modifier_handler($queryObject, $field);
-        else
-          SQLModifier::default_handler($modifier, $queryObject, $field);
       }
     }
 
