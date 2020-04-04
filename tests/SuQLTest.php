@@ -114,7 +114,7 @@ final class SuQLTest extends TestCase
               'groups.id@gid' => ['field' => 'groups.id', 'alias' => 'gid'],
               'groups.name@gname' => ['field' => 'groups.name', 'alias' => 'gname'],
               'count(groups.name)@cnt' => [
-                'field' => 'count(groups.name)',
+                'field' => 'groups.name',
                 'alias' => 'cnt',
               ],
             ],
