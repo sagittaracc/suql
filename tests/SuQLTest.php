@@ -113,9 +113,15 @@ final class SuQLTest extends TestCase
               'users.id@uid' => ['field' => 'users.id', 'alias' => 'uid'],
               'groups.id@gid' => ['field' => 'groups.id', 'alias' => 'gid'],
               'groups.name@gname' => ['field' => 'groups.name', 'alias' => 'gname'],
-              'count(groups.name)@cnt' => [
+              'groups.name@cnt' => [
                 'field' => 'groups.name',
                 'alias' => 'cnt',
+                'modifier' => [
+                  'group' => [
+                    0 => 'admin'
+                  ],
+                  'count' => []
+                ]
               ],
             ],
             'from' => 'users',
@@ -128,11 +134,9 @@ final class SuQLTest extends TestCase
               1 => ['table' => 'groups', 'on' => 'group_id <--> gid'],
             ],
             'group' => [
-              0 => 'groups.name'
             ],
             'order' => [],
             'having' => [
-              0 => 'cnt = admin'
             ],
           ]
         ]
@@ -154,7 +158,7 @@ final class SuQLTest extends TestCase
           gname,
           cnt
         };
-      ", 'afterPreparing')
+      ", 'beforePreparing')
     );
   }
 

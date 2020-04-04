@@ -6,6 +6,7 @@
 - SQLModifier class to process custom SuQL and base SQL functions
 - Add HAVING
 - Testing an SQLObject before and after preparing it
+- Add default modifier handler
 
 **Bug fixes:**
 - Refactor
