@@ -1,18 +1,6 @@
 <?php
 class SQLBaseModifier
 {
-  public static function default_handler($modifier, &$queryObject, $field) {
-    $fieldName = $queryObject['select'][$field]['field'];
-    $aliasName = $queryObject['select'][$field]['alias'];
-
-    $queryObject['select']["$modifier($fieldName)" . ($aliasName ? "@$aliasName" : '')] = [
-      'field' => $fieldName,
-      'alias' => $aliasName,
-    ];
-
-    unset($queryObject['select'][$field]);
-  }
-
   public static function mod_asc(&$queryObject, $field) {
     $queryObject['order'][] = [
       'field' => $queryObject['select'][$field]['field'],
