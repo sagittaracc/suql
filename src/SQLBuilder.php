@@ -108,7 +108,28 @@ class SQLBuilder
   private function buildJoin($query) {
     $queryObject = $this->getQuery($query);
 
-    $join = $this->parseJoin($queryObject);
+    $join = $queryObject['join'];
+    $select = $queryObject['select'];
+
+    foreach ($join as &$_join) {
+      $on = $_join['on'];
+
+      $on = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $on);
+
+      if (count(explode(self::INNER_JOIN, $on)) === 2) {
+        $_join['type'] = 'inner';
+        $_join['on'] = implode(' = ', explode(self::INNER_JOIN, $on));
+      } else if (count(explode(self::RIGHT_JOIN, $on)) === 2) {
+        $_join['type'] = 'right';
+        $_join['on'] = implode(' = ', explode(self::RIGHT_JOIN, $on));
+      } else if (count(explode(self::LEFT_JOIN, $on)) === 2) {
+        $_join['type'] = 'left';
+        $_join['on'] = implode(' = ', explode(self::LEFT_JOIN, $on));
+      } else {
+
+      }
+    }
+    unset($_join);
 
     if (empty($join))
       return '';
@@ -131,7 +152,14 @@ class SQLBuilder
   private function buildWhere($query) {
     $queryObject = $this->getQuery($query);
 
-    $where = $this->parseWhere($queryObject);
+    $where = $queryObject['where'];
+    $select = $queryObject['select'];
+
+    foreach ($where as &$_where) {
+      $_where = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $_where);
+    }
+    unset($_where);
+
     return !empty($where) ? ' where ' . implode(' and ', $where) : '';
   }
 
@@ -156,53 +184,5 @@ class SQLBuilder
     }
 
     return ' order by ' . implode(', ', $s);
-  }
-
-  private function parseFields($cond, $select)
-  {
-    $a = array_column($select, 'field');
-    $b = array_column($select, 'alias');
-    return str_replace($b, $a, $cond);
-  }
-
-  private function parseJoin($queryObject)
-  {
-    $join = $queryObject['join'];
-    $select = $queryObject['select'];
-
-    foreach ($join as &$_join) {
-      $on = $_join['on'];
-
-      $on = $this->parseFields($on, $select);
-
-      if (count(explode(self::INNER_JOIN, $on)) === 2) {
-        $_join['type'] = 'inner';
-        $_join['on'] = implode(' = ', explode(self::INNER_JOIN, $on));
-      } else if (count(explode(self::RIGHT_JOIN, $on)) === 2) {
-        $_join['type'] = 'right';
-        $_join['on'] = implode(' = ', explode(self::RIGHT_JOIN, $on));
-      } else if (count(explode(self::LEFT_JOIN, $on)) === 2) {
-        $_join['type'] = 'left';
-        $_join['on'] = implode(' = ', explode(self::LEFT_JOIN, $on));
-      } else {
-
-      }
-    }
-    unset($_join);
-
-    return $join;
-  }
-
-  private function parseWhere($queryObject)
-  {
-    $where = $queryObject['where'];
-    $select = $queryObject['select'];
-
-    foreach ($where as &$_where) {
-      $_where = $this->parseFields($_where, $select);
-    }
-    unset($_where);
-
-    return $where;
   }
 }
