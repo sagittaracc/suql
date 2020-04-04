@@ -210,14 +210,14 @@ final class SuQLTest extends TestCase
   public function testJoin(): void
   {
     $this->assertEquals(
-      "select table1.*, table2.id as t2id, table3.id as t3id from table1 inner join table2 on table1.id  =  table2.id inner join table3 on table1.id  =  table3.id",
+      "select table1.*, table2.Id as t2id, table3.id as t3id from table1 inner join table2 on table1.id  =  table2.Id inner join table3 on table1.id  =  table3.id",
       SuQL::toSql("
         table1 {
           *
         }
         [table1.id <--> t2id]
         table2 {
-          id@t2id
+          Id@t2id
         }
         [table1.id <--> t3id]
         table3 {
@@ -232,18 +232,6 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       ['word1', 'word2', 'now()', 'word3'],
       SuQLReservedWords::toSql(['word1', 'word2', 'now', 'word3'])
-    );
-  }
-
-  public function testModifierParams(): void
-  {
-    $this->assertEquals(
-      "select datediff(table1.id, now()) as uid from table1",
-      SuQL::toSql("
-        table1 {
-          id@uid.datediff(now)
-        };
-      ")
     );
   }
 }

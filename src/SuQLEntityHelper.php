@@ -5,6 +5,7 @@ class SuQLEntityHelper
 	{
 		return ord($ch) >= 48 && ord($ch) <= 57
 			|| ord($ch) >= 97 && ord($ch) <= 122
+			|| ord($ch) >= 65 && ord($ch) <= 90
 			|| $ch === '_';
 	}
 
