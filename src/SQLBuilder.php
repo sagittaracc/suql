@@ -34,22 +34,128 @@ class SQLBuilder
       return false;
   }
 
+  private function setQuery($query, $queryObject)
+  {
+    $this->SQLObject['queries'][$query] = $queryObject;
+  }
+
   private function buildQuery($query)
   {
     $sqlTemplate = "#select##from##join##where##group##having##order#";
 
-    $queryObject = $this->getQuery($query);
-    $queryObject = $this->processModifiers($queryObject);
+    $this->setQuery($query, $this->prepareQuery($query));
 
-    $sqlTemplate = str_replace('#select#', $this->buildSelect($queryObject), $sqlTemplate);
-    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($queryObject), $sqlTemplate);
-    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($queryObject), $sqlTemplate);
-    $sqlTemplate = str_replace('#group#' , $this->buildGroup($queryObject), $sqlTemplate);
-    $sqlTemplate = str_replace('#where#' , $this->buildWhere($queryObject), $sqlTemplate);
-    $sqlTemplate = str_replace('#having#', $this->buildHaving($queryObject), $sqlTemplate);
-    $sqlTemplate = str_replace('#order#' , $this->buildOrder($queryObject), $sqlTemplate);
+    $sqlTemplate = str_replace('#select#', $this->buildSelect($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#group#' , $this->buildGroup($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#where#' , $this->buildWhere($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#having#', $this->buildHaving($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#order#' , $this->buildOrder($query), $sqlTemplate);
 
     return $sqlTemplate;
+  }
+
+  private function prepareQuery($query) {
+    $queryObject = $this->getQuery($query);
+
+    foreach ($queryObject['select'] as $field => $options) {
+      if (empty($options['modifier']))
+        continue;
+
+      foreach ($options['modifier'] as $modifier => $params) {
+        $modifier_handler = "mod_$modifier";
+  			if (method_exists(SQLModifier::class, $modifier_handler))
+  				SQLModifier::$modifier_handler($queryObject, $field);
+      }
+    }
+
+    return $queryObject;
+  }
+
+  private function buildSelect($query) {
+    $queryObject = $this->getQuery($query);
+
+    $select = array_keys($queryObject['select']);
+
+    if (empty($select))
+      return '';
+
+    foreach ($select as &$field) {
+      $field = str_replace('@', ' as ', $field);
+    }
+    unset($field);
+
+    return 'select ' . implode(', ', $select);
+  }
+
+  private function buildFrom($query) {
+    $queryObject = $this->getQuery($query);
+
+    $from = $queryObject['from'];
+
+    if (empty($from))
+      return '';
+
+    if ($this->getQuery($from)) {
+      $nestedQuery = $this->buildQuery($from);
+      return " from ($nestedQuery) {$from}";
+    } else {
+      return " from $from";
+    }
+  }
+
+  private function buildJoin($query) {
+    $queryObject = $this->getQuery($query);
+
+    $join = $this->parseJoin($queryObject);
+
+    if (empty($join))
+      return '';
+
+    $s = [];
+    foreach ($join as $_join) {
+      $s[] = "{$_join['type']} join {$_join['table']} on {$_join['on']}";
+    }
+
+    return ' ' . implode(' ', $s);
+  }
+
+  private function buildGroup($query) {
+    $queryObject = $this->getQuery($query);
+
+    $group = $queryObject['group'];
+    return !empty($group) ? ' group by ' . implode(', ', $group) : '';
+  }
+
+  private function buildWhere($query) {
+    $queryObject = $this->getQuery($query);
+
+    $where = $this->parseWhere($queryObject);
+    return !empty($where) ? ' where ' . implode(' and ', $where) : '';
+  }
+
+  private function buildHaving($query) {
+    $queryObject = $this->getQuery($query);
+
+    $having = $queryObject['having'];
+    return !empty($having) ? ' having ' . implode(' and ', $having) : '';
+  }
+
+  private function buildOrder($query) {
+    $queryObject = $this->getQuery($query);
+
+    $order = $queryObject['order'];
+
+    if (empty($order))
+      return '';
+
+    $s = [];
+    foreach ($order as $_order) {
+      $s[] = "{$_order['field']} {$_order['direction']}";
+    }
+
+    return ' order by ' . implode(', ', $s);
   }
 
   private function parseFields($cond, $select)
@@ -98,91 +204,5 @@ class SQLBuilder
     unset($_where);
 
     return $where;
-  }
-
-  private function processModifiers($queryObject) {
-    foreach ($queryObject['select'] as $field => $options) {
-      if (empty($options['modifier']))
-        continue;
-
-      foreach ($options['modifier'] as $modifier => $params) {
-        $modifier_handler = "mod_$modifier";
-  			if (method_exists(SQLModifier::class, $modifier_handler))
-  				SQLModifier::$modifier_handler($queryObject, $field);
-      }
-    }
-
-    return $queryObject;
-  }
-
-  private function buildSelect($queryObject) {
-    $select = array_keys($queryObject['select']);
-
-    if (empty($select))
-      return '';
-
-    foreach ($select as &$field) {
-      $field = str_replace('@', ' as ', $field);
-    }
-    unset($field);
-
-    return 'select ' . implode(', ', $select);
-  }
-
-  private function buildFrom($queryObject) {
-    $from = $queryObject['from'];
-
-    if (empty($from))
-      return '';
-
-    if ($this->getQuery($from)) {
-      $nestedQuery = $this->buildQuery($from);
-      return " from ($nestedQuery) {$from}";
-    } else {
-      return " from $from";
-    }
-  }
-
-  private function buildJoin($queryObject) {
-    $join = $this->parseJoin($queryObject);
-
-    if (empty($join))
-      return '';
-
-    $s = [];
-    foreach ($join as $_join) {
-      $s[] = "{$_join['type']} join {$_join['table']} on {$_join['on']}";
-    }
-
-    return ' ' . implode(' ', $s);
-  }
-
-  private function buildGroup($queryObject) {
-    $group = $queryObject['group'];
-    return !empty($group) ? ' group by ' . implode(', ', $group) : '';
-  }
-
-  private function buildWhere($queryObject) {
-    $where = $this->parseWhere($queryObject);
-    return !empty($where) ? ' where ' . implode(' and ', $where) : '';
-  }
-
-  private function buildHaving($queryObject) {
-    $having = $queryObject['having'];
-    return !empty($having) ? ' having ' . implode(' and ', $having) : '';
-  }
-
-  private function buildOrder($queryObject) {
-    $order = $queryObject['order'];
-
-    if (empty($order))
-      return '';
-
-    $s = [];
-    foreach ($order as $_order) {
-      $s[] = "{$_order['field']} {$_order['direction']}";
-    }
-
-    return ' order by ' . implode(', ', $s);
   }
 }
