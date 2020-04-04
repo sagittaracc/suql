@@ -1,11 +1,13 @@
 <?php
 class SQLBaseModifier
 {
-  private static function default_handler($modifier, &$queryObject, $field) {
+  public static function default_handler($modifier, &$queryObject, $field) {
     $fieldName = $queryObject['select'][$field]['field'];
     $aliasName = $queryObject['select'][$field]['alias'];
+    $params    = SuQLReservedWords::toSql($queryObject['select'][$field]['modifier'][$modifier]);
+    $strParams = (count($params) > 0 ? ', ' . implode(', ', $params) : '');
 
-    $queryObject['select']["$modifier($fieldName)" . ($aliasName ? "@$aliasName" : '')] = [
+    $queryObject['select']["$modifier($fieldName" . "$strParams)" . ($aliasName ? "@$aliasName" : '')] = [
       'field' => $fieldName,
       'alias' => $aliasName,
     ];

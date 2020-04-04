@@ -226,4 +226,24 @@ final class SuQLTest extends TestCase
       ")
     );
   }
+
+  public function testSuQLWordsToSQL(): void
+  {
+    $this->assertEquals(
+      ['word1', 'word2', 'now()', 'word3'],
+      SuQLReservedWords::toSql(['word1', 'word2', 'now', 'word3'])
+    );
+  }
+
+  public function testModifierParams(): void
+  {
+    $this->assertEquals(
+      "select datediff(table1.id, now()) as uid from table1",
+      SuQL::toSql("
+        table1 {
+          id@uid.datediff(now)
+        };
+      ")
+    );
+  }
 }
