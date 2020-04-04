@@ -26,7 +26,7 @@ class SuQL
 		return false;
 	}
 
-	public function getSQLObject()
+	public function getSQLObjectBeforePreparing()
 	{
 		if ($this->interpret())
 			return $this->tm->output();
@@ -34,14 +34,30 @@ class SuQL
 			return null;
 	}
 
+	public function getSQLObjectAfterPreparing()
+	{
+		if ($this->interpret()) {
+			$this->SQLBuilder = new SQLBuilder($this->tm->output());
+			$this->SQLBuilder->run();
+			return $this->SQLBuilder->getSQLObject();
+		}
+
+		return null;
+	}
+
 	public static function toSql($suql)
 	{
 		return new self($suql);
 	}
 
-	public static function toSqlObject($suql)
+	public static function toSqlObject($suql, $phase)
 	{
-		return (new self($suql))->getSQLObject();
+		if ($phase === 'beforePreparing')
+			return (new self($suql))->getSQLObjectBeforePreparing();
+		else if ($phase === 'afterPreparing')
+			return (new self($suql))->getSQLObjectAfterPreparing();
+		else
+			return null;
 	}
 
 	public function __toString()

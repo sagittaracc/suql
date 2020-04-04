@@ -13,6 +13,11 @@ class SQLBuilder
     $this->SQLObject = $SQLObject;
   }
 
+  public function getSQLObject()
+  {
+    return $this->SQLObject;
+  }
+
   public function getSql()
   {
     return $this->sql;

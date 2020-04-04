@@ -1,10 +1,11 @@
 # Change log
 
-## v1.2 - Apr. 01, 2020
+## v1.2 - Apr. 04, 2020
 
 **New features:**
 - SQLModifier class to process custom SuQL and base SQL functions
 - Add HAVING
+- Testing an SQLObject before and after preparing it
 
 **Bug fixes:**
 - Refactor
