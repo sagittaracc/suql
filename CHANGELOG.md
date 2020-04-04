@@ -7,6 +7,7 @@
 - Add HAVING
 - Testing an SQLObject before and after preparing it
 - Add default modifier handler
+- Convert SuQL reserved words to SQL
 
 **Bug fixes:**
 - Refactor
