@@ -1,4 +1,4 @@
-# SuQL
+# Sugar SQL
 ### What is this?
 SuQL is syntactic sugar for SQL.
 ### Why do you need this?
