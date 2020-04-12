@@ -5,7 +5,7 @@
 **New features:**
 - Change suql join syntax
 
-**Buf fixes:**
+**Bug fixes:**
 - Refactor
 
 ---
