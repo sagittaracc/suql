@@ -106,14 +106,6 @@ class SuQLHandler
 		$this->stringBuffer1 = '';
 	}
 
-	public function TM_STAY_join_clause($ch) {
-		$this->stringBuffer1 .= $ch;
-	}
-
-	public function TM_GO_join_clause_end($ch) {
-
-	}
-
 	public function TM_GO_joined_select($ch) {
 		$this->stringBuffer2 .= $ch;
 	}
