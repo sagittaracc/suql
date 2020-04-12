@@ -49,4 +49,18 @@ class SQLBaseModifier
     $queryObject['join'][$table]['type'] = 'inner';
     $queryObject['join'][$table]['on'] = $fieldOptions['field'] . ' = ' . $fieldOptions['modifier']['join'][0];
   }
+
+  public static function mod_left_join(&$queryObject, $field) {
+    $fieldOptions = $queryObject['select'][$field];
+    $table = $fieldOptions['table'];
+    $queryObject['join'][$table]['type'] = 'left';
+    $queryObject['join'][$table]['on'] = $fieldOptions['field'] . ' = ' . $fieldOptions['modifier']['left_join'][0];
+  }
+
+  public static function mod_right_join(&$queryObject, $field) {
+    $fieldOptions = $queryObject['select'][$field];
+    $table = $fieldOptions['table'];
+    $queryObject['join'][$table]['type'] = 'right';
+    $queryObject['join'][$table]['on'] = $fieldOptions['field'] . ' = ' . $fieldOptions['modifier']['right_join'][0];
+  }
 }

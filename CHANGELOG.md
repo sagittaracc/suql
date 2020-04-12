@@ -5,6 +5,9 @@
 **New features:**
 - Change suql join syntax
 
+**Buf fixes:**
+- Refactor
+
 ---
 
 ## v1.2 - Apr. 04, 2020
