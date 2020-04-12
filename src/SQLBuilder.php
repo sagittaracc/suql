@@ -1,10 +1,6 @@
 <?php
 class SQLBuilder
 {
-  const LEFT_JOIN = '<--';
-  const RIGHT_JOIN = '-->';
-  const INNER_JOIN = '<-->';
-
   private $SQLObject = null;
   private $sql = null;
 
@@ -117,22 +113,7 @@ class SQLBuilder
     $select = $queryObject['select'];
 
     foreach ($join as &$_join) {
-      $on = $_join['on'];
-
-      $on = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $on);
-
-      if (count(explode(self::INNER_JOIN, $on)) === 2) {
-        $_join['type'] = 'inner';
-        $_join['on'] = implode(' = ', explode(self::INNER_JOIN, $on));
-      } else if (count(explode(self::RIGHT_JOIN, $on)) === 2) {
-        $_join['type'] = 'right';
-        $_join['on'] = implode(' = ', explode(self::RIGHT_JOIN, $on));
-      } else if (count(explode(self::LEFT_JOIN, $on)) === 2) {
-        $_join['type'] = 'left';
-        $_join['on'] = implode(' = ', explode(self::LEFT_JOIN, $on));
-      } else {
-
-      }
+      $_join['on'] = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $_join['on']);
     }
     unset($_join);
 

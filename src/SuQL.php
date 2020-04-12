@@ -120,10 +120,10 @@ class SuQL
 						else {throw new Exception($i);}
 						break;
 					case 'select_end':
-						if (SuQLEntityHelper::isS($this->tm->ch)) ;
-						else if ($this->tm->ch === '~') $this->tm->go('where_clause');
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if ($this->tm->ch === ';') $this->tm->go('0');
-						else if ($this->tm->ch === '[') $this->tm->go('join_clause');
+						else if ($this->tm->ch === '[') $this->tm->go('where_clause');
 						else {throw new Exception($i);}
 						break;
 					case 'new_field_expects':
@@ -158,6 +158,7 @@ class SuQL
 						else if ($this->tm->ch === '}') {
 							$this->tm->go('field_modifier');
 							$this->tm->go('apply_field_modifiers');
+							$this->tm->go('select_end');
 						}
 						else if ($this->tm->ch === '(') $this->tm->go('field_modifier_param_expects');
 						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_field_modifier_expects');
@@ -187,6 +188,7 @@ class SuQL
 						else if ($this->tm->ch === '}') {
 							$this->tm->go('field_modifier');
 							$this->tm->go('apply_field_modifiers');
+							$this->tm->go('select_end');
 						}
 						else {throw new Exception($i);}
 						break;
@@ -194,8 +196,7 @@ class SuQL
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('field');
 						else if ($this->tm->ch === ';') $this->tm->go('0');
-						else if ($this->tm->ch === '~') $this->tm->go('where_clause');
-						else if ($this->tm->ch === '[') $this->tm->go('join_clause');
+						else if ($this->tm->ch === '[') $this->tm->go('where_clause');
 						else {throw new Exception($i);}
 						break;
 					case 'new_aliased_field_expects':
@@ -206,23 +207,12 @@ class SuQL
 						break;
 					case 'where_clause':
 						if (SuQLEntityHelper::isWhereClausePossibleSymbol($this->tm->ch)) $this->tm->stay('where_clause');
-						else if ($this->tm->ch === ';') {
-							$this->tm->go('where_clause_end');
-							$this->tm->go('0');
-						}
-						else if ($this->tm->ch === '['){
-							$this->tm->go('where_clause_end');
-							$this->tm->go('join_clause');
-						}
+						else if ($this->tm->ch === ']') $this->tm->go('where_clause_end');
 						else {throw new Exception($i);}
 						break;
-					case 'join_clause':
-						if (SuQLEntityHelper::isJoinClausePossibleSymbol($this->tm->ch)) $this->tm->stay('join_clause');
-						else if ($this->tm->ch === ']') $this->tm->go('join_clause_end');
-						else {throw new Exception($i);}
-						break;
-					case 'join_clause_end':
+					case 'where_clause_end':
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === ';') $this->tm->go('0');
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
 						else {throw new Exception($i);}
 						break;
