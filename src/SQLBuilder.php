@@ -1,10 +1,6 @@
 <?php
 class SQLBuilder
 {
-  const LEFT_JOIN = '<--';
-  const RIGHT_JOIN = '-->';
-  const INNER_JOIN = '<-->';
-
   private $SQLObject = null;
   private $sql = null;
 
