@@ -208,29 +208,11 @@ class SuQL
 					case 'where_clause':
 						if (SuQLEntityHelper::isWhereClausePossibleSymbol($this->tm->ch)) $this->tm->stay('where_clause');
 						else if ($this->tm->ch === ']') $this->tm->go('where_clause_end');
-						else if ($this->tm->ch === ';') {
-							$this->tm->go('where_clause_end');
-							$this->tm->go('0');
-						}
-						else if ($this->tm->ch === '['){
-							$this->tm->go('where_clause_end');
-							$this->tm->go('join_clause');
-						}
 						else {throw new Exception($i);}
 						break;
 					case 'where_clause_end':
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if ($this->tm->ch === ';') $this->tm->go('0');
-						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
-						else {throw new Exception($i);}
-						break;
-					case 'join_clause':
-						if (SuQLEntityHelper::isJoinClausePossibleSymbol($this->tm->ch)) $this->tm->stay('join_clause');
-						else if ($this->tm->ch === ']') $this->tm->go('join_clause_end');
-						else {throw new Exception($i);}
-						break;
-					case 'join_clause_end':
-						if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
 						else {throw new Exception($i);}
 						break;
