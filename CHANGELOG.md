@@ -1,5 +1,12 @@
 # Change log
 
+## v1.3 - Apr. 12, 2020
+
+**New features:**
+- Change suql join syntax
+
+---
+
 ## v1.2 - Apr. 04, 2020
 
 **New features:**
