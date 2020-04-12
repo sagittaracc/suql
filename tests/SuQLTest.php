@@ -27,7 +27,7 @@ final class SuQLTest extends TestCase
         users {
           id@uid,
           name@uname
-        } ~ uid > 5 and uname <> 'admin';
+        } [uid > 5 and uname <> 'admin'];
       ")
     );
   }
@@ -40,7 +40,7 @@ final class SuQLTest extends TestCase
         users {
           *,
           id@uid
-        } ~ uid > 5;
+        } [uid > 5];
       ")
     );
   }
@@ -61,16 +61,27 @@ final class SuQLTest extends TestCase
   public function testJoinGroup(): void
   {
     $this->assertEquals(
-      "select users.id as uid, groups.id as gid, groups.name as gname, count(groups.name) as cnt from users inner join user_group on users.id  =  user_id inner join groups on group_id  =  groups.id group by groups.name",
+      "select ".
+        "users.id as u_id, ".
+        "user_group.user_id as ug_uid, ".
+        "groups.id as g_id, ".
+        "groups.name as gname, ".
+        "count(groups.name) as cnt ".
+      "from users ".
+      "inner join user_group on user_group.user_id = users.id ".
+      "inner join groups on groups.id = user_group.group_id ".
+      "group by groups.name",
       SuQL::toSql("
         users {
-          id@uid
+          id@u_id
         }
-        [uid <--> user_id]
-        user_group {}
-        [group_id <--> gid]
+
+        user_group {
+          user_id@ug_uid.join(u_id)
+        }
+
         groups {
-          id@gid,
+          id@g_id.join(user_group.group_id),
           name@gname,
           name@cnt.group.count
         };
@@ -98,8 +109,8 @@ final class SuQLTest extends TestCase
         'queries' => [
           'main' => [
             'select' => [
-              't1.gname' => ['field' => 't1.gname', 'alias' => ''],
-              't1.cnt' => ['field' => 't1.cnt', 'alias' => ''],
+              't1.gname' => ['table' => 't1', 'field' => 't1.gname', 'alias' => ''],
+              't1.cnt' => ['table' => 't1', 'field' => 't1.cnt', 'alias' => ''],
             ],
             'from' => 't1',
             'where' => [],
@@ -110,10 +121,11 @@ final class SuQLTest extends TestCase
           ],
           't1' => [
             'select' => [
-              'users.id@uid' => ['field' => 'users.id', 'alias' => 'uid'],
-              'groups.id@gid' => ['field' => 'groups.id', 'alias' => 'gid'],
-              'groups.name@gname' => ['field' => 'groups.name', 'alias' => 'gname'],
+              'users.id@uid' => ['table' => 'users', 'field' => 'users.id', 'alias' => 'uid'],
+              'groups.id@gid' => ['table' => 'groups', 'field' => 'groups.id', 'alias' => 'gid', 'modifier' => ['join' => ['ug_gid']]],
+              'groups.name@gname' => ['table' => 'groups', 'field' => 'groups.name', 'alias' => 'gname'],
               'groups.name@cnt' => [
+                'table' => 'groups',
                 'field' => 'groups.name',
                 'alias' => 'cnt',
                 'modifier' => [
@@ -121,7 +133,20 @@ final class SuQLTest extends TestCase
                     0 => 'admin'
                   ],
                   'count' => []
+                ],
+              ],
+              'user_group.user_id@ug_uid' => [
+                'table' => 'user_group',
+                'field' => 'user_group.user_id',
+                'alias' => 'ug_uid',
+                'modifier' => [
+                  'join' => ['uid']
                 ]
+              ],
+              'user_group.group_id@ug_gid' => [
+                'table' => 'user_group',
+                'field' => 'user_group.group_id',
+                'alias' => 'ug_gid',
               ],
             ],
             'from' => 'users',
@@ -130,8 +155,8 @@ final class SuQLTest extends TestCase
               1 => 'gid > 2',
             ],
             'join' => [
-              0 => ['table' => 'user_group', 'on' => 'uid <--> user_id'],
-              1 => ['table' => 'groups', 'on' => 'group_id <--> gid'],
+              'user_group' => ['table' => 'user_group', 'on' => ''],
+              'groups' => ['table' => 'groups', 'on' => ''],
             ],
             'group' => [
             ],
@@ -144,15 +169,18 @@ final class SuQLTest extends TestCase
       SuQL::toSqlObject("
         #t1 = users {
           id@uid
-        } ~ uid > 1
-        [uid <--> user_id]
-        user_group {}
-        [group_id <--> gid]
+        } [uid > 1]
+
+        user_group {
+          user_id@ug_uid.join(uid),
+          group_id@ug_gid
+        }
+
         groups {
-          id@gid,
+          id@gid.join(ug_gid),
           name@gname,
           name@cnt.group(admin).count
-        } ~ gid > 2;
+        } [gid > 2];
 
         t1 {
           gname,
@@ -165,19 +193,38 @@ final class SuQLTest extends TestCase
   public function testNestedQuery(): void
   {
     $this->assertEquals(
-      'select t1.gname, t1.cnt from (select users.id as uid, groups.id as gid, groups.name as gname, count(groups.name) as cnt from users inner join user_group on users.id  =  user_id inner join groups on group_id  =  groups.id where users.id > 1 and groups.id > 2 group by groups.name) t1',
+      'select '.
+        't1.gname, '.
+        't1.cnt '.
+      'from ('.
+        'select '.
+          'users.id as uid, '.
+          'user_group.user_id as ug_uid, '.
+          'user_group.group_id as ug_gid, '.
+          'groups.id as gid, '.
+          'groups.name as gname, '.
+          'count(groups.name) as cnt '.
+        'from users '.
+        'inner join user_group on user_group.user_id = users.id '.
+        'inner join groups on groups.id = user_group.group_id '.
+        'where users.id > 1 and groups.id > 2 '.
+        'group by groups.name'.
+      ') t1',
       SuQL::toSql("
         #t1 = users {
           id@uid
-        } ~ uid > 1
-        [uid <--> user_id]
-        user_group {}
-        [group_id <--> gid]
+        } [uid > 1]
+
+        user_group {
+          user_id@ug_uid.join(uid),
+          group_id@ug_gid
+        }
+
         groups {
-          id@gid,
+          id@gid.join(ug_gid),
           name@gname,
           name@cnt.group.count
-        } ~ gid > 2;
+        } [gid > 2];
 
         t1 {
           gname,
@@ -190,16 +237,18 @@ final class SuQLTest extends TestCase
   public function testHaving(): void
   {
     $this->assertEquals(
-      "select users.id as uid, groups.id as gid, groups.name as uname, count(groups.name) as cnt from users inner join user_group on users.id  =  user_id inner join groups on group_id  =  groups.id group by groups.name having uname = 'admin'",
+      "select users.id as uid, user_group.user_id as ug_uid, groups.id as gid, groups.name as uname, count(groups.name) as cnt from users inner join user_group on user_group.user_id = users.id inner join groups on groups.id = user_group.group_id group by groups.name having uname = 'admin'",
       SuQL::toSql("
         users {
           id@uid
         }
-        [uid <--> user_id]
-        user_group {}
-        [group_id <--> gid]
+
+        user_group {
+          user_id@ug_uid.join(uid)
+        }
+
         groups {
-          id@gid,
+          id@gid.join(user_group.group_id),
           name@uname.group('admin'),
           name@cnt.count
         };
@@ -210,18 +259,18 @@ final class SuQLTest extends TestCase
   public function testJoin(): void
   {
     $this->assertEquals(
-      "select table1.*, table2.Id as t2id, table3.id as t3id from table1 inner join table2 on table1.id  =  table2.Id inner join table3 on table1.id  =  table3.id",
+      "select table1.*, table2.Id as t2id, table3.id as t3id from table1 inner join table2 on table2.Id = table1.id inner join table3 on table3.id = table1.id",
       SuQL::toSql("
         table1 {
           *
         }
-        [table1.id <--> t2id]
+
         table2 {
-          Id@t2id
+          Id@t2id.join(table1.id)
         }
-        [table1.id <--> t3id]
+
         table3 {
-          id@t3id
+          id@t3id.join(table1.id)
         };
       ")
     );
