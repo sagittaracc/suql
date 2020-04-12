@@ -42,4 +42,11 @@ class SQLBaseModifier
   public static function mod_count(&$queryObject, $field) {
     self::default_handler('count', $queryObject, $field);
   }
+
+  public static function mod_join(&$queryObject, $field) {
+    $fieldOptions = $queryObject['select'][$field];
+    $table = $fieldOptions['table'];
+    $queryObject['join'][$table]['type'] = 'inner';
+    $queryObject['join'][$table]['on'] = $fieldOptions['field'] . ' = ' . $fieldOptions['modifier']['join'][0];
+  }
 }
