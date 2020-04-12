@@ -120,7 +120,8 @@ class SuQL
 						else {throw new Exception($i);}
 						break;
 					case 'select_end':
-						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if ($this->tm->ch === '~') $this->tm->go('where_clause');
 						else if ($this->tm->ch === ';') $this->tm->go('0');
 						else if ($this->tm->ch === '[') $this->tm->go('join_clause');
@@ -158,6 +159,7 @@ class SuQL
 						else if ($this->tm->ch === '}') {
 							$this->tm->go('field_modifier');
 							$this->tm->go('apply_field_modifiers');
+							$this->tm->go('select_end');
 						}
 						else if ($this->tm->ch === '(') $this->tm->go('field_modifier_param_expects');
 						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_field_modifier_expects');
@@ -187,6 +189,7 @@ class SuQL
 						else if ($this->tm->ch === '}') {
 							$this->tm->go('field_modifier');
 							$this->tm->go('apply_field_modifiers');
+							$this->tm->go('select_end');
 						}
 						else {throw new Exception($i);}
 						break;
