@@ -1,5 +1,12 @@
 # Change log
 
+## v1.3.1 - Apr. 12, 2020
+
+**New features:**
+- Field aliases are not necessary while using field modifiers
+
+---
+
 ## v1.3 - Apr. 12, 2020
 
 **New features:**
