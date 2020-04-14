@@ -309,4 +309,16 @@ final class SuQLTest extends TestCase
       SuQLReservedWords::toSql(['word1', 'word2', 'now', 'word3'])
     );
   }
+
+  public function testWhereBitwise(): void
+  {
+    $this->assertEquals(
+      "select users.* from users where users.id % 2 = 0",
+      SuQL::toSql("
+        users {
+          *
+        } [users.id % 2 = 0];
+      ")
+    );
+  }
 }

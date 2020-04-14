@@ -52,7 +52,8 @@ class SuQLEntityHelper
 				|| self::isComparisonSymbol($ch)
 				|| self::isPlaceholderSymbol($ch)
 				|| self::isQuote($ch)
-				|| self::isBitwiseOperator($ch);
+				|| self::isBitwiseOperator($ch)
+				|| $ch === '.';
 	}
 
 	public static function isJoinClausePossibleSymbol($ch)
