@@ -1,9 +1,12 @@
 # Change log
 
-## v1.3.1 - Apr. 12, 2020
+## v1.3.1 - Apr. 14, 2020
 
 **New features:**
 - Field aliases are not necessary while using field modifiers
+
+**Bug fixes:**
+- Where clause bitwise operations
 
 ---
 
