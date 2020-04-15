@@ -117,6 +117,7 @@ class SuQL
 						else if ($this->tm->ch === ',') $this->tm->go('new_field');
 						else if ($this->tm->ch === '}') $this->tm->go('select_end');
 						else if ($this->tm->ch === '@') $this->tm->go('field_alias_expects');
+						else if ($this->tm->ch === '.') $this->tm->go('field_modifier');
 						else {throw new Exception($i);}
 						break;
 					case 'select_end':

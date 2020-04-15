@@ -276,11 +276,49 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testFieldsWithNoAliases(): void
+  {
+    $this->assertEquals(
+      'select '.
+        'users.*, '.
+        'user_group.user_id, '.
+        'groups.*, '.
+        'groups.id '.
+      'from users '.
+      'inner join user_group on user_group.user_id = users.id '.
+      'inner join groups on groups.id = user_group.group_id',
+      SuQL::toSql("
+        users {*}
+
+        user_group {
+          user_id.join(users.id)
+        }
+
+        groups {
+          *,
+          id.join(user_group.group_id)
+        };
+      ")
+    );
+  }
+
   public function testSuQLWordsToSQL(): void
   {
     $this->assertEquals(
       ['word1', 'word2', 'now()', 'word3'],
       SuQLReservedWords::toSql(['word1', 'word2', 'now', 'word3'])
+    );
+  }
+
+  public function testWhereBitwise(): void
+  {
+    $this->assertEquals(
+      "select users.* from users where users.id % 2 = 0",
+      SuQL::toSql("
+        users {
+          *
+        } [users.id % 2 = 0];
+      ")
     );
   }
 }

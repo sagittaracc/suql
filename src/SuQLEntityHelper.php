@@ -39,6 +39,11 @@ class SuQLEntityHelper
 		return $ch === '\'' || $ch === '"';
 	}
 
+	public static function isBitwiseOperator($ch)
+	{
+		return $ch === '%';
+	}
+
 	public static function isWhereClausePossibleSymbol($ch)
 	{
 		return self::isI($ch)
@@ -46,7 +51,9 @@ class SuQLEntityHelper
 				|| self::isParentheses($ch)
 				|| self::isComparisonSymbol($ch)
 				|| self::isPlaceholderSymbol($ch)
-				|| self::isQuote($ch);
+				|| self::isQuote($ch)
+				|| self::isBitwiseOperator($ch)
+				|| $ch === '.';
 	}
 
 	public static function isJoinClausePossibleSymbol($ch)
