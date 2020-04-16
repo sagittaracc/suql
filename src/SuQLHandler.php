@@ -69,22 +69,28 @@ class SuQLHandler
 	}
 
 	public function TM_GO_new_field($ch) {
-		$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? "@$this->stringBuffer2" : '')] = [
+		$fieldOptions = [
 			'table' => $this->table,
 			'field' => "$this->table.$this->stringBuffer1",
 			'alias' => $this->stringBuffer2,
 		];
+		$fieldName = $fieldOptions['alias'] ? $fieldOptions['alias'] : $fieldOptions['field'];
+		$this->osuql['queries'][$this->query]['select'][$fieldName] = $fieldOptions;
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 	}
 
 	public function TM_GO_select_end($ch) {
-		if ($this->stringBuffer1)
-			$this->osuql['queries'][$this->query]['select']["$this->table.$this->stringBuffer1" . ($this->stringBuffer2 ? "@$this->stringBuffer2" : '')] = [
+		if ($this->stringBuffer1) {
+			$fieldOptions = [
 				'table' => $this->table,
 				'field' => "$this->table.$this->stringBuffer1",
 				'alias' => $this->stringBuffer2,
 			];
+			$fieldName = $fieldOptions['alias'] ? $fieldOptions['alias'] : $fieldOptions['field'];
+			$this->osuql['queries'][$this->query]['select'][$fieldName] = $fieldOptions;
+		}
+
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 	}
@@ -156,12 +162,15 @@ class SuQLHandler
 		$field = $this->stringBuffer1;
 		$alias = $this->stringBuffer2;
 
-		$this->osuql['queries'][$this->query]['select']["$table.$field" . ($alias ? "@$alias" : '')] = [
+		$fieldOptions = [
 			'table' => $table,
 			'field' => "$table.$field",
 			'alias' => $alias,
 			'modifier' => $this->arrayBuffer1,
 		];
+		$fieldName = $fieldOptions['alias'] ? $fieldOptions['alias'] : $fieldOptions['field'];
+
+		$this->osuql['queries'][$this->query]['select'][$fieldName] = $fieldOptions;
 
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';

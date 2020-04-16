@@ -77,17 +77,17 @@ class SQLBuilder
   private function buildSelect($query) {
     $queryObject = $this->getQuery($query);
 
-    $select = array_keys($queryObject['select']);
+    $select = $queryObject['select'];
 
     if (empty($select))
       return '';
 
-    foreach ($select as &$field) {
-      $field = str_replace('@', ' as ', $field);
+    $selectList = [];
+    foreach ($select as $fieldOptions) {
+      $selectList[] = $fieldOptions['field'] . ($fieldOptions['alias'] ? " as {$fieldOptions['alias']}" : '');
     }
-    unset($field);
 
-    return 'select ' . implode(', ', $select);
+    return 'select ' . implode(', ', $selectList);
   }
 
   private function buildFrom($query) {

@@ -7,24 +7,30 @@ class SQLBaseModifier
     $params    = SuQLReservedWords::toSql($queryObject['select'][$field]['modifier'][$modifier]);
     $strParams = (count($params) > 0 ? ', ' . implode(', ', $params) : '');
 
-    $queryObject['select']["$modifier($fieldName" . "$strParams)" . ($aliasName ? "@$aliasName" : '')] = [
-      'field' => $fieldName,
+    $queryObject['select'][$field] = [
+      'field' => "$modifier($fieldName" . "$strParams)",
       'alias' => $aliasName,
     ];
-
-    unset($queryObject['select'][$field]);
   }
 
   public static function mod_asc(&$queryObject, $field) {
+    $sortBy = $queryObject['select'][$field]['alias']
+            ? $queryObject['select'][$field]['alias']
+            : $queryObject['select'][$field]['field'];
+
     $queryObject['order'][] = [
-      'field' => $queryObject['select'][$field]['field'],
+      'field' => $sortBy,
       'direction' => 'asc',
     ];
   }
 
   public static function mod_desc(&$queryObject, $field) {
+    $sortBy = $queryObject['select'][$field]['alias']
+            ? $queryObject['select'][$field]['alias']
+            : $queryObject['select'][$field]['field'];
+
     $queryObject['order'][] = [
-      'field' => $queryObject['select'][$field]['field'],
+      'field' => $sortBy,
       'direction' => 'desc',
     ];
   }
