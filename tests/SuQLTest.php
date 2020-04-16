@@ -3,6 +3,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SuQLTest extends TestCase
 {
+
   public function testSelect(): void
   {
     $this->assertEquals(
@@ -92,7 +93,7 @@ final class SuQLTest extends TestCase
   public function testOrder(): void
   {
     $this->assertEquals(
-      "select users.name as uname, users.id as uid from users order by users.name desc, users.id asc",
+      "select users.name as uname, users.id as uid from users order by uname desc, uid asc",
       SuQL::toSql("
         users {
           name@uname.desc,
@@ -121,10 +122,10 @@ final class SuQLTest extends TestCase
           ],
           't1' => [
             'select' => [
-              'users.id@uid' => ['table' => 'users', 'field' => 'users.id', 'alias' => 'uid'],
-              'groups.id@gid' => ['table' => 'groups', 'field' => 'groups.id', 'alias' => 'gid', 'modifier' => ['join' => ['ug_gid']]],
-              'groups.name@gname' => ['table' => 'groups', 'field' => 'groups.name', 'alias' => 'gname'],
-              'groups.name@cnt' => [
+              'uid' => ['table' => 'users', 'field' => 'users.id', 'alias' => 'uid'],
+              'gid' => ['table' => 'groups', 'field' => 'groups.id', 'alias' => 'gid', 'modifier' => ['join' => ['ug_gid']]],
+              'gname' => ['table' => 'groups', 'field' => 'groups.name', 'alias' => 'gname'],
+              'cnt' => [
                 'table' => 'groups',
                 'field' => 'groups.name',
                 'alias' => 'cnt',
@@ -135,7 +136,7 @@ final class SuQLTest extends TestCase
                   'count' => []
                 ],
               ],
-              'user_group.user_id@ug_uid' => [
+              'ug_uid' => [
                 'table' => 'user_group',
                 'field' => 'user_group.user_id',
                 'alias' => 'ug_uid',
@@ -143,7 +144,7 @@ final class SuQLTest extends TestCase
                   'join' => ['uid']
                 ]
               ],
-              'user_group.group_id@ug_gid' => [
+              'ug_gid' => [
                 'table' => 'user_group',
                 'field' => 'user_group.group_id',
                 'alias' => 'ug_gid',
@@ -321,4 +322,29 @@ final class SuQLTest extends TestCase
       ")
     );
   }
+
+  public function testOrderDataInCountColumn(): void {
+    $this->assertEquals(
+      "select user_group.user_id, groups.id, groups.name as gname, count(groups.name) as count ".
+      "from users ".
+      "inner join user_group on user_group.user_id = users.id ".
+      "inner join groups on groups.id = user_group.group_id ".
+      "group by groups.name ".
+      "order by count asc",
+      SuQL::toSql("
+        users {}
+
+        user_group {
+          user_id.join(users.id)
+        }
+
+        groups {
+          id.join(user_group.group_id),
+          name@gname,
+          name@count.group.count.asc
+        };
+      ")
+    );
+  }
+
 }
