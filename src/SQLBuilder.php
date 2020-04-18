@@ -42,17 +42,18 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $sqlTemplate = "#select##from##join##where##group##having##order#";
+    $sqlTemplate = "#select##from##join##where##group##having##order##limit#";
 
     $this->setQuery($query, $this->prepareQuery($query));
 
     $sqlTemplate = str_replace('#select#', $this->buildSelect($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#group#' , $this->buildGroup($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#where#' , $this->buildWhere($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query),   $sqlTemplate);
+    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query),   $sqlTemplate);
+    $sqlTemplate = str_replace('#group#' , $this->buildGroup($query),  $sqlTemplate);
+    $sqlTemplate = str_replace('#where#' , $this->buildWhere($query),  $sqlTemplate);
     $sqlTemplate = str_replace('#having#', $this->buildHaving($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#order#' , $this->buildOrder($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#order#' , $this->buildOrder($query),  $sqlTemplate);
+    $sqlTemplate = str_replace('#limit#' , $this->buildLimit($query),  $sqlTemplate);
 
     return $sqlTemplate;
   }
@@ -170,5 +171,17 @@ class SQLBuilder
     }
 
     return ' order by ' . implode(', ', $s);
+  }
+
+  private function buildLimit($query) {
+    $bound = [];
+    $queryObject = $this->getQuery($query);
+
+    if (!is_null($queryObject['offset'])) $bound[] = $queryObject['offset'];
+    if (!is_null($queryObject['limit'])) $bound[] = $queryObject['limit'];
+
+    $bound = implode(', ', $bound);
+
+    return $bound ? " limit $bound" : '';
   }
 }

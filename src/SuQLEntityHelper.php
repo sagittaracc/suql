@@ -1,9 +1,14 @@
 <?php
 class SuQLEntityHelper
 {
+	public static function isN($ch)
+	{
+		return ord($ch) >= 48 && ord($ch) <= 57;
+	}
+
 	public static function isI($ch)
 	{
-		return ord($ch) >= 48 && ord($ch) <= 57
+		return self::isN($ch)
 			|| ord($ch) >= 97 && ord($ch) <= 122
 			|| ord($ch) >= 65 && ord($ch) <= 90
 			|| $ch === '_';

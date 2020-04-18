@@ -119,6 +119,8 @@ final class SuQLTest extends TestCase
             'group' => [],
             'order' => [],
             'having' => [],
+            'offset' => null,
+            'limit' => null,
           ],
           't1' => [
             'select' => [
@@ -159,11 +161,11 @@ final class SuQLTest extends TestCase
               'user_group' => ['table' => 'user_group', 'on' => ''],
               'groups' => ['table' => 'groups', 'on' => ''],
             ],
-            'group' => [
-            ],
+            'group' => [],
             'order' => [],
-            'having' => [
-            ],
+            'having' => [],
+            'offset' => null,
+            'limit' => null,
           ]
         ]
       ],
@@ -343,6 +345,26 @@ final class SuQLTest extends TestCase
           name@gname,
           name@count.group.count.asc
         };
+      ")
+    );
+  }
+
+  public function testLimit(): void {
+    $this->assertEquals(
+      "select users.* from users limit 30",
+      SuQL::toSql("
+        users {
+          *
+        } [30];
+      ")
+    );
+  }
+
+  public function testOffsetLimit(): void {
+    $this->assertEquals(
+      "select users.* from users limit 30, 30",
+      SuQL::toSql("
+        users {*} [ 30 , 30 ]
       ")
     );
   }
