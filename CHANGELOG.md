@@ -5,6 +5,7 @@
 **New features:**
 - Field aliases are not necessary while using field modifiers
 - LIMIT clause
+- DISTINCT
 
 **Bug fixes:**
 - Where clause bitwise operations

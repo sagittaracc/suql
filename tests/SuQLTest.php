@@ -119,6 +119,7 @@ final class SuQLTest extends TestCase
             'group' => [],
             'order' => [],
             'having' => [],
+            'modifier' => null,
             'offset' => null,
             'limit' => null,
           ],
@@ -164,6 +165,7 @@ final class SuQLTest extends TestCase
             'group' => [],
             'order' => [],
             'having' => [],
+            'modifier' => null,
             'offset' => null,
             'limit' => null,
           ]
@@ -374,6 +376,45 @@ final class SuQLTest extends TestCase
       "select users.* from users where users.id % 2 = 0 limit 0, 1",
       SuQL::toSql("
         users {*} ~ {users.id % 2 = 0} [0, 1];
+      ")
+    );
+  }
+
+  public function testObjectSelectModifier(): void {
+    $this->assertEquals(
+      [
+        'queries' => [
+          'main' => [
+            'select' => [
+              'users.*' => [
+                'table' => 'users',
+                'field' => 'users.*',
+                'alias' => ''
+              ]
+            ],
+            'from' => 'users',
+            'where' => [],
+            'having' => [],
+            'join' => [],
+            'group' => [],
+            'order' => [],
+            'modifier' => 'distinct',
+            'offset' => null,
+            'limit' => null,
+          ]
+        ]
+      ],
+      SuQL::toSqlObject("
+        users.distinct {*};
+      ", 'beforePreparing')
+    );
+  }
+
+  public function testSelectModifier(): void {
+    $this->assertEquals(
+      "select distinct users.* from users",
+      SuQL::toSql("
+        users.distinct {*};
       ")
     );
   }

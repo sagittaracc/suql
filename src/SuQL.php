@@ -90,6 +90,17 @@ class SuQL
 						break;
 					case 'select':
 						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->stay('select');
+						else if ($this->tm->ch === '.') $this->tm->go('select_modifier_expects');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_select_expects');
+						else if ($this->tm->ch === '{') $this->tm->go('new_select');
+						else {throw new Exception($i);}
+						break;
+					case 'select_modifier_expects':
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('select_modifier');
+						else {throw new Exception($i);}
+						break;
+					case 'select_modifier':
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->stay('select_modifier');
 						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_select_expects');
 						else if ($this->tm->ch === '{') $this->tm->go('new_select');
 						else {throw new Exception($i);}

@@ -21,7 +21,18 @@ class SuQLHandler
 		$this->stringBuffer4 = '';
 		$this->arrayBuffer1 = [];
 		$this->arrayBuffer2 = [];
-		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'having' => [], 'join' => [], 'group' => [], 'order' => [], 'offset' => null, 'limit' => null];
+		$this->canonicalQuery = [
+			'select' => [],
+			'from' => null,
+			'where' => [],
+			'having' => [],
+			'join' => [],
+			'group' => [],
+			'order' => [],
+			'modifier' => null,	//Модификаторы select
+			'offset' => null,
+			'limit' => null
+		];
 		$this->query = 'main';
 		$this->table = null;
 		$this->osuql['queries'][$this->query] = $this->canonicalQuery;
@@ -54,10 +65,23 @@ class SuQLHandler
 		$this->stringBuffer1 .= $ch;
 	}
 
+	public function TM_GO_select_modifier($ch) {
+		$this->stringBuffer2 .= $ch;
+	}
+
+	public function TM_STAY_select_modifier($ch) {
+		$this->stringBuffer2 .= $ch;
+	}
+
 	public function TM_GO_new_select($ch) {
 		$this->osuql['queries'][$this->query]['from'] = $this->stringBuffer1;
 		$this->table = $this->stringBuffer1;
+
+		if ($this->stringBuffer2)
+			$this->osuql['queries'][$this->query]['modifier'] = $this->stringBuffer2;
+
 		$this->stringBuffer1 = '';
+		$this->stringBuffer2 = '';
 	}
 
 	public function TM_GO_field($ch) {
@@ -166,7 +190,7 @@ class SuQLHandler
 			'table' => $table,
 			'field' => "$table.$field",
 			'alias' => $alias,
-			'modifier' => $this->arrayBuffer1,
+			'modifier' => $this->arrayBuffer1, //Модификаторы field
 		];
 		$fieldName = $fieldOptions['alias'] ? $fieldOptions['alias'] : $fieldOptions['field'];
 
