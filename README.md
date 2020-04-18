@@ -9,4 +9,4 @@ SuQL is syntactic sugar for SQL.
 [Learn more about SuQL](https://github.com/sagittaracc/suql/wiki)
 ### How do you use this?
 1. Include `dist/suql.phar` in your project
-2. Call `SuQL::toSql(<string>)` to convert an SuQL query into standart SQL.
+2. Call `SuQL::toSql(<string>, 'mysql')` to convert an SuQL query into standart SQL.
