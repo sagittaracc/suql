@@ -220,6 +220,7 @@ class SuQL
 						break;
 					case 'where_clause_end':
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === '[') $this->tm->go('offset_limit_clause');
 						else if ($this->tm->ch === ';') $this->tm->go('0');
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
 						else {throw new Exception($i);}

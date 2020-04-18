@@ -369,4 +369,13 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testWhereAndLimitTogether(): void {
+    $this->assertEquals(
+      "select users.* from users where users.id % 2 = 0 limit 0, 1",
+      SuQL::toSql("
+        users {*} ~ {users.id % 2 = 0} [0, 1];
+      ")
+    );
+  }
+
 }
