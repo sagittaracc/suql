@@ -1,10 +1,12 @@
 # Change log
 
-## v1.3.1 - Apr. 18, 2020
+## v1.3.1 - Apr. 19, 2020
 
 **New features:**
 - Field aliases are not necessary while using field modifiers
 - LIMIT clause
+- DISTINCT
+- Support different SQL Drivers
 
 **Bug fixes:**
 - Where clause bitwise operations

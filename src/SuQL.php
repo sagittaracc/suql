@@ -3,6 +3,11 @@ class SuQL
 {
 	private $suql = null;
 
+	private $builder = null;
+	private $availableBuilders = [
+		'mysql' => 'MySQLBuilder'
+	];
+
 	private $tm = null;
 	private $SQLBuilder = null;
 
@@ -11,6 +16,14 @@ class SuQL
 	function __construct($suql)
 	{
 		$this->suql = trim($suql);
+	}
+
+	public function setBuilder($builder)
+	{
+		if (isset($this->availableBuilders[$builder]))
+			$this->builder = $builder;
+
+		return $this;
 	}
 
 	public function getError()
@@ -37,25 +50,24 @@ class SuQL
 	public function getSQLObjectAfterPreparing()
 	{
 		if ($this->interpret()) {
-			$this->SQLBuilder = new SQLBuilder($this->tm->output());
-			$this->SQLBuilder->run();
+			$this->buildSQL();
 			return $this->SQLBuilder->getSQLObject();
 		}
 
 		return null;
 	}
 
-	public static function toSql($suql)
+	public static function toSql($suql, $builder)
 	{
-		return new self($suql);
+		return (new self($suql))->setBuilder($builder);
 	}
 
-	public static function toSqlObject($suql, $phase)
+	public static function toSqlObject($suql, $builder, $phase)
 	{
 		if ($phase === 'beforePreparing')
-			return (new self($suql))->getSQLObjectBeforePreparing();
+			return (new self($suql))->setBuilder($builder)->getSQLObjectBeforePreparing();
 		else if ($phase === 'afterPreparing')
-			return (new self($suql))->getSQLObjectAfterPreparing();
+			return (new self($suql))->setBuilder($builder)->getSQLObjectAfterPreparing();
 		else
 			return null;
 	}
@@ -90,6 +102,17 @@ class SuQL
 						break;
 					case 'select':
 						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->stay('select');
+						else if ($this->tm->ch === '.') $this->tm->go('select_modifier_expects');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_select_expects');
+						else if ($this->tm->ch === '{') $this->tm->go('new_select');
+						else {throw new Exception($i);}
+						break;
+					case 'select_modifier_expects':
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('select_modifier');
+						else {throw new Exception($i);}
+						break;
+					case 'select_modifier':
+						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->stay('select_modifier');
 						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('new_select_expects');
 						else if ($this->tm->ch === '{') $this->tm->go('new_select');
 						else {throw new Exception($i);}
@@ -220,6 +243,7 @@ class SuQL
 						break;
 					case 'where_clause_end':
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === '[') $this->tm->go('offset_limit_clause');
 						else if ($this->tm->ch === ';') $this->tm->go('0');
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
 						else {throw new Exception($i);}
@@ -293,7 +317,12 @@ class SuQL
 
 	private function buildSQL()
 	{
-		$this->SQLBuilder = new SQLBuilder($this->tm->output());
+		if (!$this->builder) return null;
+
+		$classBuilder = $this->availableBuilders[$this->builder];
+		if (!class_exists($classBuilder)) return null;
+
+		$this->SQLBuilder = new $classBuilder($this->tm->output());
 		$this->SQLBuilder->run();
 		return $this->SQLBuilder->getSql();
 	}
