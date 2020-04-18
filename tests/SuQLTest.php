@@ -28,7 +28,7 @@ final class SuQLTest extends TestCase
         users {
           id@uid,
           name@uname
-        } [uid > 5 and uname <> 'admin'];
+        } ~ {uid > 5 and uname <> 'admin'};
       ")
     );
   }
@@ -41,7 +41,7 @@ final class SuQLTest extends TestCase
         users {
           *,
           id@uid
-        } [uid > 5];
+        } ~ {uid > 5};
       ")
     );
   }
@@ -119,6 +119,8 @@ final class SuQLTest extends TestCase
             'group' => [],
             'order' => [],
             'having' => [],
+            'offset' => null,
+            'limit' => null,
           ],
           't1' => [
             'select' => [
@@ -159,18 +161,18 @@ final class SuQLTest extends TestCase
               'user_group' => ['table' => 'user_group', 'on' => ''],
               'groups' => ['table' => 'groups', 'on' => ''],
             ],
-            'group' => [
-            ],
+            'group' => [],
             'order' => [],
-            'having' => [
-            ],
+            'having' => [],
+            'offset' => null,
+            'limit' => null,
           ]
         ]
       ],
       SuQL::toSqlObject("
         #t1 = users {
           id@uid
-        } [uid > 1]
+        } ~ {uid > 1}
 
         user_group {
           user_id@ug_uid.join(uid),
@@ -181,7 +183,7 @@ final class SuQLTest extends TestCase
           id@gid.join(ug_gid),
           name@gname,
           name@cnt.group(admin).count
-        } [gid > 2];
+        } ~ {gid > 2};
 
         t1 {
           gname,
@@ -214,7 +216,7 @@ final class SuQLTest extends TestCase
       SuQL::toSql("
         #t1 = users {
           id@uid
-        } [uid > 1]
+        } ~ {uid > 1}
 
         user_group {
           user_id@ug_uid.join(uid),
@@ -225,7 +227,7 @@ final class SuQLTest extends TestCase
           id@gid.join(ug_gid),
           name@gname,
           name@cnt.group.count
-        } [gid > 2];
+        } ~ {gid > 2};
 
         t1 {
           gname,
@@ -318,7 +320,7 @@ final class SuQLTest extends TestCase
       SuQL::toSql("
         users {
           *
-        } [users.id % 2 = 0];
+        } ~ {users.id % 2 = 0};
       ")
     );
   }
@@ -343,6 +345,26 @@ final class SuQLTest extends TestCase
           name@gname,
           name@count.group.count.asc
         };
+      ")
+    );
+  }
+
+  public function testLimit(): void {
+    $this->assertEquals(
+      "select users.* from users limit 30",
+      SuQL::toSql("
+        users {
+          *
+        } [30];
+      ")
+    );
+  }
+
+  public function testOffsetLimit(): void {
+    $this->assertEquals(
+      "select users.* from users limit 30, 30",
+      SuQL::toSql("
+        users {*} [ 30 , 30 ]
       ")
     );
   }

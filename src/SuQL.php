@@ -124,7 +124,8 @@ class SuQL
 						if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
 						else if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if ($this->tm->ch === ';') $this->tm->go('0');
-						else if ($this->tm->ch === '[') $this->tm->go('where_clause');
+						else if ($this->tm->ch === '~') $this->tm->go('where_clause_expects');
+						else if ($this->tm->ch === '[') $this->tm->go('offset_limit_clause');
 						else {throw new Exception($i);}
 						break;
 					case 'new_field_expects':
@@ -197,7 +198,8 @@ class SuQL
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('field');
 						else if ($this->tm->ch === ';') $this->tm->go('0');
-						else if ($this->tm->ch === '[') $this->tm->go('where_clause');
+						else if ($this->tm->ch === '~') $this->tm->go('where_clause_expects');
+						else if ($this->tm->ch === '[') $this->tm->go('offset_limit_clause');
 						else {throw new Exception($i);}
 						break;
 					case 'new_aliased_field_expects':
@@ -206,15 +208,59 @@ class SuQL
 						else if ($this->tm->ch === '}') $this->tm->go('select_end');
 						else {throw new Exception($i);}
 						break;
+					case 'where_clause_expects':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === '{') $this->tm->go('where_clause');
+						else {throw new Exception($i);}
+						break;
 					case 'where_clause':
 						if (SuQLEntityHelper::isWhereClausePossibleSymbol($this->tm->ch)) $this->tm->stay('where_clause');
-						else if ($this->tm->ch === ']') $this->tm->go('where_clause_end');
+						else if ($this->tm->ch === '}') $this->tm->go('where_clause_end');
 						else {throw new Exception($i);}
 						break;
 					case 'where_clause_end':
 						if (SuQLEntityHelper::isS($this->tm->ch)) ;
 						else if ($this->tm->ch === ';') $this->tm->go('0');
 						else if (SuQLEntityHelper::isI($this->tm->ch)) $this->tm->go('joined_select');
+						else {throw new Exception($i);}
+						break;
+					case 'offset_limit_clause':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if (SuQLEntityHelper::isN($this->tm->ch)) $this->tm->go('offset_or_limit');
+						else {throw new Exception($i);}
+						break;
+					case 'offset_or_limit':
+						if (SuQLEntityHelper::isN($this->tm->ch)) $this->tm->stay('offset_or_limit');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('offset_or_limit_undefined');
+						else if ($this->tm->ch === ',') $this->tm->go('limit_expects');
+						else if ($this->tm->ch === ']') $this->tm->go('offset_limit_clause_end');
+						else {throw new Exception($i);}
+						break;
+					case 'offset_or_limit_undefined':
+						if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->stay('offset_or_limit_undefined');
+						else if ($this->tm->ch === ',') $this->tm->go('limit_expects');
+						else if ($this->tm->ch === ']') $this->tm->go('offset_limit_clause_end');
+						else {throw new Exception($i);}
+						break;
+					case 'limit_expects':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if (SuQLEntityHelper::isN($this->tm->ch)) $this->tm->go('limit');
+						else {throw new Exception($i);}
+						break;
+					case 'limit':
+						if (SuQLEntityHelper::isN($this->tm->ch)) $this->tm->stay('limit');
+						else if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->go('offset_limit_clause_end_expects');
+						else if ($this->tm->ch === ']') $this->tm->go('offset_limit_clause_end');
+						else {throw new Exception($i);}
+						break;
+					case 'offset_limit_clause_end_expects':
+						if (SuQLEntityHelper::isS($this->tm->ch)) $this->tm->stay('offset_limit_clause_end_expects');
+						else if ($this->tm->ch === ']') $this->tm->go('offset_limit_clause_end');
+						else {throw new Exception($i);}
+						break;
+					case 'offset_limit_clause_end':
+						if (SuQLEntityHelper::isS($this->tm->ch)) ;
+						else if ($this->tm->ch === ';') $this->tm->go('0');
 						else {throw new Exception($i);}
 						break;
 					case 'joined_select':

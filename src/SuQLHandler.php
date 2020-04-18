@@ -21,7 +21,7 @@ class SuQLHandler
 		$this->stringBuffer4 = '';
 		$this->arrayBuffer1 = [];
 		$this->arrayBuffer2 = [];
-		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'having' => [], 'join' => [], 'group' => [], 'order' => []];
+		$this->canonicalQuery = ['select' => [], 'from' => null, 'where' => [], 'having' => [], 'join' => [], 'group' => [], 'order' => [], 'offset' => null, 'limit' => null];
 		$this->query = 'main';
 		$this->table = null;
 		$this->osuql['queries'][$this->query] = $this->canonicalQuery;
@@ -175,5 +175,33 @@ class SuQLHandler
 		$this->stringBuffer1 = '';
 		$this->stringBuffer2 = '';
 		$this->arrayBuffer1 = [];
+	}
+
+	public function TM_GO_offset_or_limit($ch) {
+		$this->stringBuffer1 .= $ch;
+	}
+
+	public function TM_STAY_offset_or_limit($ch) {
+		$this->stringBuffer1 .= $ch;
+	}
+
+	public function TM_GO_limit($ch) {
+		$this->stringBuffer2 .= $ch;
+	}
+
+	public function TM_STAY_limit($ch) {
+		$this->stringBuffer2 .= $ch;
+	}
+
+	public function TM_GO_offset_limit_clause_end($ch) {
+		if ($this->stringBuffer2) {
+			$this->osuql['queries'][$this->query]['offset'] = $this->stringBuffer1;
+			$this->osuql['queries'][$this->query]['limit'] = $this->stringBuffer2;
+		} else {
+			$this->osuql['queries'][$this->query]['limit'] = $this->stringBuffer1;
+		}
+
+		$this->stringBuffer1 = '';
+		$this->stringBuffer2 = '';
 	}
 }
