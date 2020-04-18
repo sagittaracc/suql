@@ -411,9 +411,9 @@ final class MySQLTest extends TestCase
 
   public function testSelectModifier(): void {
     $this->assertEquals(
-      "select distinct users.* from users",
+      "select distinct users.id, users.name from users",
       SuQL::toSql("
-        users.distinct {*};
+        users.distinct {id, name};
       ", 'mysql')
     );
   }
