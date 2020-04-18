@@ -28,7 +28,7 @@ final class SuQLTest extends TestCase
         users {
           id@uid,
           name@uname
-        } [uid > 5 and uname <> 'admin'];
+        } ~ {uid > 5 and uname <> 'admin'};
       ")
     );
   }
@@ -41,7 +41,7 @@ final class SuQLTest extends TestCase
         users {
           *,
           id@uid
-        } [uid > 5];
+        } ~ {uid > 5};
       ")
     );
   }
@@ -170,7 +170,7 @@ final class SuQLTest extends TestCase
       SuQL::toSqlObject("
         #t1 = users {
           id@uid
-        } [uid > 1]
+        } ~ {uid > 1}
 
         user_group {
           user_id@ug_uid.join(uid),
@@ -181,7 +181,7 @@ final class SuQLTest extends TestCase
           id@gid.join(ug_gid),
           name@gname,
           name@cnt.group(admin).count
-        } [gid > 2];
+        } ~ {gid > 2};
 
         t1 {
           gname,
@@ -214,7 +214,7 @@ final class SuQLTest extends TestCase
       SuQL::toSql("
         #t1 = users {
           id@uid
-        } [uid > 1]
+        } ~ {uid > 1}
 
         user_group {
           user_id@ug_uid.join(uid),
@@ -225,7 +225,7 @@ final class SuQLTest extends TestCase
           id@gid.join(ug_gid),
           name@gname,
           name@cnt.group.count
-        } [gid > 2];
+        } ~ {gid > 2};
 
         t1 {
           gname,
@@ -318,7 +318,7 @@ final class SuQLTest extends TestCase
       SuQL::toSql("
         users {
           *
-        } [users.id % 2 = 0];
+        } ~ {users.id % 2 = 0};
       ")
     );
   }
