@@ -1,14 +1,13 @@
 <?php declare(strict_types = 1);
 use PHPUnit\Framework\TestCase;
 
-final class SuQLTest extends TestCase
+final class MySQLTest extends TestCase
 {
-
   public function testSelect(): void
   {
     $this->assertEquals(
       'select users.* from users',
-      SuQL::toSql('users {*};')
+      SuQL::toSql('users {*};', 'mysql')
     );
   }
 
@@ -16,7 +15,7 @@ final class SuQLTest extends TestCase
   {
     $this->assertEquals(
       'select users.id as uid, users.name as uname from users',
-      SuQL::toSql('users {id@uid, name@uname};')
+      SuQL::toSql('users {id@uid, name@uname};', 'mysql')
     );
   }
 
@@ -29,7 +28,7 @@ final class SuQLTest extends TestCase
           id@uid,
           name@uname
         } ~ {uid > 5 and uname <> 'admin'};
-      ")
+      ", 'mysql')
     );
   }
 
@@ -42,7 +41,7 @@ final class SuQLTest extends TestCase
           *,
           id@uid
         } ~ {uid > 5};
-      ")
+      ", 'mysql')
     );
   }
 
@@ -55,7 +54,7 @@ final class SuQLTest extends TestCase
           name,
           name@cnt.group.count
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -86,7 +85,7 @@ final class SuQLTest extends TestCase
           name@gname,
           name@cnt.group.count
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -99,7 +98,7 @@ final class SuQLTest extends TestCase
           name@uname.desc,
           id@uid.asc
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -191,7 +190,7 @@ final class SuQLTest extends TestCase
           gname,
           cnt
         };
-      ", 'beforePreparing')
+      ", 'mysql', 'beforePreparing')
     );
   }
 
@@ -235,7 +234,7 @@ final class SuQLTest extends TestCase
           gname,
           cnt
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -257,7 +256,7 @@ final class SuQLTest extends TestCase
           name@uname.group('admin'),
           name@cnt.count
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -277,7 +276,7 @@ final class SuQLTest extends TestCase
         table3 {
           id@t3id.right_join(table1.id)
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -303,7 +302,7 @@ final class SuQLTest extends TestCase
           *,
           id.join(user_group.group_id)
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -323,7 +322,7 @@ final class SuQLTest extends TestCase
         users {
           *
         } ~ {users.id % 2 = 0};
-      ")
+      ", 'mysql')
     );
   }
 
@@ -347,7 +346,7 @@ final class SuQLTest extends TestCase
           name@gname,
           name@count.group.count.asc
         };
-      ")
+      ", 'mysql')
     );
   }
 
@@ -358,7 +357,7 @@ final class SuQLTest extends TestCase
         users {
           *
         } [30];
-      ")
+      ", 'mysql')
     );
   }
 
@@ -367,7 +366,7 @@ final class SuQLTest extends TestCase
       "select users.* from users limit 30, 30",
       SuQL::toSql("
         users {*} [ 30 , 30 ]
-      ")
+      ", 'mysql')
     );
   }
 
@@ -376,7 +375,7 @@ final class SuQLTest extends TestCase
       "select users.* from users where users.id % 2 = 0 limit 0, 1",
       SuQL::toSql("
         users {*} ~ {users.id % 2 = 0} [0, 1];
-      ")
+      ", 'mysql')
     );
   }
 
@@ -406,7 +405,7 @@ final class SuQLTest extends TestCase
       ],
       SuQL::toSqlObject("
         users.distinct {*};
-      ", 'beforePreparing')
+      ", 'mysql', 'beforePreparing')
     );
   }
 
@@ -415,7 +414,7 @@ final class SuQLTest extends TestCase
       "select distinct users.* from users",
       SuQL::toSql("
         users.distinct {*};
-      ")
+      ", 'mysql')
     );
   }
 

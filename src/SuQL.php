@@ -3,6 +3,11 @@ class SuQL
 {
 	private $suql = null;
 
+	private $builder = null;
+	private $availableBuilders = [
+		'mysql' => 'MySQLBuilder'
+	];
+
 	private $tm = null;
 	private $SQLBuilder = null;
 
@@ -11,6 +16,14 @@ class SuQL
 	function __construct($suql)
 	{
 		$this->suql = trim($suql);
+	}
+
+	public function setBuilder($builder)
+	{
+		if (isset($this->availableBuilders[$builder]))
+			$this->builder = $builder;
+
+		return $this;
 	}
 
 	public function getError()
@@ -37,25 +50,24 @@ class SuQL
 	public function getSQLObjectAfterPreparing()
 	{
 		if ($this->interpret()) {
-			$this->SQLBuilder = new SQLBuilder($this->tm->output());
-			$this->SQLBuilder->run();
+			$this->buildSQL();
 			return $this->SQLBuilder->getSQLObject();
 		}
 
 		return null;
 	}
 
-	public static function toSql($suql)
+	public static function toSql($suql, $builder)
 	{
-		return new self($suql);
+		return (new self($suql))->setBuilder($builder);
 	}
 
-	public static function toSqlObject($suql, $phase)
+	public static function toSqlObject($suql, $builder, $phase)
 	{
 		if ($phase === 'beforePreparing')
-			return (new self($suql))->getSQLObjectBeforePreparing();
+			return (new self($suql))->setBuilder($builder)->getSQLObjectBeforePreparing();
 		else if ($phase === 'afterPreparing')
-			return (new self($suql))->getSQLObjectAfterPreparing();
+			return (new self($suql))->setBuilder($builder)->getSQLObjectAfterPreparing();
 		else
 			return null;
 	}
@@ -305,7 +317,12 @@ class SuQL
 
 	private function buildSQL()
 	{
-		$this->SQLBuilder = new SQLBuilder($this->tm->output());
+		if (!$this->builder) return null;
+
+		$classBuilder = $this->availableBuilders[$this->builder];
+		if (!class_exists($classBuilder)) return null;
+
+		$this->SQLBuilder = new $classBuilder($this->tm->output());
 		$this->SQLBuilder->run();
 		return $this->SQLBuilder->getSql();
 	}

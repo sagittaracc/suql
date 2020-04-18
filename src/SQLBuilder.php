@@ -3,6 +3,7 @@ class SQLBuilder
 {
   private $SQLObject = null;
   private $sql = null;
+  protected $sqlTemplate = "#select##from##join##where##group##having##order##limit#";
 
   function __construct($SQLObject)
   {
@@ -42,7 +43,7 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $sqlTemplate = "#select##from##join##where##group##having##order##limit#";
+    $sqlTemplate = $this->sqlTemplate;
 
     $this->setQuery($query, $this->prepareQuery($query));
 
@@ -75,7 +76,7 @@ class SQLBuilder
     return $queryObject;
   }
 
-  private function buildSelect($query) {
+  protected function buildSelect($query) {
     $queryObject = $this->getQuery($query);
 
     $fields = $queryObject['select'];
@@ -94,7 +95,7 @@ class SQLBuilder
     return $select . implode(', ', $selectList);
   }
 
-  private function buildFrom($query) {
+  protected function buildFrom($query) {
     $queryObject = $this->getQuery($query);
 
     $from = $queryObject['from'];
@@ -110,7 +111,7 @@ class SQLBuilder
     }
   }
 
-  private function buildJoin($query) {
+  protected function buildJoin($query) {
     $queryObject = $this->getQuery($query);
 
     $join = $queryObject['join'];
@@ -132,14 +133,14 @@ class SQLBuilder
     return ' ' . implode(' ', $s);
   }
 
-  private function buildGroup($query) {
+  protected function buildGroup($query) {
     $queryObject = $this->getQuery($query);
 
     $group = $queryObject['group'];
     return !empty($group) ? ' group by ' . implode(', ', $group) : '';
   }
 
-  private function buildWhere($query) {
+  protected function buildWhere($query) {
     $queryObject = $this->getQuery($query);
 
     $where = $queryObject['where'];
@@ -153,14 +154,14 @@ class SQLBuilder
     return !empty($where) ? ' where ' . implode(' and ', $where) : '';
   }
 
-  private function buildHaving($query) {
+  protected function buildHaving($query) {
     $queryObject = $this->getQuery($query);
 
     $having = $queryObject['having'];
     return !empty($having) ? ' having ' . implode(' and ', $having) : '';
   }
 
-  private function buildOrder($query) {
+  protected function buildOrder($query) {
     $queryObject = $this->getQuery($query);
 
     $order = $queryObject['order'];
@@ -176,7 +177,7 @@ class SQLBuilder
     return ' order by ' . implode(', ', $s);
   }
 
-  private function buildLimit($query) {
+  protected function buildLimit($query) {
     $bound = [];
     $queryObject = $this->getQuery($query);
 
