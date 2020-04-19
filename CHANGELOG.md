@@ -7,6 +7,7 @@
 - LIMIT clause
 - DISTINCT
 - Support different SQL Drivers
+- SQL Custom Modifiers define in an external file
 
 **Bug fixes:**
 - Where clause bitwise operations
