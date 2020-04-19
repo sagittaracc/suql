@@ -14,7 +14,7 @@ if (file_exists($pharFile . '.gz')) {
 $p = new Phar($pharFile);
 
 // creating our library using whole directory
-$p->buildFromDirectory('src/');
+$p->buildFromDirectory('src/', '/^(?!(.*SQLModifier))(.*)$/i');
 
 // pointing main file which requires all classes
 $p->setDefaultStub('index.php', '/index.php');
