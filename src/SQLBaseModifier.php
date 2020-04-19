@@ -13,6 +13,21 @@ class SQLBaseModifier
     ];
   }
 
+  public static function mod_case($case, &$queryObject, $field) {
+    $fieldName = $queryObject['select'][$field]['field'];
+    $caseList = [];
+
+    foreach ($case as $when => $then) {
+      if ($when === 'default') {
+        $caseList[] = "else $then";
+      } else {
+        $caseList[] = "when " . str_replace('$', $fieldName, $when) . " then $then";
+      }
+    }
+
+    $queryObject['select'][$field]['field'] = 'case ' . implode(' ', $caseList) . ' end';
+  }
+
   public static function mod_asc(&$queryObject, $field) {
     $sortBy = $queryObject['select'][$field]['alias']
             ? $queryObject['select'][$field]['alias']
