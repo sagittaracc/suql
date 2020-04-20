@@ -1,23 +1,57 @@
 <?php
 class OSuQL
 {
-  function __construct() {
+  private $osuql;
+  private $currentQuery;
+  private $currentTable;
+  private $currentField;
 
+  function __construct() {
+    $this->osuql['queries'] = [];
+  }
+
+  public function getSQLObject() {
+    return $this->osuql;
   }
 
   public function rel($leftTable, $rightTable, $on, $linkType) {
     return $this;
   }
 
-  public function query($name) {
+  public function query($name = 'main') {
+    $this->osuql['queries'][$name] = [
+      'select'   => [],
+			'from'     => null,
+			'where'    => [],
+			'having'   => [],
+			'join'     => [],
+			'group'    => [],
+			'order'    => [],
+			'modifier' => null,
+			'offset'   => null,
+			'limit'    => null,
+    ];
+    $this->currentQuery = $name;
+    $this->currentTable = null;
+    $this->currentField = null;
     return $this;
   }
 
-  public function left() {}
-  public function right() {}
+  public function left() {
 
-  public function field($name, $alias) {
+  }
 
+  public function right() {
+
+  }
+
+  public function field($name, $alias = '') {
+    $this->osuql['queries'][$this->currentQuery]['select'][$alias ? $alias : "{$this->currentTable}.$name"] = [
+      'table' => $this->currentTable,
+      'field' => $name,
+      'alias' => $alias,
+    ];
+    return $this;
   }
 
   public function where($where) {
@@ -33,9 +67,15 @@ class OSuQL
   }
 
   public function __call($name, $arguments) {
-    // Everything else are modifiers
-    if (method_exists(self, $name)) return;
-    // if the $name is the $query name
+    if (method_exists(self::class, $name)) return;
+    if (!$this->currentQuery) return;
+    if (!$this->currentTable) return $this->from($name);
+  }
+
+  private function from($table) {
+    $this->osuql['queries'][$this->currentQuery]['from'] = $table;
+    $this->currentTable = $table;
+    return $this;
   }
 }
 
