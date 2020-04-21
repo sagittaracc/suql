@@ -147,15 +147,13 @@ class SQLBuilder
   protected function buildWhere($query) {
     $queryObject = $this->getQuery($query);
 
-    $where = $queryObject['where'];
+    $where = implode(' and ', $queryObject['where']);
+    if (!$where) return '';
+
     $select = $queryObject['select'];
+    $where = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $where);
 
-    foreach ($where as &$_where) {
-      $_where = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $_where);
-    }
-    unset($_where);
-
-    return !empty($where) ? ' where ' . implode(' and ', $where) : '';
+    return " where $where";
   }
 
   protected function buildHaving($query) {
