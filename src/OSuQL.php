@@ -2,12 +2,22 @@
 class OSuQL
 {
   private $osuql;
+
   private $currentQuery;
   private $currentTable;
   private $currentField;
 
-  function __construct() {
+  private $errors;
 
+  private function init() {
+    $this->currentQuery = null;
+    $this->currentTable = null;
+    $this->currentField = null;
+    $this->errors = [];
+  }
+
+  function __construct() {
+    $this->init();
   }
 
   public function getSQLObject() {
@@ -38,11 +48,11 @@ class OSuQL
   }
 
   public function left() {
-
+    return $this;
   }
 
   public function right() {
-
+    return $this;
   }
 
   public function field($name, $alias = '') {
@@ -55,15 +65,20 @@ class OSuQL
   }
 
   public function where($where) {
-
+    return $this;
   }
 
   public function offset($offset) {
-
+    return $this;
   }
 
   public function limit($limit) {
+    return $this;
+  }
 
+  public function flush() {
+    $this->init();
+    return $this;
   }
 
   public function __call($name, $arguments) {
@@ -95,5 +110,9 @@ $db->query('All')
 $db->query('main')
     ->All()
     ->where('id > 3')
+    ->flush();
+
+Start over after flushing
+$db->query()->users();
 
 */
