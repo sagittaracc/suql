@@ -1,6 +1,6 @@
 # Change log
 
-## v1.3.1 - Apr. 19, 2020
+## v1.3.1 - Apr. 21, 2020
 
 **New features:**
 - Field aliases are not necessary while using field modifiers
@@ -14,6 +14,7 @@
 - Where clause bitwise operations
 - Sorting data gotten by the count modifier
 - Refactor
+- Nested queries inside the WHERE Clause
 
 ---
 

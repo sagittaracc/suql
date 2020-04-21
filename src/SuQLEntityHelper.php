@@ -58,7 +58,8 @@ class SuQLEntityHelper
 				|| self::isPlaceholderSymbol($ch)
 				|| self::isQuote($ch)
 				|| self::isBitwiseOperator($ch)
-				|| $ch === '.';
+				|| $ch === '.'
+				|| $ch === '#';
 	}
 
 	public static function isJoinClausePossibleSymbol($ch)
@@ -74,5 +75,10 @@ class SuQLEntityHelper
 		return self::isI($ch)
 				|| self::isQuote($ch)
 				|| $ch === '.';
+	}
+
+	public static function getNestedQueryNames($s)
+	{
+		return preg_match_all("/#(?<name>[a-zA-Z0-9_]+)/", $s, $list) ? $list['name'] : [];
 	}
 }

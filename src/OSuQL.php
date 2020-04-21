@@ -7,7 +7,7 @@ class OSuQL
   private $currentField;
 
   function __construct() {
-    $this->osuql['queries'] = [];
+
   }
 
   public function getSQLObject() {
@@ -21,15 +21,15 @@ class OSuQL
   public function query($name = 'main') {
     $this->osuql['queries'][$name] = [
       'select'   => [],
-			'from'     => null,
-			'where'    => [],
-			'having'   => [],
-			'join'     => [],
-			'group'    => [],
-			'order'    => [],
-			'modifier' => null,
-			'offset'   => null,
-			'limit'    => null,
+      'from'     => null,
+      'where'    => [],
+      'having'   => [],
+      'join'     => [],
+      'group'    => [],
+      'order'    => [],
+      'modifier' => null,
+      'offset'   => null,
+      'limit'    => null,
     ];
     $this->currentQuery = $name;
     $this->currentTable = null;
