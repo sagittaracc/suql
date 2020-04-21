@@ -56,6 +56,8 @@ class OSuQL
   }
 
   public function field($name, $alias = '') {
+    if (!$this->currentTable) return;
+
     $this->osuql['queries'][$this->currentQuery]['select'][$alias ? $alias : "{$this->currentTable}.$name"] = [
       'table' => $this->currentTable,
       'field' => $name,
