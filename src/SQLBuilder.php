@@ -153,6 +153,14 @@ class SQLBuilder
     $select = $queryObject['select'];
     $where = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $where);
 
+    $nestedQueryNames = SuQLEntityHelper::getNestedQueryNames($where);
+    foreach ($nestedQueryNames as $name) {
+      if ($this->getQuery($name)) {
+        $nestedQuery = $this->buildQuery($name);
+        $where = str_replace("#$name", "($nestedQuery)", $where);
+      }
+    }
+
     return " where $where";
   }
 

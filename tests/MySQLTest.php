@@ -418,4 +418,20 @@ final class MySQLTest extends TestCase
     );
   }
 
+  public function testNestedQueryInWhereClause(): void {
+    $this->assertEquals(
+      "select ".
+        "users.name ".
+      "from users ".
+      "where users.id not in (select distinct user_group.user_id from user_group)",
+      SuQL::toSql("
+        #users_belong_to_any_group = user_group.distinct {user_id};
+
+        users {
+          name
+        } ~ {users.id not in #users_belong_to_any_group};
+      ", 'mysql')
+    );
+  }
+
 }
