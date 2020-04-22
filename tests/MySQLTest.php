@@ -434,4 +434,38 @@ final class MySQLTest extends TestCase
     );
   }
 
+  public function testNestedQueryInJoinClause(): void {
+    $this->assertEquals(
+      "select ".
+        "users.name, ".
+        "admins.user_id ".
+      "from users ".
+      "inner join (".
+        "select ".
+          "user_group.user_id, ".
+          "groups.id ".
+        "from user_group ".
+        "inner join groups on groups.id = user_group.group_id ".
+        "where groups.name = 'admin'".
+      ") admins on admins.user_id = users.id",
+      SuQL::toSql("
+        #admins = user_group {
+          user_id
+        }
+
+        groups {
+          id.join(user_group.group_id)
+        } ~ {groups.name = 'admin'};
+
+        users {
+          name
+        }
+
+        admins {
+          user_id.join(users.id)
+        };
+      ", 'mysql')
+    );
+  }
+
 }
