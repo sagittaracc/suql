@@ -7,13 +7,10 @@ class OSuQL
   private $currentTable;
   private $currentField;
 
-  private $errors;
-
   private function init() {
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
-    $this->errors = [];
   }
 
   function __construct() {
@@ -48,10 +45,12 @@ class OSuQL
   }
 
   public function left() {
+    if (!$this->currentTable) return;
     return $this;
   }
 
   public function right() {
+    if (!$this->currentTable) return;
     return $this;
   }
 
