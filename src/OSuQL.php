@@ -77,6 +77,7 @@ class OSuQL
   }
 
   public function where($where) {
+    $this->osuql['queries'][$this->currentQuery]['where'][] = $where;
     return $this;
   }
 
