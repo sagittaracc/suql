@@ -131,7 +131,11 @@ class SQLBuilder
 
     $s = [];
     foreach ($join as $_join) {
-      $s[] = "{$_join['type']} join {$_join['table']} on {$_join['on']}";
+      $table = $_join['table'];
+      $table = $this->getQuery($table)
+        ? "(".$this->buildQuery($table).") $table"
+        : $table;
+      $s[] = "{$_join['type']} join $table on {$_join['on']}";
     }
 
     return ' ' . implode(' ', $s);
