@@ -68,11 +68,15 @@ class OSuQL
   public function field($name, $alias = '') {
     if (!$this->currentTable) return;
 
-    $this->osuql['queries'][$this->currentQuery]['select'][$alias ? $alias : "{$this->currentTable}.$name"] = [
+    $fieldName = $alias ? $alias : "{$this->currentTable}.$name";
+    $this->osuql['queries'][$this->currentQuery]['select'][$fieldName] = [
       'table' => $this->currentTable,
       'field' => $name,
       'alias' => $alias,
+      'modifier' => [],
     ];
+    $this->currentField = $fieldName;
+
     return $this;
   }
 
@@ -112,6 +116,7 @@ class OSuQL
     // Здесь уже обработка модификаторов (должно быть задано Поле)
     if (!$this->currentField) return;
     // Обрабатываем модификатор
+    return $this->modifier($name, $arguments);
   }
 
   private function isTable($name) {
@@ -132,6 +137,11 @@ class OSuQL
     $this->currentTable = $table;
     return $this;
   }
+
+  private function modifier($name, $arguments) {
+    $this->osuql['queries'][$this->currentQuery]['select'][$this->currentField]['modifier'][$name] = $arguments;
+    return $this;
+  }
 }
 
 /*
@@ -150,9 +160,6 @@ $db->query('All')
 $db->query()
     ->All()
     ->where('id > 3')
-    ->flush();
-
-Start over after flushing
-$db->query()->users();
+    ->getSQLObject();
 
 */

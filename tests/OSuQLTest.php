@@ -8,7 +8,7 @@ final class OSuQLTest extends TestCase
     $db = new OSuQL;
     $osuql = $db->query()
                   ->users()
-                    ->field('id', 'uid')
+                    ->field('id', 'uid')->group()->count()
                     ->field('name')
                   ->where('uid % 2 = 0')
                 ->getSQLObject();
@@ -18,8 +18,21 @@ final class OSuQLTest extends TestCase
         'queries' => [
           'main' => [
             'select'   => [
-              'uid' => ['table' => 'users', 'field' => 'id', 'alias' => 'uid'],
-              'users.name' => ['table' => 'users', 'field' => 'name', 'alias' => '']
+              'uid' => [
+                'table' => 'users',
+                'field' => 'id',
+                'alias' => 'uid',
+                'modifier' => [
+                  'group' => [],
+                  'count' => [],
+                ],
+              ],
+              'users.name' => [
+                'table' => 'users',
+                'field' => 'name',
+                'alias' => '',
+                'modifier' => [],
+              ]
             ],
       			'from'     => 'users',
       			'where'    => ['uid % 2 = 0'],
