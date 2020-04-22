@@ -7,10 +7,15 @@ class OSuQL
   private $currentTable;
   private $currentField;
 
+  private $queryList;
+  private $tableList;
+
   private function init() {
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
+    $this->queryList = [];
+    $this->tableList = [];
   }
 
   function __construct() {
@@ -22,6 +27,8 @@ class OSuQL
   }
 
   public function rel($leftTable, $rightTable, $on, $linkType) {
+    $this->tableList[] = $leftTable;
+    $this->tableList[] = $rightTable;
     return $this;
   }
 
@@ -41,6 +48,7 @@ class OSuQL
     $this->currentQuery = $name;
     $this->currentTable = null;
     $this->currentField = null;
+    $this->queryList[] = $name;
     return $this;
   }
 
@@ -85,12 +93,29 @@ class OSuQL
   public function __call($name, $arguments) {
     if (method_exists(self::class, $name)) return;
     if (!$this->currentQuery) $this->query('main');
-    if (!$this->currentTable) return $this->from($name);
+    if ($this->isTable($name) || $this->isQuery($name)) {
+      if (!$this->currentTable)
+        return $this->from($name);
+      else
+        return $this->join($name);
+    }
+  }
+
+  private function isTable($name) {
+    return in_array($name, $this->tableList);
+  }
+
+  private function isQuery($name) {
+    return in_array($name, $this->queryList);
   }
 
   private function from($table) {
     $this->osuql['queries'][$this->currentQuery]['from'] = $table;
     $this->currentTable = $table;
+    return $this;
+  }
+
+  private function join($table) {
     return $this;
   }
 }
