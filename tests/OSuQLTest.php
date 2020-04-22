@@ -27,7 +27,8 @@ final class OSuQLTest extends TestCase
           ]
         ]
       ],
-      $db->users()
+      $db->query()
+          ->users()
           ->field('id', 'uid')
           ->field('name')
          ->getSQLObject()

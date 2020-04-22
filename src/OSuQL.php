@@ -32,7 +32,7 @@ class OSuQL
     return $this;
   }
 
-  public function query($name) {
+  public function query($name = 'main') {
     $this->osuql['queries'][$name] = [
       'select'   => [],
       'from'     => null,
@@ -92,13 +92,14 @@ class OSuQL
 
   public function __call($name, $arguments) {
     if (method_exists(self::class, $name)) return;
-    if (!$this->currentQuery) $this->query('main');
+    if (!$this->currentQuery) return;
     if ($this->isTable($name) || $this->isQuery($name)) {
       if (!$this->currentTable)
         return $this->from($name);
       else
         return $this->join($name);
     }
+    if (!$this->currentTable) return $this->from($name);
   }
 
   private function isTable($name) {
@@ -116,6 +117,7 @@ class OSuQL
   }
 
   private function join($table) {
+    $this->currentTable = $table;
     return $this;
   }
 }
@@ -133,7 +135,8 @@ $db->query('All')
       ->field('name', 'count')->group()->count()
     ->where('g_name = "admin"');
 
-$db->All()
+$db->query()
+    ->All()
     ->where('id > 3')
     ->flush();
 
