@@ -25,7 +25,7 @@ class OSuQL
     return $this;
   }
 
-  public function query($name = 'main') {
+  public function query($name) {
     $this->osuql['queries'][$name] = [
       'select'   => [],
       'from'     => null,
@@ -84,7 +84,7 @@ class OSuQL
 
   public function __call($name, $arguments) {
     if (method_exists(self::class, $name)) return;
-    if (!$this->currentQuery) return;
+    if (!$this->currentQuery) $this->query('main');
     if (!$this->currentTable) return $this->from($name);
   }
 
@@ -108,8 +108,7 @@ $db->query('All')
       ->field('name', 'count')->group()->count()
     ->where('g_name = "admin"');
 
-$db->query('main')
-    ->All()
+$db->All()
     ->where('id > 3')
     ->flush();
 

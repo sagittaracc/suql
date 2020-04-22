@@ -5,6 +5,8 @@ final class OSuQLTest extends TestCase
 {
   public function testQuery(): void
   {
+    $db = new OSuQL;
+
     $this->assertEquals(
       [
         'queries' => [
@@ -25,11 +27,10 @@ final class OSuQLTest extends TestCase
           ]
         ]
       ],
-      (new OSuQL)->query()
-        ->users()
+      $db->users()
           ->field('id', 'uid')
           ->field('name')
-        ->getSQLObject()
+         ->getSQLObject()
     );
   }
 }
