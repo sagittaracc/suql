@@ -91,15 +91,23 @@ class OSuQL
   }
 
   public function __call($name, $arguments) {
+    // Если есть обработчик $name, то приоритет отдаем ему
     if (method_exists(self::class, $name)) return;
+    // Прежде всего должна быть задана query, main по дефолту
     if (!$this->currentQuery) return;
+    // Пробуем распознать таблицу или подзапрос
     if ($this->isTable($name) || $this->isQuery($name)) {
+      // Запрашиваем из неё или джоиним к текущей таблицы
       if (!$this->currentTable)
         return $this->from($name);
       else
         return $this->join($name);
     }
+    // Здесь только один вариант - запрашивается таблица
     if (!$this->currentTable) return $this->from($name);
+    // Здесь уже обработка модификаторов (должно быть задано Поле)
+    if (!$this->currentField) return;
+    // Обрабатываем модификатор
   }
 
   private function isTable($name) {
