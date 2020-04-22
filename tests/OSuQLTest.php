@@ -6,6 +6,11 @@ final class OSuQLTest extends TestCase
   public function testQuery(): void
   {
     $db = new OSuQL;
+    $osuql = $db->query()
+                  ->users()
+                  ->field('id', 'uid')
+                  ->field('name')
+                ->getSQLObject();
 
     $this->assertEquals(
       [
@@ -27,11 +32,9 @@ final class OSuQLTest extends TestCase
           ]
         ]
       ],
-      $db->query()
-          ->users()
-          ->field('id', 'uid')
-          ->field('name')
-         ->getSQLObject()
+      $osuql
     );
+
+    $this->assertEquals([], $db->getSQLObject());
   }
 }

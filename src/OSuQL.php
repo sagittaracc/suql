@@ -11,6 +11,7 @@ class OSuQL
   private $tableList;
 
   private function init() {
+    $this->osuql = [];
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
@@ -23,7 +24,9 @@ class OSuQL
   }
 
   public function getSQLObject() {
-    return $this->osuql;
+    $osuql = $this->osuql;
+    $this->flush();
+    return $osuql;
   }
 
   public function rel($leftTable, $rightTable, $on, $linkType) {
