@@ -10,10 +10,11 @@ final class OSuQLTest extends TestCase
 
     $osuql = $db->query()
                   ->users()
-                    ->field('id', 'uid')
-                    ->field('name')
+                    ->field('id')
                   ->user_group()
                   ->groups()
+                    ->field('name', 'gname')
+                  ->where("gname = 'admin'")
                 ->getSQLObject();
 
     $this->assertEquals(
@@ -21,21 +22,21 @@ final class OSuQLTest extends TestCase
         'queries' => [
           'main' => [
             'select'   => [
-              'uid' => [
+              'users.id' => [
                 'table' => 'users',
                 'field' => 'id',
-                'alias' => 'uid',
-                'modifier' => [],
-              ],
-              'users.name' => [
-                'table' => 'users',
-                'field' => 'name',
                 'alias' => '',
                 'modifier' => [],
-              ]
+              ],
+              'gname' => [
+                'table' => 'groups',
+                'field' => 'name',
+                'alias' => 'gname',
+                'modifier' => [],
+              ],
             ],
       			'from'     => 'users',
-      			'where'    => [],
+      			'where'    => ["gname = 'admin'"],
       			'having'   => [],
       			'join'     => [
               'user_group' => ['table' => 'user_group', 'on' => 'users.id = user_group.user_id'],
@@ -52,6 +53,12 @@ final class OSuQLTest extends TestCase
       $osuql
     );
 
-    $this->assertEquals([], $db->getSQLObject());
+    $db->drop();
+
+    $osuql = $db->query()
+                  ->users()
+                  ->user_group();
+
+    $this->assertEquals(null, $osuql);
   }
 }
