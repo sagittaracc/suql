@@ -5,12 +5,15 @@ final class OSuQLTest extends TestCase
 {
   public function testQuery(): void
   {
-    $db = new OSuQL;
+    $db = (new OSuQL)->rel('users', 'user_group', 'id = user_id')
+                     ->rel('user_group', 'groups', 'group_id = id');
+
     $osuql = $db->query()
                   ->users()
-                    ->field('id', 'uid')->group()->count()
+                    ->field('id', 'uid')
                     ->field('name')
-                  ->where('uid % 2 = 0')
+                  ->user_group()
+                  ->groups()
                 ->getSQLObject();
 
     $this->assertEquals(
@@ -22,10 +25,7 @@ final class OSuQLTest extends TestCase
                 'table' => 'users',
                 'field' => 'id',
                 'alias' => 'uid',
-                'modifier' => [
-                  'group' => [],
-                  'count' => [],
-                ],
+                'modifier' => [],
               ],
               'users.name' => [
                 'table' => 'users',
@@ -35,9 +35,12 @@ final class OSuQLTest extends TestCase
               ]
             ],
       			'from'     => 'users',
-      			'where'    => ['uid % 2 = 0'],
+      			'where'    => [],
       			'having'   => [],
-      			'join'     => [],
+      			'join'     => [
+              'user_group' => ['table' => 'user_group', 'on' => 'users.id = user_group.user_id'],
+              'groups' => ['table' => 'groups', 'on' => 'user_group.group_id = groups.id'],
+            ],
       			'group'    => [],
       			'order'    => [],
       			'modifier' => null,

@@ -32,11 +32,18 @@ class OSuQL
     return $osuql;
   }
 
-  public function rel($leftTable, $rightTable, $on, $linkType) {
+  public function rel($leftTable, $rightTable, $on) {
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
-    $this->scheme[$leftTable][$rightTable] = $on;
-    $this->scheme[$rightTable][$leftTable] = $on;
+
+    $on = explode('=', $on);
+    $on[0] = $leftTable . '.' . trim($on[0]);
+    $on[1] = $rightTable . '.' . trim($on[1]);
+    $on = implode(' = ', $on);
+
+    $this->scheme['rel'][$leftTable][$rightTable] = $on;
+    $this->scheme['rel'][$rightTable][$leftTable] = $on;
+
     return $this;
   }
 
@@ -140,6 +147,11 @@ class OSuQL
   }
 
   private function join($table) {
+    $this->osuql['queries'][$this->currentQuery]['join'][$table] = [
+      'table' => $table,
+      'on'    => $this->scheme['rel'][$this->currentTable][$table],
+    ];
+
     $this->currentTable = $table;
     return $this;
   }
