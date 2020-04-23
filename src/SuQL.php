@@ -4,9 +4,6 @@ class SuQL
 	private $suql = null;
 
 	private $builder = null;
-	private $availableBuilders = [
-		'mysql' => 'MySQLBuilder'
-	];
 
 	private $tm = null;
 	private $SQLBuilder = null;
@@ -20,7 +17,7 @@ class SuQL
 
 	public function setBuilder($builder)
 	{
-		if (isset($this->availableBuilders[$builder]))
+		if (SQLAdapter::exists($builder))
 			$this->builder = $builder;
 
 		return $this;
@@ -319,7 +316,7 @@ class SuQL
 	{
 		if (!$this->builder) return null;
 
-		$classBuilder = $this->availableBuilders[$this->builder];
+		$classBuilder = SQLAdapter::get($this->builder);
 		if (!class_exists($classBuilder)) return null;
 
 		$this->SQLBuilder = new $classBuilder($this->tm->output());
