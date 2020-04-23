@@ -3,6 +3,8 @@ class OSuQL
 {
   private $osuql;
 
+  private $scheme;
+
   private $currentQuery;
   private $currentTable;
   private $currentField;
@@ -10,7 +12,7 @@ class OSuQL
   private $queryList;
   private $tableList;
 
-  private function init() {
+  private function clear() {
     $this->osuql = [];
     $this->currentQuery = null;
     $this->currentTable = null;
@@ -20,18 +22,21 @@ class OSuQL
   }
 
   function __construct() {
-    $this->init();
+    $this->clear();
+    $this->scheme = [];
   }
 
   public function getSQLObject() {
     $osuql = $this->osuql;
-    $this->flush();
+    $this->clear();
     return $osuql;
   }
 
   public function rel($leftTable, $rightTable, $on, $linkType) {
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
+    $this->scheme[$leftTable][$rightTable] = $on;
+    $this->scheme[$rightTable][$leftTable] = $on;
     return $this;
   }
 
@@ -93,8 +98,9 @@ class OSuQL
     return $this;
   }
 
-  public function flush() {
-    $this->init();
+  public function drop() {
+    $this->clear();
+    $this->scheme = [];
     return $this;
   }
 
