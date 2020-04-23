@@ -12,6 +12,20 @@ class OSuQL
   private $queryList;
   private $tableList;
 
+  private $adapter;
+
+  function __construct() {
+    $this->clear();
+    $this->scheme = [];
+  }
+
+  public function setAdapter($adapter) {
+    if (SQLAdapter::exists($adapter))
+      $this->adapter = $adapter;
+
+    return $this;
+  }
+
   private function clear() {
     $this->osuql = [];
     $this->currentQuery = null;
@@ -19,11 +33,6 @@ class OSuQL
     $this->currentField = null;
     $this->queryList = [];
     $this->tableList = [];
-  }
-
-  function __construct() {
-    $this->clear();
-    $this->scheme = [];
   }
 
   public function getSQLObject() {

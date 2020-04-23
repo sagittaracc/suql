@@ -5,7 +5,8 @@ final class OSuQLTest extends TestCase
 {
   public function testQuery(): void
   {
-    $db = (new OSuQL)->rel('users', 'user_group', 'id = user_id')
+    $db = (new OSuQL)->setAdapter('mysql')
+                     ->rel('users', 'user_group', 'id = user_id')
                      ->rel('user_group', 'groups', 'group_id = id');
 
     $osuql = $db->query()
