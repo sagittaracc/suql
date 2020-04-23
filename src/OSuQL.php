@@ -98,10 +98,12 @@ class OSuQL
   }
 
   public function offset($offset) {
+    $this->osuql['queries'][$this->currentQuery]['offset'] = $offset;
     return $this;
   }
 
   public function limit($limit) {
+    $this->osuql['queries'][$this->currentQuery]['limit'] = $limit;
     return $this;
   }
 
@@ -161,23 +163,3 @@ class OSuQL
     return $this;
   }
 }
-
-/*
-
-$db = (new OSuQL)->rel('users', 'user_group', 'id = user_id', OSuQL::OneToMany)
-                 ->rel('user_group', 'groups', 'group_id = id', OSuQL::ManyToOne);
-
-$db->query('All')
-    ->users()
-    ->left()->user_group()
-    ->left()->groups()
-      ->field('name', 'g_name')
-      ->field('name', 'count')->group()->count()
-    ->where('g_name = "admin"');
-
-$db->query()
-    ->All()
-    ->where('id > 3')
-    ->getSQLObject();
-
-*/
