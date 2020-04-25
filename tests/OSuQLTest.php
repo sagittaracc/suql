@@ -6,42 +6,26 @@ final class OSuQLTest extends TestCase
   public function testQuery(): void
   {
     $db = (new OSuQL)->setAdapter('mysql')
-                     ->rel('users', 'user_group', 'id = user_id')
-                     ->rel('user_group', 'groups', 'group_id = id');
+                     ->rel('table1', 'table2', 'id = t2id')
+                     ->rel('table1', 'table3', 'id = t3id');
 
     $osuql = $db->query()
-                  ->users()
-                    ->field('id')
-                  ->user_group()
-                  ->groups()
-                    ->field('name', 'gname')
-                  ->where("gname = 'admin'")
+                  ->table1()
+                  ->table2()
+                  ->table3()
                 ->getSQLObject();
 
     $this->assertEquals(
       [
         'queries' => [
           'main' => [
-            'select'   => [
-              'users.id' => [
-                'table' => 'users',
-                'field' => 'id',
-                'alias' => '',
-                'modifier' => [],
-              ],
-              'gname' => [
-                'table' => 'groups',
-                'field' => 'name',
-                'alias' => 'gname',
-                'modifier' => [],
-              ],
-            ],
-      			'from'     => 'users',
-      			'where'    => ["gname = 'admin'"],
+            'select'   => [],
+      			'from'     => 'table1',
+      			'where'    => [],
       			'having'   => [],
       			'join'     => [
-              'user_group' => ['table' => 'user_group', 'on' => 'users.id = user_group.user_id'],
-              'groups' => ['table' => 'groups', 'on' => 'user_group.group_id = groups.id'],
+              'table2' => ['table' => 'table2', 'on' => 'table1.id = table2.t2id'],
+              'table3' => ['table' => 'table3', 'on' => 'table1.id = table3.t3id'],
             ],
       			'group'    => [],
       			'order'    => [],
@@ -55,11 +39,5 @@ final class OSuQLTest extends TestCase
     );
 
     $db->drop();
-
-    $osuql = $db->query()
-                  ->users()
-                  ->user_group();
-
-    $this->assertEquals(null, $osuql);
   }
 }

@@ -7,6 +7,7 @@ class OSuQL
 
   private $currentQuery;
   private $currentTable;
+  private $tablesInQuery;
   private $currentField;
 
   private $queryList;
@@ -30,6 +31,7 @@ class OSuQL
     $this->osuql = [];
     $this->currentQuery = null;
     $this->currentTable = null;
+    $this->tablesInQuery = [];
     $this->currentField = null;
     $this->queryList = [];
     $this->tableList = [];
@@ -154,21 +156,32 @@ class OSuQL
   private function from($table) {
     $this->osuql['queries'][$this->currentQuery]['from'] = $table;
     $this->currentTable = $table;
+    $this->tablesInQuery[$this->currentQuery][] = $table;
     return $this;
   }
 
   private function join($table) {
+    $tableToJoinTo = $this->getTableToJoinTo($table);
+    if (!$tableToJoinTo) return;
+
     $this->osuql['queries'][$this->currentQuery]['join'][$table] = [
       'table' => $table,
-      'on'    => $this->scheme['rel'][$this->currentTable][$table],
+      'on'    => $this->scheme['rel'][$tableToJoinTo][$table],
     ];
 
     $this->currentTable = $table;
+    $this->tablesInQuery[$this->currentQuery][] = $table;
     return $this;
   }
 
   private function modifier($name, $arguments) {
     $this->osuql['queries'][$this->currentQuery]['select'][$this->currentField]['modifier'][$name] = $arguments;
     return $this;
+  }
+
+  private function getTableToJoinTo($table) {
+    $possibleTableLinks = array_keys($this->scheme['rel'][$table]);
+    $tableToJoinTo = array_intersect($this->tablesInQuery[$this->currentQuery], $possibleTableLinks);
+    return count($tableToJoinTo) > 1 ? null : $tableToJoinTo[0];
   }
 }
