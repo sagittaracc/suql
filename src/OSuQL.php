@@ -83,6 +83,7 @@ class OSuQL
     ];
     $this->currentQuery = $name;
     $this->currentTable = null;
+    $this->tablesInQuery[$name] = [];
     $this->currentField = null;
     $this->queryList[] = $name;
     return $this;
