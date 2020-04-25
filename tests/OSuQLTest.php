@@ -49,4 +49,59 @@ final class OSuQLTest extends TestCase
 
     $db->drop();
   }
+
+  public function testTempRel(): void
+  {
+    $db = (new OSuQL)->setAdapter('mysql')
+                     ->rel('table1', 'table2', 't1id = t2id')
+                     ->rel('table1', 'table3', 't1id = t3id');
+
+    $db->query('view1')
+        ->table1()
+        ->table2()
+        ->table3();
+
+    $db->temp_rel('table4', 'view1', 't4id = v_id');
+
+    $db->query()
+        ->table4()
+        ->view1();
+
+    $this->assertEquals(
+      [
+        'queries' => [
+          'view1' => [
+            'select'   => [],
+      			'from'     => 'table1',
+      			'where'    => [],
+      			'having'   => [],
+      			'join'     => [
+              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id'],
+              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id'],
+            ],
+      			'group'    => [],
+      			'order'    => [],
+      			'modifier' => null,
+      			'offset'   => null,
+      			'limit'    => null,
+          ],
+          'main' => [
+            'select'   => [],
+      			'from'     => 'table4',
+      			'where'    => [],
+      			'having'   => [],
+      			'join'     => [
+              'view1' => ['table' => 'view1', 'on' => 'table4.t4id = view1.v_id'],
+            ],
+      			'group'    => [],
+      			'order'    => [],
+      			'modifier' => null,
+      			'offset'   => null,
+      			'limit'    => null,
+          ]
+        ]
+      ],
+      $db->getSQLObject()
+    );
+  }
 }

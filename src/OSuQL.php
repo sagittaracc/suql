@@ -35,6 +35,7 @@ class OSuQL
     $this->currentField = null;
     $this->queryList = [];
     $this->tableList = [];
+    $this->scheme['temp_rel'] = [];
   }
 
   public function getSQLObject() {
@@ -43,7 +44,7 @@ class OSuQL
     return $osuql;
   }
 
-  public function rel($leftTable, $rightTable, $on) {
+  public function rel($leftTable, $rightTable, $on, $temporary = false) {
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
 
@@ -52,10 +53,14 @@ class OSuQL
     $on[1] = $rightTable . '.' . trim($on[1]);
     $on = implode(' = ', $on);
 
-    $this->scheme['rel'][$leftTable][$rightTable] = $on;
-    $this->scheme['rel'][$rightTable][$leftTable] = $on;
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = $on;
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = $on;
 
     return $this;
+  }
+
+  public function temp_rel($leftTable, $rightTable, $on) {
+    return $this->rel($leftTable, $rightTable, $on, true);
   }
 
   public function query($name = 'main') {
@@ -161,12 +166,12 @@ class OSuQL
   }
 
   private function join($table) {
-    $tableToJoinTo = $this->getTableToJoinTo($table);
-    if (!$tableToJoinTo) return;
+    $on = $this->getJoinLinkFor($table);
+    if (!$on) return;
 
     $this->osuql['queries'][$this->currentQuery]['join'][$table] = [
       'table' => $table,
-      'on'    => $this->scheme['rel'][$tableToJoinTo][$table],
+      'on'    => $on,
     ];
 
     $this->currentTable = $table;
@@ -179,9 +184,17 @@ class OSuQL
     return $this;
   }
 
-  private function getTableToJoinTo($table) {
-    $possibleTableLinks = array_keys($this->scheme['rel'][$table]);
+  public function getJoinLinkFor($table) {
+    $rel = isset($this->scheme['rel'][$table])
+            ? 'rel'
+            : (isset($this->scheme['temp_rel'])
+                ? 'temp_rel'
+                : null);
+
+    if (!$rel) return null;
+
+    $possibleTableLinks = array_keys($this->scheme[$rel][$table]);
     $tableToJoinTo = array_intersect($possibleTableLinks, $this->tablesInQuery[$this->currentQuery]);
-    return count($tableToJoinTo) > 1 ? null : $tableToJoinTo[0];
+    return count($tableToJoinTo) === 1 ? $this->scheme[$rel][$tableToJoinTo[0]][$table] : null;
   }
 }
