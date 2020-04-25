@@ -10,6 +10,8 @@ class OSuQL
   private $tablesInQuery;
   private $currentField;
 
+  private $currentJoinType;
+
   private $queryList;
   private $tableList;
 
@@ -44,22 +46,21 @@ class OSuQL
     return $osuql;
   }
 
+  public function getSQL() {
+    if (!$this->adapter) return null;
+
+    $classBuilder = SQLAdapter::get($this->adapter);
+    $SQLBuilder = new $classBuilder($this->getSQLObject());
+		$SQLBuilder->run();
+		return $SQLBuilder->getSql();
+  }
+
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
 
-    if (is_string($on)) $on = [$on];
-
-    foreach ($on as &$_on) {
-      $_on = explode('=', $_on);
-      $_on[0] = $leftTable . '.' . trim($_on[0]);
-      $_on[1] = $rightTable . '.' . trim($_on[1]);
-      $_on = implode(' = ', $_on);
-    }
-    unset($_on);
-
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = implode(' and ', $on);
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = implode(' and ', $on);
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = $on;
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = $on;
 
     return $this;
   }
@@ -91,11 +92,13 @@ class OSuQL
 
   public function left() {
     if (!$this->currentTable) return;
+    $this->currentJoinType = 'left';
     return $this;
   }
 
   public function right() {
     if (!$this->currentTable) return;
+    $this->currentJoinType = 'right';
     return $this;
   }
 
@@ -105,7 +108,7 @@ class OSuQL
     $fieldName = $alias ? $alias : "{$this->currentTable}.$name";
     $this->osuql['queries'][$this->currentQuery]['select'][$fieldName] = [
       'table' => $this->currentTable,
-      'field' => $name,
+      'field' => "{$this->currentTable}.$name",
       'alias' => $alias,
       'modifier' => [],
     ];
@@ -168,6 +171,7 @@ class OSuQL
     $this->osuql['queries'][$this->currentQuery]['from'] = $table;
     $this->currentTable = $table;
     $this->tablesInQuery[$this->currentQuery][] = $table;
+    $this->currentJoinType = 'inner';
     return $this;
   }
 
@@ -178,10 +182,12 @@ class OSuQL
     $this->osuql['queries'][$this->currentQuery]['join'][$table] = [
       'table' => $table,
       'on'    => $on,
+      'type'  => $this->currentJoinType,
     ];
 
     $this->currentTable = $table;
     $this->tablesInQuery[$this->currentQuery][] = $table;
+    $this->currentJoinType = 'inner';
     return $this;
   }
 

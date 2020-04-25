@@ -64,6 +64,18 @@ class SQLBaseModifier
     self::default_handler('count', $queryObject, $field);
   }
 
+  public static function mod_min(&$queryObject, $field) {
+    self::default_handler('min', $queryObject, $field);
+  }
+
+  public static function mod_max(&$queryObject, $field) {
+    self::default_handler('max', $queryObject, $field);
+  }
+
+  public static function mod_sum(&$queryObject, $field) {
+    self::default_handler('sum', $queryObject, $field);
+  }
+
   public static function mod_join(&$queryObject, $field) {
     $fieldOptions = $queryObject['select'][$field];
     $table = $fieldOptions['table'];
