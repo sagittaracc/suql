@@ -3,16 +3,22 @@ use PHPUnit\Framework\TestCase;
 
 final class OSuQLTest extends TestCase
 {
-  public function testQuery(): void
+  public function testJoinChain(): void
   {
     $db = (new OSuQL)->setAdapter('mysql')
-                     ->rel('table1', 'table2', 'id = t2id')
-                     ->rel('table1', 'table3', 'id = t3id');
+                     ->rel('table1', 'table2', 't1id = t2id')
+                     ->rel('table1', 'table3', 't1id = t3id')
+                     ->rel('table2', 'table4', 't2id = t4id')
+                     ->rel('table3', 'table5', 't3id = t5id')
+                     ->rel('table1', 'table6', 't1id = t6id');
 
     $osuql = $db->query()
                   ->table1()
                   ->table2()
                   ->table3()
+                  ->table4()
+                  ->table5()
+                  ->table6()
                 ->getSQLObject();
 
     $this->assertEquals(
@@ -24,8 +30,11 @@ final class OSuQLTest extends TestCase
       			'where'    => [],
       			'having'   => [],
       			'join'     => [
-              'table2' => ['table' => 'table2', 'on' => 'table1.id = table2.t2id'],
-              'table3' => ['table' => 'table3', 'on' => 'table1.id = table3.t3id'],
+              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id'],
+              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id'],
+              'table4' => ['table' => 'table4', 'on' => 'table2.t2id = table4.t4id'],
+              'table5' => ['table' => 'table5', 'on' => 'table3.t3id = table5.t5id'],
+              'table6' => ['table' => 'table6', 'on' => 'table1.t1id = table6.t6id'],
             ],
       			'group'    => [],
       			'order'    => [],

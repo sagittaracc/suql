@@ -181,7 +181,7 @@ class OSuQL
 
   private function getTableToJoinTo($table) {
     $possibleTableLinks = array_keys($this->scheme['rel'][$table]);
-    $tableToJoinTo = array_intersect($this->tablesInQuery[$this->currentQuery], $possibleTableLinks);
+    $tableToJoinTo = array_intersect($possibleTableLinks, $this->tablesInQuery[$this->currentQuery]);
     return count($tableToJoinTo) > 1 ? null : $tableToJoinTo[0];
   }
 }
