@@ -48,13 +48,18 @@ class OSuQL
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
 
-    $on = explode('=', $on);
-    $on[0] = $leftTable . '.' . trim($on[0]);
-    $on[1] = $rightTable . '.' . trim($on[1]);
-    $on = implode(' = ', $on);
+    if (is_string($on)) $on = [$on];
 
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = $on;
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = $on;
+    foreach ($on as &$_on) {
+      $_on = explode('=', $_on);
+      $_on[0] = $leftTable . '.' . trim($_on[0]);
+      $_on[1] = $rightTable . '.' . trim($_on[1]);
+      $_on = implode(' = ', $_on);
+    }
+    unset($_on);
+
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = implode(' and ', $on);
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = implode(' and ', $on);
 
     return $this;
   }

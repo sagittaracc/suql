@@ -53,7 +53,7 @@ final class OSuQLTest extends TestCase
   public function testTempRel(): void
   {
     $db = (new OSuQL)->setAdapter('mysql')
-                     ->rel('table1', 'table2', 't1id = t2id')
+                     ->rel('table1', 'table2', ['t1id = t2id', 'lid = rid'])
                      ->rel('table1', 'table3', 't1id = t3id');
 
     $db->query('view1')
@@ -76,7 +76,7 @@ final class OSuQLTest extends TestCase
       			'where'    => [],
       			'having'   => [],
       			'join'     => [
-              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id'],
+              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id and table1.lid = table2.rid'],
               'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id'],
             ],
       			'group'    => [],
