@@ -56,6 +56,16 @@ class OSuQL
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
+    if (is_array($leftTable)) {
+      $on = str_replace(array_values($leftTable), array_keys($leftTable), $on);
+      $leftTable = array_keys($leftTable)[0];
+    }
+
+    if (is_array($rightTable)) {
+      $on = str_replace(array_values($rightTable), array_keys($rightTable), $on);
+      $rightTable = array_keys($rightTable)[0];
+    }
+
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
 
