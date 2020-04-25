@@ -112,14 +112,35 @@ class OSuQL
     return $this;
   }
 
-  public function field($name, $alias = '') {
+  public function field($name, ...$options) {
     if (!$this->currentTable) return;
+
+    if (count($options) === 0) {
+      $visible = true;
+      $alias = '';
+    }
+
+    if (count($options) === 1) {
+      if (is_bool($options[0])) {
+        $visible = $options[0];
+        $alias = '';
+      } else {
+        $visible = true;
+        $alias = $options[0];
+      }
+    }
+
+    if (count($options) === 2) {
+      $alias = $options[0];
+      $visible = $options[1];
+    }
 
     $fieldName = $alias ? $alias : "{$this->currentTable}.$name";
     $this->osuql['queries'][$this->currentQuery]['select'][$fieldName] = [
       'table' => $this->currentTable,
       'field' => "{$this->currentTable}.$name",
       'alias' => $alias,
+      'visible' => $visible,
       'modifier' => [],
     ];
     $this->currentField = $fieldName;

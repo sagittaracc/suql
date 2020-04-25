@@ -93,6 +93,7 @@ class SQLBuilder
 
     $selectList = [];
     foreach ($fields as $fieldOptions) {
+      if (isset($fieldOptions['visible']) && $fieldOptions['visible'] === false) continue;
       $selectList[] = $fieldOptions['field'] . ($fieldOptions['alias'] ? " as {$fieldOptions['alias']}" : '');
     }
 

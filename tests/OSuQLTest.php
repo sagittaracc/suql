@@ -6,11 +6,11 @@ final class OSuQLTest extends TestCase
   public function testJoinChain(): void
   {
     $db = (new OSuQL)->setAdapter('mysql')
-                     ->rel('table1', 'table2', 't1id = t2id')
-                     ->rel('table1', 'table3', 't1id = t3id')
-                     ->rel('table2', 'table4', 't2id = t4id')
-                     ->rel('table3', 'table5', 't3id = t5id')
-                     ->rel('table1', 'table6', 't1id = t6id');
+                     ->rel('table1', 'table2', 'table1.t1id = table2.t2id')
+                     ->rel('table1', 'table3', 'table1.t1id = table3.t3id')
+                     ->rel('table2', 'table4', 'table2.t2id = table4.t4id')
+                     ->rel('table3', 'table5', 'table3.t3id = table5.t5id')
+                     ->rel('table1', 'table6', 'table1.t1id = table6.t6id');
 
     $osuql = $db->query()
                   ->table1()
@@ -30,11 +30,11 @@ final class OSuQLTest extends TestCase
       			'where'    => [],
       			'having'   => [],
       			'join'     => [
-              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id'],
-              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id'],
-              'table4' => ['table' => 'table4', 'on' => 'table2.t2id = table4.t4id'],
-              'table5' => ['table' => 'table5', 'on' => 'table3.t3id = table5.t5id'],
-              'table6' => ['table' => 'table6', 'on' => 'table1.t1id = table6.t6id'],
+              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id', 'type' => 'inner'],
+              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id', 'type' => 'inner'],
+              'table4' => ['table' => 'table4', 'on' => 'table2.t2id = table4.t4id', 'type' => 'inner'],
+              'table5' => ['table' => 'table5', 'on' => 'table3.t3id = table5.t5id', 'type' => 'inner'],
+              'table6' => ['table' => 'table6', 'on' => 'table1.t1id = table6.t6id', 'type' => 'inner'],
             ],
       			'group'    => [],
       			'order'    => [],
@@ -53,15 +53,15 @@ final class OSuQLTest extends TestCase
   public function testTempRel(): void
   {
     $db = (new OSuQL)->setAdapter('mysql')
-                     ->rel('table1', 'table2', ['t1id = t2id', 'lid = rid'])
-                     ->rel('table1', 'table3', 't1id = t3id');
+                     ->rel('table1', 'table2', 'table1.t1id = table2.t2id and table1.lid = table2.rid')
+                     ->rel('table1', 'table3', 'table1.t1id = table3.t3id');
 
     $db->query('view1')
         ->table1()
         ->table2()
         ->table3();
 
-    $db->temp_rel('table4', 'view1', 't4id = v_id');
+    $db->temp_rel('table4', 'view1', 'table4.t4id = view1.v_id');
 
     $db->query()
         ->table4()
@@ -76,8 +76,8 @@ final class OSuQLTest extends TestCase
       			'where'    => [],
       			'having'   => [],
       			'join'     => [
-              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id and table1.lid = table2.rid'],
-              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id'],
+              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id and table1.lid = table2.rid', 'type' => 'inner'],
+              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id', 'type' => 'inner'],
             ],
       			'group'    => [],
       			'order'    => [],
@@ -91,7 +91,7 @@ final class OSuQLTest extends TestCase
       			'where'    => [],
       			'having'   => [],
       			'join'     => [
-              'view1' => ['table' => 'view1', 'on' => 'table4.t4id = view1.v_id'],
+              'view1' => ['table' => 'view1', 'on' => 'table4.t4id = view1.v_id', 'type' => 'inner'],
             ],
       			'group'    => [],
       			'order'    => [],

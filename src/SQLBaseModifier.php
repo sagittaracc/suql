@@ -7,10 +7,9 @@ class SQLBaseModifier
     $params    = SuQLReservedWords::toSql($queryObject['select'][$field]['modifier'][$modifier]);
     $strParams = (count($params) > 0 ? ', ' . implode(', ', $params) : '');
 
-    $queryObject['select'][$field] = [
-      'field' => "$modifier($fieldName" . "$strParams)",
-      'alias' => $aliasName,
-    ];
+    $queryObject['select'][$field]['field'] = "$modifier($fieldName" . "$strParams)";
+    $queryObject['select'][$field]['alias'] = $aliasName;
+    unset($queryObject['select'][$field]['modifier'][$modifier]);
   }
 
   public static function mod_case($case, &$queryObject, $field) {
