@@ -2,9 +2,9 @@
 ### What is this?
 SuQL is syntactic sugar for SQL.
 ### Why do you need this?
-1. Write queries easier and faster
-2. Read queries in one breath
-3. Make your own SuQL functions. SQL is your only limit.
+1. Make developing process faster.
+2. Make queries easy to read and write.
+3. Expand SuQL syntax on your own.
 # Documentation
 ## Sample Database
 ### users
