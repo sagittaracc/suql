@@ -61,7 +61,7 @@ usersCountOfEachGroup {
 
 ### Sample Database
 
-![Sugar SQL Sample Database](assets\images\Sugar-SQL-Sample-Database.png)
+![Sugar SQL Sample Database](/assets/images/Sugar-SQL-Sample-Database.png)
 
 
 
