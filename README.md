@@ -1,26 +1,82 @@
 # Sugar SQL
+
 ### What is this?
 SuQL is syntactic sugar for SQL.
+
 ### Why do you need this?
 1. Make developing process faster.
 2. Make queries easy to read and write.
 3. Expand SuQL syntax on your own.
+
+### How do you use this?
+There are two approaches:
+1. [Object Oriented Sugar SQL.](#object-oriented-sugar-sql)
+2. [Simple Sugar SQL.](#simple-sugar-sql)
+
+#### Object Oriented Sugar SQL
+```php
+// Setting up tables relations
+$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+// Getting how many users of each group
+$db->query('usersCountOfEachGroup')
+    ->users()
+    ->user_group()
+    ->groups()
+      ->field('name', 'g_name')
+      ->field('name', 'count')->group()->count();
+
+// How many admins?
+$db->query()
+    ->usersCountOfEachGroup()
+      ->field('g_name')
+      ->field('count')
+    ->where("g_name = 'admin'");
+```
+
+#### Simple Sugar SQL
+```
+#usersCountOfEachGroup = users {
+  id@u_id
+}
+
+user_group {
+  user_id.join(u_id)
+}
+
+groups {
+  id@g_id.join(user_group.group_id),
+  name@g_name,
+  name@count.group.count
+};
+
+usersCountOfEachGroup {
+  g_name,
+  count
+} ~ {g_name = 'admin'};
+```
+
 # Documentation
-## Sample Database
-### users
+
+### Sample Database
+
+#### users
 |id   |name   |registration   |
 |---|---|---|
 |1   |Yuriy   |2019-12-10 10:03:16   |
 |2   |Alex   |2020-04-08 10:03:16   |
 |3   |Vlad   |2020-04-14 10:03:16   |
 |4   |Den   |2019-06-12 10:03:16   |
-### groups
+
+#### groups
 |id   |name   |
 |---|---|
 |1   |admin   |
 |2   |user   |
 |3   |guest   |
-### user_group
+
+#### user_group
 |id   |user_id   |group_id   |
 |---|---|---|
 |1   |1   |1   |
@@ -292,9 +348,9 @@ $db->query('allGroupsCount')
       ->field('name', 'count')->group()->count();
 
 $db->query()
-    allGroupsCount()
+    ->allGroupsCount()
       ->field('g_name')
-      ->field('count');
+      ->field('count')
     ->where("g_name = 'admin'");
 ```
 |g_name   |count   |
