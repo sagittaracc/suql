@@ -16,7 +16,7 @@ There are two approaches:
 #### Object Oriented Sugar SQL
 ```php
 // Setting up tables relations
-$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
 // Getting how many users of each group
@@ -100,7 +100,7 @@ users {*};
 
 **Object Oriented approach**
 ```php
-$db = new (OSuQL)->query()
+$db = (new OSuQL)->query()
                   ->users()
                     ->field('*');
 ```
@@ -117,7 +117,7 @@ users {
 
 **Object Oriented approach**
 ```php
-$db = new (OSuQL)->query()
+$db = (new OSuQL)->query()
                   ->users()
                     ->field('id', 'u_id')
                     ->field('name', 'u_name');
@@ -146,7 +146,7 @@ users {
 
 **Object Oriented approach**
 ```php
-$db = new (OSuQL)->query()
+$db = (new OSuQL)->query()
                   ->users()
                     ->field('id', 'u_id')
                     ->field('name', 'u_name')
@@ -171,7 +171,7 @@ users {
 
 **Object Oriented approach**
 ```php
-$db = new (OSuQL)->query('users_belong_to_any_group')
+$db = (new OSuQL)->query('users_belong_to_any_group')
                   ->user_group('distinct')
                     ->field('user_id');
 $db->query()
@@ -190,7 +190,7 @@ users {*} <b>[0, 2]</b>;
 
 **Object Oriented approach**
 ```php
-$db = new (OSuQL)->query()
+$db = (new OSuQL)->query()
                   ->users()
                     ->field('*')
                   ->offset(0)
@@ -232,7 +232,7 @@ groups {
 
 **Object Oriented approach**
 ```php
-$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
 $db->query()
@@ -273,7 +273,7 @@ groups {
 
 **Object Oriented approach**
 ```php
-$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
 $db->query()
@@ -316,7 +316,7 @@ groups {
 
 **Object Oriented approach**
 ```php
-$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
 $db->query('allGroupsCount')
