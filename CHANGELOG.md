@@ -1,6 +1,6 @@
 # Change log
 
-## v1.3.1 - Apr. 21, 2020
+## v1.3.1 - Apr. 26, 2020
 
 **New features:**
 - Field aliases are not necessary while using field modifiers
@@ -9,6 +9,7 @@
 - Support different SQL Drivers
 - SQL Custom Modifiers define in an external file
 - CASE Statement
+- Object Oriented approach to generate queries
 
 **Bug fixes:**
 - Where clause bitwise operations
