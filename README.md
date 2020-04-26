@@ -33,11 +33,21 @@ SuQL is syntactic sugar for SQL.
 # SuQL Syntax
 ## Querying Data
 Specify a list of comma-separated columns you want to query the data from.
+
+**Sugar SQL approach:**
 ```
 users {
   id,
   name
 };
+```
+
+**Object Oriented approach**
+```php
+$db = (new OSuQL)->query()
+                  ->users()
+                    ->field('id')
+                    ->field('name');
 ```
 |id   |name   |
 |---|---|
@@ -47,17 +57,36 @@ users {
 |4   |Den   |
 
 Use the asterisk to query data from all columns of a table.
+
+**Sugar SQL approach**
 ```
 users {*};
 ```
 
+**Object Oriented approach**
+```php
+$db = new (OSuQL)->query()
+                  ->users()
+                    ->field('*');
+```
+
 Use aliases to give a column a temporary name.
+
+**Sugar SQL approach**
 <pre>
 users {
   id@<b>u_id</b>,
   name@<b>u_name</b>
 };
 </pre>
+
+**Object Oriented approach**
+```php
+$db = new (OSuQL)->query()
+                  ->users()
+                    ->field('id', 'u_id')
+                    ->field('name', 'u_name');
+```
 |u_id   |u_name   |
 |---|---|
 |1   |Yuriy   |
@@ -71,12 +100,23 @@ users {
 To select certain rows from a table, put a condition in curly brackets right after the querying data clause.
 The condition syntax is the same as in the SQL WHERE clause.
 > Example: Get all the users with even id's
+
+**Sugar SQL approach**
 <pre>
 users {
   id@u_id,
   name@u_name
 } <b>~ {u_id % 2 = 0}</b>;
 </pre>
+
+**Object Oriented approach**
+```php
+$db = new (OSuQL)->query()
+                  ->users()
+                    ->field('id', 'u_id')
+                    ->field('name', 'u_name')
+                  ->where('u_id % 2 = 0');
+```
 |u_id   |u_name   |
 |---|---|
 |2   |Alex   |
@@ -84,6 +124,8 @@ users {
 
 You also can use nested queries this clause.
 > Example: Get all the users who do not belong to any groups
+
+**Sugar SQL approach**
 <pre>
 <b>#users_belong_to_any_group</b> = user_group.distinct {user_id};
 
@@ -92,11 +134,33 @@ users {
 } ~ {users.id not in <b>#users_belong_to_any_group</b>};
 </pre>
 
+**Object Oriented approach**
+```php
+$db = new (OSuQL)->query('users_belong_to_any_group')
+                  ->user_group('distinct')
+                    ->field('user_id');
+$db->query()
+    ->users()
+      ->field('name')
+    ->where('users.id not in #users_belong_to_any_group');
+```
+
 To retrieve a portion of rows, put `offset` and `limit` in square brackets right after the querying data clause.
 > Example: Get the first two users
+
+**Sugar SQL approach**
 <pre>
 users {*} <b>[0, 2]</b>;
 </pre>
+
+**Object Oriented approach**
+```php
+$db = new (OSuQL)->query()
+                  ->users()
+                    ->field('*')
+                  ->offset(0)
+                  ->limit(2);
+```
 | id | name  | registration        |
 |----|-------|---------------------|
 | 1  | Yuriy | 2019-12-10 10:03:16 |
@@ -114,6 +178,8 @@ users.<b>distinct</b> {
 ## Joining Multiple Tables
 To join multiple tables together, you use the `join` modifier. Link two tables by a relationship between two columns. One of them you apply the `join` modifier to and another you pass as a parameter.
 > Example: Link all three tables together to see how many admins we have.
+
+**Sugar SQL approach**
 <pre>
 users {
   id@u_id
@@ -128,18 +194,32 @@ groups {
   name@g_name
 };
 </pre>
-|u_id   |user_id   |g_id   |g_name   |
-|---|---|---|---|
-|1   |1   |1   |admin   |
-|2   |2   |1   |admin   |
-|3   |3   |1   |admin   |
-|4   |4   |2   |user   |
+
+**Object Oriented approach**
+```php
+$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+$db->query()
+    ->users()
+    ->user_group()
+    ->groups()
+      ->field('name', 'g_name')
+```
+|g_name   |
+|---|
+|admin   |
+|admin   |
+|admin   |
+|user   |
 
 
 
 ## Grouping Data
 To group rows into groups, you use the `group` modifier.
 > Example: How many admins? Use the count modifier to calc the exact number.
+
+**Sugar SQL approach**
 <pre>
 users {
   id@u_id
@@ -155,14 +235,29 @@ groups {
   name@count.<b>group</b>.count
 } ~ {g_name = 'admin'};
 </pre>
-|u_id   |user_id   |g_id   |g_name   |count   |
-|---|---|---|---|---|
-|1   |1   |1   |admin   |3   |
+
+**Object Oriented approach**
+```php
+$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+$db->query()
+    ->users()
+    ->user_group()
+    ->groups()
+      ->field('name', 'g_name')
+      ->field('name', 'count')->group()->count();
+```
+|g_name   |count   |
+|---|---|
+|admin   |3   |
 
 
 
 ## Nested Queries
 Use variables for nested queries. A variable should start with the `#`
+
+**Sugar SQL approach**
 <pre>
 <b>#allGroupsCount</b> = users {
   id@u_id
@@ -183,6 +278,25 @@ groups {
   count
 } ~ {g_name = 'admin'};
 </pre>
+
+**Object Oriented approach**
+```php
+$db = new OSuQL()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+$db->query('allGroupsCount')
+    ->users()
+    ->user_group()
+    ->groups()
+      ->field('name', 'g_name')
+      ->field('name', 'count')->group()->count();
+
+$db->query()
+    allGroupsCount()
+      ->field('g_name')
+      ->field('count');
+    ->where("g_name = 'admin'");
+```
 |g_name   |count   |
 |---|---|
 |admin   |3   |
@@ -258,6 +372,8 @@ class SQLModifier extends SQLBaseModifier
   // ...
 }
 ```
+
+**Sugar SQL approach**
 <pre>
 groups {
   id,
@@ -265,6 +381,15 @@ groups {
   name@permission.<b>permission</b>
 };
 </pre>
+
+**Object Oriented approach**
+```php
+$db = (new OSuQL)->query()
+                  ->groups()
+                    ->field('id')
+                    ->field('name')
+                    ->field('name', 'permission')->permission();
+```
 | id | name  | permission        |
 |----|-------|-------------------|
 | 1  | admin | can do everything |
@@ -278,5 +403,3 @@ groups {
 SuQL is all about modifiers. They already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` etc and SQL functions.
 
 More than that, you can develop your own modifiers.
-
-[Learn more about modifiers.](https://github.com/sagittaracc/suql/wiki/Modifiers)
