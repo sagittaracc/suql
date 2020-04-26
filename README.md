@@ -61,28 +61,7 @@ usersCountOfEachGroup {
 
 ### Sample Database
 
-#### users
-|id   |name   |registration   |
-|---|---|---|
-|1   |Yuriy   |2019-12-10 10:03:16   |
-|2   |Alex   |2020-04-08 10:03:16   |
-|3   |Vlad   |2020-04-14 10:03:16   |
-|4   |Den   |2019-06-12 10:03:16   |
-
-#### groups
-|id   |name   |
-|---|---|
-|1   |admin   |
-|2   |user   |
-|3   |guest   |
-
-#### user_group
-|id   |user_id   |group_id   |
-|---|---|---|
-|1   |1   |1   |
-|2   |2   |1   |
-|4   |3   |1   |
-|5   |4   |2   |
+![Sugar SQL Sample Database](https://drive.google.com/open?id=1xdZWo7yvoFo8bDfSyIFf3pd-yWjkSmSr)
 
 
 
