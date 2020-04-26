@@ -9,3 +9,4 @@ require 'SQLAdapter.php';
 require 'SQLBuilder.php';
 require 'MySQLBuilder.php';
 require 'SuQL.php';
+require 'OSuQL.php';
