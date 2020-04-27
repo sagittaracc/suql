@@ -36,25 +36,27 @@ $db->query()
 ```
 
 #### Simple Sugar SQL
-```
-#usersCountOfEachGroup = users {
-  id@u_id
-}
+```php
+SuQL::toSql("
+  #usersCountOfEachGroup = users {
+    id@u_id
+  }
 
-user_group {
-  user_id.join(u_id)
-}
+  user_group {
+    user_id.join(u_id)
+  }
 
-groups {
-  id@g_id.join(user_group.group_id),
-  name@g_name,
-  name@count.group.count
-};
+  groups {
+    id@g_id.join(user_group.group_id),
+    name@g_name,
+    name@count.group.count
+  };
 
-usersCountOfEachGroup {
-  g_name,
-  count
-} ~ {g_name = 'admin'};
+  usersCountOfEachGroup {
+    g_name,
+    count
+  } ~ {g_name = 'admin'};
+", 'mysql');
 ```
 
 # Documentation
