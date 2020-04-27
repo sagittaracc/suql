@@ -1,5 +1,12 @@
 # Change log
 
+## v1.3.2 - Apr. 27, 2020
+
+**Bug fixes:**
+- Refactor
+
+---
+
 ## v1.3.1 - Apr. 26, 2020
 
 **New features:**

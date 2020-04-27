@@ -22,13 +22,6 @@ class OSuQL
     $this->scheme = [];
   }
 
-  public function setAdapter($adapter) {
-    if (SQLAdapter::exists($adapter))
-      $this->adapter = $adapter;
-
-    return $this;
-  }
-
   private function clear() {
     $this->osuql = [];
     $this->currentQuery = null;
@@ -38,6 +31,19 @@ class OSuQL
     $this->queryList = [];
     $this->tableList = [];
     $this->scheme['temp_rel'] = [];
+  }
+
+  public function drop() {
+    $this->clear();
+    $this->scheme = [];
+    return $this;
+  }
+
+  public function setAdapter($adapter) {
+    if (SQLAdapter::exists($adapter))
+      $this->adapter = $adapter;
+
+    return $this;
   }
 
   public function getSQLObject() {
@@ -51,8 +57,8 @@ class OSuQL
 
     $classBuilder = SQLAdapter::get($this->adapter);
     $SQLBuilder = new $classBuilder($this->getSQLObject());
-		$SQLBuilder->run();
-		return $SQLBuilder->getSql();
+    $SQLBuilder->run();
+    return $SQLBuilder->getSql();
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
@@ -112,28 +118,12 @@ class OSuQL
     return $this;
   }
 
-  public function field($name, ...$options) {
+  public function field($name, $visible = true) {
     if (!$this->currentTable) return;
 
-    if (count($options) === 0) {
-      $visible = true;
-      $alias = '';
-    }
-
-    if (count($options) === 1) {
-      if (is_bool($options[0])) {
-        $visible = $options[0];
-        $alias = '';
-      } else {
-        $visible = true;
-        $alias = $options[0];
-      }
-    }
-
-    if (count($options) === 2) {
-      $alias = $options[0];
-      $visible = $options[1];
-    }
+    $field = is_string($name) ? [$name => ''] : $name;
+    if (!is_array($field)) return;
+    foreach ($field as $name => $alias) break;
 
     $fieldName = $alias ? $alias : "{$this->currentTable}.$name";
     $this->osuql['queries'][$this->currentQuery]['select'][$fieldName] = [
@@ -160,12 +150,6 @@ class OSuQL
 
   public function limit($limit) {
     $this->osuql['queries'][$this->currentQuery]['limit'] = $limit;
-    return $this;
-  }
-
-  public function drop() {
-    $this->clear();
-    $this->scheme = [];
     return $this;
   }
 
@@ -207,7 +191,18 @@ class OSuQL
   }
 
   private function join($table) {
-    $on = $this->getJoinLinkFor($table);
+    $rel = isset($this->scheme['rel'][$table])
+            ? 'rel'
+            : (isset($this->scheme['temp_rel'])
+                ? 'temp_rel'
+                : null);
+
+    if (!$rel) return;
+
+    $possibleTableLinks = array_keys($this->scheme[$rel][$table]);
+    $tableToJoinTo = array_intersect($possibleTableLinks, $this->tablesInQuery[$this->currentQuery]);
+    $on = count($tableToJoinTo) === 1 ? $this->scheme[$rel][$tableToJoinTo[0]][$table] : null;
+
     if (!$on) return;
 
     $this->osuql['queries'][$this->currentQuery]['join'][$table] = [
@@ -225,19 +220,5 @@ class OSuQL
   private function modifier($name, $arguments) {
     $this->osuql['queries'][$this->currentQuery]['select'][$this->currentField]['modifier'][$name] = $arguments;
     return $this;
-  }
-
-  public function getJoinLinkFor($table) {
-    $rel = isset($this->scheme['rel'][$table])
-            ? 'rel'
-            : (isset($this->scheme['temp_rel'])
-                ? 'temp_rel'
-                : null);
-
-    if (!$rel) return null;
-
-    $possibleTableLinks = array_keys($this->scheme[$rel][$table]);
-    $tableToJoinTo = array_intersect($possibleTableLinks, $this->tablesInQuery[$this->currentQuery]);
-    return count($tableToJoinTo) === 1 ? $this->scheme[$rel][$tableToJoinTo[0]][$table] : null;
   }
 }
