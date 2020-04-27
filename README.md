@@ -24,8 +24,8 @@ $db->query('usersCountOfEachGroup')
     ->users()
     ->user_group()
     ->groups()
-      ->field('name', 'g_name')
-      ->field('name', 'count')->group()->count();
+      ->field(['name' => 'g_name'])
+      ->field(['name' => 'count'])->group()->count();
 
 // How many admins?
 $db->query()
@@ -119,8 +119,8 @@ users {
 ```php
 $db = (new OSuQL)->query()
                   ->users()
-                    ->field('id', 'u_id')
-                    ->field('name', 'u_name');
+                    ->field(['id' => 'u_id'])
+                    ->field(['name' => 'u_name']);
 ```
 |u_id   |u_name   |
 |---|---|
@@ -148,8 +148,8 @@ users {
 ```php
 $db = (new OSuQL)->query()
                   ->users()
-                    ->field('id', 'u_id')
-                    ->field('name', 'u_name')
+                    ->field(['id' => 'u_id'])
+                    ->field(['name' => 'u_name'])
                   ->where('u_id % 2 = 0');
 ```
 |u_id   |u_name   |
@@ -239,7 +239,7 @@ $db->query()
     ->users()
     ->user_group()
     ->groups()
-      ->field('name', 'g_name')
+      ->field(['name' => 'g_name'])
 ```
 |g_name   |
 |---|
@@ -280,8 +280,8 @@ $db->query()
     ->users()
     ->user_group()
     ->groups()
-      ->field('name', 'g_name')
-      ->field('name', 'count')->group()->count();
+      ->field(['name' => 'g_name'])
+      ->field(['name' => 'count'])->group()->count();
 ```
 |g_name   |count   |
 |---|---|
@@ -323,8 +323,8 @@ $db->query('allGroupsCount')
     ->users()
     ->user_group()
     ->groups()
-      ->field('name', 'g_name')
-      ->field('name', 'count')->group()->count();
+      ->field(['name' => 'g_name'])
+      ->field(['name' => 'count'])->group()->count();
 
 $db->query()
     ->allGroupsCount()
@@ -340,6 +340,8 @@ $db->query()
 
 ## Sorting Data
 Apply the sort modifier to the field you want to sort by. `asc` for ascending, `desc` for descending.
+
+**Sugar SQL approach**
 <pre>
 users {}
 
@@ -353,6 +355,19 @@ groups {
   name@count.group.count.<b>asc</b>
 };
 </pre>
+
+**Object Oriented approach**
+```php
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+$db->query()
+    ->users()
+    ->user_group()
+    ->groups()
+      ->field(['name' => 'gname'])
+      ->field(['name' => 'count'])->group()->count()->asc();
+```
 | user_id | id | gname | count |
 |---------|----|-------|-------|
 | 4       | 2  | user  | 1     |
@@ -423,7 +438,7 @@ $db = (new OSuQL)->query()
                   ->groups()
                     ->field('id')
                     ->field('name')
-                    ->field('name', 'permission')->permission();
+                    ->field(['name' => 'permission'])->permission();
 ```
 | id | name  | permission        |
 |----|-------|-------------------|
