@@ -340,6 +340,8 @@ $db->query()
 
 ## Sorting Data
 Apply the sort modifier to the field you want to sort by. `asc` for ascending, `desc` for descending.
+
+**Sugar SQL approach**
 <pre>
 users {}
 
@@ -353,6 +355,19 @@ groups {
   name@count.group.count.<b>asc</b>
 };
 </pre>
+
+**Object Oriented approach**
+```php
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+$db->query()
+    ->users()
+    ->user_group()
+    ->groups()
+      ->field(['name' => 'gname'])
+      ->field(['name' => 'count'])->group()->count()->asc();
+```
 | user_id | id | gname | count |
 |---------|----|-------|-------|
 | 4       | 2  | user  | 1     |
