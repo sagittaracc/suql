@@ -8,10 +8,12 @@ class SQLSugarSyntax
 
   function __construct() {
     $this->clear();
+    $this->scheme = [];
   }
 
   public function clear() {
     $this->osuql = [];
+    $this->tablesInQuery = [];
     $this->scheme['temp_rel'] = [];
   }
 
@@ -90,6 +92,8 @@ class SQLSugarSyntax
       'visible' => $visible,
       'modifier' => [],
     ];
+
+    return $fieldName;
   }
 
   public function addWhere($query, $where) {
