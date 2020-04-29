@@ -1,106 +1,45 @@
 <?php
-class OSuQL
+class OSuQL extends SQLSugarSyntax
 {
-  private $osuql;
-
-  private $scheme;
-
   private $currentQuery;
   private $currentTable;
-  private $tablesInQuery;
   private $currentField;
-
   private $currentJoinType;
 
   private $queryList;
   private $tableList;
 
-  private $adapter;
-
   function __construct() {
-    $this->clear();
-    $this->scheme = [];
+    parent::__construct();
   }
 
-  private function clear() {
-    $this->osuql = [];
+  public function clear() {
+    parent::clear();
     $this->currentQuery = null;
     $this->currentTable = null;
-    $this->tablesInQuery = [];
     $this->currentField = null;
     $this->queryList = [];
     $this->tableList = [];
-    $this->scheme['temp_rel'] = [];
   }
 
   public function drop() {
-    $this->clear();
-    $this->scheme = [];
+    parent::drop();
     return $this;
-  }
-
-  public function setAdapter($adapter) {
-    if (SQLAdapter::exists($adapter))
-      $this->adapter = $adapter;
-
-    return $this;
-  }
-
-  public function getSQLObject() {
-    $osuql = $this->osuql;
-    $this->clear();
-    return $osuql;
-  }
-
-  public function getSQL() {
-    if (!$this->adapter) return null;
-
-    $classBuilder = SQLAdapter::get($this->adapter);
-    $SQLBuilder = new $classBuilder($this->getSQLObject());
-    $SQLBuilder->run();
-    return $SQLBuilder->getSql();
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
-    if (is_array($leftTable)) {
-      $on = str_replace(array_values($leftTable), array_keys($leftTable), $on);
-      $leftTable = array_keys($leftTable)[0];
-    }
-
-    if (is_array($rightTable)) {
-      $on = str_replace(array_values($rightTable), array_keys($rightTable), $on);
-      $rightTable = array_keys($rightTable)[0];
-    }
+    parent::rel($leftTable, $rightTable, $on, $temporary);
 
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
 
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = $on;
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = $on;
-
     return $this;
   }
 
-  public function temp_rel($leftTable, $rightTable, $on) {
-    return $this->rel($leftTable, $rightTable, $on, true);
-  }
-
   public function query($name = 'main') {
-    $this->osuql['queries'][$name] = [
-      'select'   => [],
-      'from'     => null,
-      'where'    => [],
-      'having'   => [],
-      'join'     => [],
-      'group'    => [],
-      'order'    => [],
-      'modifier' => null,
-      'offset'   => null,
-      'limit'    => null,
-    ];
+    parent::addQuery($name);
     $this->currentQuery = $name;
     $this->currentTable = null;
-    $this->tablesInQuery[$name] = [];
     $this->currentField = null;
     $this->queryList[] = $name;
     return $this;
@@ -121,35 +60,23 @@ class OSuQL
   public function field($name, $visible = true) {
     if (!$this->currentTable) return;
 
-    $field = is_string($name) ? [$name => ''] : $name;
-    if (!is_array($field)) return;
-    foreach ($field as $name => $alias) break;
-
-    $fieldName = $alias ? $alias : "{$this->currentTable}.$name";
-    $this->osuql['queries'][$this->currentQuery]['select'][$fieldName] = [
-      'table' => $this->currentTable,
-      'field' => "{$this->currentTable}.$name",
-      'alias' => $alias,
-      'visible' => $visible,
-      'modifier' => [],
-    ];
-    $this->currentField = $fieldName;
+    $this->currentField = parent::addField($this->currentQuery, $this->currentTable, $name, $visible);
 
     return $this;
   }
 
   public function where($where) {
-    $this->osuql['queries'][$this->currentQuery]['where'][] = $where;
+    parent::addWhere($this->currentQuery, $where);
     return $this;
   }
 
   public function offset($offset) {
-    $this->osuql['queries'][$this->currentQuery]['offset'] = $offset;
+    parent::addOffset($this->currentQuery, $offset);
     return $this;
   }
 
   public function limit($limit) {
-    $this->osuql['queries'][$this->currentQuery]['limit'] = $limit;
+    parent::addLimit($this->currentQuery, $limit);
     return $this;
   }
 
@@ -183,42 +110,22 @@ class OSuQL
   }
 
   private function from($table) {
-    $this->osuql['queries'][$this->currentQuery]['from'] = $table;
+    parent::addFrom($this->currentQuery, $table);
     $this->currentTable = $table;
-    $this->tablesInQuery[$this->currentQuery][] = $table;
     $this->currentJoinType = 'inner';
     return $this;
   }
 
   private function join($table) {
-    $rel = isset($this->scheme['rel'][$table])
-            ? 'rel'
-            : (isset($this->scheme['temp_rel'])
-                ? 'temp_rel'
-                : null);
-
-    if (!$rel) return;
-
-    $possibleTableLinks = array_keys($this->scheme[$rel][$table]);
-    $tableToJoinTo = array_intersect($possibleTableLinks, $this->tablesInQuery[$this->currentQuery]);
-    $on = count($tableToJoinTo) === 1 ? $this->scheme[$rel][$tableToJoinTo[0]][$table] : null;
-
-    if (!$on) return;
-
-    $this->osuql['queries'][$this->currentQuery]['join'][$table] = [
-      'table' => $table,
-      'on'    => $on,
-      'type'  => $this->currentJoinType,
-    ];
+    parent::addJoin($this->currentQuery, $this->currentJoinType, $table);
 
     $this->currentTable = $table;
-    $this->tablesInQuery[$this->currentQuery][] = $table;
     $this->currentJoinType = 'inner';
     return $this;
   }
 
   private function modifier($name, $arguments) {
-    $this->osuql['queries'][$this->currentQuery]['select'][$this->currentField]['modifier'][$name] = $arguments;
+    parent::addModifier($this->currentQuery, $this->currentField, $name, $arguments);
     return $this;
   }
 }
