@@ -104,4 +104,20 @@ final class OSuQLTest extends TestCase
       $db->getSQLObject()
     );
   }
+
+  public function testWhere(): void
+  {
+    $db = new OSuQL;
+
+    $db->query()
+        ->users()
+          ->field(['id' => 'uid'])
+          ->field(['name' => 'uname'])
+        ->where("uid > 5 and uname = 'admin'");
+
+    $this->assertEquals(
+      "select users.id as uid, users.name as uname from users where users.id > 5 and users.name = 'admin'",
+      $db->setAdapter('mysql')->getSQL()
+    );
+  }
 }
