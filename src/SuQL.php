@@ -25,9 +25,8 @@ class SuQL extends SQLSugarSyntax
 		if (!$this->suql) return null;
 
 		$regex_select = 'select\s*'.
-										'from\s*@?'.
-											'(?<table>[a-z]+)'.							// the table to get the data from
-												'.*?'.												// the field list
+										'from\s*@?(?<table>[a-z]+)'.			// the table to get the data from
+										'.*?'.														// the field list
 										'(where\s*(?<where>.*?))?\s*'.		// where clause
 										'(offset\s*(?<offset>\d+))?\s*'.	// offset clause
 										'(limit\s*(?<limit>\d+))?;';			// limit clause
