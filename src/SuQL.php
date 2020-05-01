@@ -1,45 +1,29 @@
 <?php
 class SuQL extends SQLSugarSyntax
 {
-  private $parser;
+  private $suql;
 
   function __construct() {
-    $this->parser = new SuQLParser();
     parent::__construct();
   }
 
-  public function clear() {
-    $this->parser->clear();
-    parent::clear();
-  }
-
   public function getSQL() {
-    if ($this->parse()) {
-      $sql = parent::getSQL();
-      $this->clear();
-      return $sql;
-    }
-
-    return null;
+    return $this->interpret() ? parent::getSQL() : null;
   }
 
   public function getSQLObject() {
-    if ($this->parse()) {
-      $osuql = parent::getSQLObject();
-      $this->clear();
-      return $osuql;
-    }
-
-    return null;
+    return $this->interpret() ? parent::getSQLObject() : null;
   }
 
   public function query($suql) {
-    $this->parser->setQuery($suql);
+    $this->suql = trim($suql);
     return $this;
   }
 
-  public function parse() {
-    $nestedQueries = $this->parser->getNestedQueries();
+  public function interpret() {
+    if (!$this->suql) return null;
+
+    $nestedQueries = SuQLParser::getNestedQueries($this->suql);
     foreach ($nestedQueries as $name => $query) {
       parent::addQuery($name);
 

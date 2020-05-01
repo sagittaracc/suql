@@ -26,7 +26,7 @@ final class MySQLTest extends TestCase
 
     $this->assertEquals(
       true,
-      $db->query($suql)->parse()
+      $db->query($suql)->interpret()
     );
   }
 }
