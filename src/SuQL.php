@@ -21,7 +21,7 @@ class SuQL extends SQLSugarSyntax
   }
 
   public function interpret() {
-    if (!$this->suql) return null;
+    if (!$this->suql) return false;
 
     // Processing the nested queries
     $nestedQueries = SuQLParser::getNestedQueries($this->suql);
@@ -45,17 +45,16 @@ class SuQL extends SQLSugarSyntax
   public function SELECT($name, $query) {
     $clauses = SuQLParser::getSelectClauses($query);
 
-    parent::addFrom($name, $clauses['table'][0]);
-    
-    if (isset($clauses['where'])) parent::addWhere($name, $clauses['where'][0]);
-    if (isset($clauses['offset'])) parent::addOffset($name, $clauses['offset'][0]);
-    if (isset($clauses['limit'])) parent::addLimit($name, $clauses['limit'][0]);
+    if ($clauses['table'][0]  !== '') parent::addFrom($name, $clauses['table'][0]);
+    if ($clauses['where'][0]  !== '') parent::addWhere($name, $clauses['where'][0]);
+    if ($clauses['offset'][0] !== '') parent::addOffset($name, $clauses['offset'][0]);
+    if ($clauses['limit'][0]  !== '') parent::addLimit($name, $clauses['limit'][0]);
 
-    if (isset($clauses['fields'])) {
+    if ($clauses['fields'][0] !== '') {
       // Processing fields
     }
 
-    if (isset($clauses['join'])) {
+    if ($clauses['join'] !== '') {
       // Processing join
     }
 
