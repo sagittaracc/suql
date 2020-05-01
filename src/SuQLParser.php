@@ -7,4 +7,8 @@ class SuQLParser
     preg_match_all(self::REGEX_NESTED_QUERY, $suql, $nestedQueries);
     return array_combine($nestedQueries['name'], $nestedQueries['query']);
 	}
+
+	public static function getMainQuery($suql) {
+		return false;
+	}
 }
