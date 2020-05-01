@@ -5,7 +5,7 @@ final class MySQLTest extends TestCase
 {
   public function testOne(): void
   {
-    $db = (new SuQL)->setAdapter('mysql');
+    $db = (new SuQL())->setAdapter('mysql');
 
     $suql = "
       @allUsers = SELECT FROM users
@@ -26,7 +26,7 @@ final class MySQLTest extends TestCase
 
     $this->assertEquals(
       true,
-      $db->query($suql)->interpret()
+      $db->query($suql)->parse()
     );
   }
 }

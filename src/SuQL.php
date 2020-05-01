@@ -1,35 +1,45 @@
 <?php
 class SuQL extends SQLSugarSyntax
 {
-  const REGEX_NESTED_QUERY = '/@(?<name>[a-z0-9_]+)\s*=\s*(?<query>.*?);/msi';  // @<var_name> = <query>;
-
-  private $suql;
+  private $parser;
 
   function __construct() {
+    $this->parser = new SuQLParser();
     parent::__construct();
-    $this->suql = '';
   }
 
-  public function query($suql) {
-    $this->suql = trim($suql);
-    return $this;
+  public function clear() {
+    $this->parser->clear();
+    parent::clear();
   }
 
   public function getSQL() {
-    return $this->interpret() ? parent::getSQL() : null;
+    if ($this->parse()) {
+      $sql = parent::getSQL();
+      $this->clear();
+      return $sql;
+    }
+
+    return null;
   }
 
   public function getSQLObject() {
-    return $this->interpret() ? parent::getSQLObject() : null;
+    if ($this->parse()) {
+      $osuql = parent::getSQLObject();
+      $this->clear();
+      return $osuql;
+    }
+
+    return null;
   }
 
-  public function interpret() {
-    if (!$this->suql) return null;
+  public function query($suql) {
+    $this->parser->setQuery($suql);
+    return $this;
+  }
 
-    // Looking for the nested queries
-    preg_match_all(self::REGEX_NESTED_QUERY, $this->suql, $nestedQueries);
-    $nestedQueries = array_combine($nestedQueries['name'], $nestedQueries['query']);
-
+  public function parse() {
+    $nestedQueries = $this->parser->getNestedQueries();
     foreach ($nestedQueries as $name => $query) {
       parent::addQuery($name);
 
