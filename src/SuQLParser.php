@@ -15,7 +15,8 @@ class SuQLParser
 	 *	[offset <offset>]
 	 *	[limit <limit>]
 	 */
-	const REGEX_SELECT = '/\s*select\s*from\s*(?<table>[a-z]+)\s*(?<fields>.*?)(where\s*(?<where>.*?))?\s*(?<join>(left|right|inner)\s*join\s*.*?)?\s*(offset\s*(?<offset>\d+))?\s*(limit\s*(?<limit>\d+))?\s*;/msi';
+	const REGEX_SELECT = '/\s*select\s*from\s*(?<table>[a-z0-9_]+)\s*(?<fields>.*?)(where\s*(?<where>.*?))?\s*(?<join>(left|right|inner)\s*join\s*.*?)?\s*(offset\s*(?<offset>\d+))?\s*(limit\s*(?<limit>\d+))?\s*;/msi';
+	const REGEX_JOIN = '/(?<join_type>left|right|inner)\s*join\s*(?<table>[a-z0-9_]+)/msi';
 
 	public static function getNestedQueries($suql) {
     preg_match_all(self::REGEX_NESTED_QUERY, $suql, $nestedQueries);
@@ -29,5 +30,10 @@ class SuQLParser
 	public static function getSelectClauses($suql) {
 		preg_match_all(self::REGEX_SELECT, $suql, $selectClauses);
 		return $selectClauses;
+	}
+
+	public static function getJoinedTables($suql) {
+		preg_match_all(self::REGEX_JOIN, $suql, $joinedTables);
+		return array_combine($joinedTables['join_type'], $joinedTables['table']);
 	}
 }

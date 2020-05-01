@@ -50,12 +50,14 @@ class SuQL extends SQLSugarSyntax
     if ($clauses['offset'][0] !== '') parent::addOffset($name, $clauses['offset'][0]);
     if ($clauses['limit'][0]  !== '') parent::addLimit($name, $clauses['limit'][0]);
 
-    if ($clauses['fields'][0] !== '') {
-      // Processing fields
+    if ($clauses['join'][0] !== '') {
+      $joinedTables = SuQLParser::getJoinedTables($clauses['join'][0]);
+      foreach ($joinedTables as $join_type => $table)
+        parent::addJoin($name, $join_type, $table);
     }
 
-    if ($clauses['join'] !== '') {
-      // Processing join
+    if ($clauses['fields'][0] !== '') {
+      // Processing fields
     }
 
     return true;

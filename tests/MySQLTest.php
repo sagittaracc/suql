@@ -7,17 +7,24 @@ final class MySQLTest extends TestCase
   {
     $db = (new SuQL())->setAdapter('mysql');
 
+    $db->rel(['users' => 'a'], ['user_group' => 'b'], 'a.id = b.user_id');
+    $db->rel(['user_group' => 'a'], ['groups' => 'b'], 'a.group_id = b.id');
+
     $suql = "
       @allUsers = SELECT FROM users
         id,
         name
-      WHERE id > 2
+
+      LEFT JOIN user_group
+        user_id,
+        group_id
+
+      RIGHT JOIN groups
+        id,
+        name
+
       OFFSET 0
       LIMIT 3;
-
-      @allGroups = SELECT FROM groups
-        id@gid
-      ;
 
       SELECT FROM @allUsers
         id
@@ -30,27 +37,18 @@ final class MySQLTest extends TestCase
           'allUsers' => [
             'select'   => [],
             'from'     => 'users',
-            'where'    => ['id > 2'],
+            'where'    => [],
             'having'   => [],
-            'join'     => [],
+            'join'     => [
+              'user_group' => ['table' => 'user_group', 'type' => 'LEFT', 'on' => 'users.id = user_group.user_id'],
+              'groups' => ['table' => 'groups', 'type' => 'RIGHT', 'on' => 'user_group.group_id = groups.id'],
+            ],
             'group'    => [],
             'order'    => [],
             'modifier' => null,
             'offset'   => '0',
             'limit'    => '3',
           ],
-          'allGroups' => [
-            'select'   => [],
-            'from'     => 'groups',
-            'where'    => [],
-            'having'   => [],
-            'join'     => [],
-            'group'    => [],
-            'order'    => [],
-            'modifier' => null,
-            'offset'   => null,
-            'limit'    => null,
-          ]
         ]
       ],
       $db->query($suql)->getSQLObject()
