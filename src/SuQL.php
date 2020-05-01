@@ -1,6 +1,8 @@
 <?php
 class SuQL extends SQLSugarSyntax
 {
+  const REGEX_NESTED_QUERY = '/@(?<name>[a-z0-9_]+)\s*=\s*(?<query>.*?);/msi';  // @<var_name> = <query>;
+
   private $suql;
 
   function __construct() {
@@ -21,37 +23,27 @@ class SuQL extends SQLSugarSyntax
     return $this->interpret() ? parent::getSQLObject() : null;
   }
 
-  private function interpret() {
+  public function interpret() {
     if (!$this->suql) return null;
 
-    $regex_select = 'select\s*'.
-                    'from\s*@?(?<table>[a-z]+)'.      // the table to get the data from
-                    '.*?'.                            // the field list
-                    '(where\s*(?<where>.*?))?\s*'.    // where clause
-                    '(offset\s*(?<offset>\d+))?\s*'.  // offset clause
-                    '(limit\s*(?<limit>\d+))?;';      // limit clause
-
     // Looking for the nested queries
-    preg_match_all("/@(?<name>[a-z]+)\s*=\s*$regex_select/msi", $this->suql, $statements);
-    for ($i = 0, $n = count($statements['name']); $i < $n; $i++) {
-      $query = $statements['name'][$i];
-      parent::addQuery ( $query );
-      parent::addFrom  ( $query, $statements['table'][$i]  );
-      parent::addWhere ( $query, $statements['where'][$i]  );
-      parent::addOffset( $query, $statements['offset'][$i] );
-      parent::addLimit ( $query, $statements['limit'][$i]  );
+    preg_match_all(self::REGEX_NESTED_QUERY, $this->suql, $nestedQueries);
+    $nestedQueries = array_combine($nestedQueries['name'], $nestedQueries['query']);
+
+    foreach ($nestedQueries as $name => $query) {
+      parent::addQuery($name);
+
+      if (!$this->SELECT($query))
+        return false;
     }
 
     // Looking for the main query
-    preg_match_all("/^;?\s*$regex_select$/msi", $this->suql, $statements);
-    if ($statements['table']) {
-      parent::addQuery ( 'main' );
-      parent::addFrom  ( 'main', $statements['table'][0]  );
-      parent::addWhere ( 'main', $statements['where'][0]  );
-      parent::addOffset( 'main', $statements['offset'][0] );
-      parent::addLimit ( 'main', $statements['limit'][0]  );
-    }
+    // if (!$this->SELECT('main')) return false;
 
+    return true;
+  }
+
+  public function SELECT($query) {
     return true;
   }
 }

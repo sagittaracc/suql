@@ -25,47 +25,8 @@ final class MySQLTest extends TestCase
     ";
 
     $this->assertEquals(
-      [
-        'queries' => [
-          'main' => [
-            'select'   => [],
-            'from'     => 'allUsers',
-            'where'    => ['id > 10'],
-            'having'   => [],
-            'join'     => [],
-            'group'    => [],
-            'order'    => [],
-            'modifier' => null,
-            'offset'   => null,
-            'limit'    => null,
-          ],
-          'allUsers' => [
-            'select'   => [],
-            'from'     => 'users',
-            'where'    => ['id > 2'],
-            'having'   => [],
-            'join'     => [],
-            'group'    => [],
-            'order'    => [],
-            'modifier' => null,
-            'offset'   => 0,
-            'limit'    => 3,
-          ],
-          'allGroups' => [
-            'select'   => [],
-            'from'     => 'groups',
-            'where'    => [],
-            'having'   => [],
-            'join'     => [],
-            'group'    => [],
-            'order'    => [],
-            'modifier' => null,
-            'offset'   => null,
-            'limit'    => null,
-          ]
-        ]
-      ],
-      $db->query($suql)->getSQLObject()
+      true,
+      $db->query($suql)->interpret()
     );
   }
 }
