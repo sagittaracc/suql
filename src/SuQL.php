@@ -64,6 +64,9 @@ class SuQL extends SQLSugarSyntax
           $clauses['table'][0],
           [$fieldList['name'][$i] => $fieldList['alias'][$i]]
         );
+
+        // Processing this field modifiers...
+        // $fieldList['modif'][$i]
       }
     }
 

@@ -19,7 +19,7 @@ class SuQLParser
 	const REGEX_MAIN_SELECT = '/^;?\s*(?<query>select.*?;)/msi';
 	const REGEX_JOIN = '/(?<join_type>left|right|inner)\s*join\s*(?<table>\w+)/msi';
 	// <field_name[.modif1.modif2.modif3...][@field_alias], ...
-	const REGEX_FIELDS = '/(?<name>\w+)(?<modif>.*?)(@(?<alias>\w+))?\s*(,|$)\s*/msi';
+	const REGEX_FIELDS = '/(?<name>\w+)(?<modif>.*?)(@(?<alias>\w+))?\s*,?\s*$/msi';
 
 	public static function getNestedQueries($suql) {
     preg_match_all(self::REGEX_NESTED_QUERY, $suql, $nestedQueries);
