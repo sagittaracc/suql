@@ -33,10 +33,10 @@ class SuQL extends SQLSugarSyntax
     }
 
     // Processing the main query
-    $mainQuery = SuQLParser::getMainQuery($this->suql);
+    $query = SuQLParser::getMainQuery($this->suql);
     parent::addQuery('main');
 
-    if (!$this->SELECT('main', $mainQuery))
+    if (!$this->SELECT('main', $query))
       return false;
 
     return true;
