@@ -27,7 +27,7 @@ final class SuQLTest extends TestCase
       LIMIT 3;
 
       SELECT FROM @allUsers
-        id
+        id@uid
       WHERE id > 10;
     ";
 
@@ -35,7 +35,15 @@ final class SuQLTest extends TestCase
       [
         'queries' => [
           'main' => [
-            'select'   => [],
+            'select'   => [
+              'uid' => [
+                'table' => 'allUsers',
+                'field' => 'allUsers.id',
+                'alias' => 'uid',
+                'visible' => true,
+                'modifier' => [],
+              ]
+            ],
             'from'     => 'allUsers',
             'where'    => ['id > 10'],
             'having'   => [],
@@ -47,7 +55,22 @@ final class SuQLTest extends TestCase
             'limit'    => null,
           ],
           'allUsers' => [
-            'select'   => [],
+            'select'   => [
+              'users.id' => [
+                'table' => 'users',
+                'field' => 'users.id',
+                'alias' => '',
+                'visible' => true,
+                'modifier' => [],
+              ],
+              'users.name' => [
+                'table' => 'users',
+                'field' => 'users.name',
+                'alias' => '',
+                'visible' => true,
+                'modifier' => [],
+              ]
+            ],
             'from'     => 'users',
             'where'    => [],
             'having'   => [],

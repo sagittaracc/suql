@@ -57,7 +57,14 @@ class SuQL extends SQLSugarSyntax
     }
 
     if ($clauses['fields'][0] !== '') {
-      // Processing fields
+      $fieldList = SuQLParser::getFieldList($clauses['fields'][0]);
+      for ($i = 0, $n = count($fieldList['name']); $i < $n; $i++) {
+        $fieldName = parent::addField(
+          $name,
+          $clauses['table'][0],
+          [$fieldList['name'][$i] => $fieldList['alias'][$i]]
+        );
+      }
     }
 
     return true;
