@@ -27,7 +27,7 @@ final class SuQLTest extends TestCase
       LIMIT 3;
 
       SELECT FROM @allUsers
-        id.group.count(1, 'fuck')@uid
+        id.group.someFunc(true,0).count(1,'fuck')@uid
       WHERE id > 10;
     ";
 
@@ -41,7 +41,11 @@ final class SuQLTest extends TestCase
                 'field' => 'allUsers.id',
                 'alias' => 'uid',
                 'visible' => true,
-                'modifier' => [],
+                'modifier' => [
+                  'group' => [],
+                  'count' => ['1', "'fuck'"],
+                  'someFunc' => ['true', '0'],
+                ],
               ]
             ],
             'from'     => 'allUsers',

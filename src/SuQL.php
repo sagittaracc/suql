@@ -65,8 +65,10 @@ class SuQL extends SQLSugarSyntax
           [$fieldList['name'][$i] => $fieldList['alias'][$i]]
         );
 
-        // Processing this field modifiers...
-        // $fieldList['modif'][$i]
+        $fieldModifierList = SuQLParser::getFieldModifierList($fieldList['modif'][$i]);
+        foreach ($fieldModifierList as $modif => $params) {
+          parent::addModifier($name, $fieldName, $modif, $params ? explode(',', $params) : []);
+        }
       }
     }
 
