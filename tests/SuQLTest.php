@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 use PHPUnit\Framework\TestCase;
 
-final class MySQLTest extends TestCase
+final class SuQLTest extends TestCase
 {
   public function testOne(): void
   {
@@ -34,6 +34,18 @@ final class MySQLTest extends TestCase
     $this->assertEquals(
       [
         'queries' => [
+          'main' => [
+            'select'   => [],
+            'from'     => 'allUsers',
+            'where'    => ['id > 10'],
+            'having'   => [],
+            'join'     => [],
+            'group'    => [],
+            'order'    => [],
+            'modifier' => null,
+            'offset'   => null,
+            'limit'    => null,
+          ],
           'allUsers' => [
             'select'   => [],
             'from'     => 'users',

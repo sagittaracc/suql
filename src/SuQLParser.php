@@ -15,7 +15,8 @@ class SuQLParser
 	 *	[offset <offset>]
 	 *	[limit <limit>]
 	 */
-	const REGEX_SELECT = '/\s*select\s*from\s*(?<table>[a-z0-9_]+)\s*(?<fields>.*?)(where\s*(?<where>.*?))?\s*(?<join>(left|right|inner)\s*join\s*.*?)?\s*(offset\s*(?<offset>\d+))?\s*(limit\s*(?<limit>\d+))?\s*;/msi';
+	const REGEX_SELECT = '/\s*select\s*from\s*@?(?<table>[a-z0-9_]+)\s*(?<fields>.*?)(where\s*(?<where>.*?))?\s*(?<join>(left|right|inner)\s*join\s*.*?)?\s*(offset\s*(?<offset>\d+))?\s*(limit\s*(?<limit>\d+))?\s*;/msi';
+	const REGEX_MAIN_SELECT = '/^;?\s*(?<query>select.*?;)/msi';
 	const REGEX_JOIN = '/(?<join_type>left|right|inner)\s*join\s*(?<table>[a-z0-9_]+)/msi';
 
 	public static function getNestedQueries($suql) {
@@ -24,7 +25,8 @@ class SuQLParser
 	}
 
 	public static function getMainQuery($suql) {
-		return false;
+		preg_match_all(self::REGEX_MAIN_SELECT, $suql, $main);
+		return $main['query'][0];
 	}
 
 	public static function getSelectClauses($suql) {
