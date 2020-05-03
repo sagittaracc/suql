@@ -84,7 +84,7 @@ class SuQL extends SQLSugarSyntax
         parent::addJoin($name, $table['join_type'], $table['name']);
 
       else
-        ;
+        return false;
 
       // ...
     }
