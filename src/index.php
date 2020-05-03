@@ -5,7 +5,7 @@ require 'SuQLReservedWords.php';
 require 'SuQLEntityHelper.php';
 require 'SQLSugarSyntax.php';
 require 'SQLBaseModifier.php';
-require 'SuQLHandler.php';
+require 'SuQLParser.php';
 require 'SQLAdapter.php';
 require 'SQLBuilder.php';
 require 'MySQLBuilder.php';

@@ -97,14 +97,17 @@ class SQLSugarSyntax
   }
 
   public function addWhere($query, $where) {
+    if (!$where) return;
     $this->osuql['queries'][$query]['where'][] = $where;
   }
 
   public function addOffset($query, $offset) {
+    if (is_null($offset)) return;
     $this->osuql['queries'][$query]['offset'] = $offset;
   }
 
   public function addLimit($query, $limit) {
+    if (is_null($limit)) return;
     $this->osuql['queries'][$query]['limit'] = $limit;
   }
 
