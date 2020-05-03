@@ -16,15 +16,15 @@ final class SuQLTest extends TestCase
       WHERE name = 'admin'
 
       LEFT JOIN user_group
-        user_id
 
       RIGHT JOIN groups
         id
-      WHERE id > 2;
+      ;
 
       SELECT FROM @allUsers
         id.group.someFunc(true,0).count(1,'fuck')@uid
-      WHERE id > 10;
+      WHERE id > 10
+      ;
     ";
 
     $this->assertEquals(
@@ -56,12 +56,23 @@ final class SuQLTest extends TestCase
           ],
           'allUsers' => [
             'select'   => [
-              'users.name' => [],
-              'user_group.user_id' => [],
-              'groups.id' => [],
+              'users.name' => [
+                'table' => 'users',
+                'field' => 'users.name',
+                'alias' => '',
+                'visible' => true,
+                'modifier' => [],
+              ],
+              'groups.id' => [
+                'table' => 'groups',
+                'field' => 'groups.id',
+                'alias' => '',
+                'visible' => true,
+                'modifier' => [],
+              ],
             ],
             'from'     => 'users',
-            'where'    => ["name = 'admin'", 'id > 2'],
+            'where'    => ["name = 'admin'"],
             'having'   => [],
             'join'     => [
               'user_group' => ['table' => 'user_group', 'type' => 'left', 'on' => 'users.id = user_group.user_id'],
