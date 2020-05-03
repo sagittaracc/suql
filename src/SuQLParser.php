@@ -25,6 +25,8 @@ class SuQLParser
 
 	const REGEX_TABLES = '/(select\s*from\s*@?(?<from>\w+))|((?<type>left|right|inner)\s*join\s*(?<join>\w+))/msi';
 
+	const REGEX_SUQL = '/\s+(?<type>from|join)\s+(?<table>\w+)\s+(?<fields>.*?)\s+(where\s+(?<where>.*?))?\s*(?<next>left|right|inner|offset\s+(?<offset>\d+)\s+limit\s+(?<limit>\d+)|;)/msi';
+
 	public static function getQueryHandler($suql) {
 		return 'SELECT';
 	}
