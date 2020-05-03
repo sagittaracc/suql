@@ -22,6 +22,9 @@ class SuQLParser
 	const REGEX_FIELDS = '/(?<name>\w+)(?<modif>.*?)(@(?<alias>\w+))?\s*,?\s*$/msi';
 	const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
 
+
+	const REGEX_TABLES = '/(select\s*from\s*@?(?<from>\w+))|((?<type>left|right|inner)\s*join\s*(?<join>\w+))/msi';
+
 	public static function getQueryHandler($suql) {
 		return 'SELECT';
 	}
@@ -34,6 +37,20 @@ class SuQLParser
 	public static function getMainQuery($suql) {
 		preg_match_all(self::REGEX_MAIN_SELECT, $suql, $main);
 		return $main['query'][0];
+	}
+
+	public static function getTables($suql) {
+		preg_match_all(self::REGEX_TABLES, $suql, $matches);
+		$tables = [];
+
+		if (isset($matches['from'][0]) && $matches['from'][0] !== '')
+			$tables[] = ['name' => $matches['from'][0], 'type' => 'from'];
+
+		if (isset($matches['join'][1]) && $matches['join'][1] !== '')
+			for ($i = 1, $n = count($matches['join']); $i < $n; $i++)
+				$tables[] = ['name' => $matches['join'][$i], 'type' => 'join', 'join_type' => $matches['type'][$i]];
+
+		return $tables;
 	}
 
 	public static function getSelectClauses($suql) {

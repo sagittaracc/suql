@@ -35,21 +35,9 @@ final class SuQLTest extends TestCase
       [
         'queries' => [
           'main' => [
-            'select'   => [
-              'uid' => [
-                'table' => 'allUsers',
-                'field' => 'allUsers.id',
-                'alias' => 'uid',
-                'visible' => true,
-                'modifier' => [
-                  'group' => [],
-                  'count' => ['1', "'fuck'"],
-                  'someFunc' => ['true', '0'],
-                ],
-              ]
-            ],
+            'select'   => [],
             'from'     => 'allUsers',
-            'where'    => ['id > 10'],
+            'where'    => [],
             'having'   => [],
             'join'     => [],
             'group'    => [],
@@ -59,22 +47,7 @@ final class SuQLTest extends TestCase
             'limit'    => null,
           ],
           'allUsers' => [
-            'select'   => [
-              'users.id' => [
-                'table' => 'users',
-                'field' => 'users.id',
-                'alias' => '',
-                'visible' => true,
-                'modifier' => [],
-              ],
-              'users.name' => [
-                'table' => 'users',
-                'field' => 'users.name',
-                'alias' => '',
-                'visible' => true,
-                'modifier' => [],
-              ],
-            ],
+            'select'   => [],
             'from'     => 'users',
             'where'    => [],
             'having'   => [],
@@ -85,8 +58,8 @@ final class SuQLTest extends TestCase
             'group'    => [],
             'order'    => [],
             'modifier' => null,
-            'offset'   => '0',
-            'limit'    => '3',
+            'offset'   => null,
+            'limit'    => null,
           ],
         ]
       ],
