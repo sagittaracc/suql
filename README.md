@@ -10,8 +10,32 @@ SuQL is syntactic sugar for SQL.
 
 ### How do you use this?
 There are two approaches:
-1. [Object Oriented Sugar SQL.](#object-oriented-sugar-sql)
-2. [Simple Sugar SQL.](#simple-sugar-sql)
+1. [Simple Sugar SQL.](#simple-sugar-sql)
+2. [Object Oriented Sugar SQL.](#object-oriented-sugar-sql)
+
+#### Simple Sugar SQL
+```php
+// Setting up tables relations
+$db = (new SuQL())->rel(['users' => 'a'], ['user_group' => 'b'], 'a.id = b.user_id')
+                  ->rel(['user_group' => 'a'], ['groups' => 'b'], 'a.group_id = b.id');
+
+$db->query("
+  -- Getting how many users of each group
+  @allUsers = SELECT FROM users
+              INNER JOIN user_group
+              INNER JOIN groups
+                name@gname
+                name.group.count@cnt
+              ;
+
+  -- How many admins?
+  SELECT FROM @allUsers
+    gname,
+    cnt
+  WHERE gname = 'admin'
+  ;
+")
+```
 
 #### Object Oriented Sugar SQL
 ```php
@@ -35,30 +59,6 @@ $db->query()
     ->where("g_name = 'admin'");
 ```
 
-#### Simple Sugar SQL
-```php
-SuQL::toSql("
-  #usersCountOfEachGroup = users {
-    id@u_id
-  }
-
-  user_group {
-    user_id.join(u_id)
-  }
-
-  groups {
-    id@g_id.join(user_group.group_id),
-    name@g_name,
-    name@count.group.count
-  };
-
-  usersCountOfEachGroup {
-    g_name,
-    count
-  } ~ {g_name = 'admin'};
-", 'mysql');
-```
-
 # Documentation
 
 ### Sample Database
@@ -69,14 +69,13 @@ SuQL::toSql("
 
 # SuQL Syntax
 ## Querying Data
-Specify a list of comma-separated columns you want to query the data from.
 
 **Sugar SQL approach:**
-```
-users {
+```sql
+SELECT FROM users
   id,
   name
-};
+;
 ```
 
 **Object Oriented approach**
@@ -93,11 +92,11 @@ $db = (new OSuQL)->query()
 |3   |Vlad   |
 |4   |Den   |
 
-Use the asterisk to query data from all columns of a table.
-
 **Sugar SQL approach**
-```
-users {*};
+```sql
+SELECT FROM users
+  *
+;
 ```
 
 **Object Oriented approach**
@@ -107,15 +106,13 @@ $db = (new OSuQL)->query()
                     ->field('*');
 ```
 
-Use aliases to give a column a temporary name.
-
 **Sugar SQL approach**
-<pre>
-users {
-  id@<b>u_id</b>,
-  name@<b>u_name</b>
-};
-</pre>
+```sql
+SELECT FROM users
+  id@u_id,
+  name@u_name
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -134,17 +131,16 @@ $db = (new OSuQL)->query()
 
 
 ## Filtering Data
-To select certain rows from a table, put a condition in curly brackets right after the querying data clause.
-The condition syntax is the same as in the SQL WHERE clause.
 > Example: Get all the users with even id's
 
 **Sugar SQL approach**
-<pre>
-users {
+```sql
+SELECT FROM users
   id@u_id,
   name@u_name
-} <b>~ {u_id % 2 = 0}</b>;
-</pre>
+WHERE u_id % 2 = 0
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -159,17 +155,19 @@ $db = (new OSuQL)->query()
 |2   |Alex   |
 |4   |Den   |
 
-You also can use nested queries this clause.
 > Example: Get all the users who do not belong to any groups
 
 **Sugar SQL approach**
-<pre>
-<b>#users_belong_to_any_group</b> = user_group.distinct {user_id};
-
-users {
+```sql
+@users_belong_to_any_group = SELECT DISTINCT FROM user_group
+                              user_id
+                             ;
+SELECT FROM users
+  id@uid,
   name
-} ~ {users.id not in <b>#users_belong_to_any_group</b>};
-</pre>
+WHERE uid not in @users_belong_to_any_group
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -182,13 +180,15 @@ $db->query()
     ->where('users.id not in #users_belong_to_any_group');
 ```
 
-To retrieve a portion of rows, put `offset` and `limit` in square brackets right after the querying data clause.
 > Example: Get the first two users
 
 **Sugar SQL approach**
-<pre>
-users {*} <b>[0, 2]</b>;
-</pre>
+```sql
+SELECT FROM users
+  *
+LIMIT 0, 2
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -203,34 +203,27 @@ $db = (new OSuQL)->query()
 | 1  | Yuriy | 2019-12-10 10:03:16 |
 | 2  | Alex  | 2020-04-08 10:03:16 |
 
-To remove duplicates from a result set, you use the distinct modifier as follows:
 > Example: Get uniques users names
-<pre>
-users.<b>distinct</b> {
+
+```sql
+SELECT DISTINCT FROM users
   name
-};
-</pre>
+;
+```
 
 
 ## Joining Multiple Tables
-To join multiple tables together, you use the `join` modifier. Link two tables by a relationship between two columns. One of them you apply the `join` modifier to and another you pass as a parameter.
 > Example: Link all three tables together to see how many admins we have.
 
 **Sugar SQL approach**
-<pre>
-users {
-  id@u_id
-}
-
-user_group {
-  user_id.<b>join</b>(u_id)
-}
-
-groups {
-  id@g_id.<b>join</b>(user_group.group_id),
+```sql
+SELECT FROM users
+INNER JOIN user_group
+INNER JOIN groups
+  id@g_id,
   name@g_name
-};
-</pre>
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -253,25 +246,18 @@ $db->query()
 
 
 ## Grouping Data
-To group rows into groups, you use the `group` modifier.
 > Example: How many admins? Use the count modifier to calc the exact number.
 
 **Sugar SQL approach**
-<pre>
-users {
-  id@u_id
-}
-
-user_group {
-  user_id.join(u_id)
-}
-
-groups {
-  id@g_id.join(user_group.group_id),
+```sql
+SELECT FROM users
+INNER JOIN user_group
+INNER JOIN groups
   name@g_name,
-  name@count.<b>group</b>.count
-} ~ {g_name = 'admin'};
-</pre>
+  name.group.count@count
+WHERE g_name = 'admin'
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -283,7 +269,8 @@ $db->query()
     ->user_group()
     ->groups()
       ->field(['name' => 'g_name'])
-      ->field(['name' => 'count'])->group()->count();
+      ->field(['name' => 'count'])->group()->count()
+    ->where("g_name = 'admin'");
 ```
 |g_name   |count   |
 |---|---|
@@ -292,29 +279,21 @@ $db->query()
 
 
 ## Nested Queries
-Use variables for nested queries. A variable should start with the `#`
 
 **Sugar SQL approach**
-<pre>
-<b>#allGroupsCount</b> = users {
-  id@u_id
-}
-
-user_group {
-  user_id.join(u_id)
-}
-
-groups {
-  id@g_id.join(user_group.group_id),
-  name@g_name,
-  name@count.group.count
-};
-
-<b>allGroupsCount</b> {
+```sql
+@allGroupsCount = SELECT FROM users
+                  INNER JOIN user_group
+                  INNER JOIN groups
+                    name@g_name,
+                    name.group.count@count
+                  ;
+SELECT FROM allGroupsCount
   g_name,
   count
-} ~ {g_name = 'admin'};
-</pre>
+WHERE g_name = 'admin'
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -341,22 +320,16 @@ $db->query()
 
 
 ## Sorting Data
-Apply the sort modifier to the field you want to sort by. `asc` for ascending, `desc` for descending.
 
 **Sugar SQL approach**
-<pre>
-users {}
-
-user_group {
-  user_id.join(users.id)
-}
-
-groups {
-  id.join(user_group.group_id),
+```sql
+SELECT FROM users
+INNER JOIN user_group
+INNER JOIN groups
   name@gname,
-  name@count.group.count.<b>asc</b>
-};
-</pre>
+  name.group.count.asc@count
+;
+```
 
 **Object Oriented approach**
 ```php
@@ -397,11 +370,12 @@ class SQLModifier extends SQLBaseModifier
 }
 ```
 > Example: When has the first user registered?
-<pre>
-users{
- registration@firstReg.<b>min</b>
-};
-</pre>
+
+```sql
+SELECT FROM users
+  registration.min@firstReg
+;
+```
 | firstReg            |
 |---------------------|
 | 2019-06-12 10:03:16 |
@@ -426,13 +400,13 @@ class SQLModifier extends SQLBaseModifier
 ```
 
 **Sugar SQL approach**
-<pre>
-groups {
+```sql
+SELECT FROM groups
   id,
   name,
-  name@permission.<b>permission</b>
-};
-</pre>
+  name.permission@permission
+;
+```
 
 **Object Oriented approach**
 ```php
