@@ -17,6 +17,21 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testSelectFields(): void
+  {
+    $db = (new SuQL)->setAdapter('mysql');
+
+    $this->assertEquals(
+      'select users.id as uid, users.name as uname from users',
+      $db->query("
+        SELECT FROM users
+          id@uid,
+          name@uname
+        ;
+      ")->getSQL()
+    );
+  }
+
   public function testOne(): void
   {
     $db = (new SuQL())->setAdapter('mysql');
@@ -33,7 +48,7 @@ final class SuQLTest extends TestCase
 
       RIGHT JOIN groups
         id
-      ;
+      LIMIT 0, 3;
 
       SELECT FROM @allUsers
         id.group.someFunc(true,0).count(1,'fuck')@uid
@@ -95,8 +110,8 @@ final class SuQLTest extends TestCase
             'group'    => [],
             'order'    => [],
             'modifier' => null,
-            'offset'   => null,
-            'limit'    => null,
+            'offset'   => '0',
+            'limit'    => '3',
           ],
         ]
       ],

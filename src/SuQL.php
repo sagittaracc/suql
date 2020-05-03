@@ -48,7 +48,7 @@ class SuQL extends SQLSugarSyntax
   {
     $clauses = SuQLParser::parseSelect($query);
 
-    foreach ($clauses as $table => $options) {
+    foreach ($clauses['tables'] as $table => $options) {
       if ($options['type'] === 'from')
         parent::addFrom($name, $table);
 
@@ -77,6 +77,9 @@ class SuQL extends SQLSugarSyntax
         }
       }
     }
+
+    if (!is_null($clauses['offset'])) parent::addOffset($name, $clauses['offset']);
+    if (!is_null($clauses['limit'])) parent::addLimit($name, $clauses['limit']);
 
     return true;
   }

@@ -38,15 +38,19 @@ class SuQLParser
 	public static function parseSelect($suql) {
 		preg_match_all(self::REGEX_SELECT, $suql, $clauses);
 		array_unshift($clauses['next'], array_pop($clauses['next']));
-		$tables = [];
+		$tables = ['tables' => [], 'offset' => null, 'limit' => null];
 		for ($i = 0, $n = count($clauses['table']); $i < $n; $i++) {
-			$tables[$clauses['table'][$i]] = [
+			$tables['tables'][$clauses['table'][$i]] = [
 				'type' => strtolower($clauses['type'][$i]),
 				'fields' => $clauses['fields'][$i],
 				'where' => $clauses['where'][$i],
 				'next' => strtolower($clauses['next'][$i]),
 			];
 		}
+		if ($clauses['offset'][count($clauses['offset']) - 1] !== '')
+			$tables['offset'] = $clauses['offset'][count($clauses['offset']) - 1];
+			if ($clauses['limit'][count($clauses['limit']) - 1] !== '')
+				$tables['limit'] = $clauses['limit'][count($clauses['limit']) - 1];
 		return $tables;
 	}
 
