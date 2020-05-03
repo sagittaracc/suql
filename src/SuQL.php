@@ -20,7 +20,7 @@ class SuQL extends SQLSugarSyntax
     return $this;
   }
 
-  public function interpret() {
+  private function interpret() {
     if (!$this->suql) return false;
 
     // Processing the nested queries
@@ -28,7 +28,8 @@ class SuQL extends SQLSugarSyntax
     foreach ($nestedQueries as $name => $query) {
       parent::addQuery($name);
 
-      if (!$this->SELECT($name, $query))
+      $handler = SuQLParser::getQueryHandler($query);
+      if (!$this->$handler($name, $query))
         return false;
     }
 
@@ -36,13 +37,14 @@ class SuQL extends SQLSugarSyntax
     $query = SuQLParser::getMainQuery($this->suql);
     parent::addQuery('main');
 
-    if (!$this->SELECT('main', $query))
+    $handler = SuQLParser::getQueryHandler($query);
+    if (!$this->$handler('main', $query))
       return false;
 
     return true;
   }
 
-  public function SELECT($name, $query) {
+  private function SELECT($name, $query) {
     $clauses = SuQLParser::getSelectClauses($query);
 
     if ($clauses['table'][0]  !== '') parent::addFrom($name, $clauses['table'][0]);
@@ -73,5 +75,17 @@ class SuQL extends SQLSugarSyntax
     }
 
     return true;
+  }
+
+  private function INSERT($name, $query) {
+
+  }
+
+  private function UPDATE($name, $query) {
+
+  }
+
+  private function DELETE($name, $query) {
+
   }
 }

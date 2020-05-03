@@ -22,6 +22,10 @@ class SuQLParser
 	const REGEX_FIELDS = '/(?<name>\w+)(?<modif>.*?)(@(?<alias>\w+))?\s*,?\s*$/msi';
 	const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
 
+	public static function getQueryHandler($suql) {
+		return 'SELECT';
+	}
+
 	public static function getNestedQueries($suql) {
     preg_match_all(self::REGEX_NESTED_QUERY, $suql, $nestedQueries);
     return array_combine($nestedQueries['name'], $nestedQueries['query']);
