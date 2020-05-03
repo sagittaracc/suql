@@ -44,49 +44,38 @@ class SuQL extends SQLSugarSyntax
     return true;
   }
 
-  private function SELECT($name, $query) {
-    // $clauses = SuQLParser::getSelectClauses($query);
-    //
-    // if ($clauses['table'][0]  !== '') parent::addFrom($name, $clauses['table'][0]);
-    // if ($clauses['where'][0]  !== '') parent::addWhere($name, $clauses['where'][0]);
-    // if ($clauses['offset'][0] !== '') parent::addOffset($name, $clauses['offset'][0]);
-    // if ($clauses['limit'][0]  !== '') parent::addLimit($name, $clauses['limit'][0]);
-    //
-    // if ($clauses['join'][0] !== '') {
-    //   $joinedTables = SuQLParser::getJoinedTables($clauses['join'][0]);
-    //   foreach ($joinedTables as $join_type => $table)
-    //     parent::addJoin($name, $join_type, $table);
-    // }
-    //
-    // if ($clauses['fields'][0] !== '') {
-    //   $fieldList = SuQLParser::getFieldList($clauses['fields'][0]);
-    //   for ($i = 0, $n = count($fieldList['name']); $i < $n; $i++) {
-    //     $fieldName = parent::addField(
-    //       $name,
-    //       $clauses['table'][0],
-    //       [$fieldList['name'][$i] => $fieldList['alias'][$i]]
-    //     );
-    //
-    //     $fieldModifierList = SuQLParser::getFieldModifierList($fieldList['modif'][$i]);
-    //     foreach ($fieldModifierList as $modif => $params) {
-    //       parent::addModifier($name, $fieldName, $modif, $params ? explode(',', $params) : []);
-    //     }
-    //   }
-    // }
+  private function SELECT($name, $query)
+  {
+    $clauses = SuQLParser::parseSelect($query);
 
-    $tables = SuQLParser::getTables($query);
-    foreach ($tables as $table) {
+    foreach ($clauses as $table => $options) {
+      if ($options['type'] === 'from')
+        parent::addFrom($name, $table);
 
-      if ($table['type'] === 'from')
-        parent::addFrom($name, $table['name']);
-
-      else if ($table['type'] === 'join')
-        parent::addJoin($name, $table['join_type'], $table['name']);
+      else if ($options['type'] === 'join')
+        parent::addJoin($name, $options['next'], $table);
 
       else
         return false;
 
-      // ...
+      if ($options['where'] !== '')
+        parent::addWhere($name, $options['where']);
+
+      if ($options['fields'] !== '') {
+        $fieldList = SuQLParser::getFieldList($options['fields']);
+        for ($i = 0, $n = count($fieldList['name']); $i < $n; $i++) {
+          $fieldName = parent::addField(
+            $name,
+            $table,
+            [$fieldList['name'][$i] => $fieldList['alias'][$i]]
+          );
+
+          $fieldModifierList = SuQLParser::getFieldModifierList($fieldList['modif'][$i]);
+          foreach ($fieldModifierList as $modif => $params) {
+            parent::addModifier($name, $fieldName, $modif, $params ? explode(',', $params) : []);
+          }
+        }
+      }
     }
 
     return true;

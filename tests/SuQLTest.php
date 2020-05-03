@@ -12,19 +12,15 @@ final class SuQLTest extends TestCase
 
     $suql = "
       @allUsers = SELECT FROM users
-        id,
         name
+      WHERE name = 'admin'
 
       LEFT JOIN user_group
-        user_id,
-        group_id
+        user_id
 
       RIGHT JOIN groups
-        id,
-        name
-
-      OFFSET 0
-      LIMIT 3;
+        id
+      WHERE id > 2;
 
       SELECT FROM @allUsers
         id.group.someFunc(true,0).count(1,'fuck')@uid
@@ -35,9 +31,21 @@ final class SuQLTest extends TestCase
       [
         'queries' => [
           'main' => [
-            'select'   => [],
+            'select'   => [
+              'uid' => [
+                'table' => 'allUsers',
+                'field' => 'allUsers.id',
+                'alias' => 'uid',
+                'visible' => true,
+                'modifier' => [
+                  'group' => [],
+                  'someFunc' => ['true', '0'],
+                  'count' => ['1', "'fuck'"]
+                ],
+              ]
+            ],
             'from'     => 'allUsers',
-            'where'    => [],
+            'where'    => ['id > 10'],
             'having'   => [],
             'join'     => [],
             'group'    => [],
@@ -47,13 +55,17 @@ final class SuQLTest extends TestCase
             'limit'    => null,
           ],
           'allUsers' => [
-            'select'   => [],
+            'select'   => [
+              'users.name' => [],
+              'user_group.user_id' => [],
+              'groups.id' => [],
+            ],
             'from'     => 'users',
-            'where'    => [],
+            'where'    => ["name = 'admin'", 'id > 2'],
             'having'   => [],
             'join'     => [
-              'user_group' => ['table' => 'user_group', 'type' => 'LEFT', 'on' => 'users.id = user_group.user_id'],
-              'groups' => ['table' => 'groups', 'type' => 'RIGHT', 'on' => 'user_group.group_id = groups.id'],
+              'user_group' => ['table' => 'user_group', 'type' => 'left', 'on' => 'users.id = user_group.user_id'],
+              'groups' => ['table' => 'groups', 'type' => 'right', 'on' => 'user_group.group_id = groups.id'],
             ],
             'group'    => [],
             'order'    => [],
