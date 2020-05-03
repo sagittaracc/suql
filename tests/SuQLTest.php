@@ -3,6 +3,20 @@ use PHPUnit\Framework\TestCase;
 
 final class SuQLTest extends TestCase
 {
+  public function testSelect(): void
+  {
+    $db = (new SuQL)->setAdapter('mysql');
+
+    $this->assertEquals(
+      'select users.* from users',
+      $db->query("
+        SELECT FROM users
+          *
+        ;
+      ")->getSQL()
+    );
+  }
+
   public function testOne(): void
   {
     $db = (new SuQL())->setAdapter('mysql');
