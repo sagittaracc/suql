@@ -58,6 +58,9 @@ class SuQL extends SQLSugarSyntax
       else
         return false;
 
+      if ($options['modifier'] !== '')
+        parent::addQueryModifier($name, $options['modifier']);
+
       if ($options['where'] !== '')
         parent::addWhere($name, $options['where']);
 
@@ -72,7 +75,7 @@ class SuQL extends SQLSugarSyntax
 
           $fieldModifierList = SuQLParser::getFieldModifierList($fieldList['modif'][$i]);
           foreach ($fieldModifierList as $modif => $params) {
-            parent::addModifier($name, $fieldName, $modif, $params ? explode(',', $params) : []);
+            parent::addFieldModifier($name, $fieldName, $modif, $params ? explode(',', $params) : []);
           }
         }
       }

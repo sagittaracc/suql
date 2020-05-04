@@ -16,7 +16,7 @@ class SuQLParser
 	 *	[offset <offset>]
 	 *	[limit <limit>]
 	 */
- 	const REGEX_SELECT = "/(?<type>from|join)\s+@?(?<table>\w+)\s+((?<fields>.*?)(where\s+(?<where>.*?)\s*)?)?(?<next>left|right|inner|limit\s+(?<offset>\d+)\s*,\s*(?<limit>\d+)|;)/msi";
+ 	const REGEX_SELECT = "/(select\s+(?<modif>\w+))?\s+(?<type>from|join)\s+@?(?<table>\w+)\s+((?<fields>.*?)(where\s+(?<where>.*?)\s*)?)?(?<next>left|right|inner|limit\s+(?<offset>\d+)\s*,\s*(?<limit>\d+)|;)/msi";
 	// <field_name[.modif1[(<params>)].modif2.modif3...][@field_alias], ...
 	const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)(@(?<alias>\w+))?\s*,?\s*$/msi';
 	const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
@@ -45,6 +45,7 @@ class SuQLParser
 				'fields' => $clauses['fields'][$i],
 				'where' => $clauses['where'][$i],
 				'next' => strtolower($clauses['next'][$i]),
+				'modifier' => strtolower($clauses['modif'][$i]),
 			];
 		}
 		if ($clauses['offset'][count($clauses['offset']) - 1] !== '')
