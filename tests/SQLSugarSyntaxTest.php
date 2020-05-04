@@ -16,8 +16,8 @@ final class SQLSugarSyntaxTest extends TestCase
     $db->addJoin('main', 'inner', 'groups');
     $db->addField('main', 'groups', ['name' => 'gname']);
     $db->addField('main', 'groups', ['name' => 'count']);
-    $db->addModifier('main', 'count', 'group', []);
-    $db->addModifier('main', 'count', 'count', []);
+    $db->addFieldModifier('main', 'count', 'group', []);
+    $db->addFieldModifier('main', 'count', 'count', []);
 
     $db->setAdapter('mysql');
 
