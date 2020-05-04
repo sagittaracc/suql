@@ -3,6 +3,22 @@ use PHPUnit\Framework\TestCase;
 
 final class OSuQLTest extends TestCase
 {
+  public function testSelectDistinct(): void
+  {
+    $db = (new OSuQL)->setAdapter('mysql');
+
+    $osuql = $db->query()
+                  ->users('distinct')
+                    ->field('id');
+
+    $this->assertEquals(
+      "select distinct users.id from users",
+      $db->getSQL()
+    );
+
+    $db->drop();
+  }
+
   public function testJoinChain(): void
   {
     $db = (new OSuQL)->setAdapter('mysql')

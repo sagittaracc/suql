@@ -89,12 +89,12 @@ class OSuQL extends SQLSugarSyntax
     if ($this->isTable($name) || $this->isQuery($name)) {
       // Запрашиваем из неё или джоиним к текущей таблицы
       if (!$this->currentTable)
-        return $this->from($name);
+        return $this->from($name, $arguments);
       else
-        return $this->join($name);
+        return $this->join($name, $arguments);
     }
     // Здесь только один вариант - запрашивается таблица
-    if (!$this->currentTable) return $this->from($name);
+    if (!$this->currentTable) return $this->from($name, $arguments);
     // Здесь уже обработка модификаторов (должно быть задано Поле)
     if (!$this->currentField) return;
     // Обрабатываем модификатор
@@ -109,14 +109,16 @@ class OSuQL extends SQLSugarSyntax
     return in_array($name, $this->queryList);
   }
 
-  private function from($table) {
+  private function from($table, $arguments) {
     parent::addFrom($this->currentQuery, $table);
+    if (!empty($arguments))
+      parent::addQueryModifier($this->currentQuery, $arguments[0]);
     $this->currentTable = $table;
     $this->currentJoinType = 'inner';
     return $this;
   }
 
-  private function join($table) {
+  private function join($table, $arguments) {
     parent::addJoin($this->currentQuery, $this->currentJoinType, $table);
 
     $this->currentTable = $table;
