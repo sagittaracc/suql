@@ -3,15 +3,47 @@ use PHPUnit\Framework\TestCase;
 
 final class SuQLTest extends TestCase
 {
+  private $db = null;
+
+  private function InitDB() {
+    $this->db = (new SuQL)->rel(['users' => 'a'], ['user_group' => 'b'], 'a.id = b.user_id')
+                           ->rel(['user_group' => 'a'], ['groups' => 'b'], 'a.group_id = b.id');
+
+    $this->db->setAdapter('mysql');
+  }
+
   public function testSelect(): void
   {
-    $db = (new SuQL)->setAdapter('mysql');
+    $this->initDB();
 
     $this->assertEquals(
       'select users.* from users',
-      $db->query("
+      $this->db->query("
         SELECT FROM users
           *
+        ;
+      ")->getSQL()
+    );
+
+    $this->assertNull($this->db->getSQL());
+    $this->assertEmpty($this->db->getSQLObject());
+
+    $this->assertEquals(
+      'select users.id, users.name from users',
+      $this->db->query("
+        SELECT FROM users
+          id,
+          name
+        ;
+      ")->getSQL()
+    );
+
+    $this->assertEquals(
+      'select users.id as uid, users.name as uname from users',
+      $this->db->query("
+        SELECT FROM users
+          id@uid,
+          name@uname
         ;
       ")->getSQL()
     );

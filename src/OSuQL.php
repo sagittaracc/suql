@@ -28,10 +28,10 @@ class OSuQL extends SQLSugarSyntax
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
-    parent::rel($leftTable, $rightTable, $on, $temporary);
-
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
+
+    parent::rel($leftTable, $rightTable, $on, $temporary);
 
     return $this;
   }

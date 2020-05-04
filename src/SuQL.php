@@ -7,6 +7,16 @@ class SuQL extends SQLSugarSyntax
     parent::__construct();
   }
 
+  public function clear() {
+    $this->suql = null;
+    parent::clear();
+  }
+
+  public function rel($leftTable, $rightTable, $on, $temporary = false) {
+    parent::rel($leftTable, $rightTable, $on, $temporary);
+    return $this;
+  }
+
   public function getSQL() {
     return $this->interpret() ? parent::getSQL() : null;
   }
