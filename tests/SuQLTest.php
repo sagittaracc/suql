@@ -17,6 +17,20 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testSelectDistinct(): void
+  {
+    $db = (new SuQL)->setAdapter('mysql');
+
+    $this->assertEquals(
+      'select distinct users.id from users',
+      $db->query("
+        SELECT DISTINCT FROM users
+          id
+        ;
+      ")->getSQL()
+    );
+  }
+
   public function testSelectFields(): void
   {
     $db = (new SuQL)->setAdapter('mysql');

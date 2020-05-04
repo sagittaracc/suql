@@ -125,7 +125,7 @@ class OSuQL extends SQLSugarSyntax
   }
 
   private function modifier($name, $arguments) {
-    parent::addModifier($this->currentQuery, $this->currentField, $name, $arguments);
+    parent::addFieldModifier($this->currentQuery, $this->currentField, $name, $arguments);
     return $this;
   }
 }

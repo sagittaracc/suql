@@ -14,27 +14,21 @@ There are two approaches:
 2. [Object Oriented Sugar SQL.](#object-oriented-sugar-sql)
 
 #### Simple Sugar SQL
-```php
-// Setting up tables relations
-$db = (new SuQL())->rel(['users' => 'a'], ['user_group' => 'b'], 'a.id = b.user_id')
-                  ->rel(['user_group' => 'a'], ['groups' => 'b'], 'a.group_id = b.id');
+```sql
+-- Getting how many users of each group
+@allUsers = SELECT FROM users
+            INNER JOIN user_group
+            INNER JOIN groups
+              name@gname
+              name.group.count@cnt
+            ;
 
-$db->query("
-  -- Getting how many users of each group
-  @allUsers = SELECT FROM users
-              INNER JOIN user_group
-              INNER JOIN groups
-                name@gname
-                name.group.count@cnt
-              ;
-
-  -- How many admins?
-  SELECT FROM @allUsers
-    gname,
-    cnt
-  WHERE gname = 'admin'
-  ;
-")
+-- How many admins?
+SELECT FROM @allUsers
+  gname,
+  cnt
+WHERE gname = 'admin'
+;
 ```
 
 #### Object Oriented Sugar SQL

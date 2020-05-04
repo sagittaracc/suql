@@ -79,6 +79,10 @@ class SQLSugarSyntax
     $this->tablesInQuery[$name] = [];
   }
 
+  public function addQueryModifier($query, $modifier) {
+    $this->osuql['queries'][$query]['modifier'] = $modifier;
+  }
+
   public function addField($query, $table, $name, $visible = true) {
     $field = is_string($name) ? [$name => ''] : $name;
     if (!is_array($field)) return;
@@ -140,7 +144,7 @@ class SQLSugarSyntax
     $this->tablesInQuery[$query][] = $table;
   }
 
-  public function addModifier($query, $field, $name, $arguments) {
+  public function addFieldModifier($query, $field, $name, $arguments) {
     $this->osuql['queries'][$query]['select'][$field]['modifier'][$name] = $arguments;
   }
 }
