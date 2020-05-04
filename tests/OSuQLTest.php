@@ -3,6 +3,53 @@ use PHPUnit\Framework\TestCase;
 
 final class OSuQLTest extends TestCase
 {
+  private $db = null;
+
+  private function InitDB() {
+    $this->db = (new OSuQL)->rel(['users' => 'a'], ['user_group' => 'b'], 'a.id = b.user_id')
+                           ->rel(['user_group' => 'a'], ['groups' => 'b'], 'a.group_id = b.id');
+
+    $this->db->setAdapter('mysql');
+  }
+
+  public function testSelect(): void
+  {
+    $this->initDB();
+
+    // Getting the all fields
+    $this->assertEquals(
+      "select users.* from users",
+      $this->db->query()
+                ->users()
+                  ->field('*')
+               ->getSQL()
+    );
+
+    // Getting the same sql again should return an empty result
+    $this->assertNull($this->db->getSQL());
+    $this->assertEmpty($this->db->getSQLObject());
+
+    // Getting specific fields
+    $this->assertEquals(
+      "select users.id, users.name from users",
+      $this->db->query()
+                ->users()
+                  ->field('id')
+                  ->field('name')
+               ->getSQL()
+    );
+
+    // Using aliases
+    $this->assertEquals(
+      "select users.id as uid, users.name as uname from users",
+      $this->db->query()
+                ->users()
+                  ->field(['id' => 'uid'])
+                  ->field(['name' => 'uname'])
+               ->getSQL()
+    );
+  }
+
   public function testSelectDistinct(): void
   {
     $db = (new OSuQL)->setAdapter('mysql');
