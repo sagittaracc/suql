@@ -33,23 +33,14 @@ class SuQL extends SQLSugarSyntax
   private function interpret() {
     if (!$this->suql) return false;
 
-    // Processing the nested queries
-    $nestedQueries = SuQLParser::getNestedQueries($this->suql);
-    foreach ($nestedQueries as $name => $query) {
-      parent::addQuery($name);
+    $queryList = SuQLParser::getQueryList($this->suql);
+    foreach ($queryList as $name => $query) {
+        parent::addQuery($name);
 
-      $handler = SuQLParser::getQueryHandler($query);
-      if (!$this->$handler($name, $query))
-        return false;
+        $handler = SuQLParser::getQueryHandler($query);
+        if (!$this->$handler($name, $query))
+            return false;
     }
-
-    // Processing the main query
-    $query = SuQLParser::getMainQuery($this->suql);
-    parent::addQuery('main');
-
-    $handler = SuQLParser::getQueryHandler($query);
-    if (!$this->$handler('main', $query))
-      return false;
 
     return true;
   }

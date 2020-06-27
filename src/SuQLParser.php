@@ -25,9 +25,16 @@ class SuQLParser
 		return 'SELECT';
 	}
 
+	public static function getQueryList($suql) {
+		return array_merge(
+			self::getNestedQueries($suql),
+			['main' => self::getMainQuery($suql)]
+		);
+	}
+
 	public static function getNestedQueries($suql) {
-    preg_match_all(self::REGEX_NESTED_QUERY, $suql, $nestedQueries);
-    return array_combine($nestedQueries['name'], $nestedQueries['query']);
+	    preg_match_all(self::REGEX_NESTED_QUERY, $suql, $nestedQueries);
+	    return array_combine($nestedQueries['name'], $nestedQueries['query']);
 	}
 
 	public static function getMainQuery($suql) {
