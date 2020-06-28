@@ -20,6 +20,7 @@ class SuQLParser
 	// <field_name[.modif1[(<params>)].modif2.modif3...][@field_alias], ...
 	const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)(@(?<alias>\w+))?\s*,?\s*$/msi';
 	const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
+	const REGEX_NESTED_QUERY_NAME = '/#(?<name>[a-zA-Z0-9_]+)/';
 
 	public static function getQueryHandler($suql) {
 		return 'SELECT';
@@ -70,5 +71,10 @@ class SuQLParser
 	public static function getFieldModifierList($suql) {
 		preg_match_all(self::REGEX_FIELD_MODIFIERS, $suql, $fieldModifierList);
 		return array_combine($fieldModifierList['name'], $fieldModifierList['params']);
+	}
+
+	public static function getNestedQueryNames($s)
+	{
+		return preg_match_all(self::REGEX_NESTED_QUERY_NAME, $s, $list) ? $list['name'] : [];
 	}
 }

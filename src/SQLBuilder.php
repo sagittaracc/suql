@@ -158,7 +158,9 @@ class SQLBuilder
     $select = $queryObject['select'];
     $where = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $where);
 
-    $nestedQueryNames = SuQLEntityHelper::getNestedQueryNames($where);
+    // TODO: Сделать обработку имен вложенных запросов ПЕРЕД сборкой where секции
+    // SuQLParser НЕ должен использоваться в SQLBuilder
+    $nestedQueryNames = SuQLParser::getNestedQueryNames($where);
     foreach ($nestedQueryNames as $name) {
       if ($this->getQuery($name)) {
         $nestedQuery = $this->buildQuery($name);
