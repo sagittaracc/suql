@@ -1,6 +1,5 @@
 <?php
 require 'SuQLLog.php';
-require 'TuringMachine.php';
 require 'SuQLReservedWords.php';
 require 'SQLSugarSyntax.php';
 require 'SQLBaseModifier.php';
