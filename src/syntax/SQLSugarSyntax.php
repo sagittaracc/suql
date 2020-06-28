@@ -4,7 +4,6 @@ class SQLSugarSyntax
   private $osuql;
   private $scheme;
   private $adapter;
-  private $tablesInQuery;
 
   function __construct() {
     $this->clear();
@@ -13,7 +12,6 @@ class SQLSugarSyntax
 
   public function clear() {
     $this->osuql = [];
-    $this->tablesInQuery = [];
     $this->scheme['temp_rel'] = [];
   }
 
@@ -65,18 +63,18 @@ class SQLSugarSyntax
 
   public function addQuery($name) {
     $this->osuql['queries'][$name] = [
-      'select'   => [],
-      'from'     => null,
-      'where'    => [],
-      'having'   => [],
-      'join'     => [],
-      'group'    => [],
-      'order'    => [],
-      'modifier' => null,
-      'offset'   => null,
-      'limit'    => null,
+      'select'     => [],
+      'from'       => null,
+      'where'      => [],
+      'having'     => [],
+      'join'       => [],
+      'group'      => [],
+      'order'      => [],
+      'modifier'   => null,
+      'offset'     => null,
+      'limit'      => null,
+      'table_list' => [],
     ];
-    $this->tablesInQuery[$name] = [];
   }
 
   public function addQueryModifier($query, $modifier) {
@@ -117,7 +115,7 @@ class SQLSugarSyntax
 
   public function addFrom($query, $table) {
     $this->osuql['queries'][$query]['from'] = $table;
-    $this->tablesInQuery[$query][] = $table;
+    $this->osuql['queries'][$query]['table_list'][] = $table;
   }
 
   public function addJoin($query, $type, $table) {
@@ -130,7 +128,7 @@ class SQLSugarSyntax
     if (!$rel) return;
 
     $possibleTableLinks = array_keys($this->scheme[$rel][$table]);
-    $tableToJoinTo = array_intersect($possibleTableLinks, $this->tablesInQuery[$query]);
+    $tableToJoinTo = array_intersect($possibleTableLinks, $this->osuql['queries'][$query]['table_list']);
     $on = count($tableToJoinTo) === 1 ? $this->scheme[$rel][$tableToJoinTo[0]][$table] : null;
 
     if (!$on) return;
@@ -141,7 +139,7 @@ class SQLSugarSyntax
       'type'  => $type,
     ];
 
-    $this->tablesInQuery[$query][] = $table;
+    $this->osuql['queries'][$query]['table_list'][] = $table;
   }
 
   public function addFieldModifier($query, $field, $name, $arguments) {
