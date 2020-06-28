@@ -43,18 +43,17 @@ class SQLSugarSyntax
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
-    if (is_array($leftTable)) {
-      $on = str_replace(array_values($leftTable), array_keys($leftTable), $on);
-      $leftTable = array_keys($leftTable)[0];
-    }
+    $leftTable = new Helper\SQLTableDef($leftTable);
+    $rightTable = new Helper\SQLTableDef($rightTable);
 
-    if (is_array($rightTable)) {
-      $on = str_replace(array_values($rightTable), array_keys($rightTable), $on);
-      $rightTable = array_keys($rightTable)[0];
-    }
+    if (!is_null($leftTable->alias))
+      $on = str_replace($leftTable->alias, $leftTable->name, $on);
 
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = $on;
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = $on;
+    if (!is_null($rightTable->alias))
+      $on = str_replace($rightTable->alias, $rightTable->name, $on);
+
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable->name][$rightTable->name] = $on;
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable->name][$leftTable->name] = $on;
   }
 
   public function temp_rel($leftTable, $rightTable, $on) {
