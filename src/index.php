@@ -1,11 +1,11 @@
 <?php
-require 'SuQLLog.php';
-require 'SuQLReservedWords.php';
-require 'SQLSugarSyntax.php';
-require 'SQLBaseModifier.php';
-require 'SuQLParser.php';
-require 'SQLAdapter.php';
-require 'SQLBuilder.php';
-require 'MySQLBuilder.php';
-require 'SuQL.php';
-require 'OSuQL.php';
+require 'helper/SuQLLog.php';
+require 'syntax/SuQLReservedWords.php';
+require 'syntax/SQLSugarSyntax.php';
+require 'modifier/SQLBaseModifier.php';
+require 'parser/SuQLParser.php';
+require 'builder/SQLAdapter.php';
+require 'builder/SQLBuilder.php';
+require 'builder/MySQLBuilder.php';
+require 'syntax/SuQL.php';
+require 'syntax/OSuQL.php';
