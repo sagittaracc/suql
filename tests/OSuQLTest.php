@@ -89,21 +89,22 @@ final class OSuQLTest extends TestCase
         'queries' => [
           'main' => [
             'select'   => [],
-      			'from'     => 'table1',
-      			'where'    => [],
-      			'having'   => [],
-      			'join'     => [
+  			'from'     => 'table1',
+  			'where'    => [],
+  			'having'   => [],
+  			'join'     => [
               'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id', 'type' => 'inner'],
               'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id', 'type' => 'inner'],
               'table4' => ['table' => 'table4', 'on' => 'table2.t2id = table4.t4id', 'type' => 'inner'],
               'table5' => ['table' => 'table5', 'on' => 'table3.t3id = table5.t5id', 'type' => 'inner'],
               'table6' => ['table' => 'table6', 'on' => 'table1.t1id = table6.t6id', 'type' => 'inner'],
             ],
-      			'group'    => [],
-      			'order'    => [],
-      			'modifier' => null,
-      			'offset'   => null,
-      			'limit'    => null,
+  			'group'    => [],
+  			'order'    => [],
+  			'modifier' => null,
+  			'offset'   => null,
+  			'limit'    => null,
+            'table_list' => ['table1', 'table2', 'table3', 'table4', 'table5', 'table6'],
           ]
         ]
       ],
@@ -135,32 +136,34 @@ final class OSuQLTest extends TestCase
         'queries' => [
           'view1' => [
             'select'   => [],
-      			'from'     => 'table1',
-      			'where'    => [],
-      			'having'   => [],
-      			'join'     => [
+  			'from'     => 'table1',
+  			'where'    => [],
+  			'having'   => [],
+  			'join'     => [
               'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id and table1.lid = table2.rid', 'type' => 'inner'],
               'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id', 'type' => 'inner'],
             ],
-      			'group'    => [],
-      			'order'    => [],
-      			'modifier' => null,
-      			'offset'   => null,
-      			'limit'    => null,
+  			'group'    => [],
+  			'order'    => [],
+  			'modifier' => null,
+  			'offset'   => null,
+  			'limit'    => null,
+            'table_list' => ['table1', 'table2', 'table3'],
           ],
           'main' => [
             'select'   => [],
-      			'from'     => 'table4',
-      			'where'    => [],
-      			'having'   => [],
-      			'join'     => [
+  			'from'     => 'table4',
+  			'where'    => [],
+  			'having'   => [],
+  			'join'     => [
               'view1' => ['table' => 'view1', 'on' => 'table4.t4id = view1.v_id', 'type' => 'inner'],
             ],
-      			'group'    => [],
-      			'order'    => [],
-      			'modifier' => null,
-      			'offset'   => null,
-      			'limit'    => null,
+  			'group'    => [],
+  			'order'    => [],
+  			'modifier' => null,
+  			'offset'   => null,
+  			'limit'    => null,
+            'table_list' => ['table4', 'view1'],
           ]
         ]
       ],
