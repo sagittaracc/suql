@@ -1,6 +1,8 @@
 <?php
 require 'helper/SuQLLog.php';
-require 'helper/SQLTableDef.php';
+require 'helper/SuQLName.php';
+require 'helper/SuQLTableName.php';
+require 'helper/SuQLFieldName.php';
 require 'syntax/SuQLReservedWords.php';
 require 'syntax/SQLSugarSyntax.php';
 require 'modifier/SQLBaseModifier.php';
