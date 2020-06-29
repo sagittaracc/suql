@@ -4,7 +4,6 @@ class SQLSugarSyntax
   private $osuql;
   private $scheme;
   private $adapter;
-  private $tablesInQuery;
 
   function __construct() {
     $this->clear();
@@ -13,7 +12,6 @@ class SQLSugarSyntax
 
   public function clear() {
     $this->osuql = [];
-    $this->tablesInQuery = [];
     $this->scheme['temp_rel'] = [];
   }
 
@@ -45,18 +43,17 @@ class SQLSugarSyntax
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
-    if (is_array($leftTable)) {
-      $on = str_replace(array_values($leftTable), array_keys($leftTable), $on);
-      $leftTable = array_keys($leftTable)[0];
-    }
+    $leftTable = new Helper\SuQLTableName($leftTable);
+    $rightTable = new Helper\SuQLTableName($rightTable);
 
-    if (is_array($rightTable)) {
-      $on = str_replace(array_values($rightTable), array_keys($rightTable), $on);
-      $rightTable = array_keys($rightTable)[0];
-    }
+    if ($leftTable->alias)
+      $on = str_replace($leftTable->alias, $leftTable->name, $on);
 
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable][$rightTable] = $on;
-    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable][$leftTable] = $on;
+    if ($rightTable->alias)
+      $on = str_replace($rightTable->alias, $rightTable->name, $on);
+
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable->name][$rightTable->name] = $on;
+    $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable->name][$leftTable->name] = $on;
   }
 
   public function temp_rel($leftTable, $rightTable, $on) {
@@ -65,18 +62,18 @@ class SQLSugarSyntax
 
   public function addQuery($name) {
     $this->osuql['queries'][$name] = [
-      'select'   => [],
-      'from'     => null,
-      'where'    => [],
-      'having'   => [],
-      'join'     => [],
-      'group'    => [],
-      'order'    => [],
-      'modifier' => null,
-      'offset'   => null,
-      'limit'    => null,
+      'select'     => [],
+      'from'       => null,
+      'where'      => [],
+      'having'     => [],
+      'join'       => [],
+      'group'      => [],
+      'order'      => [],
+      'modifier'   => null,
+      'offset'     => null,
+      'limit'      => null,
+      'table_list' => [],
     ];
-    $this->tablesInQuery[$name] = [];
   }
 
   public function addQueryModifier($query, $modifier) {
@@ -84,15 +81,13 @@ class SQLSugarSyntax
   }
 
   public function addField($query, $table, $name, $visible = true) {
-    $field = is_string($name) ? [$name => ''] : $name;
-    if (!is_array($field)) return;
-    foreach ($field as $name => $alias) break;
+    $field = new Helper\SuQLFieldName($table, $name);
+    $fieldName = $field->alias ? $field->alias : $field->format('%t.%n');
 
-    $fieldName = $alias ? $alias : "$table.$name";
     $this->osuql['queries'][$query]['select'][$fieldName] = [
       'table' => $table,
-      'field' => "$table.$name",
-      'alias' => $alias,
+      'field' => $field->format('%t.%n'),
+      'alias' => $field->alias,
       'visible' => $visible,
       'modifier' => [],
     ];
@@ -117,7 +112,7 @@ class SQLSugarSyntax
 
   public function addFrom($query, $table) {
     $this->osuql['queries'][$query]['from'] = $table;
-    $this->tablesInQuery[$query][] = $table;
+    $this->osuql['queries'][$query]['table_list'][] = $table;
   }
 
   public function addJoin($query, $type, $table) {
@@ -130,7 +125,7 @@ class SQLSugarSyntax
     if (!$rel) return;
 
     $possibleTableLinks = array_keys($this->scheme[$rel][$table]);
-    $tableToJoinTo = array_intersect($possibleTableLinks, $this->tablesInQuery[$query]);
+    $tableToJoinTo = array_intersect($possibleTableLinks, $this->osuql['queries'][$query]['table_list']);
     $on = count($tableToJoinTo) === 1 ? $this->scheme[$rel][$tableToJoinTo[0]][$table] : null;
 
     if (!$on) return;
@@ -141,7 +136,7 @@ class SQLSugarSyntax
       'type'  => $type,
     ];
 
-    $this->tablesInQuery[$query][] = $table;
+    $this->osuql['queries'][$query]['table_list'][] = $table;
   }
 
   public function addFieldModifier($query, $field, $name, $arguments) {
