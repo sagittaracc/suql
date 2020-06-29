@@ -43,8 +43,8 @@ class SQLSugarSyntax
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
-    $leftTable = new Helper\SQLTableDef($leftTable);
-    $rightTable = new Helper\SQLTableDef($rightTable);
+    $leftTable = new Helper\SuQLTableDef($leftTable);
+    $rightTable = new Helper\SuQLTableDef($rightTable);
 
     if (!is_null($leftTable->alias))
       $on = str_replace($leftTable->alias, $leftTable->name, $on);
