@@ -10,6 +10,6 @@ class SuQLFieldName extends SuQLName {
   }
 
   public function format($s) {
-    return str_replace(['%t', '%n'], [$this->table, $this->name], $s);
+    return str_replace(['%t', '%n', '%a'], [$this->table, $this->name, $this->alias], $s);
   }
 }

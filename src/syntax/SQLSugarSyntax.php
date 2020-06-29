@@ -7,7 +7,7 @@ class SQLSugarSyntax
 
   function __construct() {
     $this->clear();
-    $this->scheme = [];
+    $this->scheme = ['rel' => [], 'temp_rel' => []];
   }
 
   public function clear() {
@@ -82,32 +82,32 @@ class SQLSugarSyntax
 
   public function addField($query, $table, $name, $visible = true) {
     $field = new Helper\SuQLFieldName($table, $name);
-    $fieldName = $field->alias ? $field->alias : $field->format('%t.%n');
+    $fieldId = $field->alias ? $field->alias : $field->format('%t.%n');
 
-    $this->osuql['queries'][$query]['select'][$fieldName] = [
+    $this->osuql['queries'][$query]['select'][$fieldId] = [
       'table' => $table,
       'field' => $field->format('%t.%n'),
-      'alias' => $field->alias,
+      'alias' => $field->format('%a'),
       'visible' => $visible,
       'modifier' => [],
     ];
 
-    return $fieldName;
+    return $fieldId;
   }
 
   public function addWhere($query, $where) {
-    if (!$where) return;
-    $this->osuql['queries'][$query]['where'][] = $where;
+    if ($where)
+      $this->osuql['queries'][$query]['where'][] = $where;
   }
 
   public function addOffset($query, $offset) {
-    if (is_null($offset)) return;
-    $this->osuql['queries'][$query]['offset'] = $offset;
+    if ($offset)
+      $this->osuql['queries'][$query]['offset'] = $offset;
   }
 
   public function addLimit($query, $limit) {
-    if (is_null($limit)) return;
-    $this->osuql['queries'][$query]['limit'] = $limit;
+    if ($limit)
+      $this->osuql['queries'][$query]['limit'] = $limit;
   }
 
   public function addFrom($query, $table) {
@@ -116,19 +116,10 @@ class SQLSugarSyntax
   }
 
   public function addJoin($query, $type, $table) {
-    $rel = isset($this->scheme['rel'][$table])
-            ? 'rel'
-            : (isset($this->scheme['temp_rel'])
-                ? 'temp_rel'
-                : null);
+    $scheme = array_merge($this->scheme['rel'], $this->scheme['temp_rel']);
+    $tableList = $this->osuql['queries'][$query]['table_list'];
 
-    if (!$rel) return;
-
-    $possibleTableLinks = array_keys($this->scheme[$rel][$table]);
-    $tableToJoinTo = array_intersect($possibleTableLinks, $this->osuql['queries'][$query]['table_list']);
-    $on = count($tableToJoinTo) === 1 ? $this->scheme[$rel][$tableToJoinTo[0]][$table] : null;
-
-    if (!$on) return;
+    $on = $scheme[$table][Helper\SuQLJoin::getTargetLink($scheme, $tableList, $table)];
 
     $this->osuql['queries'][$query]['join'][$table] = [
       'table' => $table,
