@@ -1,7 +1,7 @@
 <?php
 namespace Helper;
 
-class SuQLTableDef {
+class SuQLName {
   public $name;
   public $alias;
 
