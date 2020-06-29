@@ -46,10 +46,10 @@ class SQLSugarSyntax
     $leftTable = new Helper\SuQLTableName($leftTable);
     $rightTable = new Helper\SuQLTableName($rightTable);
 
-    if (!is_null($leftTable->alias))
+    if ($leftTable->alias)
       $on = str_replace($leftTable->alias, $leftTable->name, $on);
 
-    if (!is_null($rightTable->alias))
+    if ($rightTable->alias)
       $on = str_replace($rightTable->alias, $rightTable->name, $on);
 
     $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable->name][$rightTable->name] = $on;
