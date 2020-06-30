@@ -8,8 +8,8 @@ class SuQL extends SQLSugarSyntax
   }
 
   public function clear() {
-    $this->suql = null;
     parent::clear();
+    $this->suql = null;
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {

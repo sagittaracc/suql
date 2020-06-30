@@ -13,8 +13,8 @@ class OSuQL extends SQLSugarSyntax
     parent::__construct();
   }
 
-  public function clear() {
-    parent::clear();
+  protected function init() {
+    parent::init();
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
@@ -22,8 +22,13 @@ class OSuQL extends SQLSugarSyntax
     $this->tableList = [];
   }
 
-  public function drop() {
-    parent::drop();
+  public function clear() {
+    parent::clear();
+    $this->currentQuery = null;
+    $this->currentTable = null;
+    $this->currentField = null;
+    $this->queryList = [];
+    $this->tableList = [];
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
