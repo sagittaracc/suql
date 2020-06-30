@@ -1,13 +1,11 @@
 <?php
 class SQLSugarSyntax
 {
-  private $osuql;
-  private $scheme;
-  private $adapter;
+  private $osuql = [];
+  private $scheme = ['rel' => [], 'temp_rel' => []];
+  private $adapter = null;
 
   function __construct() {
-    $this->clear();
-    $this->scheme = ['rel' => [], 'temp_rel' => []];
   }
 
   public function clear() {
@@ -16,8 +14,10 @@ class SQLSugarSyntax
   }
 
   public function drop() {
-    $this->clear();
-    $this->scheme = [];
+    $this->osuql = [];
+    $this->scheme['temp_rel'] = [];
+    $this->scheme['rel'] = [];
+    $this->adapter = null;
   }
 
   public function setAdapter($adapter) {
