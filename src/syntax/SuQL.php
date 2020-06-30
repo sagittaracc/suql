@@ -68,13 +68,12 @@ class SuQL extends SQLSugarSyntax
       if ($options['fields'] !== '') {
         $fieldList = SuQLParser::getFieldList($options['fields']);
         for ($i = 0, $n = count($fieldList['name']); $i < $n; $i++) {
-          $fieldName = parent::addField(
-            $name,
-            $table,
-            [$fieldList['name'][$i] => $fieldList['alias'][$i]]
-          );
+          $_name = $fieldList['name'][$i];
+          $_alias = $fieldList['alias'][$i];
+          $_modifier = $fieldList['modif'][$i];
+          $fieldName = parent::addField($name, $table, [$_name => $_alias]);
 
-          $fieldModifierList = SuQLParser::getFieldModifierList($fieldList['modif'][$i]);
+          $fieldModifierList = SuQLParser::getFieldModifierList($_modifier);
           foreach ($fieldModifierList as $modif => $params) {
             parent::addFieldModifier($name, $fieldName, $modif, $params ? explode(',', $params) : []);
           }
