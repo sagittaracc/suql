@@ -24,7 +24,6 @@ class OSuQL extends SQLSugarSyntax
 
   public function drop() {
     parent::drop();
-    return $this;
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
