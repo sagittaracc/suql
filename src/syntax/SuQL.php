@@ -35,9 +35,8 @@ class SuQL extends SQLSugarSyntax
 
     $queryList = SuQLParser::getQueryList($this->suql);
     foreach ($queryList as $name => $query) {
-        parent::addQuery($name);
-
         $handler = SuQLParser::getQueryHandler($query);
+
         if (!$this->$handler($name, $query))
             return false;
     }
@@ -47,6 +46,8 @@ class SuQL extends SQLSugarSyntax
 
   private function SELECT($name, $query)
   {
+    parent::addSelect($name);
+
     $clauses = SuQLParser::parseSelect($query);
 
     foreach ($clauses['tables'] as $table => $options) {

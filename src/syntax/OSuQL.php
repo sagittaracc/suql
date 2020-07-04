@@ -41,7 +41,7 @@ class OSuQL extends SQLSugarSyntax
   }
 
   public function query($name = 'main') {
-    parent::addQuery($name);
+    parent::addSelect($name);
     $this->currentQuery = $name;
     $this->currentTable = null;
     $this->currentField = null;

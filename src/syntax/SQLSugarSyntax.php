@@ -67,8 +67,9 @@ class SQLSugarSyntax
     return $this->rel($leftTable, $rightTable, $on, true);
   }
 
-  public function addQuery($name) {
+  public function addSelect($name) {
     $this->osuql['queries'][$name] = [
+      'type'       => 'select',
       'select'     => [],
       'from'       => null,
       'where'      => [],

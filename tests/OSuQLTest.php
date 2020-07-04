@@ -88,6 +88,7 @@ final class OSuQLTest extends TestCase
       [
         'queries' => [
           'main' => [
+            'type'     => 'select',
             'select'   => [],
   			'from'     => 'table1',
   			'where'    => [],
@@ -135,6 +136,7 @@ final class OSuQLTest extends TestCase
       [
         'queries' => [
           'view1' => [
+            'type'     => 'select',
             'select'   => [],
   			'from'     => 'table1',
   			'where'    => [],
@@ -151,6 +153,7 @@ final class OSuQLTest extends TestCase
             'table_list' => ['table1', 'table2', 'table3'],
           ],
           'main' => [
+            'type'     => 'select',
             'select'   => [],
   			'from'     => 'table4',
   			'where'    => [],

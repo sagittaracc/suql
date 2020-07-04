@@ -10,7 +10,7 @@ final class SQLSugarSyntaxTest extends TestCase
     $db->rel(['users' => 'a'], ['user_group' => 'b'], 'a.id = b.user_id');
     $db->rel(['user_group' => 'a'], ['groups' => 'b'], 'a.group_id = b.id');
 
-    $db->addQuery('main');
+    $db->addSelect('main');
     $db->addFrom('main', 'users');
     $db->addJoin('main', 'inner', 'user_group');
     $db->addJoin('main', 'inner', 'groups');
