@@ -37,7 +37,7 @@ class SuQL extends SQLSugarSyntax
     foreach ($queryList as $name => $query) {
         $handler = SuQLParser::getQueryHandler($query);
 
-        if (!$this->$handler($name, $query))
+        if (!$handler || !$this->$handler($name, $query))
             return false;
     }
 
@@ -89,14 +89,19 @@ class SuQL extends SQLSugarSyntax
   }
 
   private function INSERT($name, $query) {
-
+    return true;
   }
 
   private function UPDATE($name, $query) {
-
+    return true;
   }
 
   private function DELETE($name, $query) {
+    return true;
+  }
 
+  private function UNION($name, $query) {
+    parent::addUnion($name, $query);
+    return true;
   }
 }

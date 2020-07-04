@@ -130,4 +130,63 @@ final class SuQLTest extends TestCase
       ")->getSQL()
     );
   }
+
+  public function testUnion(): void
+  {
+    $query = '
+      @q3 = @q1 union all @q2 union @q4 ;
+      select from @q3 * ;
+    ';
+
+    $queryList = SuQLParser::getQueryList($query);
+
+    $this->assertEquals([
+        'q3'   => '@q1 union all @q2 union @q4 ;',
+        'main' => 'select from @q3 * ;'
+    ], $queryList);
+
+    $queryTypes = [];
+    foreach ($queryList as $_name => $_query) {
+      $queryTypes[$_name] = SuQLParser::getQueryHandler($_query);
+    }
+
+    $this->assertEquals([
+      'q3'   => 'UNION',
+      'main' => 'SELECT',
+    ], $queryTypes);
+
+    $db = (new SuQL)->setAdapter('mysql');
+    $osuql = $db->query($query)->getSQLObject();
+
+    $this->assertEquals([
+      'queries' => [
+        'main' => [
+          'type'       => 'select',
+          'select'     => [
+            'q3.*' => [
+              'table' => 'q3',
+              'field' => 'q3.*',
+              'alias' => '',
+              'visible' => true,
+              'modifier' => []
+            ]
+          ],
+          'from'       => 'q3',
+          'where'      => [],
+          'having'     => [],
+          'join'       => [],
+          'group'      => [],
+          'order'      => [],
+          'modifier'   => null,
+          'offset'     => null,
+          'limit'      => null,
+          'table_list' => ['q3'],
+        ],
+        'q3' => [
+          'type' => 'union',
+          'suql' => '@q1 union all @q2 union @q4 ;',
+        ]
+      ]
+    ], $osuql);
+  }
 }

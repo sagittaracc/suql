@@ -84,6 +84,13 @@ class SQLSugarSyntax
     ];
   }
 
+  public function addUnion($name, $query) {
+    $this->osuql['queries'][$name] = [
+      'type' => 'union',
+      'suql' => $query,
+    ];
+  }
+
   public function addQueryModifier($query, $modifier) {
     $this->osuql['queries'][$query]['modifier'] = $modifier;
   }
