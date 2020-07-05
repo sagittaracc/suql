@@ -17,8 +17,8 @@ class SuQL extends SQLSugarSyntax
     return $this;
   }
 
-  public function getSQL() {
-    return $this->interpret() ? parent::getSQL() : null;
+  public function getSQL($queryList = ['main']) {
+    return $this->interpret() ? parent::getSQL($queryList) : null;
   }
 
   public function getSQLObject() {
@@ -35,10 +35,9 @@ class SuQL extends SQLSugarSyntax
 
     $queryList = SuQLParser::getQueryList($this->suql);
     foreach ($queryList as $name => $query) {
-        parent::addQuery($name);
-
         $handler = SuQLParser::getQueryHandler($query);
-        if (!$this->$handler($name, $query))
+
+        if (!$handler || !$this->$handler($name, $query))
             return false;
     }
 
@@ -47,6 +46,8 @@ class SuQL extends SQLSugarSyntax
 
   private function SELECT($name, $query)
   {
+    parent::addSelect($name);
+
     $clauses = SuQLParser::parseSelect($query);
 
     foreach ($clauses['tables'] as $table => $options) {
@@ -88,14 +89,19 @@ class SuQL extends SQLSugarSyntax
   }
 
   private function INSERT($name, $query) {
-
+    return true;
   }
 
   private function UPDATE($name, $query) {
-
+    return true;
   }
 
   private function DELETE($name, $query) {
+    return true;
+  }
 
+  private function UNION($name, $query) {
+    parent::addUnion($name, $query);
+    return true;
   }
 }

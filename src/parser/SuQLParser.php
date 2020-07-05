@@ -1,6 +1,9 @@
 <?php
 class SuQLParser
 {
+	const REGEX_DETECT_SELECT_QUERY_TYPE = '/^select.*?;$/msi';
+	const REGEX_DETECT_UNION_QUERY_TYPE = '/^(@\w+\s+union\s+(all\s+)?)+@\w+\s*;/msi';
+
 	// @<var_name> = <query>;
 	const REGEX_NESTED_QUERY = '/@(?<name>\w+)\s*=\s*(?<query>.*?;)/msi';
 	const REGEX_MAIN_SELECT = '/^;?\s*(?<query>select.*?;)/msi';
@@ -23,7 +26,12 @@ class SuQLParser
 	const REGEX_NESTED_QUERY_NAME = '/#(?<name>[a-zA-Z0-9_]+)/';
 
 	public static function getQueryHandler($suql) {
-		return 'SELECT';
+		if (preg_match(self::REGEX_DETECT_SELECT_QUERY_TYPE, $suql))
+			return 'SELECT';
+		else if (preg_match(self::REGEX_DETECT_UNION_QUERY_TYPE, $suql))
+			return 'UNION';
+		else
+			return null;
 	}
 
 	public static function getQueryList($suql) {

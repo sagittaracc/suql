@@ -31,6 +31,10 @@ class OSuQL extends SQLSugarSyntax
     $this->tableList = [];
   }
 
+  public function getSQL($queryList = ['main']) {
+    return parent::getSQL($queryList);
+  }
+
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
     $this->tableList[] = $leftTable;
     $this->tableList[] = $rightTable;
@@ -41,7 +45,7 @@ class OSuQL extends SQLSugarSyntax
   }
 
   public function query($name = 'main') {
-    parent::addQuery($name);
+    parent::addSelect($name);
     $this->currentQuery = $name;
     $this->currentTable = null;
     $this->currentField = null;

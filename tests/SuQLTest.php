@@ -130,4 +130,89 @@ final class SuQLTest extends TestCase
       ")->getSQL()
     );
   }
+
+  public function testUnion1(): void
+  {
+    $query = '
+      @q3 = @q1 union all @q2 union @q4 ;
+      select from @q3 * ;
+    ';
+
+    $queryList = SuQLParser::getQueryList($query);
+
+    $this->assertEquals([
+        'q3'   => '@q1 union all @q2 union @q4 ;',
+        'main' => 'select from @q3 * ;'
+    ], $queryList);
+
+    $queryTypes = [];
+    foreach ($queryList as $_name => $_query) {
+      $queryTypes[$_name] = SuQLParser::getQueryHandler($_query);
+    }
+
+    $this->assertEquals([
+      'q3'   => 'UNION',
+      'main' => 'SELECT',
+    ], $queryTypes);
+
+    $db = (new SuQL)->setAdapter('mysql');
+    $osuql = $db->query($query)->getSQLObject();
+
+    $this->assertEquals([
+      'queries' => [
+        'main' => [
+          'type'       => 'select',
+          'select'     => [
+            'q3.*' => [
+              'table' => 'q3',
+              'field' => 'q3.*',
+              'alias' => '',
+              'visible' => true,
+              'modifier' => []
+            ]
+          ],
+          'from'       => 'q3',
+          'where'      => [],
+          'having'     => [],
+          'join'       => [],
+          'group'      => [],
+          'order'      => [],
+          'modifier'   => null,
+          'offset'     => null,
+          'limit'      => null,
+          'table_list' => ['q3'],
+        ],
+        'q3' => [
+          'type' => 'union',
+          'suql' => '@q1 union all @q2 union @q4 ;',
+        ]
+      ]
+    ], $osuql);
+  }
+
+  public function testUnion2(): void
+  {
+    $query = '
+      @q1 = select from users * ;
+      @q2 = select from groups * ;
+      @q3 = select from user_group * ;
+      @q4 = @q1 union all @q2 union @q3 ;
+      select from @q4 * ;
+    ';
+
+    $db = new SuQL;
+    $db = $db->setAdapter('mysql');
+    $db->query($query);
+
+    $this->assertEquals(
+      'select q4.* from ('.
+        '(select users.* from users) '.
+        'union all '.
+        '(select groups.* from groups) '.
+        'union '.
+        '(select user_group.* from user_group)'.
+      ') q4',
+      $db->getSQL()
+    );
+  }
 }

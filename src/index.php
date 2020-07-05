@@ -1,4 +1,5 @@
 <?php
+require 'helper/CArray.php';
 require 'helper/SuQLLog.php';
 require 'helper/SuQLName.php';
 require 'helper/SuQLTableName.php';

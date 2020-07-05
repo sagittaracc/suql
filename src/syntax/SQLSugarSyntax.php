@@ -34,19 +34,27 @@ class SQLSugarSyntax
     return $this;
   }
 
+  public function getAllTheQueryList() {
+    return array_keys($this->osuql['queries']);
+  }
+
   public function getSQLObject() {
     $osuql = $this->osuql;
     $this->clear();
     return $osuql;
   }
 
-  public function getSQL() {
+  public function getSQL($queryList) {
+    if ($queryList === 'all')
+      $queryList = $this->getAllTheQueryList();
+
+    if (!is_array($queryList)) return null;
     if (!$this->adapter) return null;
 
     $classBuilder = SQLAdapter::get($this->adapter);
     $SQLBuilder = new $classBuilder($this->getSQLObject());
-    $SQLBuilder->run();
-    return $SQLBuilder->getSql();
+    $SQLBuilder->run($queryList);
+    return $SQLBuilder->getSql($queryList);
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
@@ -67,8 +75,9 @@ class SQLSugarSyntax
     return $this->rel($leftTable, $rightTable, $on, true);
   }
 
-  public function addQuery($name) {
+  public function addSelect($name) {
     $this->osuql['queries'][$name] = [
+      'type'       => 'select',
       'select'     => [],
       'from'       => null,
       'where'      => [],
@@ -80,6 +89,13 @@ class SQLSugarSyntax
       'offset'     => null,
       'limit'      => null,
       'table_list' => [],
+    ];
+  }
+
+  public function addUnion($name, $query) {
+    $this->osuql['queries'][$name] = [
+      'type' => 'union',
+      'suql' => $query,
     ];
   }
 
