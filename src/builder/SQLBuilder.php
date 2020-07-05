@@ -2,7 +2,7 @@
 class SQLBuilder
 {
   private $SQLObject = null;
-  private $sql = null;
+  private $sql = [];
   protected $sqlTemplate = "#select##from##join##where##group##having##order##limit#";
 
   function __construct($SQLObject)
@@ -15,17 +15,27 @@ class SQLBuilder
     return $this->SQLObject;
   }
 
-  public function getSql()
+  public function getSql($queryList)
   {
-    return $this->sql;
+    if (empty($this->sql)) return null;
+
+    return count($queryList) === 1
+            ? $this->sql[$queryList[0]]
+            : Helper\CArray::slice_by_keys($this->sql, $queryList);
   }
 
-  public function run()
+  public function run($queryList)
   {
     if (!$this->SQLObject)
       return;
 
-    $this->sql = trim($this->buildQuery('main'));
+    foreach ($this->SQLObject['queries'] as $query => $osuql) {
+      $this->sql[$query] = trim($this->buildQuery($query));
+    }
+
+    foreach ($queryList as $query) {
+      $this->sql[$query] = $this->composerQuery($query);
+    }
   }
 
   private function getQuery($query)
@@ -43,20 +53,50 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $sqlTemplate = $this->sqlTemplate;
+    $queryObject = $this->getQuery($query);
+    $handler = 'build'.ucfirst($queryObject['type']).'Query';
+    return method_exists($this, $handler)
+            ? $this->$handler($query)
+            : null;
+  }
 
-    $this->setQuery($query, $this->prepareQuery($query));
+  private function buildSelectQuery($query) {
+      $sqlTemplate = $this->sqlTemplate;
 
-    $sqlTemplate = str_replace('#select#', $this->buildSelect($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query),   $sqlTemplate);
-    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query),   $sqlTemplate);
-    $sqlTemplate = str_replace('#group#' , $this->buildGroup($query),  $sqlTemplate);
-    $sqlTemplate = str_replace('#where#' , $this->buildWhere($query),  $sqlTemplate);
-    $sqlTemplate = str_replace('#having#', $this->buildHaving($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#order#' , $this->buildOrder($query),  $sqlTemplate);
-    $sqlTemplate = str_replace('#limit#' , $this->buildLimit($query),  $sqlTemplate);
+      $this->setQuery($query, $this->prepareQuery($query));
 
-    return $sqlTemplate;
+      $sqlTemplate = str_replace('#select#', $this->buildSelect($query), $sqlTemplate);
+      $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query),   $sqlTemplate);
+      $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query),   $sqlTemplate);
+      $sqlTemplate = str_replace('#group#' , $this->buildGroup($query),  $sqlTemplate);
+      $sqlTemplate = str_replace('#where#' , $this->buildWhere($query),  $sqlTemplate);
+      $sqlTemplate = str_replace('#having#', $this->buildHaving($query), $sqlTemplate);
+      $sqlTemplate = str_replace('#order#' , $this->buildOrder($query),  $sqlTemplate);
+      $sqlTemplate = str_replace('#limit#' , $this->buildLimit($query),  $sqlTemplate);
+
+      return $sqlTemplate;
+  }
+
+  private function buildUnionQuery($query) {
+      $queryObject = $this->getQuery($query);
+      preg_match("/(.*?);/", $queryObject['suql'], $matches);
+      return $matches[1];
+  }
+
+  private function composerQuery($query) {
+      if (!isset($this->sql[$query]))
+        return '';
+      $suql = $this->sql[$query];
+
+      preg_match_all("/@(?<name>\w+)/msi", $suql, $subQueries);
+      if (empty($subQueries['name']))
+        return $suql;
+      else {
+        foreach ($subQueries['name'] as $subQuery)
+          $suql = str_replace("@$subQuery", '('.$this->composerQuery($subQuery).')', $suql);
+
+        return $suql;
+      }
   }
 
   private function prepareQuery($query) {
@@ -109,8 +149,7 @@ class SQLBuilder
       return '';
 
     if ($this->getQuery($from)) {
-      $nestedQuery = $this->buildQuery($from);
-      return " from ($nestedQuery) {$from}";
+      return " from @{$from} {$from}";
     } else {
       return " from $from";
     }
@@ -134,7 +173,7 @@ class SQLBuilder
     foreach ($join as $_join) {
       $table = $_join['table'];
       $table = $this->getQuery($table)
-        ? "(".$this->buildQuery($table).") $table"
+        ? "@$table $table"
         : $table;
       $s[] = "{$_join['type']} join $table on {$_join['on']}";
     }
@@ -157,16 +196,6 @@ class SQLBuilder
 
     $select = $queryObject['select'];
     $where = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $where);
-
-    // TODO: Сделать обработку имен вложенных запросов ПЕРЕД сборкой where секции
-    // SuQLParser НЕ должен использоваться в SQLBuilder
-    $nestedQueryNames = SuQLParser::getNestedQueryNames($where);
-    foreach ($nestedQueryNames as $name) {
-      if ($this->getQuery($name)) {
-        $nestedQuery = $this->buildQuery($name);
-        $where = str_replace("#$name", "($nestedQuery)", $where);
-      }
-    }
 
     return " where $where";
   }

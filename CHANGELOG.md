@@ -1,10 +1,15 @@
 # Change log
 
-## v2.0 - May 04, 2020
+## v2.0.1 - Jul 05, 2020
 
 **New features:**
--- New SuQL Syntax
--- Similar tests for SuQL & OSuQL syntax
+- New SuQL Syntax
+- Similar tests for SuQL & OSuQL syntax
+- New build system
+- Add UNION support
+
+**Bug fixes:**
+- refactor
 
 ---
 

@@ -131,7 +131,7 @@ final class SuQLTest extends TestCase
     );
   }
 
-  public function testUnion(): void
+  public function testUnion1(): void
   {
     $query = '
       @q3 = @q1 union all @q2 union @q4 ;
@@ -188,5 +188,31 @@ final class SuQLTest extends TestCase
         ]
       ]
     ], $osuql);
+  }
+
+  public function testUnion2(): void
+  {
+    $query = '
+      @q1 = select from users * ;
+      @q2 = select from groups * ;
+      @q3 = select from user_group * ;
+      @q4 = @q1 union all @q2 union @q3 ;
+      select from @q4 * ;
+    ';
+
+    $db = new SuQL;
+    $db = $db->setAdapter('mysql');
+    $db->query($query);
+
+    $this->assertEquals(
+      'select q4.* from ('.
+        '(select users.* from users) '.
+        'union all '.
+        '(select groups.* from groups) '.
+        'union '.
+        '(select user_group.* from user_group)'.
+      ') q4',
+      $db->getSQL()
+    );
   }
 }

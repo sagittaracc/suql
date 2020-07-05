@@ -17,8 +17,8 @@ class SuQL extends SQLSugarSyntax
     return $this;
   }
 
-  public function getSQL() {
-    return $this->interpret() ? parent::getSQL() : null;
+  public function getSQL($queryList = ['main']) {
+    return $this->interpret() ? parent::getSQL($queryList) : null;
   }
 
   public function getSQLObject() {
