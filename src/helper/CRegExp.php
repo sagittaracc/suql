@@ -7,6 +7,12 @@ class CRegExp {
 	private $sequenceList = [];
 
 	function __construct($regex, $flags = '') {
+		if (count(explode('/', $regex)) > 1) {
+			$parts = explode('/', $regex);
+			$regex = $parts[1];
+			$flags = $parts[2];
+		}
+
 		$this->setRegex($regex);
 		$this->setFlags($flags);
 	}
