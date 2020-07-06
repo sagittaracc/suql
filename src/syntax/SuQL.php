@@ -101,7 +101,7 @@ class SuQL extends SQLSugarSyntax
   }
 
   private function UNION($name, $query) {
-    parent::addUnion($name, $query);
+    parent::addUnion($name, SuQLParser::trimSemicolon($query));
     return true;
   }
 }

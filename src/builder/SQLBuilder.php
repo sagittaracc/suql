@@ -19,9 +19,11 @@ class SQLBuilder
   {
     if (empty($this->sql)) return null;
 
-    return count($queryList) === 1
-            ? $this->sql[$queryList[0]]
-            : Helper\CArray::slice_by_keys($this->sql, $queryList);
+    $sqlList = Helper\CArray::slice_by_keys($this->sql, $queryList);
+
+    return count($queryList) === 1 && count($sqlList) === 1
+            ? reset($sqlList)
+            : $sqlList;
   }
 
   public function run($queryList)
@@ -34,7 +36,7 @@ class SQLBuilder
     }
 
     foreach ($queryList as $query) {
-      $this->sql[$query] = $this->composerQuery($query);
+      $this->sql[$query] = $this->composeQuery($query);
     }
   }
 
@@ -79,11 +81,10 @@ class SQLBuilder
 
   private function buildUnionQuery($query) {
       $queryObject = $this->getQuery($query);
-      preg_match("/(.*?);/", $queryObject['suql'], $matches);
-      return $matches[1];
+      return $queryObject['suql'];
   }
 
-  private function composerQuery($query) {
+  private function composeQuery($query) {
       if (!isset($this->sql[$query]))
         return '';
       $suql = $this->sql[$query];
@@ -93,7 +94,7 @@ class SQLBuilder
         return $suql;
       else {
         foreach ($subQueries['name'] as $subQuery)
-          $suql = str_replace("@$subQuery", '('.$this->composerQuery($subQuery).')', $suql);
+          $suql = str_replace("@$subQuery", '('.$this->composeQuery($subQuery).')', $suql);
 
         return $suql;
       }

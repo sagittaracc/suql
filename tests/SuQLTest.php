@@ -184,7 +184,7 @@ final class SuQLTest extends TestCase
         ],
         'q3' => [
           'type' => 'union',
-          'suql' => '@q1 union all @q2 union @q4 ;',
+          'suql' => '@q1 union all @q2 union @q4',
         ]
       ]
     ], $osuql);
