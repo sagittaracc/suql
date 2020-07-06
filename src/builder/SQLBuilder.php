@@ -79,8 +79,7 @@ class SQLBuilder
 
   private function buildUnionQuery($query) {
       $queryObject = $this->getQuery($query);
-      preg_match("/(.*?);/", $queryObject['suql'], $matches);
-      return $matches[1];
+      return $queryObject['suql'];
   }
 
   private function composeQuery($query) {
