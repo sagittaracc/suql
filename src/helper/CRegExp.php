@@ -4,7 +4,7 @@ namespace Helper;
 class CRegExp {
 	private $regex;
 	private $flags;
-	private $sequenceList = [];
+	protected $sequenceList = [];
 
 	function __construct($regex, $flags = '') {
 		if (count(explode('/', $regex)) > 1) {
@@ -47,7 +47,9 @@ class CRegExp {
 	public function match($subject) {
 		$regex = $this->buildRegex();
 		preg_match($regex, $subject, $matches);
-		return $matches;
+		return empty($matches)
+				? null
+				: $matches;
 	}
 
 	public function match_all($subject) {
