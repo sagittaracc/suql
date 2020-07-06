@@ -6,7 +6,7 @@ class CRegSequence {
 	public $set;
 
 	function __construct($name, $set) {
-		$this->name = "{::$name::}";
+		$this->name = "{:$name:}";
 		$this->set = '['.implode('', $set).']';
 	}
 

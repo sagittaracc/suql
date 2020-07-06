@@ -2,11 +2,11 @@
 class SuQLParser
 {
 	const REGEX_DETECT_SELECT_QUERY_TYPE = '/^select.*?;$/msi';
-	const REGEX_DETECT_UNION_QUERY_TYPE = '/^(@\w+\s+union\s+(all\s+)?)+@\w+\s*;/msi';
+	const REGEX_DETECT_UNION_QUERY_TYPE = '/^({:v:}\w+\s+union\s+(all\s+)?)+{:v:}\w+\s*;/msi';
 
-	// @<var_name> = <query>;
-	const REGEX_NESTED_QUERY = '/@(?<name>\w+)\s*=\s*(?<query>.*?;)/msi';
-	const REGEX_MAIN_SELECT = '/^;?\s*(?<query>select.*?;)/msi';
+	// <var_name> = <query>;
+	const REGEX_NESTED_QUERY = '/{:v:}(?<name>\w+)\s*=\s*(?<query>.*?;)/msi';
+	const REGEX_MAIN_SELECT = '/^;?\s*(select.*?;)/msi';
 	/*
 	 *	select from <table>
 	 *		<field list>
@@ -19,17 +19,17 @@ class SuQLParser
 	 *	[offset <offset>]
 	 *	[limit <limit>]
 	 */
- 	const REGEX_SELECT = "/(select\s+(?<modif>\w+))?\s+(?<type>from|join)\s+@?(?<table>\w+)\s+((?<fields>.*?)(where\s+(?<where>.*?)\s*)?)?(?<next>left|right|inner|limit\s+(?<offset>\d+)\s*,\s*(?<limit>\d+)|;)/msi";
-	// <field_name[.modif1[(<params>)].modif2.modif3...][@field_alias], ...
-	const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)(@(?<alias>\w+))?\s*,?\s*$/msi';
+ 	const REGEX_SELECT = "/(select\s+(?<modif>\w+))?\s+(?<type>from|join)\s+{:v:}?(?<table>\w+)\s+((?<fields>.*?)(where\s+(?<where>.*?)\s*)?)?(?<next>left|right|inner|limit\s+(?<offset>\d+)\s*,\s*(?<limit>\d+)|;)/msi";
+	// <field_name[.modif1[(<params>)].modif2.modif3...][field_alias], ...
+	const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)({:f:}(?<alias>\w+))?\s*,?\s*$/msi';
 	const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
 
 	const REGEX_TRIM_SEMICOLON = '/(.*?);/';
 
 	public static function getQueryHandler($suql) {
-		if (preg_match(self::REGEX_DETECT_SELECT_QUERY_TYPE, $suql))
+		if ((new SuQLRegExp(self::REGEX_DETECT_SELECT_QUERY_TYPE))->match($suql))
 			return 'SELECT';
-		else if (preg_match(self::REGEX_DETECT_UNION_QUERY_TYPE, $suql))
+		else if ((new SuQLRegExp(self::REGEX_DETECT_UNION_QUERY_TYPE))->match($suql))
 			return 'UNION';
 		else
 			return null;
@@ -43,17 +43,16 @@ class SuQLParser
 	}
 
 	public static function getNestedQueries($suql) {
-	    preg_match_all(self::REGEX_NESTED_QUERY, $suql, $nestedQueries);
+		$nestedQueries = (new SuQLRegExp(self::REGEX_NESTED_QUERY))->match_all($suql);
 	    return array_combine($nestedQueries['name'], $nestedQueries['query']);
 	}
 
 	public static function getMainQuery($suql) {
-		preg_match_all(self::REGEX_MAIN_SELECT, $suql, $main);
-		return $main['query'][0];
+		return (new SuQLRegExp(self::REGEX_MAIN_SELECT))->match($suql);
 	}
 
 	public static function parseSelect($suql) {
-		preg_match_all(self::REGEX_SELECT, $suql, $clauses);
+		$clauses = (new SuQLRegExp(self::REGEX_SELECT))->match_all($suql);
 		array_unshift($clauses['next'], array_pop($clauses['next']));
 		$tables = ['tables' => [], 'offset' => null, 'limit' => null];
 		for ($i = 0, $n = count($clauses['table']); $i < $n; $i++) {
@@ -73,17 +72,15 @@ class SuQLParser
 	}
 
 	public static function getFieldList($suql) {
-		preg_match_all(self::REGEX_FIELDS, $suql, $fieldList);
-		return $fieldList;
+		return (new SuQLRegExp(self::REGEX_FIELDS))->match_all($suql);
 	}
 
 	public static function getFieldModifierList($suql) {
-		preg_match_all(self::REGEX_FIELD_MODIFIERS, $suql, $fieldModifierList);
+		$fieldModifierList = (new SuQLRegExp(self::REGEX_FIELD_MODIFIERS))->match_all($suql);
 		return array_combine($fieldModifierList['name'], $fieldModifierList['params']);
 	}
 
 	public static function trimSemicolon($suql) {
-		preg_match(self::REGEX_TRIM_SEMICOLON, $suql, $matches);
-        return trim($matches[1]);
+        return trim((new SuQLRegExp(self::REGEX_TRIM_SEMICOLON))->match($suql));
 	}
 }
