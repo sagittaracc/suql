@@ -19,9 +19,11 @@ class SQLBuilder
   {
     if (empty($this->sql)) return null;
 
-    return count($queryList) === 1
-            ? $this->sql[$queryList[0]]
-            : Helper\CArray::slice_by_keys($this->sql, $queryList);
+    $sqlList = Helper\CArray::slice_by_keys($this->sql, $queryList);
+
+    return count($queryList) === 1 && count($sqlList) === 1
+            ? reset($sqlList)
+            : $sqlList;
   }
 
   public function run($queryList)
