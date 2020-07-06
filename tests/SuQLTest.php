@@ -215,4 +215,77 @@ final class SuQLTest extends TestCase
       $db->getSQL()
     );
   }
+
+  public function testSuQLSpecialSymbols(): void
+  {
+    $old = SuQLRegExp::$prefix_declare_variable;
+    SuQLRegExp::$prefix_declare_variable = ['#'];
+
+    $query = '
+      #q3 = #q1 union all #q2 union #q4 ;
+      select from #q3 * ;
+    ';
+
+    $db = (new SuQL)->setAdapter('mysql');
+    $osuql = $db->query($query)->getSQLObject();
+
+    $this->assertEquals([
+      'queries' => [
+        'main' => [
+          'type'       => 'select',
+          'select'     => [
+            'q3.*' => [
+              'table' => 'q3',
+              'field' => 'q3.*',
+              'alias' => '',
+              'visible' => true,
+              'modifier' => []
+            ]
+          ],
+          'from'       => 'q3',
+          'where'      => [],
+          'having'     => [],
+          'join'       => [],
+          'group'      => [],
+          'order'      => [],
+          'modifier'   => null,
+          'offset'     => null,
+          'limit'      => null,
+          'table_list' => ['q3'],
+        ],
+        'q3' => [
+          'type' => 'union',
+          'suql' => '#q1 union all #q2 union #q4',
+        ]
+      ]
+    ], $osuql);
+
+    SuQLRegExp::$prefix_declare_variable = $old;
+  }
+
+  public function testAfterChangingSuQLSpecialSymbols(): void
+  {
+    $query = '
+      @q1 = select from users * ;
+      @q2 = select from groups * ;
+      @q3 = select from user_group * ;
+      @q4 = @q1 union all @q2 union @q3 ;
+      select from @q4 * ;
+    ';
+
+    $db = new SuQL;
+    $db = $db->setAdapter('mysql');
+    $db->query($query);
+
+    $this->assertEquals(
+      'select q4.* from ('.
+        '(select users.* from users) '.
+        'union all '.
+        '(select groups.* from groups) '.
+        'union '.
+        '(select user_group.* from user_group)'.
+      ') q4',
+      $db->getSQL()
+    );
+  }
 }
