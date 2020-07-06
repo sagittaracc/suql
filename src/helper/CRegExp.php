@@ -44,13 +44,13 @@ class CRegExp {
 		);
 	}
 
-	public function exec($subject) {
+	public function match($subject) {
 		$regex = $this->buildRegex();
 		preg_match($regex, $subject, $matches);
 		return $matches;
 	}
 
-	public function exec_all($subject) {
+	public function match_all($subject) {
 		$regex = $this->buildRegex();
 		preg_match_all($regex, $subject, $matches);
 		return $matches;
