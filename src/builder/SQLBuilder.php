@@ -34,7 +34,7 @@ class SQLBuilder
     }
 
     foreach ($queryList as $query) {
-      $this->sql[$query] = $this->composerQuery($query);
+      $this->sql[$query] = $this->composeQuery($query);
     }
   }
 
@@ -83,7 +83,7 @@ class SQLBuilder
       return $matches[1];
   }
 
-  private function composerQuery($query) {
+  private function composeQuery($query) {
       if (!isset($this->sql[$query]))
         return '';
       $suql = $this->sql[$query];
@@ -93,7 +93,7 @@ class SQLBuilder
         return $suql;
       else {
         foreach ($subQueries['name'] as $subQuery)
-          $suql = str_replace("@$subQuery", '('.$this->composerQuery($subQuery).')', $suql);
+          $suql = str_replace("@$subQuery", '('.$this->composeQuery($subQuery).')', $suql);
 
         return $suql;
       }
