@@ -11,6 +11,7 @@ require 'syntax/SuQLSpecialSymbols.php';
 require 'syntax/SuQLReservedWords.php';
 require 'syntax/SQLSugarSyntax.php';
 require 'modifier/SQLBaseModifier.php';
+require 'modifier/SQLModifier.php';
 require 'parser/SuQLRegExp.php';
 require 'parser/SuQLParser.php';
 require 'builder/SQLAdapter.php';

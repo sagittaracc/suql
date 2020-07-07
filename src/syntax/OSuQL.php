@@ -6,9 +6,6 @@ class OSuQL extends SQLSugarSyntax
   private $currentField;
   private $currentJoinType;
 
-  private $queryList;
-  private $tableList;
-
   function __construct() {
     parent::__construct();
   }
@@ -18,8 +15,6 @@ class OSuQL extends SQLSugarSyntax
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
-    $this->queryList = [];
-    $this->tableList = [];
   }
 
   public function clear() {
@@ -27,8 +22,6 @@ class OSuQL extends SQLSugarSyntax
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
-    $this->queryList = [];
-    $this->tableList = [];
   }
 
   public function getSQL($queryList = ['main']) {
@@ -36,11 +29,7 @@ class OSuQL extends SQLSugarSyntax
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
-    $this->tableList[] = $leftTable;
-    $this->tableList[] = $rightTable;
-
     parent::rel($leftTable, $rightTable, $on, $temporary);
-
     return $this;
   }
 
@@ -49,7 +38,6 @@ class OSuQL extends SQLSugarSyntax
     $this->currentQuery = $name;
     $this->currentTable = null;
     $this->currentField = null;
-    $this->queryList[] = $name;
     return $this;
   }
 
@@ -93,28 +81,14 @@ class OSuQL extends SQLSugarSyntax
     if (method_exists(self::class, $name)) return;
     // Прежде всего должна быть задана query, main по дефолту
     if (!$this->currentQuery) return;
-    // Пробуем распознать таблицу или подзапрос
-    if ($this->isTable($name) || $this->isQuery($name)) {
-      // Запрашиваем из неё или джоиним к текущей таблицы
-      if (!$this->currentTable)
-        return $this->from($name, $arguments);
-      else
-        return $this->join($name, $arguments);
-    }
-    // Здесь только один вариант - запрашивается таблица
-    if (!$this->currentTable) return $this->from($name, $arguments);
-    // Здесь уже обработка модификаторов (должно быть задано Поле)
-    if (!$this->currentField) return;
-    // Обрабатываем модификатор
-    return $this->modifier($name, $arguments);
-  }
-
-  private function isTable($name) {
-    return in_array($name, $this->tableList);
-  }
-
-  private function isQuery($name) {
-    return in_array($name, $this->queryList);
+    // Если это модификатор то обработать его
+    if (method_exists(SQLModifier::class, "mod_$name"))
+      return $this->modifier($name, $arguments);
+    // Запрашиваем из неё или джоиним к текущей таблицы
+    if (!$this->currentTable)
+      return $this->from($name, $arguments);
+    else
+      return $this->join($name, $arguments);
   }
 
   private function from($table, $arguments) {
