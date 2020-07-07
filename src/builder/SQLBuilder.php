@@ -101,10 +101,6 @@ class SQLBuilder
   }
 
   private function prepareQuery($query) {
-    $modifierClass = class_exists('SQLModifier')
-      ? 'SQLModifier'
-      : 'SQLBaseModifier';
-
     $queryObject = $this->getQuery($query);
 
     foreach ($queryObject['select'] as $field => $options) {
@@ -113,8 +109,8 @@ class SQLBuilder
 
       foreach ($options['modifier'] as $modifier => $params) {
         $modifier_handler = "mod_$modifier";
-  			if (method_exists($modifierClass, $modifier_handler))
-  				$modifierClass::$modifier_handler($queryObject, $field);
+  			if (method_exists(SQLModifier::class, $modifier_handler))
+  				SQLModifier::$modifier_handler($queryObject, $field);
       }
     }
 
