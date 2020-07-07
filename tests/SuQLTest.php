@@ -219,7 +219,7 @@ final class SuQLTest extends TestCase
   public function testSuQLSpecialSymbols(): void
   {
     $old = SuQLSpecialSymbols::$prefix_declare_variable;
-    SuQLSpecialSymbols::$prefix_declare_variable = ['#'];
+    SuQLSpecialSymbols::$prefix_declare_variable = '#';
 
     $query = '
       #q3 = #q1 union all #q2 union #q4 ;
