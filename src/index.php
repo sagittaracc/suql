@@ -7,6 +7,7 @@ require 'helper/SuQLName.php';
 require 'helper/SuQLTableName.php';
 require 'helper/SuQLFieldName.php';
 require 'helper/SuQLJoin.php';
+require 'syntax/SuQLSpecialSymbols.php';
 require 'syntax/SuQLReservedWords.php';
 require 'syntax/SQLSugarSyntax.php';
 require 'modifier/SQLBaseModifier.php';
