@@ -218,8 +218,8 @@ final class SuQLTest extends TestCase
 
   public function testSuQLSpecialSymbols(): void
   {
-    $old = SuQLRegExp::$prefix_declare_variable;
-    SuQLRegExp::$prefix_declare_variable = ['#'];
+    $old = SuQLSpecialSymbols::$prefix_declare_variable;
+    SuQLSpecialSymbols::$prefix_declare_variable = ['#'];
 
     $query = '
       #q3 = #q1 union all #q2 union #q4 ;
@@ -260,7 +260,7 @@ final class SuQLTest extends TestCase
       ]
     ], $osuql);
 
-    SuQLRegExp::$prefix_declare_variable = $old;
+    SuQLSpecialSymbols::$prefix_declare_variable = $old;
   }
 
   public function testAfterChangingSuQLSpecialSymbols(): void
