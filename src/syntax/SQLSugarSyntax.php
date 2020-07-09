@@ -99,6 +99,26 @@ class SQLSugarSyntax
     ];
   }
 
+  public function addUnion($query, $table) {
+    $var_prefix = SuQLSpecialSymbols::$prefix_declare_variable;
+    $this->osuql['queries'][$query]['type'] = 'union';
+    if (empty($this->osuql['queries'][$query]['suql'])) {
+      $this->osuql['queries'][$query]['suql'] = $var_prefix . $table;
+    } else {
+      $this->osuql['queries'][$query]['suql'] .= ' union ' . $var_prefix . $table;
+    }
+  }
+
+  public function addUnionAll($query, $table) {
+    $var_prefix = SuQLSpecialSymbols::$prefix_declare_variable;
+    $this->osuql['queries'][$query]['type'] = 'union';
+    if (empty($this->osuql['queries'][$query]['suql'])) {
+      $this->osuql['queries'][$query]['suql'] = $var_prefix . $table;
+    } else {
+      $this->osuql['queries'][$query]['suql'] .= ' union all ' . $var_prefix . $table;
+    }
+  }
+
   public function addQueryModifier($query, $modifier) {
     $this->osuql['queries'][$query]['modifier'] = $modifier;
   }

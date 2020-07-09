@@ -190,4 +190,59 @@ final class OSuQLTest extends TestCase
       $db->setAdapter('mysql')->getSQL()
     );
   }
+
+  public function testUnion(): void
+  {
+    $db = new OSuQL;
+    $db = $db->setAdapter('mysql');
+    $db->query('q1')
+        ->select()
+          ->users()
+            ->field('*');
+
+    $db->query('q2')
+        ->select()
+          ->groups()
+            ->field('*');
+
+    $db->query('q3')
+        ->select()
+          ->user_group()
+            ->field('*');
+
+    $db->query('q4')
+        ->union('q1')
+        ->unionAll('q2')
+        ->union('q3');
+
+    $db->query('main')
+        ->select()
+          ->q4()
+            ->field('*');
+
+    $this->assertEquals(
+      'select q4.* from ('.
+        '(select users.* from users) '.
+        'union all '.
+        '(select groups.* from groups) '.
+        'union '.
+        '(select user_group.* from user_group)'.
+      ') q4',
+      $db->getSQL()
+    );
+  }
+
+  public function testSimple(): void
+  {
+    $db = new OSuQL;
+    $db = $db->setAdapter('mysql');
+    $db->select()
+        ->users()
+          ->field('*');
+
+    $this->assertEquals(
+      'select users.* from users',
+      $db->getSQL()
+    );
+  }
 }

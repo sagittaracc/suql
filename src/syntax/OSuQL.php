@@ -50,6 +50,18 @@ class OSuQL extends SQLSugarSyntax
     return $this;
   }
 
+  public function union($table) {
+    $query = $this->queryByDefault;
+    parent::addUnion($query, $table);
+    return $this;
+  }
+
+  public function unionAll($table) {
+    $query = $this->queryByDefault;
+    parent::addUnionAll($query, $table);
+    return $this;
+  }
+
   public function left() {
     if (!$this->currentTable) return;
     $this->currentJoinType = 'left';
