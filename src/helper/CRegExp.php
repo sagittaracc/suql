@@ -47,13 +47,7 @@ class CRegExp {
 	public function match($subject) {
 		$regex = $this->buildRegex();
 		preg_match($regex, $subject, $matches);
-		return empty($matches)
-				? false
-				: (
-					isset($matches[1])
-					 ? $matches[1]
-					 : true
-				);
+		return empty($matches) ? false : (isset($matches[1]) ? $matches[1] : true);
 	}
 
 	public function match_all($subject) {

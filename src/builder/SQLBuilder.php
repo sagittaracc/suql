@@ -63,41 +63,41 @@ class SQLBuilder
   }
 
   private function buildSelectQuery($query) {
-      $sqlTemplate = $this->sqlTemplate;
+    $sqlTemplate = $this->sqlTemplate;
 
-      $this->setQuery($query, $this->prepareQuery($query));
+    $this->setQuery($query, $this->prepareQuery($query));
 
-      $sqlTemplate = str_replace('#select#', $this->buildSelect($query), $sqlTemplate);
-      $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query),   $sqlTemplate);
-      $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query),   $sqlTemplate);
-      $sqlTemplate = str_replace('#group#' , $this->buildGroup($query),  $sqlTemplate);
-      $sqlTemplate = str_replace('#where#' , $this->buildWhere($query),  $sqlTemplate);
-      $sqlTemplate = str_replace('#having#', $this->buildHaving($query), $sqlTemplate);
-      $sqlTemplate = str_replace('#order#' , $this->buildOrder($query),  $sqlTemplate);
-      $sqlTemplate = str_replace('#limit#' , $this->buildLimit($query),  $sqlTemplate);
+    $sqlTemplate = str_replace('#select#', $this->buildSelect($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query),   $sqlTemplate);
+    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query),   $sqlTemplate);
+    $sqlTemplate = str_replace('#group#' , $this->buildGroup($query),  $sqlTemplate);
+    $sqlTemplate = str_replace('#where#' , $this->buildWhere($query),  $sqlTemplate);
+    $sqlTemplate = str_replace('#having#', $this->buildHaving($query), $sqlTemplate);
+    $sqlTemplate = str_replace('#order#' , $this->buildOrder($query),  $sqlTemplate);
+    $sqlTemplate = str_replace('#limit#' , $this->buildLimit($query),  $sqlTemplate);
 
-      return $sqlTemplate;
+    return $sqlTemplate;
   }
 
   private function buildUnionQuery($query) {
-      $queryObject = $this->getQuery($query);
-      return $queryObject['suql'];
+    $queryObject = $this->getQuery($query);
+    return $queryObject['suql'];
   }
 
   private function composeQuery($query) {
-      if (!isset($this->sql[$query]))
-        return '';
-      $suql = $this->sql[$query];
+    if (!isset($this->sql[$query]))
+      return '';
+    $suql = $this->sql[$query];
 
-      preg_match_all("/@(?<name>\w+)/msi", $suql, $subQueries);
-      if (empty($subQueries['name']))
-        return $suql;
-      else {
-        foreach ($subQueries['name'] as $subQuery)
-          $suql = str_replace("@$subQuery", '('.$this->composeQuery($subQuery).')', $suql);
+    preg_match_all("/@(?<name>\w+)/msi", $suql, $subQueries);
+    if (empty($subQueries['name']))
+      return $suql;
+    else {
+      foreach ($subQueries['name'] as $subQuery)
+        $suql = str_replace("@$subQuery", '('.$this->composeQuery($subQuery).')', $suql);
 
-        return $suql;
-      }
+      return $suql;
+    }
   }
 
   private function prepareQuery($query) {
@@ -122,8 +122,8 @@ class SQLBuilder
 
     $fields = $queryObject['select'];
     $select = !is_null($queryObject['modifier'])
-      ? "select {$queryObject['modifier']} "
-      : 'select ';
+                ? "select {$queryObject['modifier']} "
+                : 'select ';
 
     if (empty($fields))
       return '';
