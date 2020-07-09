@@ -1,7 +1,6 @@
 <?php
 class OSuQL extends SQLSugarSyntax
 {
-  private $queryByDefault;
   private $currentQuery;
   private $currentTable;
   private $currentField;
@@ -9,7 +8,6 @@ class OSuQL extends SQLSugarSyntax
 
   protected function init() {
     parent::init();
-    $this->queryByDefault = 'main';
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
@@ -17,7 +15,6 @@ class OSuQL extends SQLSugarSyntax
 
   public function clear() {
     parent::clear();
-    $this->queryByDefault = 'main';
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
@@ -32,33 +29,25 @@ class OSuQL extends SQLSugarSyntax
     return $this;
   }
 
-  public function query($name) {
-    $this->queryByDefault = $name;
+  public function query($name = 'main') {
+    $this->currentQuery = $name;
+    $this->currentTable = null;
+    $this->currentField = null;
     return $this;
   }
 
   public function select() {
-    $query = $this->queryByDefault;
-
-    $this->currentQuery = $query;
-    $this->currentTable = null;
-    $this->currentField = null;
-
-    parent::addSelect($query);
-
-    $this->queryByDefault = 'main';
+    parent::addSelect($this->currentQuery);
     return $this;
   }
 
   public function union($table) {
-    $query = $this->queryByDefault;
-    parent::addUnion($query, $table);
+    parent::addUnion($this->currentQuery, $table);
     return $this;
   }
 
   public function unionAll($table) {
-    $query = $this->queryByDefault;
-    parent::addUnionAll($query, $table);
+    parent::addUnionAll($this->currentQuery, $table);
     return $this;
   }
 
