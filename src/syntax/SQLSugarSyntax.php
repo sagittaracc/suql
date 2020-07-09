@@ -6,7 +6,7 @@ class SQLSugarSyntax
   private $adapter;
 
   function __construct() {
-      $this->init();
+    $this->init();
   }
 
   protected function init() {
