@@ -35,10 +35,10 @@ class SuQL extends SQLSugarSyntax
 
     $queryList = SuQLParser::getQueryList($this->suql);
     foreach ($queryList as $name => $query) {
-        $handler = SuQLParser::getQueryHandler($query);
+      $handler = SuQLParser::getQueryHandler($query);
 
-        if (!$handler || !$this->$handler($name, $query))
-            return false;
+      if (!$handler || !$this->$handler($name, $query))
+        return false;
     }
 
     return true;
