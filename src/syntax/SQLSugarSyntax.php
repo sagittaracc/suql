@@ -92,7 +92,7 @@ class SQLSugarSyntax
     ];
   }
 
-  public function addUnion($name, $query) {
+  public function addUnionQuery($name, $query) {
     $this->osuql['queries'][$name] = [
       'type' => 'union',
       'suql' => $query,
