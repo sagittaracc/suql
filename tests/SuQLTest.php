@@ -141,8 +141,8 @@ final class SuQLTest extends TestCase
     $queryList = SuQLParser::getQueryList($query);
 
     $this->assertEquals([
-        'q3'   => '@q1 union all @q2 union @q4 ;',
-        'main' => 'select from @q3 * ;'
+      'q3'   => '@q1 union all @q2 union @q4 ;',
+      'main' => 'select from @q3 * ;'
     ], $queryList);
 
     $queryTypes = [];
