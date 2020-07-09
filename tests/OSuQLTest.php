@@ -19,10 +19,9 @@ final class OSuQLTest extends TestCase
     // Getting the all fields
     $this->assertEquals(
       "select users.* from users",
-      $this->db->query()
-                ->select()
-                  ->users()
-                    ->field('*')
+      $this->db->select()
+                ->users()
+                  ->field('*')
                ->getSQL()
     );
 
@@ -33,22 +32,20 @@ final class OSuQLTest extends TestCase
     // Getting specific fields
     $this->assertEquals(
       "select users.id, users.name from users",
-      $this->db->query()
-                ->select()
-                  ->users()
-                    ->field('id')
-                    ->field('name')
+      $this->db->select()
+                ->users()
+                  ->field('id')
+                  ->field('name')
                ->getSQL()
     );
 
     // Using aliases
     $this->assertEquals(
       "select users.id as uid, users.name as uname from users",
-      $this->db->query()
-                ->select()
-                  ->users()
-                    ->field(['id' => 'uid'])
-                    ->field(['name' => 'uname'])
+      $this->db->select()
+                ->users()
+                  ->field(['id' => 'uid'])
+                  ->field(['name' => 'uname'])
                ->getSQL()
     );
   }
@@ -57,10 +54,9 @@ final class OSuQLTest extends TestCase
   {
     $db = (new OSuQL)->setAdapter('mysql');
 
-    $osuql = $db->query()
-                  ->select()
-                    ->users('distinct')
-                      ->field('id');
+    $osuql = $db->select()
+                  ->users('distinct')
+                    ->field('id');
 
     $this->assertEquals(
       "select distinct users.id from users",
@@ -79,14 +75,13 @@ final class OSuQLTest extends TestCase
                      ->rel('table3', 'table5', 'table3.t3id = table5.t5id')
                      ->rel('table1', 'table6', 'table1.t1id = table6.t6id');
 
-    $osuql = $db->query()
-                  ->select()
-                    ->table1()
-                    ->table2()
-                    ->table3()
-                    ->table4()
-                    ->table5()
-                    ->table6()
+    $osuql = $db->select()
+                  ->table1()
+                  ->table2()
+                  ->table3()
+                  ->table4()
+                  ->table5()
+                  ->table6()
                 ->getSQLObject();
 
     $this->assertEquals(
@@ -183,12 +178,11 @@ final class OSuQLTest extends TestCase
   {
     $db = new OSuQL;
 
-    $db->query()
-        ->select()
-          ->users()
-            ->field(['id' => 'uid'])
-            ->field(['name' => 'uname'])
-          ->where("uid > 5 and uname = 'admin'");
+    $db->select()
+        ->users()
+          ->field(['id' => 'uid'])
+          ->field(['name' => 'uname'])
+        ->where("uid > 5 and uname = 'admin'");
 
     $this->assertEquals(
       "select users.id as uid, users.name as uname from users where users.id > 5 and users.name = 'admin'",
@@ -216,10 +210,9 @@ final class OSuQLTest extends TestCase
          ->union('q1')
          ->unionAll('q2')
          ->union('q3')
-       ->query()        // Main query
-         ->select()
-           ->q4()
-             ->field('*');
+       ->select()        // Main query
+         ->q4()
+           ->field('*');
 
     $this->assertEquals(
       'select q4.* from ('.
