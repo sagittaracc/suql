@@ -1,17 +1,15 @@
 <?php
 class OSuQL extends SQLSugarSyntax
 {
+  private $queryByDefault;
   private $currentQuery;
   private $currentTable;
   private $currentField;
   private $currentJoinType;
 
-  function __construct() {
-    parent::__construct();
-  }
-
   protected function init() {
     parent::init();
+    $this->queryByDefault = 'main';
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
@@ -19,6 +17,7 @@ class OSuQL extends SQLSugarSyntax
 
   public function clear() {
     parent::clear();
+    $this->queryByDefault = 'main';
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
@@ -33,11 +32,21 @@ class OSuQL extends SQLSugarSyntax
     return $this;
   }
 
-  public function query($name = 'main') {
-    parent::addSelect($name);
-    $this->currentQuery = $name;
+  public function query($name) {
+    $this->queryByDefault = $name;
+    return $this;
+  }
+
+  public function select() {
+    $query = $this->queryByDefault;
+
+    $this->currentQuery = $query;
     $this->currentTable = null;
     $this->currentField = null;
+
+    parent::addSelect($query);
+
+    $this->queryByDefault = 'main';
     return $this;
   }
 

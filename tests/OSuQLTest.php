@@ -19,7 +19,7 @@ final class OSuQLTest extends TestCase
     // Getting the all fields
     $this->assertEquals(
       "select users.* from users",
-      $this->db->query()
+      $this->db->select()
                 ->users()
                   ->field('*')
                ->getSQL()
@@ -32,7 +32,7 @@ final class OSuQLTest extends TestCase
     // Getting specific fields
     $this->assertEquals(
       "select users.id, users.name from users",
-      $this->db->query()
+      $this->db->select()
                 ->users()
                   ->field('id')
                   ->field('name')
@@ -42,7 +42,7 @@ final class OSuQLTest extends TestCase
     // Using aliases
     $this->assertEquals(
       "select users.id as uid, users.name as uname from users",
-      $this->db->query()
+      $this->db->select()
                 ->users()
                   ->field(['id' => 'uid'])
                   ->field(['name' => 'uname'])
@@ -54,7 +54,7 @@ final class OSuQLTest extends TestCase
   {
     $db = (new OSuQL)->setAdapter('mysql');
 
-    $osuql = $db->query()
+    $osuql = $db->select()
                   ->users('distinct')
                     ->field('id');
 
@@ -75,7 +75,7 @@ final class OSuQLTest extends TestCase
                      ->rel('table3', 'table5', 'table3.t3id = table5.t5id')
                      ->rel('table1', 'table6', 'table1.t1id = table6.t6id');
 
-    $osuql = $db->query()
+    $osuql = $db->select()
                   ->table1()
                   ->table2()
                   ->table3()
@@ -122,13 +122,14 @@ final class OSuQLTest extends TestCase
                      ->rel('table1', 'table3', 'table1.t1id = table3.t3id');
 
     $db->query('view1')
-        ->table1()
-        ->table2()
-        ->table3();
+        ->select()
+          ->table1()
+          ->table2()
+          ->table3();
 
     $db->temp_rel('table4', 'view1', 'table4.t4id = view1.v_id');
 
-    $db->query()
+    $db->select()
         ->table4()
         ->view1();
 
@@ -178,7 +179,7 @@ final class OSuQLTest extends TestCase
   {
     $db = new OSuQL;
 
-    $db->query()
+    $db->select()
         ->users()
           ->field(['id' => 'uid'])
           ->field(['name' => 'uname'])
