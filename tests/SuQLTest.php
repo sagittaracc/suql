@@ -159,9 +159,6 @@ final class SuQLTest extends TestCase
     $osuql = $db->query($query)->getSQLObject();
 
     $this->assertEquals([
-      'config' => [
-        'var_declare' => '@',
-      ],
       'queries' => [
         'main' => [
           'type'       => 'select',
@@ -233,9 +230,6 @@ final class SuQLTest extends TestCase
     $osuql = $db->query($query)->getSQLObject();
 
     $this->assertEquals([
-      'config' => [
-        'var_declare' => '#',
-      ],
       'queries' => [
         'main' => [
           'type'       => 'select',

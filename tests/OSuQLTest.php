@@ -86,9 +86,6 @@ final class OSuQLTest extends TestCase
 
     $this->assertEquals(
       [
-        'config' => [
-          'var_declare' => '@',
-        ],
         'queries' => [
           'main' => [
             'type'     => 'select',
@@ -137,9 +134,6 @@ final class OSuQLTest extends TestCase
 
     $this->assertEquals(
       [
-        'config' => [
-          'var_declare' => '@',
-        ],
         'queries' => [
           'view1' => [
             'type'     => 'select',

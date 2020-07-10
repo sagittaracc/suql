@@ -15,7 +15,6 @@ require 'modifier/SQLModifier.php';
 require 'parser/SuQLRegExp.php';
 require 'parser/OSuQLParser.php';
 require 'parser/SuQLParser.php';
-require 'config/SuQLConfig.php';
 require 'builder/SQLAdapter.php';
 require 'builder/SQLBuilder.php';
 require 'builder/MySQLBuilder.php';
