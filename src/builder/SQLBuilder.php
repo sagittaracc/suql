@@ -1,9 +1,11 @@
 <?php
 class SQLBuilder
 {
+  const SELECT_TEMPLATE = "#select##from##join##where##group##having##order##limit#";
+  const REGEX_SUB_QUERY = '/{:v:}(?<name>\w+)/msi';
+
   private $SQLObject = null;
   private $sql = [];
-  protected $selectTemplate = "#select##from##join##where##group##having##order##limit#";
 
   function __construct($SQLObject)
   {
@@ -63,7 +65,7 @@ class SQLBuilder
   }
 
   private function buildSelectQuery($query) {
-    $selectTemplate = $this->selectTemplate;
+    $selectTemplate = self::SELECT_TEMPLATE;
 
     $this->setQuery($query, $this->prepareQuery($query));
 
@@ -89,12 +91,12 @@ class SQLBuilder
       return '';
     $suql = $this->sql[$query];
 
-    preg_match_all("/@(?<name>\w+)/msi", $suql, $subQueries);
+    $subQueries = (new SuQLRegExp(self::REGEX_SUB_QUERY))->match_all($suql);
     if (empty($subQueries['name']))
       return $suql;
     else {
       foreach ($subQueries['name'] as $subQuery)
-        $suql = str_replace("@$subQuery", '('.$this->composeQuery($subQuery).')', $suql);
+        $suql = str_replace(SuQLSpecialSymbols::$prefix_declare_variable . $subQuery, '('.$this->composeQuery($subQuery).')', $suql);
 
       return $suql;
     }
@@ -146,7 +148,7 @@ class SQLBuilder
       return '';
 
     if ($this->getQuery($from)) {
-      return " from @{$from} {$from}";
+      return ' from ' . SuQLSpecialSymbols::$prefix_declare_variable . "{$from} {$from}";
     } else {
       return " from $from";
     }
@@ -170,7 +172,7 @@ class SQLBuilder
     foreach ($join as $_join) {
       $table = $_join['table'];
       $table = $this->getQuery($table)
-        ? "@$table $table"
+        ? SuQLSpecialSymbols::$prefix_declare_variable . "$table $table"
         : $table;
       $s[] = "{$_join['type']} join $table on {$_join['on']}";
     }

@@ -40,13 +40,8 @@ class SQLSugarSyntax
   }
 
   public function getSQLObject() {
-    if (empty($this->osuql)) return null;
-
-    $this->config = SuQLConfig::read();
-
-    $osuql = array_merge($this->osuql, $this->config);
+    $osuql = !empty($this->osuql) ? $this->osuql : null;
     $this->clear();
-
     return $osuql;
   }
 

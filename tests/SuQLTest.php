@@ -159,9 +159,6 @@ final class SuQLTest extends TestCase
     $osuql = $db->query($query)->getSQLObject();
 
     $this->assertEquals([
-      'config' => [
-        'var_declare' => '@',
-      ],
       'queries' => [
         'main' => [
           'type'       => 'select',
@@ -233,9 +230,6 @@ final class SuQLTest extends TestCase
     $osuql = $db->query($query)->getSQLObject();
 
     $this->assertEquals([
-      'config' => [
-        'var_declare' => '#',
-      ],
       'queries' => [
         'main' => [
           'type'       => 'select',
@@ -265,6 +259,25 @@ final class SuQLTest extends TestCase
         ]
       ]
     ], $osuql);
+
+    $query = '
+      #q1 = select from users * ;
+      #q2 = select from groups * ;
+      #q3 = #q1 union all #q2 ;
+    ';
+
+    $sql = $db->query($query)->getSQL(['q3']);
+    $this->assertEquals(
+      '(select users.* from users) union all (select groups.* from groups)',
+      $sql
+    );
+
+    $queries = $db->query($query)->getSQL('all');
+    $this->assertEquals([
+      'q1' => 'select users.* from users',
+      'q2' => 'select groups.* from groups',
+      'q3' => '(select users.* from users) union all (select groups.* from groups)',
+    ], $queries);
 
     SuQLSpecialSymbols::$prefix_declare_variable = $old;
   }
