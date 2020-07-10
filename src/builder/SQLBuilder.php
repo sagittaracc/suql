@@ -3,7 +3,7 @@ class SQLBuilder
 {
   private $SQLObject = null;
   private $sql = [];
-  protected $sqlTemplate = "#select##from##join##where##group##having##order##limit#";
+  protected $selectTemplate = "#select##from##join##where##group##having##order##limit#";
 
   function __construct($SQLObject)
   {
@@ -63,20 +63,20 @@ class SQLBuilder
   }
 
   private function buildSelectQuery($query) {
-    $sqlTemplate = $this->sqlTemplate;
+    $selectTemplate = $this->selectTemplate;
 
     $this->setQuery($query, $this->prepareQuery($query));
 
-    $sqlTemplate = str_replace('#select#', $this->buildSelect($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#from#'  , $this->buildFrom($query),   $sqlTemplate);
-    $sqlTemplate = str_replace('#join#'  , $this->buildJoin($query),   $sqlTemplate);
-    $sqlTemplate = str_replace('#group#' , $this->buildGroup($query),  $sqlTemplate);
-    $sqlTemplate = str_replace('#where#' , $this->buildWhere($query),  $sqlTemplate);
-    $sqlTemplate = str_replace('#having#', $this->buildHaving($query), $sqlTemplate);
-    $sqlTemplate = str_replace('#order#' , $this->buildOrder($query),  $sqlTemplate);
-    $sqlTemplate = str_replace('#limit#' , $this->buildLimit($query),  $sqlTemplate);
+    $selectTemplate = str_replace('#select#', $this->buildSelect($query), $selectTemplate);
+    $selectTemplate = str_replace('#from#'  , $this->buildFrom($query),   $selectTemplate);
+    $selectTemplate = str_replace('#join#'  , $this->buildJoin($query),   $selectTemplate);
+    $selectTemplate = str_replace('#group#' , $this->buildGroup($query),  $selectTemplate);
+    $selectTemplate = str_replace('#where#' , $this->buildWhere($query),  $selectTemplate);
+    $selectTemplate = str_replace('#having#', $this->buildHaving($query), $selectTemplate);
+    $selectTemplate = str_replace('#order#' , $this->buildOrder($query),  $selectTemplate);
+    $selectTemplate = str_replace('#limit#' , $this->buildLimit($query),  $selectTemplate);
 
-    return $sqlTemplate;
+    return $selectTemplate;
   }
 
   private function buildUnionQuery($query) {
@@ -109,8 +109,8 @@ class SQLBuilder
 
       foreach ($options['modifier'] as $modifier => $params) {
         $modifier_handler = "mod_$modifier";
-  			if (method_exists(SQLModifier::class, $modifier_handler))
-  				SQLModifier::$modifier_handler($queryObject, $field);
+        if (method_exists(SQLModifier::class, $modifier_handler))
+          SQLModifier::$modifier_handler($queryObject, $field);
       }
     }
 
