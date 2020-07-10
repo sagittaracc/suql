@@ -1,9 +1,10 @@
 <?php
 class SQLBuilder
 {
+  const SELECT_TEMPLATE = "#select##from##join##where##group##having##order##limit#";
+
   private $SQLObject = null;
   private $sql = [];
-  protected $selectTemplate = "#select##from##join##where##group##having##order##limit#";
 
   function __construct($SQLObject)
   {
@@ -63,7 +64,7 @@ class SQLBuilder
   }
 
   private function buildSelectQuery($query) {
-    $selectTemplate = $this->selectTemplate;
+    $selectTemplate = self::SELECT_TEMPLATE;
 
     $this->setQuery($query, $this->prepareQuery($query));
 
