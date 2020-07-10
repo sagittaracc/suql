@@ -12,6 +12,7 @@ class OSuQL extends SQLSugarSyntax
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
+    $this->currentJoin  = 'inner';
     $this->parser = new OSuQLParser();
   }
 
@@ -20,6 +21,7 @@ class OSuQL extends SQLSugarSyntax
     $this->currentQuery = null;
     $this->currentTable = null;
     $this->currentField = null;
+    $this->currentJoin  = 'inner';
     $this->parser->clear();
   }
 
@@ -72,9 +74,7 @@ class OSuQL extends SQLSugarSyntax
 
   public function field($name, $visible = true) {
     if (!$this->currentTable) return;
-
     $this->currentField = parent::addField($this->currentQuery, $this->currentTable, $name, $visible);
-
     return $this;
   }
 
@@ -111,15 +111,12 @@ class OSuQL extends SQLSugarSyntax
     if (!empty($arguments))
       parent::addQueryModifier($this->currentQuery, $arguments[0]);
     $this->currentTable = $table;
-    $this->currentJoin = 'inner';
     return $this;
   }
 
   private function join($table, $arguments) {
     parent::addJoin($this->currentQuery, $this->currentJoin, $table);
-
     $this->currentTable = $table;
-    $this->currentJoin = 'inner';
     return $this;
   }
 

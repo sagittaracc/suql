@@ -3,10 +3,6 @@ class SuQL extends SQLSugarSyntax
 {
   private $suql;
 
-  function __construct() {
-    parent::__construct();
-  }
-
   public function clear() {
     parent::clear();
     $this->suql = null;
