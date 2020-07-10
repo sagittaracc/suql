@@ -36,10 +36,9 @@ class SuQLParser
   }
 
   public static function getQueryList($suql) {
-    return array_merge(
-      self::getNestedQueries($suql),
-      ['main' => self::getMainQuery($suql)]
-    );
+    $nested = self::getNestedQueries($suql);
+    $main = self::getMainQuery($suql);
+    return $main ? array_merge($nested, ['main' => $main]) : $nested;
   }
 
   public static function getNestedQueries($suql) {
