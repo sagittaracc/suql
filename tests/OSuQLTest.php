@@ -27,7 +27,7 @@ final class OSuQLTest extends TestCase
 
     // Getting the same sql again should return an empty result
     $this->assertNull($this->db->getSQL());
-    $this->assertEmpty($this->db->getSQLObject());
+    $this->assertNull($this->db->getSQLObject());
 
     // Getting specific fields
     $this->assertEquals(
@@ -86,6 +86,9 @@ final class OSuQLTest extends TestCase
 
     $this->assertEquals(
       [
+        'config' => [
+          'var_declare' => '@',
+        ],
         'queries' => [
           'main' => [
             'type'     => 'select',
@@ -134,6 +137,9 @@ final class OSuQLTest extends TestCase
 
     $this->assertEquals(
       [
+        'config' => [
+          'var_declare' => '@',
+        ],
         'queries' => [
           'view1' => [
             'type'     => 'select',
