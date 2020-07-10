@@ -26,7 +26,7 @@ final class SuQLTest extends TestCase
     );
 
     $this->assertNull($this->db->getSQL());
-    $this->assertEmpty($this->db->getSQLObject());
+    $this->assertNull($this->db->getSQLObject());
 
     $this->assertEquals(
       'select users.id, users.name from users',
@@ -159,6 +159,9 @@ final class SuQLTest extends TestCase
     $osuql = $db->query($query)->getSQLObject();
 
     $this->assertEquals([
+      'config' => [
+        'var_declare' => '@',
+      ],
       'queries' => [
         'main' => [
           'type'       => 'select',
@@ -230,6 +233,9 @@ final class SuQLTest extends TestCase
     $osuql = $db->query($query)->getSQLObject();
 
     $this->assertEquals([
+      'config' => [
+        'var_declare' => '#',
+      ],
       'queries' => [
         'main' => [
           'type'       => 'select',

@@ -2,6 +2,7 @@
 class SQLSugarSyntax
 {
   private $osuql;
+  private $config;
   private $scheme;
   private $adapter;
 
@@ -39,8 +40,13 @@ class SQLSugarSyntax
   }
 
   public function getSQLObject() {
-    $osuql = $this->osuql;
+    if (empty($this->osuql)) return null;
+
+    $this->config = SuQLConfig::read();
+
+    $osuql = array_merge($this->osuql, $this->config);
     $this->clear();
+
     return $osuql;
   }
 
