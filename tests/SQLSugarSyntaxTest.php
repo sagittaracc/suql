@@ -32,9 +32,6 @@ final class SQLSugarSyntaxTest extends TestCase
       $db->getSQL(['main'])
     );
 
-    $this->assertEquals(
-      [],
-      $db->getSQLObject()
-    );
+    $this->assertNull($db->getSQLObject());
   }
 }
