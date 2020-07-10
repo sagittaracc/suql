@@ -1,11 +1,11 @@
 <?php
 class SQLBuilder
 {
-  const SELECT_TEMPLATE = "#select##from##join##where##group##having##order##limit#";
-  const REGEX_SUB_QUERY = '/{:v:}(?<name>\w+)/msi';
-
   private $SQLObject = null;
   private $sql = [];
+
+  const SELECT_TEMPLATE = "#select##from##join##where##group##having##order##limit#";
+  const REGEX_SUB_QUERY = '/{:v:}(?<name>\w+)/msi';
 
   function __construct($SQLObject)
   {
@@ -50,11 +50,6 @@ class SQLBuilder
       return false;
   }
 
-  private function setQuery($query, $queryObject)
-  {
-    $this->SQLObject['queries'][$query] = $queryObject;
-  }
-
   private function buildQuery($query)
   {
     $queryObject = $this->getQuery($query);
@@ -67,7 +62,7 @@ class SQLBuilder
   private function buildSelectQuery($query) {
     $selectTemplate = self::SELECT_TEMPLATE;
 
-    $this->setQuery($query, $this->prepareQuery($query));
+    $this->SQLObject['queries'][$query] = $this->prepareQuery($query);
 
     $selectTemplate = str_replace('#select#', $this->buildSelect($query), $selectTemplate);
     $selectTemplate = str_replace('#from#'  , $this->buildFrom($query),   $selectTemplate);

@@ -35,10 +35,6 @@ class SQLSugarSyntax
     return $this;
   }
 
-  public function getAllTheQueryList() {
-    return array_keys($this->osuql['queries']);
-  }
-
   public function getSQLObject() {
     $osuql = !empty($this->osuql) ? $this->osuql : null;
     $this->clear();
@@ -47,7 +43,7 @@ class SQLSugarSyntax
 
   public function getSQL($queryList) {
     if ($queryList === 'all')
-      $queryList = $this->getAllTheQueryList();
+      $queryList = Helper\SuQLObjectReader::getAllTheQueryList($this->osuql);
 
     if (!is_array($queryList)) return null;
     if (!$this->adapter) return null;
