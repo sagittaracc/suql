@@ -2,6 +2,8 @@
 // The php.ini setting phar.readonly must be set to 0
 $pharFile = 'dist/suql.phar';
 
+mkdir('dist');
+
 // clean up
 if (file_exists($pharFile)) {
     unlink($pharFile);
