@@ -60,9 +60,9 @@ class SQLBuilder
   }
 
   private function buildSelectQuery($query) {
-    $selectTemplate = self::SELECT_TEMPLATE;
+    $this->prepareQuery($query);
 
-    $this->SQLObject['queries'][$query] = $this->prepareQuery($query);
+    $selectTemplate = self::SELECT_TEMPLATE;
 
     $selectTemplate = str_replace('#select#', $this->buildSelect($query), $selectTemplate);
     $selectTemplate = str_replace('#from#'  , $this->buildFrom($query),   $selectTemplate);
@@ -98,7 +98,7 @@ class SQLBuilder
   }
 
   private function prepareQuery($query) {
-    $queryObject = $this->getQuery($query);
+    $queryObject = &$this->SQLObject['queries'][$query];
 
     foreach ($queryObject['select'] as $field => $options) {
       if (empty($options['modifier']))
@@ -110,8 +110,6 @@ class SQLBuilder
           SQLModifier::$modifier_handler($queryObject, $field);
       }
     }
-
-    return $queryObject;
   }
 
   protected function buildSelect($query) {
