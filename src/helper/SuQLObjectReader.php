@@ -7,7 +7,11 @@ class SuQLObjectReader {
   }
 
   public static function &getQuery(&$osuql, $name) {
-    $queryObject = &$osuql['queries'][$name];
+    if (isset($osuql['queries'][$name]))
+      $queryObject = &$osuql['queries'][$name];
+    else
+      $queryObject = null;
+
     return $queryObject;
   }
 }
