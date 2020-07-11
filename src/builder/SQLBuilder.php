@@ -1,20 +1,15 @@
 <?php
 class SQLBuilder
 {
-  private $SQLObject = null;
+  private $osuql = null;
   private $sql = [];
 
   const SELECT_TEMPLATE = "#select##from##join##where##group##having##order##limit#";
   const REGEX_SUB_QUERY = '/{:v:}(?<name>\w+)/msi';
 
-  function __construct($SQLObject)
+  function __construct($osuql)
   {
-    $this->SQLObject = $SQLObject;
-  }
-
-  public function getSQLObject()
-  {
-    return $this->SQLObject;
+    $this->osuql = $osuql;
   }
 
   public function getSql($queryList)
@@ -30,10 +25,12 @@ class SQLBuilder
 
   public function run($queryList)
   {
-    if (!$this->SQLObject)
+    if (!$this->osuql)
       return;
 
-    foreach ($this->SQLObject['queries'] as $query => $osuql) {
+    $allQueryList = Helper\SuQLObjectReader::getAllTheQueryList($this->osuql);
+
+    foreach ($allQueryList as $query) {
       $this->sql[$query] = trim($this->buildQuery($query));
     }
 
@@ -44,8 +41,8 @@ class SQLBuilder
 
   private function getQuery($query)
   {
-    if (isset($this->SQLObject['queries'][$query]))
-      return $this->SQLObject['queries'][$query];
+    if (isset($this->osuql['queries'][$query]))
+      return $this->osuql['queries'][$query];
     else
       return false;
   }
@@ -98,7 +95,7 @@ class SQLBuilder
   }
 
   private function prepareQuery($query) {
-    $queryObject = &$this->SQLObject['queries'][$query];
+    $queryObject = &$this->osuql['queries'][$query];
 
     foreach ($queryObject['select'] as $field => $options) {
       if (empty($options['modifier']))
