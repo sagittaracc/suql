@@ -95,7 +95,7 @@ class SQLBuilder
   }
 
   private function prepareQuery($query) {
-    $queryObject = &$this->osuql['queries'][$query];
+    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
 
     foreach ($queryObject['select'] as $field => $options) {
       if (empty($options['modifier']))
