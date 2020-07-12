@@ -41,8 +41,8 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
-    $handler = 'build'.ucfirst($queryObject['type']).'Query';
+    $queryType = &Helper\SuQLObjectReader::getQueryType($this->osuql, $query);
+    $handler = 'build'.ucfirst($queryType).'Query';
     return method_exists($this, $handler)
             ? $this->$handler($query)
             : null;
