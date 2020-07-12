@@ -66,8 +66,8 @@ class SQLBuilder
   }
 
   private function buildUnionQuery($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
-    return $queryObject['suql'];
+    $suqlString = &Helper\SuQLObjectReader::getQuerySuqlString($this->osuql, $query);
+    return $suqlString;
   }
 
   private function composeQuery($query) {

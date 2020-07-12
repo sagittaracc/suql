@@ -20,4 +20,10 @@ class SuQLObjectReader {
     $type = &$queryObject['type'];
     return $type;
   }
+
+  public static function &getQuerySuqlString(&$osuql, $name) {
+    $queryObject = &self::getQuery($osuql, $name);
+    $suqlString = &$queryObject['suql'];
+    return $suqlString;
+  }
 }
