@@ -65,8 +65,8 @@ class SuQLParser
     }
     if ($clauses['offset'][count($clauses['offset']) - 1] !== '')
       $tables['offset'] = $clauses['offset'][count($clauses['offset']) - 1];
-      if ($clauses['limit'][count($clauses['limit']) - 1] !== '')
-        $tables['limit'] = $clauses['limit'][count($clauses['limit']) - 1];
+    if ($clauses['limit'][count($clauses['limit']) - 1] !== '')
+      $tables['limit'] = $clauses['limit'][count($clauses['limit']) - 1];
     return $tables;
   }
 

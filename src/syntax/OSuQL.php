@@ -94,12 +94,11 @@ class OSuQL extends SQLSugarSyntax
   }
 
   public function __call($name, $arguments) {
-    // Прежде всего должна быть задана query, main по дефолту
     if (!$this->currentQuery) return;
-    // Если это модификатор то обработать его
+
     if (method_exists(SQLModifier::class, "mod_$name"))
       return $this->modifier($name, $arguments);
-    // Запрашиваем из неё или джоиним к текущей таблицы
+
     if (!$this->currentTable)
       return $this->from($name, $arguments);
     else

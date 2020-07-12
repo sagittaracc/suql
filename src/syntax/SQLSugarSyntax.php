@@ -2,7 +2,6 @@
 class SQLSugarSyntax
 {
   private $osuql;
-  private $config;
   private $scheme;
   private $adapter;
 
@@ -42,11 +41,12 @@ class SQLSugarSyntax
   }
 
   public function getSQL($queryList) {
+    if (!$this->adapter) return null;
+
     if ($queryList === 'all')
       $queryList = Helper\SuQLObjectReader::getAllTheQueryList($this->osuql);
 
     if (!is_array($queryList)) return null;
-    if (!$this->adapter) return null;
 
     $classBuilder = SQLAdapter::get($this->adapter);
     $SQLBuilder = new $classBuilder($this->getSQLObject());
