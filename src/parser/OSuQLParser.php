@@ -4,11 +4,11 @@ class OSuQLParser
   private $chain;
 
   function __construct() {
-    $this->chain = ['prev' => null, 'curr' => null];
+    $this->chain = ['prev' => 'none', 'curr' => 'none'];
   }
 
   public function clear() {
-    $this->chain = ['prev' => null, 'curr' => null];
+    $this->chain = ['prev' => 'none', 'curr' => 'none'];
   }
 
   public function chain($name) {
@@ -20,16 +20,16 @@ class OSuQLParser
   }
 
   public function process($context) {
-    $chain = $this->chain['prev'] . '_' . $this->chain['curr'];
+    $chain = 'chain_' . $this->chain['prev'] . '_' . $this->chain['curr'];
     if (method_exists($this, $chain))
       $this->$chain($context);
   }
 
-  private function _select($context) {
+  private function chain_none_select($context) {
     $context->query('main');
   }
 
-  private function union_select($context) {
+  private function chain_union_select($context) {
     $context->query('main');
   }
 }
