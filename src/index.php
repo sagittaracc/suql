@@ -2,7 +2,6 @@
 require 'helper/CRegSequence.php';
 require 'helper/CRegExp.php';
 require 'helper/CArray.php';
-require 'helper/SuQLObjectReader.php';
 require 'helper/SuQLLog.php';
 require 'helper/SuQLName.php';
 require 'helper/SuQLTableName.php';
