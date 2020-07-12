@@ -1,4 +1,7 @@
 <?php
+use Helper\SuQLObjectReader;
+use Helper\CArray;
+
 class SQLBuilder
 {
   private $osuql = null;
@@ -16,7 +19,7 @@ class SQLBuilder
   {
     if (empty($this->sql)) return null;
 
-    $sqlList = Helper\CArray::slice_by_keys($this->sql, $queryList);
+    $sqlList = CArray::slice_by_keys($this->sql, $queryList);
 
     return count($queryList) === 1 && count($sqlList) === 1
             ? reset($sqlList)
@@ -28,7 +31,7 @@ class SQLBuilder
     if (!$this->osuql)
       return;
 
-    $allQueryList = Helper\SuQLObjectReader::getAllTheQueryList($this->osuql);
+    $allQueryList = SuQLObjectReader::getAllTheQueryList($this->osuql);
 
     foreach ($allQueryList as $query) {
       $this->sql[$query] = trim($this->buildQuery($query));
@@ -41,7 +44,7 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $queryType = &Helper\SuQLObjectReader::getQueryType($this->osuql, $query);
+    $queryType = &SuQLObjectReader::getQueryType($this->osuql, $query);
     $handler = 'build'.ucfirst($queryType).'Query';
     return method_exists($this, $handler)
             ? $this->$handler($query)
@@ -66,7 +69,7 @@ class SQLBuilder
   }
 
   private function buildUnionQuery($query) {
-    $suqlString = &Helper\SuQLObjectReader::getQuerySuqlString($this->osuql, $query);
+    $suqlString = &SuQLObjectReader::getQuerySuqlString($this->osuql, $query);
     return $suqlString;
   }
 
@@ -87,7 +90,7 @@ class SQLBuilder
   }
 
   private function prepareQuery($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     foreach ($queryObject['select'] as $field => $options) {
       if (empty($options['modifier']))
@@ -102,7 +105,7 @@ class SQLBuilder
   }
 
   protected function buildSelect($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     $fields = $queryObject['select'];
     $select = !is_null($queryObject['modifier'])
@@ -122,14 +125,14 @@ class SQLBuilder
   }
 
   protected function buildFrom($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     $from = $queryObject['from'];
 
     if (empty($from))
       return '';
 
-    $fromQuery = &Helper\SuQLObjectReader::getQuery($this->osuql, $from);
+    $fromQuery = &SuQLObjectReader::getQuery($this->osuql, $from);
 
     return $fromQuery
             ? ' from ' . SuQLSpecialSymbols::$prefix_declare_variable . "{$from} {$from}"
@@ -137,7 +140,7 @@ class SQLBuilder
   }
 
   protected function buildJoin($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     $join = $queryObject['join'];
     $select = $queryObject['select'];
@@ -153,7 +156,7 @@ class SQLBuilder
     $s = [];
     foreach ($join as $_join) {
       $table = $_join['table'];
-      $joinQuery = &Helper\SuQLObjectReader::getQuery($this->osuql, $table);
+      $joinQuery = &SuQLObjectReader::getQuery($this->osuql, $table);
       $table = $joinQuery
                 ? SuQLSpecialSymbols::$prefix_declare_variable . "$table $table"
                 : $table;
@@ -164,14 +167,14 @@ class SQLBuilder
   }
 
   protected function buildGroup($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     $group = $queryObject['group'];
     return !empty($group) ? ' group by ' . implode(', ', $group) : '';
   }
 
   protected function buildWhere($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     $where = implode(' and ', $queryObject['where']);
     if (!$where) return '';
@@ -183,14 +186,14 @@ class SQLBuilder
   }
 
   protected function buildHaving($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     $having = $queryObject['having'];
     return !empty($having) ? ' having ' . implode(' and ', $having) : '';
   }
 
   protected function buildOrder($query) {
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     $order = $queryObject['order'];
 
@@ -207,7 +210,7 @@ class SQLBuilder
 
   protected function buildLimit($query) {
     $bound = [];
-    $queryObject = &Helper\SuQLObjectReader::getQuery($this->osuql, $query);
+    $queryObject = &SuQLObjectReader::getQuery($this->osuql, $query);
 
     if (!is_null($queryObject['offset'])) $bound[] = $queryObject['offset'];
     if (!is_null($queryObject['limit'])) $bound[] = $queryObject['limit'];
