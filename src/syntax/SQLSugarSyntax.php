@@ -44,13 +44,14 @@ class SQLSugarSyntax
     if (!$this->adapter) return null;
 
     if ($queryList === 'all')
-      $queryList = Helper\SuQLObjectReader::getAllTheQueryList($this->osuql);
+      $queryList = $this->getAllTheQueryList();
 
     if (!is_array($queryList)) return null;
 
     $classBuilder = SQLAdapter::get($this->adapter);
-    $SQLBuilder = new $classBuilder($this->getSQLObject());
+    $SQLBuilder = new $classBuilder($this);
     $SQLBuilder->run($queryList);
+    $this->clear();
     return $SQLBuilder->getSql($queryList);
   }
 
@@ -172,5 +173,30 @@ class SQLSugarSyntax
 
   public function addFieldModifier($query, $field, $name, $arguments) {
     $this->osuql['queries'][$query]['select'][$field]['modifier'][$name] = $arguments;
+  }
+
+  public function getOSuQL() {
+    return $this->osuql;
+  }
+
+  public function getAllTheQueryList() {
+    return array_keys($this->osuql['queries']);
+  }
+
+  public function getQueryType($query) {
+    return $this->osuql['queries'][$query]['type'];
+  }
+
+  public function getQuerySuqlString($query) {
+    return $this->osuql['queries'][$query]['suql'];
+  }
+
+  public function &getQuery($query) {
+    if (isset($this->osuql['queries'][$query]))
+      $queryObject = &$this->osuql['queries'][$query];
+    else
+      $queryObject = null;
+
+    return $queryObject;
   }
 }
