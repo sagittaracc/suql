@@ -90,12 +90,10 @@ class SQLBuilder
 
   private function prepareQuery($query) {
     $queryObject = &$this->osuql->getQuery($query);
+    $fieldModifiers = $this->osuql->getFieldModifiers($queryObject);
 
-    foreach ($queryObject['select'] as $field => $options) {
-      if (empty($options['modifier']))
-        continue;
-
-      foreach ($options['modifier'] as $modifier => $params) {
+    foreach ($fieldModifiers as $field => $modifiers) {
+      foreach ($modifiers as $modifier => $params) {
         $modifier_handler = "mod_$modifier";
         if (method_exists(SQLModifier::class, $modifier_handler))
           SQLModifier::$modifier_handler($queryObject, $field);
