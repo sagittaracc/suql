@@ -56,8 +56,8 @@ class SQLSugarSyntax
   }
 
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
-    $leftTable = new Helper\SuQLTableName($leftTable);
-    $rightTable = new Helper\SuQLTableName($rightTable);
+    $leftTable = new SuQLTableName($leftTable);
+    $rightTable = new SuQLTableName($rightTable);
 
     if ($leftTable->alias)
       $on = str_replace($leftTable->alias, $leftTable->name, $on);
@@ -122,7 +122,7 @@ class SQLSugarSyntax
   }
 
   public function addField($query, $table, $name, $visible = true) {
-    $field = new Helper\SuQLFieldName($table, $name);
+    $field = new SuQLFieldName($table, $name);
     $fieldId = $field->alias ? $field->alias : $field->format('%t.%n');
 
     $this->osuql['queries'][$query]['select'][$fieldId] = [

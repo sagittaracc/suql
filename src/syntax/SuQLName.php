@@ -1,6 +1,4 @@
 <?php
-namespace Helper;
-
 class SuQLName {
   public $name;
   public $alias;
