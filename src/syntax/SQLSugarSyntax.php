@@ -185,6 +185,15 @@ class SQLSugarSyntax
     return array_keys($this->osuql['queries']);
   }
 
+  public function &getQuery($query) {
+    if (isset($this->osuql['queries'][$query]))
+      $queryObject = &$this->osuql['queries'][$query];
+    else
+      $queryObject = null;
+
+    return $queryObject;
+  }
+
   public function getQueryType($query) {
     return $this->osuql['queries'][$query]['type'];
   }
@@ -193,12 +202,13 @@ class SQLSugarSyntax
     return $this->osuql['queries'][$query]['suql'];
   }
 
-  public function &getQuery($query) {
-    if (isset($this->osuql['queries'][$query]))
-      $queryObject = &$this->osuql['queries'][$query];
-    else
-      $queryObject = null;
+  public function getFieldModifiers($queryObject) {
+    $list = [];
 
-    return $queryObject;
+    foreach ($queryObject['select'] as $field => $options)
+      if (!empty($options['modifier']))
+        $list[$field] = $options['modifier'];
+
+    return $list;
   }
 }
