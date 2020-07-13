@@ -1,6 +1,6 @@
 # Change log
 
-## v2.0 - Jul 12, 2020
+## v2.0 - Jul 13, 2020
 
 **New features:**
 - New SuQL Syntax

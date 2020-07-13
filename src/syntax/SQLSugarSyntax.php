@@ -157,10 +157,12 @@ class SQLSugarSyntax
   }
 
   public function addJoin($query, $type, $table) {
-    $scheme = array_merge($this->scheme['rel'], $this->scheme['temp_rel']);
-    $tableList = $this->osuql['queries'][$query]['table_list'];
-
-    $on = $scheme[$table][Helper\SuQLJoin::getTargetLink($scheme, $tableList, $table)];
+    $scheme        = array_merge($this->scheme['rel'], $this->scheme['temp_rel']);
+    $tableList     = $this->osuql['queries'][$query]['table_list'];
+    $tableLinks    = array_keys($scheme[$table]);
+    $possibleLinks = array_intersect($tableLinks, $tableList);
+    $targetLink    = array_pop($possibleLinks);
+    $on            = $scheme[$table][$targetLink];
 
     $this->osuql['queries'][$query]['join'][$table] = [
       'table' => $table,
