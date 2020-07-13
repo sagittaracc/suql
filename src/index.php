@@ -2,11 +2,10 @@
 require 'helper/CRegSequence.php';
 require 'helper/CRegExp.php';
 require 'helper/CArray.php';
-require 'helper/SuQLLog.php';
-require 'helper/SuQLName.php';
-require 'helper/SuQLTableName.php';
-require 'helper/SuQLFieldName.php';
-require 'helper/SuQLJoin.php';
+require 'helper/CLog.php';
+require 'syntax/SuQLName.php';
+require 'syntax/SuQLTableName.php';
+require 'syntax/SuQLFieldName.php';
 require 'syntax/SuQLSpecialSymbols.php';
 require 'syntax/SuQLReservedWords.php';
 require 'syntax/SQLSugarSyntax.php';
