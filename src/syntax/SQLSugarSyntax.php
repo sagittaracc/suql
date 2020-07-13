@@ -177,7 +177,7 @@ class SQLSugarSyntax
     $this->osuql['queries'][$query]['select'][$field]['modifier'][$name] = $arguments;
   }
 
-  public function getOSuQL() {
+  public function get() {
     return $this->osuql;
   }
 

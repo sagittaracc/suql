@@ -3,15 +3,15 @@ use Helper\CArray;
 
 class SQLBuilder
 {
-  private $sql_object = null;
+  private $osuql = null;
   private $sql = [];
 
   const SELECT_TEMPLATE = "#select##from##join##where##group##having##order##limit#";
   const REGEX_SUB_QUERY = '/{:v:}(?<name>\w+)/msi';
 
-  function __construct($sql_object)
+  function __construct($osuql)
   {
-    $this->sql_object = $sql_object;
+    $this->osuql = $osuql;
   }
 
   public function getSql($queryList)
@@ -27,10 +27,10 @@ class SQLBuilder
 
   public function run($queryList)
   {
-    if (!$this->sql_object->getOSuQL())
+    if (!$this->osuql->get())
       return;
 
-    $allQueryList = $this->sql_object->getAllTheQueryList();
+    $allQueryList = $this->osuql->getAllTheQueryList();
 
     foreach ($allQueryList as $query) {
       $this->sql[$query] = trim($this->buildQuery($query));
@@ -43,7 +43,7 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $queryType = $this->sql_object->getQueryType($query);
+    $queryType = $this->osuql->getQueryType($query);
     $handler = 'build'.ucfirst($queryType).'Query';
     return method_exists($this, $handler)
             ? $this->$handler($query)
@@ -68,7 +68,7 @@ class SQLBuilder
   }
 
   private function buildUnionQuery($query) {
-    $suqlString = $this->sql_object->getQuerySuqlString($query);
+    $suqlString = $this->osuql->getQuerySuqlString($query);
     return $suqlString;
   }
 
@@ -89,7 +89,7 @@ class SQLBuilder
   }
 
   private function prepareQuery($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     foreach ($queryObject['select'] as $field => $options) {
       if (empty($options['modifier']))
@@ -104,7 +104,7 @@ class SQLBuilder
   }
 
   protected function buildSelect($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     $fields = $queryObject['select'];
     $select = !is_null($queryObject['modifier'])
@@ -124,14 +124,14 @@ class SQLBuilder
   }
 
   protected function buildFrom($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     $from = $queryObject['from'];
 
     if (empty($from))
       return '';
 
-    $fromQuery = &$this->sql_object->getQuery($from);
+    $fromQuery = &$this->osuql->getQuery($from);
 
     return $fromQuery
             ? ' from ' . SuQLSpecialSymbols::$prefix_declare_variable . "{$from} {$from}"
@@ -139,7 +139,7 @@ class SQLBuilder
   }
 
   protected function buildJoin($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     $join = $queryObject['join'];
     $select = $queryObject['select'];
@@ -155,7 +155,7 @@ class SQLBuilder
     $s = [];
     foreach ($join as $_join) {
       $table = $_join['table'];
-      $joinQuery = &$this->sql_object->getQuery($table);
+      $joinQuery = &$this->osuql->getQuery($table);
       $table = $joinQuery
                 ? SuQLSpecialSymbols::$prefix_declare_variable . "$table $table"
                 : $table;
@@ -166,14 +166,14 @@ class SQLBuilder
   }
 
   protected function buildGroup($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     $group = $queryObject['group'];
     return !empty($group) ? ' group by ' . implode(', ', $group) : '';
   }
 
   protected function buildWhere($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     $where = implode(' and ', $queryObject['where']);
     if (!$where) return '';
@@ -185,14 +185,14 @@ class SQLBuilder
   }
 
   protected function buildHaving($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     $having = $queryObject['having'];
     return !empty($having) ? ' having ' . implode(' and ', $having) : '';
   }
 
   protected function buildOrder($query) {
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     $order = $queryObject['order'];
 
@@ -209,7 +209,7 @@ class SQLBuilder
 
   protected function buildLimit($query) {
     $bound = [];
-    $queryObject = &$this->sql_object->getQuery($query);
+    $queryObject = &$this->osuql->getQuery($query);
 
     if (!is_null($queryObject['offset'])) $bound[] = $queryObject['offset'];
     if (!is_null($queryObject['limit'])) $bound[] = $queryObject['limit'];
