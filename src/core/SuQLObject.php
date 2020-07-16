@@ -26,7 +26,7 @@ class SuQLObject {
   }
 
   public function getSQLObject() {
-    $osuql = array_map(array(SuQLSelect::class, 'getSQLObject'), $this->queries);
+    $osuql = array_map([SuQLSelect::class, 'getSQLObject'], $this->queries);
     $this->clear();
     return $osuql;
   }
