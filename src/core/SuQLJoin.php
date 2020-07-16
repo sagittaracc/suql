@@ -2,14 +2,14 @@
 namespace core;
 
 class SuQLJoin {
-  private $osuql = null;
+  private $oselect = null;
 
   private $table;
   private $on;
   private $type;
 
-  function __construct($osuql, $table, $on, $type) {
-    $this->osuql = $osuql;
+  function __construct($oselect, $table, $on, $type) {
+    $this->oselect = $oselect;
     $this->table = $table;
     $this->on = $on;
     $this->type = $type;

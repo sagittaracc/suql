@@ -33,7 +33,7 @@ class SuQLSelect {
     $field = new SuQLFieldName($table, $name);
     $fieldId = $field->alias ? $field->alias : $field->format('%t.%n');
 
-    $this->select[$fieldId] = new SuQLField($this->osuql, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
+    $this->select[$fieldId] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
 
     return $fieldId;
   }
@@ -66,7 +66,7 @@ class SuQLSelect {
     $targetLink    = array_pop($possibleLinks);
     $on            = $scheme[$table][$targetLink];
 
-    $this->join[$table] = new SuQLJoin($this->osuql, $table, $on, $type);
+    $this->join[$table] = new SuQLJoin($this, $table, $on, $type);
 
     $this->table_list[] = $table;
   }

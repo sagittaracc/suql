@@ -2,7 +2,7 @@
 namespace core;
 
 class SuQLField {
-  private $osuql = null;
+  private $oselect = null;
 
   private $table;
   private $field;
@@ -10,8 +10,8 @@ class SuQLField {
   private $visible;
   private $modifier;
 
-  function __construct($osuql, $table, $field, $alias, $visible, $modifier) {
-    $this->osuql = $osuql;
+  function __construct($oselect, $table, $field, $alias, $visible, $modifier) {
+    $this->oselect = $oselect;
     $this->table = $table;
     $this->field = $field;
     $this->alias = $alias;
