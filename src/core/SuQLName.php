@@ -1,4 +1,6 @@
 <?php
+namespace core;
+
 class SuQLName {
   public $name;
   public $alias;

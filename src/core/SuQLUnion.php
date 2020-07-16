@@ -1,5 +1,5 @@
 <?php
-namespace osuql;
+namespace core;
 
 class SuQLUnion {
   private $osuql = null;

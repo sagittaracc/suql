@@ -1,4 +1,6 @@
 <?php
+use core\SuQLReservedWords;
+
 class SQLBaseModifier
 {
   public static function default_handler($modifier, &$queryObject, $field) {

@@ -1,4 +1,8 @@
 <?php
+use core\SuQLSpecialSymbols;
+use core\SuQLTableName;
+use core\SuQLFieldName;
+
 class SQLSugarSyntax
 {
   private $osuql;

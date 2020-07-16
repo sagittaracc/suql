@@ -1,4 +1,6 @@
 <?php
+namespace core;
+
 class SuQLFieldName extends SuQLName {
   public $table;
 

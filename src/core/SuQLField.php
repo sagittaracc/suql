@@ -1,5 +1,5 @@
 <?php
-namespace osuql;
+namespace core;
 
 class SuQLField {
   private $osuql = null;
