@@ -21,6 +21,10 @@ class SuQLSelect {
     $this->osuql = $osuql;
   }
 
+  public function getSQLObject() {
+    return [];
+  }
+
   public function addModifier($modifier) {
     $this->modifier = $modifier;
   }
