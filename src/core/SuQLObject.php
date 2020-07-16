@@ -26,14 +26,8 @@ class SuQLObject {
   }
 
   public function getSQLObject() {
-    $osuql = [];
-
-    foreach ($this->queries as $name => $query) {
-      $osuql[$name] = $query->getSQLObject();
-    }
-
+    $osuql = array_map(array(SuQLSelect::class, 'getSQLObject'), $this->queries);
     $this->clear();
-
     return $osuql;
   }
 
