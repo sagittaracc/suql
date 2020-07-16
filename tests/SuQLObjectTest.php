@@ -15,16 +15,6 @@ final class SuQLObjectTest extends TestCase
 
     $db->addSelect('main');
     $db->getQuery('main')->addField('users', 'id');
-    $this->assertEquals($db->getSQLObject(), [
-      'main' => [
-        'type' => 'select',
-        'select' => [
-          'users.id' => [
-            'table' => 'users',
-          ]
-        ],
-      ]
-    ]);
-    $this->assertEmpty($db->getSQLObject());
+    $this->assertTrue($db->getQuery('main')->hasField('users.id'));
   }
 }

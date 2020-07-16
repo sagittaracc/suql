@@ -21,30 +21,24 @@ class SuQLSelect {
     $this->osuql = $osuql;
   }
 
-  public function getSQLObject() {
-    $oselect = [
-      'type' => $this->type,
-      'select' => [],
-    ];
-
-    foreach ($this->select as $field => $options) {
-      $oselect['select'][$field] = $options->getSQLObject();
-    }
-
-    return $oselect;
-  }
-
   public function addModifier($modifier) {
     $this->modifier = $modifier;
   }
 
   public function addField($table, $name, $visible = true) {
     $field = new SuQLFieldName($table, $name);
-    $fieldId = $field->alias ? $field->alias : $field->format('%t.%n');
+    $_field = $field->alias ? $field->alias : $field->format('%t.%n');
 
-    $this->select[$fieldId] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
+    $this->select[$_field] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
+  }
 
-    return $fieldId;
+  public function hasField($_field) {
+    foreach ($this->select as $field => $options) {
+      if ($options->getField() === $_field)
+        return true;
+    }
+
+    return false;
   }
 
   public function addWhere($where) {

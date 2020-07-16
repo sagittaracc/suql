@@ -25,17 +25,6 @@ class SuQLObject {
     return $this;
   }
 
-  public function getSQLObject() {
-    $osuql = [];
-
-    foreach ($this->getFullQueryList() as $name) {
-      $osuql[$name] = $this->queries[$name]->getSQLObject();
-    }
-
-    $this->clear();
-    return $osuql;
-  }
-
   public function getSQL($queryList) {
     if (!$this->adapter) return null;
 

@@ -19,13 +19,11 @@ class SuQLField {
     $this->modifier = $modifier;
   }
 
-  public function getSQLObject() {
-    return [
-      'table' => $this->table,
-    ];
-  }
-
   public function addModifier($name, $arguments) {
     $this->modifier[$name] = $arguments;
+  }
+
+  public function getField() {
+    return $this->field;
   }
 }
