@@ -26,7 +26,12 @@ class SuQLObject {
   }
 
   public function getSQLObject() {
-    $osuql = array_map([SuQLSelect::class, 'getSQLObject'], $this->queries);
+    $osuql = [];
+
+    foreach ($this->getFullQueryList() as $name) {
+      $osuql[$name] = $this->queries[$name]->getSQLObject();
+    }
+
     $this->clear();
     return $osuql;
   }
@@ -76,5 +81,9 @@ class SuQLObject {
 
   public function addUnion($name, $query) {
     $this->queries[$name] = new SuQLUnion($this, $query);
+  }
+
+  public function getQuery($name) {
+    return $this->queries[$name];
   }
 }

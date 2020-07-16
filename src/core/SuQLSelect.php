@@ -22,7 +22,16 @@ class SuQLSelect {
   }
 
   public function getSQLObject() {
-    return [];
+    $oselect = [
+      'type' => $this->type,
+      'select' => [],
+    ];
+
+    foreach ($this->select as $field => $options) {
+      $oselect['select'][$field] = $options->getSQLObject();
+    }
+
+    return $oselect;
   }
 
   public function addModifier($modifier) {

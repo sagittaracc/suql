@@ -14,7 +14,17 @@ final class SuQLObjectTest extends TestCase
     $db->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
     $db->addSelect('main');
-    $this->assertEquals($db->getSQLObject(), ['main' => []]);
+    $db->getQuery('main')->addField('users', 'id');
+    $this->assertEquals($db->getSQLObject(), [
+      'main' => [
+        'type' => 'select',
+        'select' => [
+          'users.id' => [
+            'table' => 'users',
+          ]
+        ],
+      ]
+    ]);
     $this->assertEmpty($db->getSQLObject());
   }
 }
