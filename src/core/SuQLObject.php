@@ -70,6 +70,10 @@ class SuQLObject {
     return $this->rel($leftTable, $rightTable, $on, true);
   }
 
+  public function getRels() {
+    return array_merge($this->scheme['rel'], $this->scheme['temp_rel']);
+  }
+
   public function hasRelBetween($table1, $table2) {
     return isset($this->scheme['rel'][$table1][$table2])
         || isset($this->scheme['temp_rel'][$table1][$table2]);

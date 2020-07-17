@@ -21,6 +21,10 @@ class SuQLSelect {
     $this->osuql = $osuql;
   }
 
+  public function getOSuQL() {
+    return $this->osuql;
+  }
+
   public function addModifier($modifier) {
     $this->modifier = $modifier;
   }
@@ -73,15 +77,11 @@ class SuQLSelect {
   }
 
   public function addJoin($type, $table) {
-    $scheme        = array_merge($this->osuql->scheme['rel'], $this->osuql->scheme['temp_rel']);
-    $tableList     = $this->table_list;
-    $tableLinks    = array_keys($scheme[$table]);
-    $possibleLinks = array_intersect($tableLinks, $tableList);
-    $targetLink    = array_pop($possibleLinks);
-    $on            = $scheme[$table][$targetLink];
-
-    $this->join[$table] = new SuQLJoin($this, $table, $on, $type);
-
+    $this->join[$table] = new SuQLJoin($this, $table, $type);
     $this->table_list[] = $table;
+  }
+
+  public function getTableList() {
+    return $this->table_list;
   }
 }
