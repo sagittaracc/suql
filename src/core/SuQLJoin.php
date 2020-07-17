@@ -12,10 +12,10 @@ class SuQLJoin {
     $this->oselect = $oselect;
     $this->table = $table;
     $this->type = $type;
-    $this->on = $this->getTargetTable();
+    $this->on = $this->getLink();
   }
 
-  private function getTargetTable() {
+  private function getLink() {
     $scheme        = $this->oselect->getOSuQL()->getRels();
     $tableList     = $this->oselect->getTableList();
     $tableLinks    = array_keys($scheme[$this->table]);
