@@ -85,7 +85,7 @@ class SuQLObject {
   }
 
   public function getRelBetween($table1, $table2) {
-    if ($this->getRelTypeBetween($table1, $table2))
+    if ($this->hasRelBetween($table1, $table2))
       return $this->scheme[$this->getRelTypeBetween($table1, $table2)][$table1][$table2];
     else
       return null;
