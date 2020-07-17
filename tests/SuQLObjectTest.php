@@ -15,12 +15,12 @@ final class SuQLObjectTest extends TestCase
 
     $db->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
     $db->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
-    $this->assertTrue($db->hasRel('user_group', 'users'));
-    $this->assertFalse($db->hasRel('users', 'groups'));
-    $this->assertEquals($db->getRelType('groups', 'user_group'), 'rel');
-    $this->assertEquals($db->getRel('groups', 'user_group'), 'user_group.group_id = groups.id');
-    $this->assertFalse($db->hasRel('users', 'groups'));
-    $this->assertNull($db->getRel('users', 'groups'));
+    $this->assertTrue($db->hasRelBetween('user_group', 'users'));
+    $this->assertFalse($db->hasRelBetween('users', 'groups'));
+    $this->assertEquals($db->getRelTypeBetween('groups', 'user_group'), 'rel');
+    $this->assertEquals($db->getRelBetween('groups', 'user_group'), 'user_group.group_id = groups.id');
+    $this->assertFalse($db->hasRelBetween('users', 'groups'));
+    $this->assertNull($db->getRelBetween('users', 'groups'));
 
     $db->addSelect('main');
     $this->assertTrue($db->hasQuery('main'));

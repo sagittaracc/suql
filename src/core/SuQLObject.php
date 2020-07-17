@@ -70,12 +70,12 @@ class SuQLObject {
     return $this->rel($leftTable, $rightTable, $on, true);
   }
 
-  public function hasRel($table1, $table2) {
+  public function hasRelBetween($table1, $table2) {
     return isset($this->scheme['rel'][$table1][$table2])
         || isset($this->scheme['temp_rel'][$table1][$table2]);
   }
 
-  public function getRelType($table1, $table2) {
+  public function getRelTypeBetween($table1, $table2) {
     if (isset($this->scheme['rel'][$table1][$table2]))
       return 'rel';
     else if (isset($this->scheme['temp_rel'][$table1][$table2]))
@@ -84,9 +84,9 @@ class SuQLObject {
       return null;
   }
 
-  public function getRel($table1, $table2) {
-    if ($this->getRelType($table1, $table2))
-      return $this->scheme[$this->getRelType($table1, $table2)][$table1][$table2];
+  public function getRelBetween($table1, $table2) {
+    if ($this->getRelTypeBetween($table1, $table2))
+      return $this->scheme[$this->getRelTypeBetween($table1, $table2)][$table1][$table2];
     else
       return null;
   }
