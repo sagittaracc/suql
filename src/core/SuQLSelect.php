@@ -81,6 +81,14 @@ class SuQLSelect {
     $this->table_list[] = $table;
   }
 
+  public function hasJoin($table) {
+    return isset($this->join[$table]);
+  }
+
+  public function getJoin($table) {
+    return $this->hasJoin($table) ? $this->join[$table] : null;
+  }
+
   public function getTableList() {
     return $this->table_list;
   }

@@ -31,5 +31,11 @@ final class SuQLObjectTest extends TestCase
     $this->assertTrue($db->getQuery('main')->hasField('users', 'id'));
     $this->assertFalse($db->getQuery('main')->hasModifier());
     $this->assertFalse($db->getQuery('main')->getField('users', 'id')->hasAlias());
+
+    $db->getQuery('main')->addJoin('inner', 'user_group');
+    $this->assertTrue($db->getQuery('main')->hasJoin('user_group'));
+    $this->assertFalse($db->getQuery('main')->hasJoin('groups'));
+    $this->assertEquals($db->getQuery('main')->getJoin('user_group')->getType(), 'inner');
+    $this->assertEquals($db->getQuery('main')->getJoin('user_group')->getOn(), 'users.id = user_group.user_id');
   }
 }
