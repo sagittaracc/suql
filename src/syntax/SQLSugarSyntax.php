@@ -2,6 +2,7 @@
 use core\SuQLSpecialSymbols;
 use core\SuQLTableName;
 use core\SuQLFieldName;
+use builder\SQLAdapter;
 
 class SQLSugarSyntax
 {

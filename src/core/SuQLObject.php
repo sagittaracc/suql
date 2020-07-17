@@ -1,6 +1,8 @@
 <?php
 namespace core;
 
+use builder\SQLAdapter;
+
 class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
@@ -23,6 +25,10 @@ class SuQLObject {
       $this->adapter = $adapter;
 
     return $this;
+  }
+
+  public function getAdapter() {
+    return $this->adapter;
   }
 
   public function getSQL($queryList) {

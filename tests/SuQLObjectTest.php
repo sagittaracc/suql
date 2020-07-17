@@ -10,6 +10,9 @@ final class SuQLObjectTest extends TestCase
     $db = new SuQLObject;
     $this->assertEmpty($db->getFullQueryList());
 
+    $db->setAdapter('mysql');
+    $this->assertEquals($db->getAdapter(), 'mysql');
+
     $db->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
     $db->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 

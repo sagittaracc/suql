@@ -1,4 +1,6 @@
 <?php
+namespace builder;
+
 class SQLAdapter {
   private static $adapters = [
     'mysql' => 'MySQLBuilder',
