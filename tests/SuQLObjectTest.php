@@ -27,6 +27,9 @@ final class SuQLObjectTest extends TestCase
     $this->assertFalse($db->hasQuery('some_query'));
 
     $db->getQuery('main')->addField('users', 'id');
-    $this->assertTrue($db->getQuery('main')->hasField('users.id'));
+    $db->getQuery('main')->addFrom('users');
+    $this->assertTrue($db->getQuery('main')->hasField('users', 'id'));
+    $this->assertFalse($db->getQuery('main')->hasModifier());
+    $this->assertFalse($db->getQuery('main')->getField('users', 'id')->hasAlias());
   }
 }

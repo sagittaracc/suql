@@ -25,20 +25,31 @@ class SuQLSelect {
     $this->modifier = $modifier;
   }
 
-  public function addField($table, $name, $visible = true) {
-    $field = new SuQLFieldName($table, $name);
-    $_field = $field->alias ? $field->alias : $field->format('%t.%n');
-
-    $this->select[$_field] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
+  public function hasModifier() {
+    return !is_null($this->modifier);
   }
 
-  public function hasField($_field) {
-    foreach ($this->select as $field => $options) {
-      if ($options->getField() === $_field)
-        return true;
-    }
+  public function getModifier() {
+    return $this->modifier;
+  }
 
-    return false;
+  public function addField($table, $name, $visible = true) {
+    $field = new SuQLFieldName($table, $name);
+    $this->select[$field->format('%t.%n')] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
+  }
+
+  public function hasField($table, $name) {
+    $field = new SuQLFieldName($table, $name);
+    return isset($this->select[$field->format('%t.%n')]);
+  }
+
+  public function getField($table, $name) {
+    if ($this->hasField($table, $name)) {
+      $field = new SuQLFieldName($table, $name);
+      return $this->select[$field->format('%t.%n')];
+    } else {
+      return null;
+    }
   }
 
   public function addWhere($where) {

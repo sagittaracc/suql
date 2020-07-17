@@ -26,4 +26,12 @@ class SuQLField {
   public function getField() {
     return $this->field;
   }
+
+  public function hasAlias() {
+    return !empty($this->alias);
+  }
+
+  public function getAlias() {
+    return $this->alias;
+  }
 }
