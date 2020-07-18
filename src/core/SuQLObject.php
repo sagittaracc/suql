@@ -42,10 +42,11 @@ class SuQLObject {
     $classBuilder = SQLAdapter::get($this->adapter);
     $SQLBuilder = new $classBuilder($this);
     $SQLBuilder->run($queryList);
+    $sqlList = $SQLBuilder->getSql($queryList);
 
     $this->clear();
 
-    return $SQLBuilder->getSql($queryList);
+    return $sqlList;
   }
 
   public function getFullQueryList() {
