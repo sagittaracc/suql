@@ -9,4 +9,8 @@ class SuQLUnion extends SuQLQuery {
     parent::__construct($osuql);
     $this->suql = $suql;
   }
+
+  public function getSuql() {
+    return $this->suql;
+  }
 }

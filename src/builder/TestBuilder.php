@@ -38,9 +38,9 @@ class TestBuilder
       $this->sql[$query] = trim($this->buildQuery($query));
     }
 
-    // foreach ($queryList as $query) {
-    //   $this->sql[$query] = $this->composeQuery($query);
-    // }
+    foreach ($queryList as $query) {
+      $this->sql[$query] = $this->composeQuery($query);
+    }
   }
 
   private function buildQuery($query)
@@ -72,12 +72,24 @@ class TestBuilder
 
   private function buildUnionQuery($query)
   {
-    return 'union';
+    return $this->osuql->getQuery($query)->getSuql();
   }
 
   private function composeQuery($query)
   {
-    return 'composing';
+    if (!isset($this->sql[$query]))
+      return '';
+    $suql = $this->sql[$query];
+
+    $subQueries = (new SuQLRegExp(self::REGEX_SUB_QUERY))->match_all($suql);
+    if (empty($subQueries['name']))
+      return $suql;
+    else {
+      foreach ($subQueries['name'] as $subQuery)
+        $suql = str_replace(SuQLSpecialSymbols::$prefix_declare_variable . $subQuery, '('.$this->composeQuery($subQuery).')', $suql);
+
+      return $suql;
+    }
   }
 
   public function applyModifier($query)
@@ -115,7 +127,14 @@ class TestBuilder
 
   protected function buildFrom($query)
   {
+    $from = $this->osuql->getQuery($query)->getFrom();
 
+    if (!$from)
+      return '';
+
+    return $this->osuql->hasQuery($from)
+            ? ' from ' . SuQLSpecialSymbols::$prefix_declare_variable . "{$from} {$from}"
+            : " from $from";
   }
 
   protected function buildJoin($query)

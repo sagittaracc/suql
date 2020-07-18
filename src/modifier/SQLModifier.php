@@ -1,5 +1,5 @@
 <?php
-class SQLModifier extends SQLBaseModifier
+class SQLModifier extends SQLTestBaseModifier
 {
   // You can define your own modifiers here
 }

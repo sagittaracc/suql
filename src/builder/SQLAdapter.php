@@ -3,7 +3,7 @@ namespace builder;
 
 class SQLAdapter {
   private static $adapters = [
-    'mysql' => 'MySQLBuilder',
+    'mysql' => 'TestBuilder',
   ];
 
   public static function exists($adapter) {
