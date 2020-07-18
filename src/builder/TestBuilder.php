@@ -189,10 +189,14 @@ class TestBuilder
 
     $orderList = [];
     foreach ($order as $oorder) {
-      $orderList[] = $oorder->getField() . ' ' . $oorder->getDirection();
+      $field = $oorder->getField();
+      $direction = $oorder->getDirection();
+      $orderList[] = "$field $direction";
     }
 
-    return ' order by ' . implode(', ', $orderList);
+    $orderList = implode(', ', $orderList);
+
+    return " order by $orderList";
   }
 
   protected function buildLimit($query)
@@ -203,9 +207,12 @@ class TestBuilder
     if ($oselect->hasOffset()) $bound[] = $oselect->getOffset();
     if ($oselect->hasLimit()) $bound[] = $oselect->getLimit();
 
+    if (empty($bound))
+      return '';
+
     $bound = implode(', ', $bound);
 
-    return $bound ? " limit $bound" : '';
+    return " limit $bound";
   }
 
   private function nestedQuery($table) {
