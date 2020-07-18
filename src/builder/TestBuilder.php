@@ -2,6 +2,7 @@
 use core\SuQLSpecialSymbols;
 use core\SuQLName;
 use Helper\CArray;
+use Helper\CString;
 
 class TestBuilder
 {
@@ -110,10 +111,6 @@ class TestBuilder
   {
     $oselect = $this->osuql->getQuery($query);
 
-    $select = 'select ';
-    if ($oselect->hasModifier())
-      $select .= $oselect->getModifier() . ' ';
-
     $selectList = [];
     foreach ($oselect->getSelect() as $field => $ofield) {
       if ($ofield->visible()) {
@@ -122,7 +119,10 @@ class TestBuilder
       }
     }
 
-    return $select . implode(', ', $selectList);
+    $selectList = empty($selectList) ? '*' : implode(', ', $selectList);
+    $modifier = $oselect->hasModifier() ? $oselect->getModifier() : '';
+
+    return CString::stripDoubleSpaces("select $modifier $selectList");
   }
 
   protected function buildFrom($query)
