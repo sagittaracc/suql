@@ -182,8 +182,8 @@ class TestBuilder
       return '';
 
     $orderList = [];
-    foreach ($order as $_order) {
-      $orderList[] = "{$_order['field']} {$_order['direction']}";
+    foreach ($order as $oorder) {
+      $orderList[] = $oorder->getField() . ' ' . $oorder->getDirection();
     }
 
     return ' order by ' . implode(', ', $orderList);

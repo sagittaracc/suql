@@ -90,11 +90,8 @@ class SuQLSelect extends SuQLQuery {
     return $this->group;
   }
 
-  public function addOrder($field, $direction) {
-    $this->order[] = [
-      'field' => $field,
-      'direction' => $direction,
-    ];
+  public function addOrder($field, $direction = 'asc') {
+    $this->order[] = new SuQLOrder($field, $direction);
   }
 
   public function getOrder() {

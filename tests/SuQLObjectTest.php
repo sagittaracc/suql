@@ -37,8 +37,9 @@ final class SuQLObjectTest extends TestCase
     $this->db->addSelect('main');
     $this->db->getQuery('main')->addModifier('distinct');
     $this->db->getQuery('main')->addField('users', 'id');
+    $this->db->getQuery('main')->getField('users', 'id')->addModifier('asc');
     $this->db->getQuery('main')->addFrom('users');
 
-    $this->assertEquals($this->db->getSQL('all'), 'select distinct users.id from users');
+    $this->assertEquals($this->db->getSQL('all'), 'select distinct users.id from users order by users.id asc');
   }
 }
