@@ -1,14 +1,12 @@
 <?php
 namespace core;
 
-class SuQLUnion {
-  private $osuql = null;
-
-  private $type   = 'union';
+class SuQLUnion extends SuQLQuery {
+  protected $type = 'union';
   private $suql   = '';
 
   function __construct($osuql, $suql) {
-    $this->osuql = $osuql;
+    parent::__construct($osuql);
     $this->suql = $suql;
   }
 }

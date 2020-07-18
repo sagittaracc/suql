@@ -1,10 +1,8 @@
 <?php
 namespace core;
 
-class SuQLSelect {
-  private $osuql      = null;
-
-  private $type       = 'select';
+class SuQLSelect extends SuQLQuery {
+  protected $type     = 'select';
   private $select     = [];
   private $from       = null;
   private $where      = [];
@@ -16,14 +14,6 @@ class SuQLSelect {
   private $offset     = null;
   private $limit      = null;
   private $table_list = [];
-
-  function __construct($osuql) {
-    $this->osuql = $osuql;
-  }
-
-  public function getOSuQL() {
-    return $this->osuql;
-  }
 
   public function addModifier($modifier) {
     $this->modifier = $modifier;

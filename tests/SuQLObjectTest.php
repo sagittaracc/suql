@@ -23,6 +23,7 @@ final class SuQLObjectTest extends TestCase
     $this->assertNull($db->getRelBetween('users', 'groups'));
 
     $db->addSelect('main');
+    $db->addUnion('another', '@main union @some');
     $this->assertTrue($db->hasQuery('main'));
     $this->assertFalse($db->hasQuery('some_query'));
 
@@ -37,5 +38,7 @@ final class SuQLObjectTest extends TestCase
     $this->assertFalse($db->getQuery('main')->hasJoin('groups'));
     $this->assertEquals($db->getQuery('main')->getJoin('user_group')->getType(), 'inner');
     $this->assertEquals($db->getQuery('main')->getJoin('user_group')->getOn(), 'users.id = user_group.user_id');
+
+    // $this->assertEquals($db->getSQL('all'), ['main' => 'select', 'another' => 'union']);
   }
 }
