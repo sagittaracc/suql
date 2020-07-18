@@ -66,19 +66,11 @@ class SuQLSelect extends SuQLQuery {
   }
 
   public function addJoin($type, $table) {
-    $this->join[$table] = new SuQLJoin($this, $table, $type);
+    $this->join[] = new SuQLJoin($this, $table, $type);
     $this->table_list[] = $table;
   }
 
-  public function hasJoin($table) {
-    return isset($this->join[$table]);
-  }
-
-  public function getJoin($table) {
-    return $this->hasJoin($table) ? $this->join[$table] : null;
-  }
-
-  public function getJoinList() {
+  public function getJoin() {
     return $this->join;
   }
 

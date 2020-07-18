@@ -42,4 +42,16 @@ final class SuQLObjectTest extends TestCase
 
     $this->assertEquals($this->db->getSQL('all'), 'select distinct users.id from users order by users.id asc');
   }
+
+  public function testJoin(): void
+  {
+    $this->init();
+
+    $this->db->addSelect('main');
+    $this->db->getQuery('main')->addFrom('users');
+    $this->db->getQuery('main')->addField('users', 'id');
+    $this->db->getQuery('main')->addJoin('inner', 'user_group');
+
+    $this->assertEquals($this->db->getSQL('all'), 'select users.id from users inner join user_group on users.id = user_group.user_id');
+  }
 }

@@ -139,7 +139,7 @@ class TestBuilder
 
   protected function buildJoin($query)
   {
-    $join = $this->osuql->getQuery($query)->getJoinList();
+    $join = $this->osuql->getQuery($query)->getJoin();
 
     if (empty($join))
       return '';
