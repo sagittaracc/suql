@@ -165,19 +165,43 @@ class TestBuilder
   protected function buildGroup($query)
   {
     $group = $this->osuql->getQuery($query)->getGroup();
-    return !empty($group) ? ' group by ' . implode(', ', $group) : '';
+
+    if (empty($group))
+      return '';
+
+    $group = implode(', ', $group);
+
+    return " group by $group";
   }
 
   protected function buildWhere($query)
   {
-    $where = $this->osuql->getQuery($query)->getWhere();
-    return !empty($where) ? ' where ' . implode(' and ', $where) : '';
+    $whereList = $this->osuql->getQuery($query)->getWhere();
+
+    if (empty($whereList))
+      return '';
+
+    $fieldList = $this->osuql->getQuery($query)->getFieldList();
+
+    foreach ($whereList as &$where) {
+      $where = str_replace(array_values($fieldList), array_keys($fieldList), $where);
+    }
+    unset($where);
+
+    $whereList = implode(' and ', $whereList);
+
+    return " where $whereList";
   }
 
   protected function buildHaving($query)
   {
     $having = $this->osuql->getQuery($query)->getHaving();
-    return !empty($having) ? ' having ' . implode(' and ', $having) : '';
+
+    if (empty($having))
+      return '';
+
+    $having = implode(' and ', $having);
+    return " having $having";
   }
 
   protected function buildOrder($query)

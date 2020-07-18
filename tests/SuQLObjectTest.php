@@ -25,8 +25,9 @@ final class SuQLObjectTest extends TestCase
     $this->db->getQuery('main')->addFrom('users');
     $this->db->getQuery('main')->addField('users', 'id@uid');
     $this->db->getQuery('main')->addField('users', 'name@uname');
+    $this->db->getQuery('main')->addWhere('uid % 2 = 0');
 
-    $this->assertEquals($this->db->getSQL('all'), 'select users.id as uid, users.name as uname from users');
+    $this->assertEquals($this->db->getSQL('all'), 'select users.id as uid, users.name as uname from users where users.id % 2 = 0');
     $this->assertNull($this->db->getSQL('all'));
   }
 
@@ -36,11 +37,11 @@ final class SuQLObjectTest extends TestCase
 
     $this->db->addSelect('main');
     $this->db->getQuery('main')->addModifier('distinct');
-    $this->db->getQuery('main')->addField('users', 'id');
-    $this->db->getQuery('main')->getField('users', 'id')->addModifier('asc');
+    $this->db->getQuery('main')->addField('users', 'id@uid');
+    $this->db->getQuery('main')->getField('users', 'id');
     $this->db->getQuery('main')->addFrom('users');
 
-    $this->assertEquals($this->db->getSQL('all'), 'select distinct users.id from users order by users.id asc');
+    $this->assertEquals($this->db->getSQL('all'), 'select distinct users.id as uid from users');
   }
 
   public function testJoin(): void

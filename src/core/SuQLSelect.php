@@ -42,6 +42,16 @@ class SuQLSelect extends SuQLQuery {
     return null;
   }
 
+  public function getFieldList() {
+    $fieldList = [];
+
+    foreach ($this->select as $ofield) {
+      $fieldList[$ofield->getField()] = $ofield->getAlias();
+    }
+
+    return $fieldList;
+  }
+
   public function addFrom($table) {
     $this->from = $table;
     $this->table_list[] = $table;
