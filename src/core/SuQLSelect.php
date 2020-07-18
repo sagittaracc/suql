@@ -21,21 +21,25 @@ class SuQLSelect extends SuQLQuery {
 
   public function addField($table, $name, $visible = true) {
     $field = new SuQLFieldName($table, $name);
-    $this->select[$field->format('%t.%n')] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
+    $this->select[] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible);
   }
 
   public function hasField($table, $name) {
     $field = new SuQLFieldName($table, $name);
-    return isset($this->select[$field->format('%t.%n')]);
+
+    foreach ($this->select as $ofield) {
+      if ($ofield->getField() === $field->format('%t.%n'))
+        return $ofield;
+    }
+
+    return false;
   }
 
   public function getField($table, $name) {
-    if ($this->hasField($table, $name)) {
-      $field = new SuQLFieldName($table, $name);
-      return $this->select[$field->format('%t.%n')];
-    } else {
-      return null;
-    }
+    if ($ofield = $this->hasField($table, $name))
+      return $ofield;
+
+    return null;
   }
 
   public function addFrom($table) {

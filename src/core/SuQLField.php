@@ -8,15 +8,14 @@ class SuQLField {
   private $field;
   private $alias;
   private $visible;
-  private $modifier;
+  private $modifier = [];
 
-  function __construct($oselect, $table, $field, $alias, $visible, $modifier) {
+  function __construct($oselect, $table, $field, $alias, $visible) {
     $this->oselect = $oselect;
     $this->table = $table;
     $this->field = $field;
     $this->alias = $alias;
     $this->visible = $visible;
-    $this->modifier = $modifier;
   }
 
   public function getOSelect() {
