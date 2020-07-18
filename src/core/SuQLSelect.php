@@ -59,9 +59,17 @@ class SuQLSelect extends SuQLQuery {
       $this->where[] = $where;
   }
 
+  public function getWhere() {
+    return $this->where;
+  }
+
   public function addHaving($having) {
     if ($having)
       $this->having[] = $having;
+  }
+
+  public function getHaving() {
+    return $this->having;
   }
 
   public function addOrder($field, $direction) {
@@ -71,8 +79,16 @@ class SuQLSelect extends SuQLQuery {
     ];
   }
 
+  public function getOrder() {
+    return $this->order;
+  }
+
   public function addGroup($field) {
     $this->group[] = $field;
+  }
+
+  public function getGroup() {
+    return $this->group;
   }
 
   public function addOffset($offset) {
@@ -80,9 +96,25 @@ class SuQLSelect extends SuQLQuery {
       $this->offset = $offset;
   }
 
+  public function hasOffset() {
+    return !is_null($this->offset);
+  }
+
+  public function getOffset() {
+    return $this->offset;
+  }
+
   public function addLimit($limit) {
     if ($limit)
       $this->limit = $limit;
+  }
+
+  public function hasLimit() {
+    return !is_null($this->limit);
+  }
+
+  public function getLimit() {
+    return $this->limit;
   }
 
   public function addFrom($table) {

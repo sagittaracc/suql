@@ -5,44 +5,40 @@ use core\SuQLObject;
 
 final class SuQLObjectTest extends TestCase
 {
+  private $db;
+
+  private function init()
+  {
+    $this->db = new SuQLObject;
+
+    $this->db->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
+    $this->db->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+    $this->db->setAdapter('mysql');
+  }
+
   public function testSelect(): void
   {
-    $db = new SuQLObject;
-    $this->assertEmpty($db->getFullQueryList());
+    $this->init();
 
-    $db->setAdapter('mysql');
-    $this->assertEquals($db->getAdapter(), 'mysql');
+    $this->db->addSelect('main');
+    $this->db->getQuery('main')->addFrom('users');
+    $this->db->getQuery('main')->addField('users', 'id@uid');
+    $this->db->getQuery('main')->addField('users', 'name@uname');
 
-    $db->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
-    $db->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
-    $this->assertTrue($db->hasRelBetween('user_group', 'users'));
-    $this->assertFalse($db->hasRelBetween('users', 'groups'));
-    $this->assertEquals($db->getRelTypeBetween('groups', 'user_group'), 'rel');
-    $this->assertEquals($db->getRelBetween('groups', 'user_group'), 'user_group.group_id = groups.id');
-    $this->assertFalse($db->hasRelBetween('users', 'groups'));
-    $this->assertNull($db->getRelBetween('users', 'groups'));
+    $this->assertEquals($this->db->getSQL('all'), 'select users.id as uid, users.name as uname from users');
+    $this->assertNull($this->db->getSQL('all'));
+  }
 
-    $db->addSelect('main');
-    $db->addUnion('another', '@main union @some');
-    $this->assertTrue($db->hasQuery('main'));
-    $this->assertFalse($db->hasQuery('some_query'));
+  public function testSelectDistinct(): void
+  {
+    $this->init();
 
-    $db->getQuery('main')->addField('users', 'id');
-    $db->getQuery('main')->getField('users', 'id')->addModifier('max');
-    $db->getQuery('main')->addFrom('users');
-    $this->assertTrue($db->getQuery('main')->hasField('users', 'id'));
-    $this->assertFalse($db->getQuery('main')->hasModifier());
-    $this->assertFalse($db->getQuery('main')->getField('users', 'id')->hasAlias());
+    $this->db->addSelect('main');
+    $this->db->getQuery('main')->addModifier('distinct');
+    $this->db->getQuery('main')->addField('users', 'id');
+    $this->db->getQuery('main')->addFrom('users');
 
-    $db->getQuery('main')->addJoin('inner', 'user_group');
-    $this->assertTrue($db->getQuery('main')->hasJoin('user_group'));
-    $this->assertFalse($db->getQuery('main')->hasJoin('groups'));
-    $this->assertEquals($db->getQuery('main')->getJoin('user_group')->getType(), 'inner');
-    $this->assertEquals($db->getQuery('main')->getJoin('user_group')->getOn(), 'users.id = user_group.user_id');
-
-    $this->assertEquals($db->getSQL('all'), [
-      'main' => 'select max(users.id) from users inner join user_group on users.id = user_group.user_id',
-      'another' => '(select max(users.id) from users inner join user_group on users.id = user_group.user_id) union ()',
-    ]);
+    $this->assertEquals($this->db->getSQL('all'), 'select distinct users.id from users');
   }
 }

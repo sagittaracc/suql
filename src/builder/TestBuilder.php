@@ -112,7 +112,7 @@ class TestBuilder
 
     $select = 'select ';
     if ($oselect->hasModifier())
-      $select .= $oselect->getModifier();
+      $select .= $oselect->getModifier() . ' ';
 
     $selectList = [];
     foreach ($oselect->getSelect() as $field => $ofield) {
@@ -158,26 +158,47 @@ class TestBuilder
 
   protected function buildGroup($query)
   {
-
+    $group = $this->osuql->getQuery($query)->getGroup();
+    return !empty($group) ? ' group by ' . implode(', ', $group) : '';
   }
 
   protected function buildWhere($query)
   {
-
+    $where = $this->osuql->getQuery($query)->getWhere();
+    return !empty($where) ? ' where ' . implode(' and ', $where) : '';
   }
 
   protected function buildHaving($query)
   {
-
+    $having = $this->osuql->getQuery($query)->getHaving();
+    return !empty($having) ? ' having ' . implode(' and ', $having) : '';
   }
 
   protected function buildOrder($query)
   {
+    $order = $this->osuql->getQuery($query)->getOrder();
 
+    if (empty($order))
+      return '';
+
+    $orderList = [];
+    foreach ($order as $_order) {
+      $orderList[] = "{$_order['field']} {$_order['direction']}";
+    }
+
+    return ' order by ' . implode(', ', $orderList);
   }
 
   protected function buildLimit($query)
   {
+    $bound = [];
+    $oselect = $this->osuql->getQuery($query);
 
+    if ($oselect->hasOffset()) $bound[] = $oselect->getOffset();
+    if ($oselect->hasLimit()) $bound[] = $oselect->getLimit();
+
+    $bound = implode(', ', $bound);
+
+    return $bound ? " limit $bound" : '';
   }
 }
