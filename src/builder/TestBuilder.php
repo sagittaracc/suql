@@ -147,13 +147,19 @@ class TestBuilder
     $joinList = [];
     foreach ($join as $ojoin) {
       $table = $ojoin->getTable();
+      $type = $ojoin->getType();
+      $on = $ojoin->getOn();
+
       $table = $this->osuql->hasQuery($table)
                 ? $this->nestedQuery($table)
                 : $table;
-      $joinList[] = $ojoin->getType() . " join $table on " . $ojoin->getOn();
+
+      $joinList[] = "$type join $table on $on";
     }
 
-    return ' ' . implode(' ', $joinList);
+    $joinList = ' ' . implode(' ', $joinList);
+
+    return $joinList;
   }
 
   protected function buildGroup($query)
