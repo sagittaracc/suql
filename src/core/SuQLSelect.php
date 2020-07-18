@@ -15,24 +15,8 @@ class SuQLSelect extends SuQLQuery {
   private $limit      = null;
   private $table_list = [];
 
-  public function addModifier($modifier) {
-    $this->modifier = $modifier;
-  }
-
-  public function hasModifier() {
-    return !is_null($this->modifier);
-  }
-
-  public function getModifier() {
-    return $this->modifier;
-  }
-
   public function getSelect() {
     return $this->select;
-  }
-
-  public function getFrom() {
-    return $this->from;
   }
 
   public function addField($table, $name, $visible = true) {
@@ -54,6 +38,15 @@ class SuQLSelect extends SuQLQuery {
     }
   }
 
+  public function addFrom($table) {
+    $this->from = $table;
+    $this->table_list[] = $table;
+  }
+
+  public function getFrom() {
+    return $this->from;
+  }
+
   public function addWhere($where) {
     if ($where)
       $this->where[] = $where;
@@ -72,6 +65,31 @@ class SuQLSelect extends SuQLQuery {
     return $this->having;
   }
 
+  public function addJoin($type, $table) {
+    $this->join[$table] = new SuQLJoin($this, $table, $type);
+    $this->table_list[] = $table;
+  }
+
+  public function hasJoin($table) {
+    return isset($this->join[$table]);
+  }
+
+  public function getJoin($table) {
+    return $this->hasJoin($table) ? $this->join[$table] : null;
+  }
+
+  public function getJoinList() {
+    return $this->join;
+  }
+
+  public function addGroup($field) {
+    $this->group[] = $field;
+  }
+
+  public function getGroup() {
+    return $this->group;
+  }
+
   public function addOrder($field, $direction) {
     $this->order[] = [
       'field' => $field,
@@ -83,12 +101,16 @@ class SuQLSelect extends SuQLQuery {
     return $this->order;
   }
 
-  public function addGroup($field) {
-    $this->group[] = $field;
+  public function addModifier($modifier) {
+    $this->modifier = $modifier;
   }
 
-  public function getGroup() {
-    return $this->group;
+  public function hasModifier() {
+    return !is_null($this->modifier);
+  }
+
+  public function getModifier() {
+    return $this->modifier;
   }
 
   public function addOffset($offset) {
@@ -115,28 +137,6 @@ class SuQLSelect extends SuQLQuery {
 
   public function getLimit() {
     return $this->limit;
-  }
-
-  public function addFrom($table) {
-    $this->from = $table;
-    $this->table_list[] = $table;
-  }
-
-  public function addJoin($type, $table) {
-    $this->join[$table] = new SuQLJoin($this, $table, $type);
-    $this->table_list[] = $table;
-  }
-
-  public function hasJoin($table) {
-    return isset($this->join[$table]);
-  }
-
-  public function getJoin($table) {
-    return $this->hasJoin($table) ? $this->join[$table] : null;
-  }
-
-  public function getJoinList() {
-    return $this->join;
   }
 
   public function getTableList() {
