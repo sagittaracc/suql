@@ -1,5 +1,6 @@
 <?php
 use core\SuQLSpecialSymbols;
+use core\SuQLName;
 use Helper\CArray;
 
 class TestBuilder
@@ -95,7 +96,21 @@ class TestBuilder
 
   protected function buildSelect($query)
   {
+    $oselect = $this->osuql->getQuery($query);
 
+    $select = 'select ';
+    if ($oselect->hasModifier())
+      $select .= $oselect->getModifier();
+
+    $selectList = [];
+    foreach ($oselect->getSelect() as $field => $ofield) {
+      if ($ofield->visible()) {
+        $fieldName = new SuQLName($ofield->getField(), $ofield->getAlias());
+        $selectList[] = $fieldName->format('%n as %a');
+      }
+    }
+
+    return $select . implode(', ', $selectList);
   }
 
   protected function buildFrom($query)

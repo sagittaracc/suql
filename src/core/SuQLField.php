@@ -54,4 +54,8 @@ class SuQLField {
   public function getAlias() {
     return $this->alias;
   }
+
+  public function visible() {
+    return $this->visible === true;
+  }
 }
