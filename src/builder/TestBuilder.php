@@ -133,7 +133,7 @@ class TestBuilder
       return '';
 
     return $this->osuql->hasQuery($from)
-            ? ' from ' . SuQLSpecialSymbols::$prefix_declare_variable . "{$from} {$from}"
+            ? ' from '.$this->nestedQuery($from)
             : " from $from";
   }
 
@@ -148,7 +148,7 @@ class TestBuilder
     foreach ($join as $ojoin) {
       $table = $ojoin->getTable();
       $table = $this->osuql->hasQuery($table)
-                ? SuQLSpecialSymbols::$prefix_declare_variable . "$table $table"
+                ? $this->nestedQuery($table)
                 : $table;
       $joinList[] = $ojoin->getType() . " join $table on " . $ojoin->getOn();
     }
@@ -200,5 +200,9 @@ class TestBuilder
     $bound = implode(', ', $bound);
 
     return $bound ? " limit $bound" : '';
+  }
+
+  private function nestedQuery($table) {
+    return SuQLSpecialSymbols::$prefix_declare_variable . "$table $table";
   }
 }
