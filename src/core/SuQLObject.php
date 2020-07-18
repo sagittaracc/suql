@@ -68,7 +68,7 @@ class SuQLObject {
   }
 
   public function temp_rel($leftTable, $rightTable, $on) {
-    return $this->rel($leftTable, $rightTable, $on, true);
+    return $this->rel($leftTable, $rightTable, $on, $temporary = true);
   }
 
   public function getRels() {
