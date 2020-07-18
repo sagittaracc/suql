@@ -26,6 +26,10 @@ class SuQLJoin {
     return $on;
   }
 
+  public function getTable() {
+    return $this->table;
+  }
+
   public function getType() {
     return $this->type;
   }

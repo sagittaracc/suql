@@ -139,7 +139,21 @@ class TestBuilder
 
   protected function buildJoin($query)
   {
+    $join = $this->osuql->getQuery($query)->getJoinList();
 
+    if (empty($join))
+      return '';
+
+    $joinList = [];
+    foreach ($join as $ojoin) {
+      $table = $ojoin->getTable();
+      $table = $this->osuql->hasQuery($table)
+                ? SuQLSpecialSymbols::$prefix_declare_variable . "$table $table"
+                : $table;
+      $joinList[] = $ojoin->getType() . " join $table on " . $ojoin->getOn();
+    }
+
+    return ' ' . implode(' ', $joinList);
   }
 
   protected function buildGroup($query)

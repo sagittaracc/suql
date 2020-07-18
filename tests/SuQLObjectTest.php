@@ -41,8 +41,8 @@ final class SuQLObjectTest extends TestCase
     $this->assertEquals($db->getQuery('main')->getJoin('user_group')->getOn(), 'users.id = user_group.user_id');
 
     $this->assertEquals($db->getSQL('all'), [
-      'main' => 'select max(users.id) from users',
-      'another' => '(select max(users.id) from users) union ()',
+      'main' => 'select max(users.id) from users inner join user_group on users.id = user_group.user_id',
+      'another' => '(select max(users.id) from users inner join user_group on users.id = user_group.user_id) union ()',
     ]);
   }
 }

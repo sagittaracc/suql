@@ -103,6 +103,10 @@ class SuQLSelect extends SuQLQuery {
     return $this->hasJoin($table) ? $this->join[$table] : null;
   }
 
+  public function getJoinList() {
+    return $this->join;
+  }
+
   public function getTableList() {
     return $this->table_list;
   }
