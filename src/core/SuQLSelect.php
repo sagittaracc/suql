@@ -27,6 +27,10 @@ class SuQLSelect extends SuQLQuery {
     return $this->modifier;
   }
 
+  public function getSelect() {
+    return $this->select;
+  }
+
   public function addField($table, $name, $visible = true) {
     $field = new SuQLFieldName($table, $name);
     $this->select[$field->format('%t.%n')] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible, $modifier = []);
@@ -49,6 +53,22 @@ class SuQLSelect extends SuQLQuery {
   public function addWhere($where) {
     if ($where)
       $this->where[] = $where;
+  }
+
+  public function addHaving($having) {
+    if ($having)
+      $this->having[] = $having;
+  }
+
+  public function addOrder($field, $direction) {
+    $this->order[] = [
+      'field' => $field,
+      'direction' => $direction,
+    ];
+  }
+
+  public function addGroup($field) {
+    $this->group[] = $field;
   }
 
   public function addOffset($offset) {

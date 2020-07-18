@@ -53,7 +53,20 @@ class TestBuilder
 
   private function buildSelectQuery($query)
   {
-    return 'select';
+    $this->applyModifier($query);
+
+    $selectTemplate = self::SELECT_TEMPLATE;
+
+    $selectTemplate = str_replace('#select#', $this->buildSelect($query), $selectTemplate);
+    $selectTemplate = str_replace('#from#'  , $this->buildFrom($query),   $selectTemplate);
+    $selectTemplate = str_replace('#join#'  , $this->buildJoin($query),   $selectTemplate);
+    $selectTemplate = str_replace('#group#' , $this->buildGroup($query),  $selectTemplate);
+    $selectTemplate = str_replace('#where#' , $this->buildWhere($query),  $selectTemplate);
+    $selectTemplate = str_replace('#having#', $this->buildHaving($query), $selectTemplate);
+    $selectTemplate = str_replace('#order#' , $this->buildOrder($query),  $selectTemplate);
+    $selectTemplate = str_replace('#limit#' , $this->buildLimit($query),  $selectTemplate);
+
+    return $selectTemplate;
   }
 
   private function buildUnionQuery($query)
@@ -66,9 +79,18 @@ class TestBuilder
     return 'composing';
   }
 
-  private function prepareQuery($query)
+  public function applyModifier($query)
   {
-
+    $oselect = $this->osuql->getQuery($query);
+    foreach ($oselect->getSelect() as $field => $ofield) {
+      if ($ofield->hasModifier()) {
+        foreach ($ofield->getModifierList() as $name => $params) {
+          $modifier_handler = "mod_$name";
+          if (method_exists(SQLModifier::class, $modifier_handler))
+            SQLModifier::$modifier_handler($ofield, $params);
+        }
+      }
+    }
   }
 
   protected function buildSelect($query)
