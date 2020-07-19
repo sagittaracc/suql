@@ -203,4 +203,25 @@ final class SuQLObjectTest extends TestCase
     );
     $this->assertNull($this->db->getSQL('all'));
   }
+
+  public function testUnion(): void
+  {
+    $this->init();
+
+    $this->db->addSelect('firstRegisration');
+    $this->db->getQuery('firstRegisration')->addFrom('users');
+    $this->db->getQuery('firstRegisration')->addField('users', 'registration@reg_interval');
+    $this->db->getQuery('firstRegisration')->getField('users', 'registration@reg_interval')->addModifier('min');
+    $this->db->addSelect('lastRegisration');
+    $this->db->getQuery('lastRegisration')->addFrom('users');
+    $this->db->getQuery('lastRegisration')->addField('users', 'registration@reg_interval');
+    $this->db->getQuery('lastRegisration')->getField('users', 'registration@reg_interval')->addModifier('max');
+    $this->db->addUnion('main', '@firstRegisration union @lastRegisration');
+    $this->assertEquals($this->db->getSQL(['main']),
+      '(select min(users.registration) as reg_interval from users) '.
+        'union '.
+      '(select max(users.registration) as reg_interval from users)'
+    );
+    $this->assertNull($this->db->getSQL('all'));
+  }
 }
