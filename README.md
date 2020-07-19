@@ -345,6 +345,46 @@ $db->query()
 
 
 
+## UNION
+
+**Sugar SQL approach**
+```sql
+@firstRegisration = SELECT FROM users
+                      registration.min@reg_interval
+                    ;
+@lastRegisration = SELECT FROM users
+                     registration.max@reg_interval
+                   ;
+
+@regInterval = @firstRegisration union @lastRegisration;
+
+SELECT FROM regInterval
+  *
+;
+```
+
+**Object Oriented approach**
+```php
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+$db->query('firstRegisration')
+    ->users()
+      ->field('registration@reg_interval')->min()
+   ->query('lastRegisration')
+    ->users()
+      ->field('registration@reg_interval')->max()
+   ->query()
+    ->union('firstRegisration')
+    ->union('lastRegisration');
+```
+| reg_interval |
+|---------|
+| 2019-06-12 10:03:16 |
+| 2020-04-21 21:16:23 |
+
+
+
 ## CASE Expression
 You can create SQL CASE Expressions by using custom modifiers.
 
