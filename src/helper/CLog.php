@@ -1,4 +1,6 @@
 <?php
+namespace Helper;
+
 class SuQLLog
 {
   public static function error($suql, $index)

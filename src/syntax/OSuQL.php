@@ -1,5 +1,7 @@
 <?php
-class OSuQL extends SQLSugarSyntax
+use core\SuQLObject;
+
+class OSuQL extends SuQLObject
 {
   private $currentQuery;
   private $currentTable;
