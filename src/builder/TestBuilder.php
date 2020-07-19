@@ -34,6 +34,8 @@ class TestBuilder
       return;
 
     $fullQueryList = $this->osuql->getFullQueryList();
+    if (empty($fullQueryList))
+      return;
 
     foreach ($fullQueryList as $query) {
       $this->sql[$query] = trim($this->buildQuery($query));

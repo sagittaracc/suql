@@ -28,7 +28,8 @@ class SuQLSelect extends SuQLQuery {
     $field = new SuQLFieldName($table, $name);
 
     foreach ($this->select as $ofield) {
-      if ($ofield->getField() === $field->format('%t.%n'))
+      if ($ofield->getField() === $field->format('%t.%n')
+       && $ofield->getAlias() === $field->format('%a'))
         return $ofield;
     }
 
