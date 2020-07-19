@@ -182,9 +182,11 @@ class TestBuilder
       return '';
 
     $fieldList = $this->osuql->getQuery($query)->getFieldList();
+    $fields = array_keys($fieldList);
+    $aliases = array_values($fieldList);
 
     foreach ($whereList as &$where) {
-      $where = str_replace(array_values($fieldList), array_keys($fieldList), $where);
+      $where = str_replace($aliases, $fields, $where);
     }
     unset($where);
 
