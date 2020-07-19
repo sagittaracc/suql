@@ -1,7 +1,7 @@
 <?php
 use core\SuQLReservedWords;
 
-class SQLTestBaseModifier
+class SQLBaseModifier
 {
   public static function default_handler($modifier, $ofield, $params) {
     array_unshift($params, $ofield->getField());

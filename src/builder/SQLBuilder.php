@@ -4,7 +4,7 @@ use core\SuQLName;
 use Helper\CArray;
 use Helper\CString;
 
-class TestBuilder
+class SQLBuilder
 {
   private $osuql = null;
   private $sql = [];
