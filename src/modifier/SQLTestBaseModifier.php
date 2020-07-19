@@ -4,11 +4,9 @@ use core\SuQLReservedWords;
 class SQLTestBaseModifier
 {
   public static function default_handler($modifier, $ofield, $params) {
-    $fieldName = $ofield->getField();
-    $aliasName = $ofield->getAlias();
-    $strParams = (count($params) > 0 ? ', ' . implode(', ', $params) : '');
-
-    $ofield->setField("$modifier($fieldName" . "$strParams)");
+    array_unshift($params, $ofield->getField());
+    $params = implode(', ', $params);
+    $ofield->setField("$modifier($params)");
     $ofield->delModifier($modifier);
   }
 
