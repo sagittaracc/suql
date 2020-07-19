@@ -87,7 +87,7 @@ class TestBuilder
       return $suql;
     else {
       foreach ($subQueries['name'] as $subQuery)
-        $suql = str_replace(SuQLSpecialSymbols::$prefix_declare_variable . $subQuery, '('.$this->composeQuery($subQuery).')', $suql);
+        $suql = str_replace(SuQLSpecialSymbols::nestedQueryPlaceholder($subQuery), '('.$this->composeQuery($subQuery).')', $suql);
 
       return $suql;
     }
@@ -133,7 +133,7 @@ class TestBuilder
       return '';
 
     return $this->osuql->hasQuery($from)
-            ? ' from '.$this->nestedQuery($from)
+            ? ' from ' . SuQLSpecialSymbols::nestedQueryPlaceholder($from) . " $from"
             : " from $from";
   }
 
@@ -151,7 +151,7 @@ class TestBuilder
       $on = $ojoin->getOn();
 
       $table = $this->osuql->hasQuery($table)
-                ? $this->nestedQuery($table)
+                ? SuQLSpecialSymbols::nestedQueryPlaceholder($table) . " $table"
                 : $table;
 
       $joinList[] = "$type join $table on $on";
@@ -239,9 +239,5 @@ class TestBuilder
     $bound = implode(', ', $bound);
 
     return " limit $bound";
-  }
-
-  private function nestedQuery($table) {
-    return SuQLSpecialSymbols::$prefix_declare_variable . "$table $table";
   }
 }
