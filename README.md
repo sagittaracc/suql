@@ -8,51 +8,6 @@ SuQL is syntactic sugar for SQL.
 2. Make queries easy to read and write.
 3. Expand SuQL syntax on your own.
 
-### How do you use this?
-There are two approaches:
-1. [Simple Sugar SQL.](#simple-sugar-sql)
-2. [Object Oriented Sugar SQL.](#object-oriented-sugar-sql)
-
-#### Simple Sugar SQL
-```sql
--- Getting how many users of each group
-@allUsers = SELECT FROM users
-            INNER JOIN user_group
-            INNER JOIN groups
-              name@gname
-              name.group.count@count
-            ;
-
--- How many admins?
-SELECT FROM @allUsers
-  gname,
-  count
-WHERE gname = 'admin'
-;
-```
-
-#### Object Oriented Sugar SQL
-```php
-// Setting up tables relations
-$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
-                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
-
-// Getting how many users of each group
-$db->query('usersCountOfEachGroup')
-    ->users()
-    ->user_group()
-    ->groups()
-      ->field(['name' => 'gname'])
-      ->field(['name' => 'count'])->group()->count();
-
-// How many admins?
-$db->query()
-    ->usersCountOfEachGroup()
-      ->field('gname')
-      ->field('count')
-    ->where("gname = 'admin'");
-```
-
 # Documentation
 
 ### Sample Database
