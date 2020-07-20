@@ -73,8 +73,8 @@ final class OSuQLTest extends TestCase
                   ->field('name')
                 ->where('uid not in @users_belong_to_any_group');
 
-    $this->db->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)');
-    $this->db->assertNull($this->db->getSQL());
+    $this->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)');
+    $this->assertNull($this->db->getSQL());
   }
 
   public function testSelectLimit(): void
