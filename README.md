@@ -137,7 +137,7 @@ WHERE uid % 2 = 0
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
                     ->field(['id' => 'uid'])
                     ->field(['name' => 'uname'])
@@ -165,13 +165,15 @@ WHERE uid not in @users_belong_to_any_group
 **Object Oriented approach**
 ```php
 $db = (new OSuQL)->query('users_belong_to_any_group')
-                  ->user_group('distinct')
-                    ->field('user_id');
+                  ->select()
+                    ->user_group('distinct')
+                      ->field('user_id');
 $db->query()
-    ->users()
-      ->field(['id' => 'uid'])
-      ->field('name')
-    ->where('uid not in @users_belong_to_any_group');
+    ->select()
+      ->users()
+        ->field(['id' => 'uid'])
+        ->field('name')
+      ->where('uid not in @users_belong_to_any_group');
 ```
 
 > Example: Get the first two users

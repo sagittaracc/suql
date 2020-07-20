@@ -48,4 +48,32 @@ final class OSuQLTest extends TestCase
     $this->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name as uname from users');
     $this->assertNull($this->db->getSQL());
   }
+
+  public function testSelectWhere(): void
+  {
+    $this->init();
+
+    $this->db->select()
+                ->users()
+                  ->field(['id' => 'uid'])
+                  ->field(['name' => 'uname'])
+                ->where('uid % 2 = 0');
+
+    $this->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name as uname from users where users.id % 2 = 0');
+    $this->assertNull($this->db->getSQL());
+
+    $this->db->query('users_belong_to_any_group')
+                ->select()
+                  ->user_group('distinct')
+                    ->field('user_id');
+    $this->db->query()
+              ->select()
+                ->users()
+                  ->field('id@uid')
+                  ->field('name')
+                ->where('uid not in @users_belong_to_any_group');
+
+    $this->db->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)');
+    $this->db->assertNull($this->db->getSQL());
+  }
 }
