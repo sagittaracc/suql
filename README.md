@@ -74,7 +74,7 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
                     ->field('id')
                     ->field('name');

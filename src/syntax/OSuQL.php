@@ -7,7 +7,11 @@ class OSuQL extends SuQLObject
   private $currentTable = null;
   private $currentField = null;
   private $currentJoin = 'inner';
-  private $parser = new OSuQLParser();
+  private $parser;
+
+  function __construct() {
+    $this->parser = new OSuQLParser();
+  }
 
   public function clear() {
     parent::clear();
