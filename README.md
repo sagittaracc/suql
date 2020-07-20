@@ -188,7 +188,7 @@ LIMIT 0, 2
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
                     ->field('*')
                   ->offset(0)
@@ -226,7 +226,7 @@ INNER JOIN groups
 $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query()
+$db->select()
     ->users()
     ->user_group()
     ->groups()
@@ -260,7 +260,7 @@ WHERE gname = 'admin'
 $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query()
+$db->select()
     ->users()
     ->user_group()
     ->groups()
@@ -297,17 +297,19 @@ $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
 $db->query('allGroupsCount')
-    ->users()
-    ->user_group()
-    ->groups()
-      ->field(['name' => 'gname'])
-      ->field(['name' => 'count'])->group()->count();
+    ->select()
+      ->users()
+      ->user_group()
+      ->groups()
+        ->field(['name' => 'gname'])
+        ->field(['name' => 'count'])->group()->count();
 
 $db->query()
-    ->allGroupsCount()
-      ->field('gname')
-      ->field('count')
-    ->where("gname = 'admin'");
+    ->select()
+      ->allGroupsCount()
+        ->field('gname')
+        ->field('count')
+      ->where("gname = 'admin'");
 ```
 |gname   |count   |
 |---|---|
@@ -332,7 +334,7 @@ INNER JOIN groups
 $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query()
+$db->select()
     ->users()
     ->user_group()
     ->groups()
@@ -370,14 +372,16 @@ $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
 $db->query('firstRegisration')
-    ->users()
-      ->field('registration@reg_interval')->min()
+    ->select()
+      ->users()
+        ->field('registration@reg_interval')->min()
    ->query('lastRegisration')
-    ->users()
-      ->field('registration@reg_interval')->max()
+    ->select()
+      ->users()
+        ->field('registration@reg_interval')->max()
    ->query()
-    ->union('firstRegisration')
-    ->union('lastRegisration');
+    ->union('@firstRegisration')
+    ->union('@lastRegisration');
 ```
 | reg_interval |
 |---------|
