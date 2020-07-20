@@ -13,4 +13,12 @@ class SuQLUnion extends SuQLQuery {
   public function getSuql() {
     return $this->suql;
   }
+
+  public function setSuQL($suql) {
+    $this->suql = $suql;
+  }
+
+  public function addUnionType($unionType, $table) {
+    $this->suql .= " $unionType $table";
+  }
 }

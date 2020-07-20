@@ -104,6 +104,13 @@ class SuQLObject {
     $this->queries[$name] = new SuQLUnion($this, $query);
   }
 
+  public function addUnionTable($name, $unionType, $table) {
+    if (!isset($this->queries[$name]))
+      $this->queries[$name] = new SuQLUnion($this, $table);
+    else
+      $this->queries[$name]->addUnionTable($unionType, $table);
+  }
+
   public function getQuery($name) {
     return $this->queries[$name];
   }
