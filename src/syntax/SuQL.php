@@ -1,5 +1,7 @@
 <?php
-class SuQL extends SQLSugarSyntax
+use core\SuQLObject;
+
+class SuQL extends SuQLObject
 {
   private $suql;
 

@@ -1,5 +1,8 @@
 <?php
+use core\SuQLSpecialSymbols;
+use core\SuQLName;
 use Helper\CArray;
+use Helper\CString;
 
 class SQLBuilder
 {
@@ -27,12 +30,14 @@ class SQLBuilder
 
   public function run($queryList)
   {
-    if (!$this->osuql->get())
+    if (!$this->osuql)
       return;
 
-    $allQueryList = $this->osuql->getAllTheQueryList();
+    $fullQueryList = $this->osuql->getFullQueryList();
+    if (empty($fullQueryList))
+      return;
 
-    foreach ($allQueryList as $query) {
+    foreach ($fullQueryList as $query) {
       $this->sql[$query] = trim($this->buildQuery($query));
     }
 
@@ -43,15 +48,16 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $queryType = $this->osuql->getQueryType($query);
+    $queryType = $this->osuql->getQuery($query)->getType();
     $handler = 'build'.ucfirst($queryType).'Query';
     return method_exists($this, $handler)
             ? $this->$handler($query)
             : null;
   }
 
-  private function buildSelectQuery($query) {
-    $this->prepareQuery($query);
+  private function buildSelectQuery($query)
+  {
+    $this->applyModifier($query);
 
     $selectTemplate = self::SELECT_TEMPLATE;
 
@@ -67,12 +73,13 @@ class SQLBuilder
     return $selectTemplate;
   }
 
-  private function buildUnionQuery($query) {
-    $suqlString = $this->osuql->getQuerySuqlString($query);
-    return $suqlString;
+  private function buildUnionQuery($query)
+  {
+    return $this->osuql->getQuery($query)->getSuql();
   }
 
-  private function composeQuery($query) {
+  private function composeQuery($query)
+  {
     if (!isset($this->sql[$query]))
       return '';
     $suql = $this->sql[$query];
@@ -82,138 +89,157 @@ class SQLBuilder
       return $suql;
     else {
       foreach ($subQueries['name'] as $subQuery)
-        $suql = str_replace(SuQLSpecialSymbols::$prefix_declare_variable . $subQuery, '('.$this->composeQuery($subQuery).')', $suql);
+        $suql = str_replace(SuQLSpecialSymbols::nestedQueryPlaceholder($subQuery), '('.$this->composeQuery($subQuery).')', $suql);
 
       return $suql;
     }
   }
 
-  private function prepareQuery($query) {
-    $queryObject = &$this->osuql->getQuery($query);
-    $fieldModifiers = $this->osuql->getFieldModifiers($queryObject);
-
-    foreach ($fieldModifiers as $field => $modifiers) {
-      foreach ($modifiers as $modifier => $params) {
-        $modifier_handler = "mod_$modifier";
-        if (method_exists(SQLModifier::class, $modifier_handler))
-          SQLModifier::$modifier_handler($queryObject, $field);
+  public function applyModifier($query)
+  {
+    $oselect = $this->osuql->getQuery($query);
+    foreach ($oselect->getSelect() as $field => $ofield) {
+      if ($ofield->hasModifier()) {
+        foreach ($ofield->getModifierList() as $name => $params) {
+          $modifier_handler = "mod_$name";
+          if (method_exists(SQLModifier::class, $modifier_handler))
+            SQLModifier::$modifier_handler($ofield, $params);
+        }
       }
     }
   }
 
-  protected function buildSelect($query) {
-    $queryObject = &$this->osuql->getQuery($query);
-
-    $fields = $queryObject['select'];
-    $select = !is_null($queryObject['modifier'])
-                ? "select {$queryObject['modifier']} "
-                : 'select ';
-
-    if (empty($fields))
-      return '';
+  protected function buildSelect($query)
+  {
+    $oselect = $this->osuql->getQuery($query);
 
     $selectList = [];
-    foreach ($fields as $fieldOptions) {
-      if (isset($fieldOptions['visible']) && $fieldOptions['visible'] === false) continue;
-      $selectList[] = $fieldOptions['field'] . ($fieldOptions['alias'] ? " as {$fieldOptions['alias']}" : '');
+    foreach ($oselect->getSelect() as $field => $ofield) {
+      if ($ofield->visible()) {
+        $fieldName = new SuQLName($ofield->getField(), $ofield->getAlias());
+        $selectList[] = $fieldName->format('%n as %a');
+      }
     }
 
-    return $select . implode(', ', $selectList);
+    $selectList = empty($selectList) ? '*' : implode(', ', $selectList);
+    $modifier = $oselect->hasModifier() ? $oselect->getModifier() : '';
+
+    return CString::stripDoubleSpaces("select $modifier $selectList");
   }
 
-  protected function buildFrom($query) {
-    $queryObject = &$this->osuql->getQuery($query);
+  protected function buildFrom($query)
+  {
+    $from = $this->osuql->getQuery($query)->getFrom();
 
-    $from = $queryObject['from'];
-
-    if (empty($from))
+    if (!$from)
       return '';
 
-    $fromQuery = &$this->osuql->getQuery($from);
-
-    return $fromQuery
-            ? ' from ' . SuQLSpecialSymbols::$prefix_declare_variable . "{$from} {$from}"
+    return $this->osuql->hasQuery($from)
+            ? ' from ' . SuQLSpecialSymbols::nestedQueryPlaceholder($from) . " $from"
             : " from $from";
   }
 
-  protected function buildJoin($query) {
-    $queryObject = &$this->osuql->getQuery($query);
-
-    $join = $queryObject['join'];
-    $select = $queryObject['select'];
-
-    foreach ($join as &$_join) {
-      $_join['on'] = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $_join['on']);
-    }
-    unset($_join);
+  protected function buildJoin($query)
+  {
+    $join = $this->osuql->getQuery($query)->getJoin();
 
     if (empty($join))
       return '';
 
-    $s = [];
-    foreach ($join as $_join) {
-      $table = $_join['table'];
-      $joinQuery = &$this->osuql->getQuery($table);
-      $table = $joinQuery
-                ? SuQLSpecialSymbols::$prefix_declare_variable . "$table $table"
+    $joinList = [];
+    foreach ($join as $ojoin) {
+      $table = $ojoin->getTable();
+      $type = $ojoin->getType();
+      $on = $ojoin->getOn();
+
+      $table = $this->osuql->hasQuery($table)
+                ? SuQLSpecialSymbols::nestedQueryPlaceholder($table) . " $table"
                 : $table;
-      $s[] = "{$_join['type']} join $table on {$_join['on']}";
+
+      $joinList[] = "$type join $table on $on";
     }
 
-    return ' ' . implode(' ', $s);
+    $joinList = ' ' . implode(' ', $joinList);
+
+    return $joinList;
   }
 
-  protected function buildGroup($query) {
-    $queryObject = &$this->osuql->getQuery($query);
+  protected function buildGroup($query)
+  {
+    $group = $this->osuql->getQuery($query)->getGroup();
 
-    $group = $queryObject['group'];
-    return !empty($group) ? ' group by ' . implode(', ', $group) : '';
+    if (empty($group))
+      return '';
+
+    $group = implode(', ', $group);
+
+    return " group by $group";
   }
 
-  protected function buildWhere($query) {
-    $queryObject = &$this->osuql->getQuery($query);
+  protected function buildWhere($query)
+  {
+    $whereList = $this->osuql->getQuery($query)->getWhere();
 
-    $where = implode(' and ', $queryObject['where']);
-    if (!$where) return '';
+    if (empty($whereList))
+      return '';
 
-    $select = $queryObject['select'];
-    $where = str_replace(array_column($select, 'alias'), array_column($select, 'field'), $where);
+    $fieldList = $this->osuql->getQuery($query)->getFieldList();
+    $fields = array_keys($fieldList);
+    $aliases = array_values($fieldList);
 
-    return " where $where";
+    foreach ($whereList as &$where) {
+      $where = str_replace($aliases, $fields, $where);
+    }
+    unset($where);
+
+    $whereList = implode(' and ', $whereList);
+
+    return " where $whereList";
   }
 
-  protected function buildHaving($query) {
-    $queryObject = &$this->osuql->getQuery($query);
+  protected function buildHaving($query)
+  {
+    $having = $this->osuql->getQuery($query)->getHaving();
 
-    $having = $queryObject['having'];
-    return !empty($having) ? ' having ' . implode(' and ', $having) : '';
+    if (empty($having))
+      return '';
+
+    $having = implode(' and ', $having);
+    return " having $having";
   }
 
-  protected function buildOrder($query) {
-    $queryObject = &$this->osuql->getQuery($query);
-
-    $order = $queryObject['order'];
+  protected function buildOrder($query)
+  {
+    $order = $this->osuql->getQuery($query)->getOrder();
 
     if (empty($order))
       return '';
 
-    $s = [];
-    foreach ($order as $_order) {
-      $s[] = "{$_order['field']} {$_order['direction']}";
+    $orderList = [];
+    foreach ($order as $oorder) {
+      $field = $oorder->getField();
+      $direction = $oorder->getDirection();
+      $orderList[] = "$field $direction";
     }
 
-    return ' order by ' . implode(', ', $s);
+    $orderList = implode(', ', $orderList);
+
+    return " order by $orderList";
   }
 
-  protected function buildLimit($query) {
+  protected function buildLimit($query)
+  {
     $bound = [];
-    $queryObject = &$this->osuql->getQuery($query);
+    $oselect = $this->osuql->getQuery($query);
 
-    if (!is_null($queryObject['offset'])) $bound[] = $queryObject['offset'];
-    if (!is_null($queryObject['limit'])) $bound[] = $queryObject['limit'];
+    if ($oselect->hasOffset()) $bound[] = $oselect->getOffset();
+    if ($oselect->hasLimit()) $bound[] = $oselect->getLimit();
+
+    if (empty($bound))
+      return '';
 
     $bound = implode(', ', $bound);
 
-    return $bound ? " limit $bound" : '';
+    return " limit $bound";
   }
 }

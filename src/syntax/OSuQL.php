@@ -1,18 +1,15 @@
 <?php
-class OSuQL extends SQLSugarSyntax
+use core\SuQLObject;
+
+class OSuQL extends SuQLObject
 {
-  private $currentQuery;
-  private $currentTable;
-  private $currentField;
-  private $currentJoin;
+  private $currentQuery = null;
+  private $currentTable = null;
+  private $currentField = null;
+  private $currentJoin = 'inner';
   private $parser;
 
-  protected function init() {
-    parent::init();
-    $this->currentQuery = null;
-    $this->currentTable = null;
-    $this->currentField = null;
-    $this->currentJoin  = 'inner';
+  function __construct() {
     $this->parser = new OSuQLParser();
   }
 
@@ -50,13 +47,13 @@ class OSuQL extends SQLSugarSyntax
 
   public function union($table) {
     $this->parser->chain('union');
-    parent::addUnion($this->currentQuery, $table);
+    parent::addUnionTable($this->currentQuery, 'union', $table);
     return $this;
   }
 
   public function unionAll($table) {
     $this->parser->chain('union');
-    parent::addUnionAll($this->currentQuery, $table);
+    parent::addUnionTable($this->currentQuery, 'unionAll', $table);
     return $this;
   }
 
@@ -74,22 +71,23 @@ class OSuQL extends SQLSugarSyntax
 
   public function field($name, $visible = true) {
     if (!$this->currentTable) return;
-    $this->currentField = parent::addField($this->currentQuery, $this->currentTable, $name, $visible);
+    $field = parent::getQuery($this->currentQuery)->addField($this->currentTable, $name, $visible);
+    $this->currentField = "{$field->name}@{$field->alias}";
     return $this;
   }
 
   public function where($where) {
-    parent::addWhere($this->currentQuery, $where);
+    parent::getQuery($this->currentQuery)->addWhere($where);
     return $this;
   }
 
   public function offset($offset) {
-    parent::addOffset($this->currentQuery, $offset);
+    parent::getQuery($this->currentQuery)->addOffset($offset);
     return $this;
   }
 
   public function limit($limit) {
-    parent::addLimit($this->currentQuery, $limit);
+    parent::getQuery($this->currentQuery)->addLimit($limit);
     return $this;
   }
 
@@ -106,21 +104,21 @@ class OSuQL extends SQLSugarSyntax
   }
 
   private function from($table, $arguments) {
-    parent::addFrom($this->currentQuery, $table);
+    parent::getQuery($this->currentQuery)->addFrom($table);
     if (!empty($arguments))
-      parent::addQueryModifier($this->currentQuery, $arguments[0]);
+      parent::getQuery($this->currentQuery)->addModifier($arguments[0]);
     $this->currentTable = $table;
     return $this;
   }
 
   private function join($table, $arguments) {
-    parent::addJoin($this->currentQuery, $this->currentJoin, $table);
+    parent::getQuery($this->currentQuery)->addJoin($this->currentJoin, $table);
     $this->currentTable = $table;
     return $this;
   }
 
   private function modifier($name, $arguments) {
-    parent::addFieldModifier($this->currentQuery, $this->currentField, $name, $arguments);
+    parent::getQuery($this->currentQuery)->getField($this->currentTable, $this->currentField)->addModifier($name, $arguments);
     return $this;
   }
 }

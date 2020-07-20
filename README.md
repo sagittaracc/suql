@@ -20,13 +20,13 @@ There are two approaches:
             INNER JOIN user_group
             INNER JOIN groups
               name@gname
-              name.group.count@cnt
+              name.group.count@count
             ;
 
 -- How many admins?
 SELECT FROM @allUsers
   gname,
-  cnt
+  count
 WHERE gname = 'admin'
 ;
 ```
@@ -42,15 +42,15 @@ $db->query('usersCountOfEachGroup')
     ->users()
     ->user_group()
     ->groups()
-      ->field(['name' => 'g_name'])
+      ->field(['name' => 'gname'])
       ->field(['name' => 'count'])->group()->count();
 
 // How many admins?
 $db->query()
     ->usersCountOfEachGroup()
-      ->field('g_name')
+      ->field('gname')
       ->field('count')
-    ->where("g_name = 'admin'");
+    ->where("gname = 'admin'");
 ```
 
 # Documentation
@@ -74,7 +74,7 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
                     ->field('id')
                     ->field('name');
@@ -95,27 +95,26 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
-                  ->users()
-                    ->field('*');
+$db = (new OSuQL)->select()
+                  ->users();
 ```
 
 **Sugar SQL approach**
 ```sql
 SELECT FROM users
-  id@u_id,
-  name@u_name
+  id@uid,
+  name@uname
 ;
 ```
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
-                    ->field(['id' => 'u_id'])
-                    ->field(['name' => 'u_name']);
+                    ->field(['id' => 'uid'])
+                    ->field(['name' => 'uname']);
 ```
-|u_id   |u_name   |
+|uid   |uname   |
 |---|---|
 |1   |Yuriy   |
 |2   |Alex   |
@@ -130,21 +129,21 @@ $db = (new OSuQL)->query()
 **Sugar SQL approach**
 ```sql
 SELECT FROM users
-  id@u_id,
-  name@u_name
-WHERE u_id % 2 = 0
+  id@uid,
+  name@uname
+WHERE uid % 2 = 0
 ;
 ```
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
-                    ->field(['id' => 'u_id'])
-                    ->field(['name' => 'u_name'])
-                  ->where('u_id % 2 = 0');
+                    ->field(['id' => 'uid'])
+                    ->field(['name' => 'uname'])
+                  ->where('uid % 2 = 0');
 ```
-|u_id   |u_name   |
+|uid   |uname   |
 |---|---|
 |2   |Alex   |
 |4   |Den   |
@@ -166,12 +165,15 @@ WHERE uid not in @users_belong_to_any_group
 **Object Oriented approach**
 ```php
 $db = (new OSuQL)->query('users_belong_to_any_group')
-                  ->user_group('distinct')
-                    ->field('user_id');
+                  ->select()
+                    ->user_group('distinct')
+                      ->field('user_id');
 $db->query()
-    ->users()
-      ->field('name')
-    ->where('users.id not in #users_belong_to_any_group');
+    ->select()
+      ->users()
+        ->field(['id' => 'uid'])
+        ->field('name')
+      ->where('uid not in @users_belong_to_any_group');
 ```
 
 > Example: Get the first two users
@@ -186,7 +188,7 @@ LIMIT 0, 2
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
                     ->field('*')
                   ->offset(0)
@@ -214,8 +216,8 @@ SELECT DISTINCT FROM users
 SELECT FROM users
 INNER JOIN user_group
 INNER JOIN groups
-  id@g_id,
-  name@g_name
+  id@gid,
+  name@gname
 ;
 ```
 
@@ -224,13 +226,13 @@ INNER JOIN groups
 $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query()
+$db->select()
     ->users()
     ->user_group()
     ->groups()
-      ->field(['name' => 'g_name'])
+      ->field(['name' => 'gname'])
 ```
-|g_name   |
+|gname   |
 |---|
 |admin   |
 |admin   |
@@ -247,9 +249,9 @@ $db->query()
 SELECT FROM users
 INNER JOIN user_group
 INNER JOIN groups
-  name@g_name,
+  name@gname,
   name.group.count@count
-WHERE g_name = 'admin'
+WHERE gname = 'admin'
 ;
 ```
 
@@ -258,15 +260,15 @@ WHERE g_name = 'admin'
 $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query()
+$db->select()
     ->users()
     ->user_group()
     ->groups()
-      ->field(['name' => 'g_name'])
+      ->field(['name' => 'gname'])
       ->field(['name' => 'count'])->group()->count()
-    ->where("g_name = 'admin'");
+    ->where("gname = 'admin'");
 ```
-|g_name   |count   |
+|gname   |count   |
 |---|---|
 |admin   |3   |
 
@@ -279,13 +281,13 @@ $db->query()
 @allGroupsCount = SELECT FROM users
                   INNER JOIN user_group
                   INNER JOIN groups
-                    name@g_name,
+                    name@gname,
                     name.group.count@count
                   ;
 SELECT FROM allGroupsCount
-  g_name,
+  gname,
   count
-WHERE g_name = 'admin'
+WHERE gname = 'admin'
 ;
 ```
 
@@ -295,19 +297,21 @@ $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
 $db->query('allGroupsCount')
-    ->users()
-    ->user_group()
-    ->groups()
-      ->field(['name' => 'g_name'])
-      ->field(['name' => 'count'])->group()->count();
+    ->select()
+      ->users()
+      ->user_group()
+      ->groups()
+        ->field(['name' => 'gname'])
+        ->field(['name' => 'count'])->group()->count();
 
 $db->query()
-    ->allGroupsCount()
-      ->field('g_name')
-      ->field('count')
-    ->where("g_name = 'admin'");
+    ->select()
+      ->allGroupsCount()
+        ->field('gname')
+        ->field('count')
+      ->where("gname = 'admin'");
 ```
-|g_name   |count   |
+|gname   |count   |
 |---|---|
 |admin   |3   |
 
@@ -330,7 +334,7 @@ INNER JOIN groups
 $db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
                  ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query()
+$db->select()
     ->users()
     ->user_group()
     ->groups()
@@ -341,6 +345,48 @@ $db->query()
 |---------|----|-------|-------|
 | 4       | 2  | user  | 1     |
 | 1       | 1  | admin | 3     |
+
+
+
+## UNION
+
+**Sugar SQL approach**
+```sql
+@firstRegisration = SELECT FROM users
+                      registration.min@reg_interval
+                    ;
+@lastRegisration = SELECT FROM users
+                     registration.max@reg_interval
+                   ;
+
+@regInterval = @firstRegisration union @lastRegisration;
+
+SELECT FROM regInterval
+  *
+;
+```
+
+**Object Oriented approach**
+```php
+$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+
+$db->query('firstRegisration')
+    ->select()
+      ->users()
+        ->field('registration@reg_interval')->min()
+   ->query('lastRegisration')
+    ->select()
+      ->users()
+        ->field('registration@reg_interval')->max()
+   ->query()
+    ->union('@firstRegisration')
+    ->union('@lastRegisration');
+```
+| reg_interval |
+|---------|
+| 2019-06-12 10:03:16 |
+| 2020-04-21 21:16:23 |
 
 
 
@@ -358,8 +404,8 @@ To develop your own modifiers:
 ```php
 class SQLModifier extends SQLBaseModifier
 {
-  public static function mod_min(&$queryObject, $field) {
-    parent::default_handler('min', $queryObject, $field);
+  public static function mod_min($ofield, $params) {
+    parent::default_handler('min', $ofield, $params);
   }
 }
 ```
@@ -382,12 +428,12 @@ SELECT FROM users
 class SQLModifier extends SQLBaseModifier
 {
   // ...
-  public static function mod_permission(&$queryObject, $field) {
+  public static function mod_permission($ofield, $params) {
     parent::mod_case([
       "$ = 'admin'" => "'can do everything'",
       "$ = 'user'"  => "'can read only'",
       'default'     => "'can do nothing'",
-    ], $queryObject, $field);
+    ], $ofield, $params);
   }
   // ...
 }

@@ -3,226 +3,234 @@ use PHPUnit\Framework\TestCase;
 
 final class OSuQLTest extends TestCase
 {
-  private $db = null;
+  private $db;
 
-  private function InitDB() {
-    $this->db = (new OSuQL)->rel(['users' => 'a'], ['user_group' => 'b'], 'a.id = b.user_id')
-                           ->rel(['user_group' => 'a'], ['groups' => 'b'], 'a.group_id = b.id');
+  private function init()
+  {
+    $this->db = new OSuQL;
+
+    $this->db->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
+    $this->db->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
     $this->db->setAdapter('mysql');
   }
 
   public function testSelect(): void
   {
-    $this->initDB();
+    $this->init();
 
-    // Getting the all fields
-    $this->assertEquals(
-      "select users.* from users",
-      $this->db->select()
-                ->users()
-                  ->field('*')
-               ->getSQL()
-    );
-
-    // Getting the same sql again should return an empty result
-    $this->assertNull($this->db->getSQL());
-    $this->assertNull($this->db->getSQLObject());
-
-    // Getting specific fields
-    $this->assertEquals(
-      "select users.id, users.name from users",
-      $this->db->select()
+    $this->db->select()
                 ->users()
                   ->field('id')
-                  ->field('name')
-               ->getSQL()
-    );
+                  ->field('name');
 
-    // Using aliases
-    $this->assertEquals(
-      "select users.id as uid, users.name as uname from users",
-      $this->db->select()
+    $this->assertEquals($this->db->getSQL(), 'select users.id, users.name from users');
+    $this->assertNull($this->db->getSQL());
+
+    $this->db->select()
+                ->users()
+                  ->field('*');
+
+    $this->assertEquals($this->db->getSQL(), 'select users.* from users');
+    $this->assertNull($this->db->getSQL());
+
+    $this->db->select()
+                ->users();
+
+    $this->assertEquals($this->db->getSQL(), 'select * from users');
+    $this->assertNull($this->db->getSQL());
+
+    $this->db->select()
+                ->users()
+                  ->field(['id' => 'uid'])
+                  ->field('name@uname');
+
+    $this->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name as uname from users');
+    $this->assertNull($this->db->getSQL());
+  }
+
+  public function testSelectWhere(): void
+  {
+    $this->init();
+
+    $this->db->select()
                 ->users()
                   ->field(['id' => 'uid'])
                   ->field(['name' => 'uname'])
-               ->getSQL()
-    );
+                ->where('uid % 2 = 0');
+
+    $this->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name as uname from users where users.id % 2 = 0');
+    $this->assertNull($this->db->getSQL());
+
+    $this->db->query('users_belong_to_any_group')
+                ->select()
+                  ->user_group('distinct')
+                    ->field('user_id');
+    $this->db->query()
+              ->select()
+                ->users()
+                  ->field('id@uid')
+                  ->field('name')
+                ->where('uid not in @users_belong_to_any_group');
+
+    $this->db->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)');
+    $this->db->assertNull($this->db->getSQL());
+  }
+
+  public function testSelectLimit(): void
+  {
+    $this->init();
+
+    $this->db->select()
+                ->users()
+                  ->field('*')
+                ->offset(0)
+                ->limit(2);
+
+    $this->assertEquals($this->db->getSQL(), 'select users.* from users limit 2');
+    $this->assertNull($this->db->getSQL());
   }
 
   public function testSelectDistinct(): void
   {
-    $db = (new OSuQL)->setAdapter('mysql');
+    $this->init();
 
-    $osuql = $db->select()
-                  ->users('distinct')
-                    ->field('id');
+    $this->db->select()
+                ->users('distinct')
+                  ->field('name');
 
-    $this->assertEquals(
-      "select distinct users.id from users",
-      $db->getSQL()
-    );
-
-    $db->drop();
+    $this->assertEquals($this->db->getSQL(), 'select distinct users.name from users');
+    $this->assertNull($this->db->getSQL());
   }
 
-  public function testJoinChain(): void
+  public function testSelectJoin(): void
   {
-    $db = (new OSuQL)->setAdapter('mysql')
-                     ->rel('table1', 'table2', 'table1.t1id = table2.t2id')
-                     ->rel('table1', 'table3', 'table1.t1id = table3.t3id')
-                     ->rel('table2', 'table4', 'table2.t2id = table4.t4id')
-                     ->rel('table3', 'table5', 'table3.t3id = table5.t5id')
-                     ->rel('table1', 'table6', 'table1.t1id = table6.t6id');
+    $this->init();
 
-    $osuql = $db->select()
-                  ->table1()
-                  ->table2()
-                  ->table3()
-                  ->table4()
-                  ->table5()
-                  ->table6()
-                ->getSQLObject();
+    $this->db->select()
+                ->users()
+                ->user_group()
+                ->groups()
+                  ->field(['id' => 'gid'])
+                  ->field(['name' => 'gname']);
 
-    $this->assertEquals(
-      [
-        'queries' => [
-          'main' => [
-            'type'     => 'select',
-            'select'   => [],
-            'from'     => 'table1',
-            'where'    => [],
-            'having'   => [],
-            'join'     => [
-              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id', 'type' => 'inner'],
-              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id', 'type' => 'inner'],
-              'table4' => ['table' => 'table4', 'on' => 'table2.t2id = table4.t4id', 'type' => 'inner'],
-              'table5' => ['table' => 'table5', 'on' => 'table3.t3id = table5.t5id', 'type' => 'inner'],
-              'table6' => ['table' => 'table6', 'on' => 'table1.t1id = table6.t6id', 'type' => 'inner'],
-            ],
-            'group'    => [],
-            'order'    => [],
-            'modifier' => null,
-            'offset'   => null,
-            'limit'    => null,
-            'table_list' => ['table1', 'table2', 'table3', 'table4', 'table5', 'table6'],
-          ]
-        ]
-      ],
-      $osuql
+    $this->assertEquals($this->db->getSQL(),
+      'select '.
+        'groups.id as gid, '.
+        'groups.name as gname '.
+      'from users '.
+      'inner join user_group on users.id = user_group.user_id '.
+      'inner join groups on user_group.group_id = groups.id'
     );
-
-    $db->drop();
+    $this->assertNull($this->db->getSQL());
   }
 
-  public function testTempRel(): void
+  public function testSelectGroup(): void
   {
-    $db = (new OSuQL)->setAdapter('mysql')
-                     ->rel('table1', 'table2', 'table1.t1id = table2.t2id and table1.lid = table2.rid')
-                     ->rel('table1', 'table3', 'table1.t1id = table3.t3id')
-                     ->temp_rel('table4', 'view1', 'table4.t4id = view1.v_id');
+    $this->init();
 
-    $db->query('view1')
-        ->select()
-          ->table1()
-          ->table2()
-          ->table3()
-       ->query()
-        ->select()
-          ->table4()
-          ->view1();
+    $this->db->select()
+                ->users()
+                ->user_group()
+                ->groups()
+                  ->field('name@gname')
+                  ->field('name@count')->group()->count()
+                ->where("gname = 'admin'");
 
-    $this->assertEquals(
-      [
-        'queries' => [
-          'view1' => [
-            'type'     => 'select',
-            'select'   => [],
-            'from'     => 'table1',
-            'where'    => [],
-            'having'   => [],
-            'join'     => [
-              'table2' => ['table' => 'table2', 'on' => 'table1.t1id = table2.t2id and table1.lid = table2.rid', 'type' => 'inner'],
-              'table3' => ['table' => 'table3', 'on' => 'table1.t1id = table3.t3id', 'type' => 'inner'],
-            ],
-            'group'    => [],
-            'order'    => [],
-            'modifier' => null,
-            'offset'   => null,
-            'limit'    => null,
-            'table_list' => ['table1', 'table2', 'table3'],
-          ],
-          'main' => [
-            'type'     => 'select',
-            'select'   => [],
-            'from'     => 'table4',
-            'where'    => [],
-            'having'   => [],
-            'join'     => [
-              'view1' => ['table' => 'view1', 'on' => 'table4.t4id = view1.v_id', 'type' => 'inner'],
-            ],
-            'group'    => [],
-            'order'    => [],
-            'modifier' => null,
-            'offset'   => null,
-            'limit'    => null,
-            'table_list' => ['table4', 'view1'],
-          ]
-        ]
-      ],
-      $db->getSQLObject()
+    $this->assertEquals($this->db->getSQL(),
+      'select '.
+        'groups.name as gname, '.
+        'count(groups.name) as count '.
+      'from users '.
+      'inner join user_group on users.id = user_group.user_id '.
+      'inner join groups on user_group.group_id = groups.id '.
+      'where groups.name = \'admin\' '.
+      'group by groups.name'
     );
+    $this->assertNull($this->db->getSQL());
   }
 
-  public function testWhere(): void
+  public function testNestedQueries(): void
   {
-    $db = new OSuQL;
+    $this->init();
 
-    $db->select()
-        ->users()
-          ->field(['id' => 'uid'])
-          ->field(['name' => 'uname'])
-        ->where("uid > 5 and uname = 'admin'");
+    $this->db->query('allGroupCount')
+                ->select()
+                  ->users()
+                  ->user_group()
+                  ->groups()
+                    ->field('name@gname')
+                    ->field('name@count')->group()->count();
+    $this->db->query()
+                ->select()
+                  ->allGroupCount()
+                    ->field('gname')
+                    ->field('count')
+                  ->where("gname = 'admin'");
 
-    $this->assertEquals(
-      "select users.id as uid, users.name as uname from users where users.id > 5 and users.name = 'admin'",
-      $db->setAdapter('mysql')->getSQL()
+    $this->assertEquals($this->db->getSQL(),
+      'select '.
+        'allGroupCount.gname, '.
+        'allGroupCount.count '.
+      'from ('.
+        'select '.
+          'groups.name as gname, '.
+          'count(groups.name) as count '.
+        'from users '.
+        'inner join user_group on users.id = user_group.user_id '.
+        'inner join groups on user_group.group_id = groups.id '.
+        'group by groups.name'.
+      ') allGroupCount '.
+      'where gname = \'admin\''
     );
+    $this->assertNull($this->db->getSQL());
+  }
+
+  public function testSorting(): void
+  {
+    $this->init();
+
+    $this->db->select()
+                ->users()
+                ->user_group()
+                ->groups()
+                  ->field('name@gname')
+                  ->field('name@count')->group()->count()->asc();
+
+    $this->assertEquals($this->db->getSQL(),
+      'select '.
+        'groups.name as gname, '.
+        'count(groups.name) as count '.
+      'from users '.
+      'inner join user_group on users.id = user_group.user_id '.
+      'inner join groups on user_group.group_id = groups.id '.
+      'group by groups.name '.
+      'order by count asc'
+    );
+    $this->assertNull($this->db->getSQL());
   }
 
   public function testUnion(): void
   {
-    $db = new OSuQL;
-    $db = $db->setAdapter('mysql');
-    $db->query('q1')    // Query q1
-         ->select()
-           ->users()
-             ->field('*')
-       ->query('q2')    // Query q2
-         ->select()
-           ->groups()
-             ->field('*')
-       ->query('q3')    // Query q3
-         ->select()
-           ->user_group()
-             ->field('*')
-       ->query('q4')    // Query q4
-         ->union('q1')
-         ->unionAll('q2')
-         ->union('q3')
-       ->select()        // Main query
-         ->q4()
-           ->field('*');
+    $this->init();
 
-    $this->assertEquals(
-      'select q4.* from ('.
-        '(select users.* from users) '.
-        'union all '.
-        '(select groups.* from groups) '.
+    $this->db->query('firstRegisration')
+                ->select()
+                  ->users()
+                    ->field('registration@reg_interval')->min();
+    $this->db->query('lastRegisration')
+                ->select()
+                  ->users()
+                    ->field('registration@reg_interval')->max();
+    $this->db->query()
+                ->union('@firstRegisration')
+                ->union('@lastRegisration');
+
+    $this->assertEquals($this->db->getSQL(),
+      '(select min(users.registration) as reg_interval from users) '.
         'union '.
-        '(select user_group.* from user_group)'.
-      ') q4',
-      $db->getSQL()
+      '(select max(users.registration) as reg_interval from users)'
     );
+    $this->assertNull($this->db->getSQL());
   }
 }

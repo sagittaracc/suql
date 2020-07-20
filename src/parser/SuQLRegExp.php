@@ -1,4 +1,5 @@
 <?php
+use core\SuQLSpecialSymbols;
 use Helper\CRegExp;
 
 class SuQLRegExp extends CRegExp {

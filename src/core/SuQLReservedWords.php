@@ -1,4 +1,6 @@
 <?php
+namespace core;
+
 class SuQLReservedWords
 {
   private static $list = [
