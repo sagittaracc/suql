@@ -26,5 +26,26 @@ final class OSuQLTest extends TestCase
 
     $this->assertEquals($this->db->getSQL(), 'select users.id, users.name from users');
     $this->assertNull($this->db->getSQL());
+
+    $this->db->select()
+                ->users()
+                  ->field('*');
+
+    $this->assertEquals($this->db->getSQL(), 'select users.* from users');
+    $this->assertNull($this->db->getSQL());
+
+    $this->db->select()
+                ->users();
+
+    $this->assertEquals($this->db->getSQL(), 'select * from users');
+    $this->assertNull($this->db->getSQL());
+
+    $this->db->select()
+                ->users()
+                  ->field(['id' => 'uid'])
+                  ->field('name@uname');
+
+    $this->assertEquals($this->db->getSQL(), 'select users.id as uid, users.name as uname from users');
+    $this->assertNull($this->db->getSQL());
   }
 }

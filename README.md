@@ -95,9 +95,8 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
-                  ->users()
-                    ->field('*');
+$db = (new OSuQL)->select()
+                  ->users();
 ```
 
 **Sugar SQL approach**
@@ -110,7 +109,7 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
+$db = (new OSuQL)->select()
                   ->users()
                     ->field(['id' => 'uid'])
                     ->field(['name' => 'uname']);

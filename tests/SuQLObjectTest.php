@@ -37,6 +37,11 @@ final class SuQLObjectTest extends TestCase
     $this->assertEquals($this->db->getSQL(['main']), 'select users.* from users');
     $this->assertNull($this->db->getSQL(['main']));
 
+    $this->db->addSelect('main');
+    $this->db->getQuery('main')->addFrom('users');
+    $this->assertEquals($this->db->getSQL(['main']), 'select * from users');
+    $this->assertNull($this->db->getSQL(['main']));
+
     // Fetching some fields with aliases
     $this->db->addSelect('main');
     $this->db->getQuery('main')->addFrom('users');
