@@ -314,11 +314,7 @@ $db->select()
                      registration.max@reg_interval
                    ;
 
-@regInterval = @firstRegisration union @lastRegisration;
-
-SELECT FROM regInterval
-  *
-;
+@main = @firstRegisration union @lastRegisration;
 ```
 
 **Object Oriented approach**

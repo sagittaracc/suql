@@ -3,7 +3,7 @@ use core\SuQLObject;
 
 class SuQL extends SuQLObject
 {
-  private $suql;
+  private $suql = null;
 
   public function clear() {
     parent::clear();
@@ -17,10 +17,6 @@ class SuQL extends SuQLObject
 
   public function getSQL($queryList = ['main']) {
     return $this->interpret() ? parent::getSQL($queryList) : null;
-  }
-
-  public function getSQLObject() {
-    return $this->interpret() ? parent::getSQLObject() : null;
   }
 
   public function query($suql) {
@@ -50,19 +46,19 @@ class SuQL extends SuQLObject
 
     foreach ($clauses['tables'] as $table => $options) {
       if ($options['type'] === 'from')
-        parent::addFrom($name, $table);
+        parent::getQuery($name)->addFrom($table);
 
       else if ($options['type'] === 'join')
-        parent::addJoin($name, $options['next'], $table);
+        parent::getQuery($name)->addJoin($options['next'], $table);
 
       else
         return false;
 
       if ($options['modifier'] !== '')
-        parent::addQueryModifier($name, $options['modifier']);
+        parent::getQuery($name)->addModifier($options['modifier']);
 
       if ($options['where'] !== '')
-        parent::addWhere($name, $options['where']);
+        parent::getQuery($name)->addWhere($options['where']);
 
       if ($options['fields'] !== '') {
         $fieldList = SuQLParser::getFieldList($options['fields']);
@@ -70,18 +66,18 @@ class SuQL extends SuQLObject
           $_name = $fieldList['name'][$i];
           $_alias = $fieldList['alias'][$i];
           $_modifier = $fieldList['modif'][$i];
-          $fieldName = parent::addField($name, $table, [$_name => $_alias]);
+          $field = parent::getQuery($name)->addField($table, [$_name => $_alias]);
 
           $fieldModifierList = SuQLParser::getFieldModifierList($_modifier);
           foreach ($fieldModifierList as $modif => $params) {
-            parent::addFieldModifier($name, $fieldName, $modif, $params ? explode(',', $params) : []);
+            parent::getQuery($name)->getField($table, [$field->name => $field->alias])->addModifier($modif, $params ? explode(',', $params) : []);
           }
         }
       }
     }
 
-    if (!is_null($clauses['offset'])) parent::addOffset($name, $clauses['offset']);
-    if (!is_null($clauses['limit'])) parent::addLimit($name, $clauses['limit']);
+    if (!is_null($clauses['offset'])) parent::getQuery($name)->addOffset($clauses['offset']);
+    if (!is_null($clauses['limit'])) parent::getQuery($name)->addLimit($clauses['limit']);
 
     return true;
   }
@@ -99,7 +95,7 @@ class SuQL extends SuQLObject
   }
 
   private function UNION($name, $query) {
-    parent::addUnionQuery($name, SuQLParser::trimSemicolon($query));
+    parent::addUnion($name, SuQLParser::trimSemicolon($query));
     return true;
   }
 }
