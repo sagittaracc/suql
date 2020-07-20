@@ -173,7 +173,7 @@ final class SuQLTest extends TestCase
                            name@gname,
                            name.group.count@count
                          ;
-        SELECT FROM @allGroupCount
+        SELECT FROM allGroupCount
           gname,
           count
         WHERE gname = \'admin\';
@@ -233,7 +233,7 @@ final class SuQLTest extends TestCase
                              registration.max@reg_interval
                            ;
         @main = @firstRegisration union @lastRegisration;
-      ')->getSQL(['main']),
+      ')->getSQL(),
       '(select min(users.registration) as reg_interval from users) '.
         'union '.
       '(select max(users.registration) as reg_interval from users)'
