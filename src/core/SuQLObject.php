@@ -57,10 +57,12 @@ class SuQLObject {
     return $sqlList;
   }
 
-  public function exec($params = []) {
+  public function exec($name, $params = []) {
     if (!$this->db) return null;
 
-    return $this->db->setQuery($this->getSQL())
+    if (!$this->hasQuery($name)) return false;
+
+    return $this->db->setQuery($this->getSQL([$name]))
                     ->bindParams($params)
                     ->fetchAll();
   }
