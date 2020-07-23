@@ -29,10 +29,14 @@ class SuQLObject {
   }
 
   public function setDb($db) {
-    if ($db instanceof IDb)
+    if (is_a($db, 'IDb'))
       $this->db = $db;
 
     return $this;
+  }
+
+  public function getDb() {
+    return $this->db;
   }
 
   public function getAdapter() {
@@ -60,11 +64,12 @@ class SuQLObject {
   public function exec($name, $params = []) {
     if (!$this->db) return null;
 
-    if (!$this->hasQuery($name)) return false;
+    $this->db->setQuery($this->getSQL([$name]));
 
-    return $this->db->setQuery($this->getSQL([$name]))
-                    ->bindParams($params)
-                    ->fetchAll();
+    if (!empty($params))
+      $this->db->bindParams($params);
+
+    return $this->db->fetchAll();
   }
 
   public function getFullQueryList() {

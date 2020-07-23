@@ -19,6 +19,10 @@ class SuQL extends SuQLObject
     return $this->interpret() ? parent::getSQL($queryList) : null;
   }
 
+  public function run($params = []) {
+    return parent::exec('main', $params);
+  }
+
   public function query($suql) {
     $this->suql = trim($suql);
     return $this;
