@@ -7,6 +7,7 @@ class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
   private $adapter = null;
+  private $db      = null;
 
   public function clear() {
     $this->queries = [];
@@ -23,6 +24,13 @@ class SuQLObject {
   public function setAdapter($adapter) {
     if (SQLAdapter::exists($adapter))
       $this->adapter = $adapter;
+
+    return $this;
+  }
+
+  public function setDb($db) {
+    if ($db instanceof IDb)
+      $this->db = $db;
 
     return $this;
   }
@@ -47,6 +55,14 @@ class SuQLObject {
     $this->clear();
 
     return $sqlList;
+  }
+
+  public function exec($params = []) {
+    if (!$this->db) return null;
+
+    return $this->db->setQuery($this->getSQL())
+                    ->bindParams($params)
+                    ->fetchAll();
   }
 
   public function getFullQueryList() {
