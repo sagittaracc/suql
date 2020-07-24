@@ -2,7 +2,6 @@
 namespace core;
 
 use builder\SQLAdapter;
-use SuQLBaseCommand;
 
 class SuQLObject {
   private $queries = [];
@@ -94,7 +93,8 @@ class SuQLObject {
       $data[] = $this->exec($query, $params);
     }
 
-    return call_user_func_array([new SuQLBaseCommand, $instruction], $data);
+    $commandClass = $this->getCommandClass();
+    return call_user_func_array([new $commandClass, $instruction], $data);
   }
 
   public function getFullQueryList() {
@@ -172,6 +172,10 @@ class SuQLObject {
   }
 
   public function getModifierClass() {
-    return class_exists('SQLModifier') ? 'SQLModifier' : 'SQLBaseModifier';
+    return class_exists('SQLExtModifier') ? 'SQLExtModifier' : 'SQLBaseModifier';
+  }
+
+  public function getCommandClass() {
+    return class_exists('SuQLExtCommand') ? 'SuQLExtCommand' : 'SuQLBaseCommand';
   }
 }
