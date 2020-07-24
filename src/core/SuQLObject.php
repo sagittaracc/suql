@@ -64,6 +64,8 @@ class SuQLObject {
   public function exec($name, $params = []) {
     if (!$this->db) return null;
 
+    if (!$this->hasQuery($name)) return false;
+
     $this->db->setQuery($this->getSQL([$name]));
 
     if (!empty($params))

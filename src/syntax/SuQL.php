@@ -16,7 +16,7 @@ class SuQL extends SuQLObject
   }
 
   public function getSQL($queryList = ['main']) {
-    return $this->interpret() ? parent::getSQL($queryList) : null;
+    return parent::getSQL($queryList);
   }
 
   public function run($params = []) {
@@ -25,6 +25,7 @@ class SuQL extends SuQLObject
 
   public function query($suql) {
     $this->suql = trim($suql);
+    $this->interpret();
     return $this;
   }
 
