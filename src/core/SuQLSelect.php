@@ -2,7 +2,6 @@
 namespace core;
 
 class SuQLSelect extends SuQLQuery {
-  protected $type     = 'select';
   private $select     = [];
   private $from       = null;
   private $where      = [];
@@ -14,6 +13,10 @@ class SuQLSelect extends SuQLQuery {
   private $offset     = null;
   private $limit      = null;
   private $table_list = [];
+
+  public function getType() {
+    return 'select';
+  }
 
   public function getSemantic() {
     return 'sql';

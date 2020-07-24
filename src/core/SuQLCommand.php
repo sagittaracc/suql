@@ -2,7 +2,6 @@
 namespace core;
 
 class SuQLCommand extends SuQLQuery {
-  protected $type = 'command';
   private $instruction;
   private $params;
 
@@ -10,6 +9,10 @@ class SuQLCommand extends SuQLQuery {
     parent::__construct($osuql);
     $this->instruction = $instruction;
     $this->params = $params;
+  }
+
+  public function getType() {
+    return 'command';
   }
 
   public function getSemantic() {
