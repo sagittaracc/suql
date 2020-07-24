@@ -136,6 +136,10 @@ class SuQLObject {
       $this->queries[$name]->addUnionTable($unionType, $table);
   }
 
+  public function addCommand($name, $instruction, $params) {
+    $this->queries[$name] = new SuQLCommand($this, $instruction, $params);
+  }
+
   public function getQuery($name) {
     return $this->queries[$name];
   }
