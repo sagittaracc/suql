@@ -3,12 +3,12 @@ namespace core;
 
 class SuQLCommand extends SuQLQuery {
   private $instruction;
-  private $params;
+  private $args;
 
-  function __construct($osuql, $instruction, $params) {
+  function __construct($osuql, $instruction, $args) {
     parent::__construct($osuql);
     $this->instruction = $instruction;
-    $this->params = $params;
+    $this->args = $args;
   }
 
   public function getType() {
@@ -17,5 +17,13 @@ class SuQLCommand extends SuQLQuery {
 
   public function getSemantic() {
     return 'cmd';
+  }
+
+  public function getInstruction() {
+    return $this->instruction;
+  }
+
+  public function getArgs() {
+    return $this->args;
   }
 }

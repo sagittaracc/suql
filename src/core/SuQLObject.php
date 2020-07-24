@@ -84,7 +84,13 @@ class SuQLObject {
   }
 
   private function execCMD($name, $params) {
+    $data = [];
 
+    foreach ($this->getQuery($name)->getArgs() as $arg) {
+      $data[] = $this->exec($arg, $params);
+    }
+
+    return $data;
   }
 
   public function getFullQueryList() {
@@ -149,8 +155,8 @@ class SuQLObject {
       $this->queries[$name]->addUnionTable($unionType, $table);
   }
 
-  public function addCommand($name, $instruction, $params) {
-    $this->queries[$name] = new SuQLCommand($this, $instruction, $params);
+  public function addCommand($name, $instruction, $args) {
+    $this->queries[$name] = new SuQLCommand($this, $instruction, $args);
   }
 
   public function getQuery($name) {
