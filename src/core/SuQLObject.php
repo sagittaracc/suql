@@ -2,6 +2,7 @@
 namespace core;
 
 use builder\SQLAdapter;
+use SuQLBaseCommand;
 
 class SuQLObject {
   private $queries = [];
@@ -86,11 +87,14 @@ class SuQLObject {
   private function execCMD($name, $params) {
     $data = [];
 
-    foreach ($this->getQuery($name)->getArgs() as $arg) {
-      $data[] = $this->exec($arg, $params);
+    $instruction = $this->getQuery($name)->getInstruction();
+    $args = $this->getQuery($name)->getArgs();
+
+    foreach ($args as $query) {
+      $data[] = $this->exec($query, $params);
     }
 
-    return $data;
+    return call_user_func_array([new SuQLBaseCommand, $instruction], $data);
   }
 
   public function getFullQueryList() {
