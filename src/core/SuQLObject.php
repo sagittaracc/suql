@@ -170,4 +170,8 @@ class SuQLObject {
   public function hasQuery($name) {
     return isset($this->queries[$name]);
   }
+
+  public function getModifierClass() {
+    return class_exists('SQLModifier') ? 'SQLModifier' : 'SQLBaseModifier';
+  }
 }

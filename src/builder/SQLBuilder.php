@@ -97,13 +97,15 @@ class SQLBuilder
 
   public function applyModifier($query)
   {
+    $modifier_class = $this->osuql->getModifierClass();
     $oselect = $this->osuql->getQuery($query);
+
     foreach ($oselect->getSelect() as $field => $ofield) {
       if ($ofield->hasModifier()) {
         foreach ($ofield->getModifierList() as $name => $params) {
           $modifier_handler = "mod_$name";
-          if (method_exists(SQLModifier::class, $modifier_handler))
-            SQLModifier::$modifier_handler($ofield, $params);
+          if (method_exists($modifier_class, $modifier_handler))
+            $modifier_class::$modifier_handler($ofield, $params);
         }
       }
     }

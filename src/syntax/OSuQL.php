@@ -98,7 +98,7 @@ class OSuQL extends SuQLObject
   public function __call($name, $arguments) {
     if (!$this->currentQuery) return;
 
-    if (method_exists(SQLModifier::class, "mod_$name"))
+    if (method_exists(parent::getModifierClass(), "mod_$name"))
       return $this->modifier($name, $arguments);
 
     if (!$this->currentTable)

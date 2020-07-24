@@ -19,7 +19,6 @@ require 'core/SuQLJoin.php';
 require 'core/SuQLOrder.php';
 
 require 'modifier/SQLBaseModifier.php';
-require 'modifier/SQLModifier.php';
 
 require 'parser/SuQLRegExp.php';
 require 'parser/OSuQLParser.php';
