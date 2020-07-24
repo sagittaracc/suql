@@ -69,7 +69,7 @@ class SuQLObject {
     if (!empty($params))
       $this->db->bindParams($params);
 
-    return $this->db->fetchAll();
+    return $this->db->exec();
   }
 
   public function getFullQueryList() {
