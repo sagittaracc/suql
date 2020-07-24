@@ -1,13 +1,15 @@
 <?php
 namespace core;
 
-class SuQLQuery {
+abstract class SuQLQuery {
   protected $osuql = null;
   protected $type;
 
   function __construct($osuql) {
     $this->osuql = $osuql;
   }
+
+  abstract public function getSemantic();
 
   public function getOSuQL() {
     return $this->osuql;

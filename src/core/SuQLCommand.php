@@ -11,4 +11,8 @@ class SuQLCommand extends SuQLQuery {
     $this->instruction = $instruction;
     $this->params = $params;
   }
+
+  public function getSemantic() {
+    return 'cmd';
+  }
 }

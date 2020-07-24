@@ -15,6 +15,10 @@ class SuQLSelect extends SuQLQuery {
   private $limit      = null;
   private $table_list = [];
 
+  public function getSemantic() {
+    return 'sql';
+  }
+
   public function getSelect() {
     return $this->select;
   }

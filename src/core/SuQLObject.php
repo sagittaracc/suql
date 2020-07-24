@@ -66,12 +66,25 @@ class SuQLObject {
 
     if (!$this->hasQuery($name)) return false;
 
+    if ($this->getQuery($name)->getSemantic() === 'sql')
+      return $this->execSQL($name, $params);
+    else if ($this->getQuery($name)->getSemantic() === 'cmd')
+      return $this->execCMD($name, $params);
+    else
+      return false;
+  }
+
+  private function execSQL($name, $params) {
     $this->db->setQuery($this->getSQL([$name]));
 
     if (!empty($params))
       $this->db->bindParams($params);
 
     return $this->db->exec();
+  }
+
+  private function execCMD($name, $params) {
+
   }
 
   public function getFullQueryList() {
