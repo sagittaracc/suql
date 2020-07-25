@@ -16,11 +16,16 @@ class SuQL extends SuQLObject
   }
 
   public function getSQL($queryList = ['main']) {
-    return $this->interpret() ? parent::getSQL($queryList) : null;
+    return parent::getSQL($queryList);
+  }
+
+  public function run($params = []) {
+    return parent::exec('main', $params);
   }
 
   public function query($suql) {
     $this->suql = trim($suql);
+    $this->interpret();
     return $this;
   }
 
@@ -96,6 +101,12 @@ class SuQL extends SuQLObject
 
   private function UNION($name, $query) {
     parent::addUnion($name, SuQLParser::trimSemicolon($query));
+    return true;
+  }
+
+  private function COMMAND($name, $query) {
+    $command = SuQLParser::parseCommand($query);
+    parent::addCommand($name, $command['instruction'], $command['args']);
     return true;
   }
 }

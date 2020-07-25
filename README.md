@@ -349,11 +349,13 @@ You can create SQL CASE Expressions by using custom modifiers.
 ## Modifiers
 To develop your own modifiers:
 1. Include `dist/suql.phar` in your project
-2. Define the `SQLModifier` class that has to be extended from the `SQLBaseModifier` class.
+2. Define the `SQLExtModifier` class that has to be extended from the `SQLBaseModifier` class.
 3. Define a public static function with the `mod_` prefix and then the name of the modifier.
+
 > Example: Define a standart SQL function `min`
+
 ```php
-class SQLModifier extends SQLBaseModifier
+class SQLExtModifier extends SQLBaseModifier
 {
   public static function mod_min($ofield, $params) {
     parent::default_handler('min', $ofield, $params);
@@ -375,8 +377,9 @@ SELECT FROM users
 
 ### CASE Expression as a custom modifier
 > Example: Show groups permissions depends on the group name.
+
 ```php
-class SQLModifier extends SQLBaseModifier
+class SQLExtModifier extends SQLBaseModifier
 {
   // ...
   public static function mod_permission($ofield, $params) {
@@ -415,8 +418,68 @@ $db = (new OSuQL)->query()
 
 
 
+## COMMANDS
+You can run different commands as PHP functions.
+
+To develop your own commands:
+1. Include `dist/suql.phar` in your project
+2. Define the `SuQLExtCommand` class that has to be extended from the `SuQLBaseCommand` class.
+3. Define a public static function that is going to be used as the command name;
+
+> Example: Show if all the admins were created in the same month
+
+```php
+class SuQLExtCommand extends SuQLBaseCommand {
+  // ...
+  public static function isSameMonth($userList) {
+    $month = null;
+
+    foreach ($userList as $user) {
+      if (is_null($month))
+        $month = date("m", strtotime($user['registration']));
+      else if ($month !== date("m", strtotime($user['registration'])))
+        return false;
+    }
+
+    return true;
+  }
+  // ...
+}
+```
+
+**Sugar SQL approach**
+```sql
+@allTheAdmins = SELECT FROM users
+                  id,
+                  registration
+                INNER JOIN user_group
+                INNER JOIN groups
+                  name
+                WHERE groups.name = \'admin\';
+
+@main = %isSameMonth @allTheAdmins;
+```
+
+**Object Oriented approach**
+```php
+$db = (new OSuQL)->query('allTheAdmins')
+                  ->select()
+                    ->users()
+                      ->field('id')
+                      ->field('registration')
+                    ->user_group()
+                    ->groups()
+                      ->field('name')
+                  ->where('groups.name = \'admin\'')
+                 ->query()
+                  ->command('isSameMonth', ['allTheAdmins']);
+```
+
+
+
 ## Conclusion
 
 SuQL is all about modifiers. They already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` etc and SQL functions.
 
 More than that, you can develop your own modifiers.
+Also you can develop your own commands in PHP to do everything that SuQL or SQL can't.

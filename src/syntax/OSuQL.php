@@ -26,6 +26,10 @@ class OSuQL extends SuQLObject
     return parent::getSQL($queryList);
   }
 
+  public function run($params = []) {
+    return parent::exec($this->currentQuery, $params);
+  }
+
   public function rel($leftTable, $rightTable, $on, $temporary = false) {
     parent::rel($leftTable, $rightTable, $on, $temporary);
     return $this;
@@ -54,6 +58,12 @@ class OSuQL extends SuQLObject
   public function unionAll($table) {
     $this->parser->chain('union');
     parent::addUnionTable($this->currentQuery, 'unionAll', $table);
+    return $this;
+  }
+
+  public function command($instruction, $args) {
+    $this->parser->chain('command');
+    parent::addCommand($this->currentQuery, $instruction, $args);
     return $this;
   }
 
@@ -94,7 +104,7 @@ class OSuQL extends SuQLObject
   public function __call($name, $arguments) {
     if (!$this->currentQuery) return;
 
-    if (method_exists(SQLModifier::class, "mod_$name"))
+    if (method_exists(parent::getModifierClass(), "mod_$name"))
       return $this->modifier($name, $arguments);
 
     if (!$this->currentTable)

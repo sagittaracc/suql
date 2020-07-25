@@ -1,3 +1,4 @@
 /vendor/
-/tests/WorkTest.php
 /dist/
+/external/
+/tests/RunTest.php
