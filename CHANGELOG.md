@@ -1,5 +1,12 @@
 # Change log
 
+## v3.1 - Jul 25, 2020
+
+**New features:**
+- Support commands query as PHP functions
+
+---
+
 ## v3.0 - Jul 20, 2020
 
 **Bug fixes:**
