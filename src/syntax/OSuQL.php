@@ -61,6 +61,12 @@ class OSuQL extends SuQLObject
     return $this;
   }
 
+  public function command($instruction, $args) {
+    $this->parser->chain('command');
+    parent::addCommand($this->currentQuery, $instruction, $args);
+    return $this;
+  }
+
   public function left() {
     if (!$this->currentTable) return;
     $this->currentJoin = 'left';
