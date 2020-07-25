@@ -3,6 +3,7 @@ class SuQLParser
 {
   const REGEX_DETECT_SELECT_QUERY_TYPE = '/^select.*?;$/msi';
   const REGEX_DETECT_UNION_QUERY_TYPE = '/^({:v:}\w+\s+union\s+(all\s+)?)+{:v:}\w+\s*;/msi';
+  const REGEX_DETECT_COMMAND_QUERY_TYPE = '/{:c:}\w+\s+({:v:}\w+,?\s*)*;/msi';
 
   // <var_name> = <query>;
   const REGEX_NESTED_QUERY = '/{:v:}(?<name>\w+)\s*=\s*(?<query>.*?;)/msi';
@@ -31,6 +32,8 @@ class SuQLParser
       return 'SELECT';
     else if ((new SuQLRegExp(self::REGEX_DETECT_UNION_QUERY_TYPE))->match($suql))
       return 'UNION';
+    else if ((new SuQLRegExp(self::REGEX_DETECT_COMMAND_QUERY_TYPE))->match($suql))
+      return 'COMMAND';
     else
       return null;
   }

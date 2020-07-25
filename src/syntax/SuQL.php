@@ -103,4 +103,8 @@ class SuQL extends SuQLObject
     parent::addUnion($name, SuQLParser::trimSemicolon($query));
     return true;
   }
+
+  private function COMMAND($name, $query) {
+    return true;
+  }
 }
