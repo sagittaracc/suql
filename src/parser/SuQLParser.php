@@ -24,6 +24,7 @@ class SuQLParser
   // <field_name[.modif1[(<params>)].modif2.modif3...][field_alias], ...
   const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)({:f:}(?<alias>\w+))?\s*,?\s*$/msi';
   const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
+  const REGEX_COMMAND = '/{:p:}(?<part>\w+)/msi';
 
   const REGEX_TRIM_SEMICOLON = '/(.*?);/';
 
@@ -80,6 +81,19 @@ class SuQLParser
   public static function getFieldModifierList($suql) {
     $fieldModifierList = (new SuQLRegExp(self::REGEX_FIELD_MODIFIERS))->match_all($suql);
     return array_combine($fieldModifierList['name'], $fieldModifierList['params']);
+  }
+
+  public static function parseCommand($suql) {
+    $command = (new SuQLRegExp(self::REGEX_COMMAND))->match_all($suql);
+    $command = $command['part'];
+
+    $instruction = array_shift($command);
+    $args = $command;
+
+    return [
+      'instruction' => $instruction,
+      'args' => $args,
+    ];
   }
 
   public static function trimSemicolon($suql) {

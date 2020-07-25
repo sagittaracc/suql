@@ -105,6 +105,8 @@ class SuQL extends SuQLObject
   }
 
   private function COMMAND($name, $query) {
+    $command = SuQLParser::parseCommand($query);
+    parent::addCommand($name, $command['instruction'], $command['args']);
     return true;
   }
 }
