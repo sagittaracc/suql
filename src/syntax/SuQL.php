@@ -29,6 +29,19 @@ class SuQL extends SuQLObject
     return $this;
   }
 
+  public function script($filename) {
+    if (!file_exists($filename))
+      return false;
+
+    $suql = file_get_contents($filename);
+    if ($suql === false)
+      return false;
+
+    $this->query($suql);
+
+    return $this;
+  }
+
   private function interpret() {
     if (!$this->suql) return false;
 

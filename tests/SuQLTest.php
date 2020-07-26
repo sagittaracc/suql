@@ -262,4 +262,15 @@ final class SuQLTest extends TestCase
     );
     $this->assertNull($this->db->getSQL());
   }
+
+  public function testScript(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->db->script('external/test_script_1')->getSQL(),
+      'select users.id, users.name from users'
+    );
+    $this->assertNull($this->db->getSQL());
+  }
 }
