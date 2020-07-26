@@ -454,8 +454,8 @@ class SuQLExtCommand extends SuQLBaseCommand {
                   registration
                 INNER JOIN user_group
                 INNER JOIN groups
-                  name
-                WHERE groups.name = \'admin\';
+                  name@group
+                WHERE group = \'admin\';
 
 @main = %isSameMonth @allTheAdmins;
 ```
@@ -469,8 +469,8 @@ $db = (new OSuQL)->query('allTheAdmins')
                       ->field('registration')
                     ->user_group()
                     ->groups()
-                      ->field('name')
-                  ->where('groups.name = \'admin\'')
+                      ->field(['name' => 'group'])
+                  ->where("group = 'admin'")
                  ->query()
                   ->command('isSameMonth', ['allTheAdmins']);
 ```

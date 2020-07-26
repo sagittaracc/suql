@@ -120,6 +120,27 @@ final class SuQLObjectTest extends TestCase
       'inner join groups on user_group.group_id = groups.id'
     );
     $this->assertNull($this->db->getSQL('all'));
+
+    // join and where
+    $this->db->addSelect('main');
+    $this->db->getQuery('main')->addFrom('users');
+    $this->db->getQuery('main')->addField('users', 'id');
+    $this->db->getQuery('main')->addField('users', 'registration');
+    $this->db->getQuery('main')->addJoin('inner', 'user_group');
+    $this->db->getQuery('main')->addJoin('inner', 'groups');
+    $this->db->getQuery('main')->addField('groups', ['name' => 'group']);
+    $this->db->getQuery('main')->addWhere("group = 'admin'");
+    $this->assertEquals($this->db->getSQL('all'),
+      'select '.
+        'users.id, '.
+        'users.registration, '.
+        'groups.name as group '.
+      'from users '.
+      'inner join user_group on users.id = user_group.user_id '.
+      'inner join groups on user_group.group_id = groups.id '.
+      'where groups.name = \'admin\''
+    );
+    $this->assertNull($this->db->getSQL('all'));
   }
 
   public function testSelectGroup(): void

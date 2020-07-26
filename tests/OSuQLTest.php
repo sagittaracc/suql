@@ -123,6 +123,29 @@ final class OSuQLTest extends TestCase
       'inner join groups on user_group.group_id = groups.id'
     );
     $this->assertNull($this->db->getSQL());
+
+    // join and where
+    $this->db->select()
+                ->users()
+                  ->field('id')
+                  ->field('registration')
+                ->user_group()
+                ->groups()
+                  ->field(['name' => 'group'])
+              ->where("group = 'admin'");
+
+    $this->assertEquals(
+      $this->db->getSQL(),
+      'select '.
+        'users.id, '.
+        'users.registration, '.
+        'groups.name as group '.
+      'from users '.
+      'inner join user_group on users.id = user_group.user_id '.
+      'inner join groups on user_group.group_id = groups.id '.
+      'where groups.name = \'admin\''
+    );
+    $this->assertNull($this->db->getSQL());
   }
 
   public function testSelectGroup(): void
