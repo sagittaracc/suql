@@ -9,8 +9,9 @@ SuQL is syntactic sugar for SQL.
 
 ### Why do you need this?
 1. Make developing process faster.
-2. Make queries easy to read and write.
-3. Expand SuQL syntax on your own.
+2. Write queries that are easy to read and write.
+3. Create a web service by using SuQL only, without post-processing in any language.
+3. Expand SuQL syntax on your own. SQL isn't the limit. There's no limit really.
 
 ### How do you use this?
 1. Download the latest release.
@@ -18,10 +19,8 @@ SuQL is syntactic sugar for SQL.
 3. Include ```suql.phar```
 4. Start using.
 
-### Try it online
-https://repl.it/@sagittaracc/suql-example
-
-See all the examples in the ```tests``` folder
+### Demo
+See all the examples in the ```tests``` folder and try it [here](https://repl.it/@sagittaracc/suql-example)
 
 # Documentation
 
@@ -44,10 +43,10 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->select()
-                  ->users()
-                    ->field('id')
-                    ->field('name');
+$osuql = (new OSuQL)->select()
+                      ->users()
+                        ->field('id')
+                        ->field('name');
 ```
 |id   |name   |
 |---|---|
@@ -65,8 +64,8 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->select()
-                  ->users();
+$osuql = (new OSuQL)->select()
+                      ->users();
 ```
 
 **Sugar SQL approach**
@@ -79,10 +78,10 @@ SELECT FROM users
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->select()
-                  ->users()
-                    ->field(['id' => 'uid'])
-                    ->field(['name' => 'uname']);
+$osuql = (new OSuQL)->select()
+                      ->users()
+                        ->field(['id' => 'uid'])
+                        ->field(['name' => 'uname']);
 ```
 |uid   |uname   |
 |---|---|
@@ -107,11 +106,11 @@ WHERE uid % 2 = 0
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->select()
-                  ->users()
-                    ->field(['id' => 'uid'])
-                    ->field(['name' => 'uname'])
-                  ->where('uid % 2 = 0');
+$osuql = (new OSuQL)->select()
+                      ->users()
+                        ->field(['id' => 'uid'])
+                        ->field(['name' => 'uname'])
+                      ->where('uid % 2 = 0');
 ```
 |uid   |uname   |
 |---|---|
@@ -134,16 +133,16 @@ WHERE uid not in @users_belong_to_any_group
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query('users_belong_to_any_group')
-                  ->select()
-                    ->user_group('distinct')
-                      ->field('user_id');
-$db->query()
-    ->select()
-      ->users()
-        ->field(['id' => 'uid'])
-        ->field('name')
-      ->where('uid not in @users_belong_to_any_group');
+$osuql = (new OSuQL)->query('users_belong_to_any_group')
+                      ->select()
+                        ->user_group('distinct')
+                          ->field('user_id');
+$osuql->query()
+        ->select()
+          ->users()
+            ->field(['id' => 'uid'])
+            ->field('name')
+        ->where('uid not in @users_belong_to_any_group');
 ```
 
 > Example: Get the first two users
@@ -158,11 +157,11 @@ LIMIT 0, 2
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->select()
-                  ->users()
-                    ->field('*')
-                  ->offset(0)
-                  ->limit(2);
+$osuql = (new OSuQL)->select()
+                      ->users()
+                        ->field('*')
+                    ->offset(0)
+                    ->limit(2);
 ```
 | id | name  | registration        |
 |----|-------|---------------------|
@@ -193,14 +192,14 @@ INNER JOIN groups
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
-                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+$osuql = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                    ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->select()
-    ->users()
-    ->user_group()
-    ->groups()
-      ->field(['name' => 'gname'])
+$osuql->select()
+        ->users()
+        ->user_group()
+        ->groups()
+          ->field(['name' => 'gname'])
 ```
 |gname   |
 |---|
@@ -227,16 +226,16 @@ WHERE gname = 'admin'
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
-                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+$osuql = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                    ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->select()
-    ->users()
-    ->user_group()
-    ->groups()
-      ->field(['name' => 'gname'])
-      ->field(['name' => 'count'])->group()->count()
-    ->where("gname = 'admin'");
+$osuql->select()
+        ->users()
+        ->user_group()
+        ->groups()
+          ->field(['name' => 'gname'])
+          ->field(['name' => 'count'])->group()->count()
+        ->where("gname = 'admin'");
 ```
 |gname   |count   |
 |---|---|
@@ -263,23 +262,23 @@ WHERE gname = 'admin'
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
-                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+$osuql = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                    ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query('allGroupsCount')
-    ->select()
-      ->users()
-      ->user_group()
-      ->groups()
-        ->field(['name' => 'gname'])
-        ->field(['name' => 'count'])->group()->count();
+$osuql->query('allGroupsCount')
+        ->select()
+          ->users()
+          ->user_group()
+          ->groups()
+            ->field(['name' => 'gname'])
+            ->field(['name' => 'count'])->group()->count();
 
-$db->query()
-    ->select()
-      ->allGroupsCount()
-        ->field('gname')
-        ->field('count')
-      ->where("gname = 'admin'");
+$osuql->query()
+        ->select()
+          ->allGroupsCount()
+            ->field('gname')
+            ->field('count')
+          ->where("gname = 'admin'");
 ```
 |gname   |count   |
 |---|---|
@@ -301,15 +300,15 @@ INNER JOIN groups
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
-                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+$osuql = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                     ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->select()
-    ->users()
-    ->user_group()
-    ->groups()
-      ->field(['name' => 'gname'])
-      ->field(['name' => 'count'])->group()->count()->asc();
+$osuql->select()
+        ->users()
+        ->user_group()
+        ->groups()
+          ->field(['name' => 'gname'])
+          ->field(['name' => 'count'])->group()->count()->asc();
 ```
 | user_id | id | gname | count |
 |---------|----|-------|-------|
@@ -334,20 +333,20 @@ $db->select()
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
-                 ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+$osuql = (new OSuQL)->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id')
+                    ->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-$db->query('firstRegisration')
-    ->select()
-      ->users()
-        ->field('registration@reg_interval')->min()
-   ->query('lastRegisration')
-    ->select()
-      ->users()
-        ->field('registration@reg_interval')->max()
-   ->query()
-    ->union('@firstRegisration')
-    ->union('@lastRegisration');
+$osuql->query('firstRegisration')
+        ->select()
+          ->users()
+            ->field('registration@reg_interval')->min()
+       ->query('lastRegisration')
+        ->select()
+          ->users()
+            ->field('registration@reg_interval')->max()
+       ->query()
+        ->union('@firstRegisration')
+        ->union('@lastRegisration');
 ```
 | reg_interval |
 |---------|
@@ -419,11 +418,11 @@ SELECT FROM groups
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query()
-                  ->groups()
-                    ->field('id')
-                    ->field('name')
-                    ->field(['name' => 'permission'])->permission();
+$osuql = (new OSuQL)->query()
+                      ->groups()
+                        ->field('id')
+                        ->field('name')
+                        ->field(['name' => 'permission'])->permission();
 ```
 | id | name  | permission        |
 |----|-------|-------------------|
@@ -477,17 +476,17 @@ class SuQLExtCommand extends SuQLBaseCommand {
 
 **Object Oriented approach**
 ```php
-$db = (new OSuQL)->query('allTheAdmins')
-                  ->select()
-                    ->users()
-                      ->field('id')
-                      ->field('registration')
-                    ->user_group()
-                    ->groups()
-                      ->field(['name' => 'group'])
-                  ->where("group = 'admin'")
-                 ->query()
-                  ->command('isSameMonth', ['allTheAdmins']);
+$osuql = (new OSuQL)->query('allTheAdmins')
+                      ->select()
+                        ->users()
+                          ->field('id')
+                          ->field('registration')
+                        ->user_group()
+                        ->groups()
+                          ->field(['name' => 'group'])
+                      ->where("group = 'admin'")
+                     ->query()
+                      ->command('isSameMonth', ['allTheAdmins']);
 ```
 
 
