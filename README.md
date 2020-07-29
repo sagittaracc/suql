@@ -2,6 +2,8 @@
 [![GitHub license](https://img.shields.io/github/license/sagittaracc/suql)](https://github.com/sagittaracc/suql/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/sagittaracc/suql)](https://github.com/sagittaracc/suql/issues)
 
+[![In english](/assets/images/en.png)](README.md) [![На русском](/assets/images/ru.png)](README.ru.md)
+
 # Sugar SQL
 
 ### What is this?
