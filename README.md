@@ -10,6 +10,17 @@ SuQL is syntactic sugar for SQL.
 2. Make queries easy to read and write.
 3. Expand SuQL syntax on your own.
 
+### How do you use this?
+1. Download the latest release.
+2. Extract the dist folder into your project folder.
+3. Include ```suql.phar```
+4. Start using.
+
+### Try it online
+https://repl.it/@sagittaracc/NegligibleCleverAbility#main.php
+
+See all the examples in the ```tests``` folder
+
 # Documentation
 
 ### Sample Database
