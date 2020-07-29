@@ -1,3 +1,5 @@
+[![GitHub license](https://img.shields.io/github/license/sagittaracc/suql)](https://github.com/sagittaracc/suql/blob/master/LICENSE)
+
 # Sugar SQL
 
 ### What is this?
