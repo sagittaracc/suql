@@ -19,7 +19,7 @@ SuQL is syntactic sugar for SQL.
 4. Start using.
 
 ### Try it online
-https://repl.it/@sagittaracc/NegligibleCleverAbility#main.php
+https://repl.it/@sagittaracc/suql-example
 
 See all the examples in the ```tests``` folder
 
