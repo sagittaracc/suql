@@ -22,9 +22,7 @@ SuQL is syntactic sugar for SQL.
 ### Demo
 See all the examples in the ```tests``` folder and try it [here](https://repl.it/@sagittaracc/suql-example)
 
-# Documentation
-
-[![In english](/assets/images/en.png)](README.md) [![На русском](/assets/images/ru.png)](README.ru.md)
+# Documentation [![In english](/assets/images/en.png)](README.md) [![На русском](/assets/images/ru.png)](README.ru.md)
 
 ### Sample Database
 
