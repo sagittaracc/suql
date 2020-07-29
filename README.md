@@ -1,4 +1,6 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/sagittaracc/suql)
 [![GitHub license](https://img.shields.io/github/license/sagittaracc/suql)](https://github.com/sagittaracc/suql/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/sagittaracc/suql)](https://github.com/sagittaracc/suql/issues)
 
 # Sugar SQL
 
