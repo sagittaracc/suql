@@ -24,6 +24,8 @@ See all the examples in the ```tests``` folder and try it [here](https://repl.it
 
 # Documentation
 
+[![In english](/assets/images.en.png)](README.md) [![На русском](/assets/images/ru.png)](README.ru.md)
+
 ### Sample Database
 
 ![Sugar SQL Sample Database](/assets/images/Sugar-SQL-Sample-Database.png)
