@@ -2,6 +2,8 @@
 [![GitHub license](https://img.shields.io/github/license/sagittaracc/suql)](https://github.com/sagittaracc/suql/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/sagittaracc/suql)](https://github.com/sagittaracc/suql/issues)
 
+[![In english](/assets/images/en.png)](README.md) [![На русском](/assets/images/ru.png)](README.ru.md)
+
 # Sugar SQL
 
 ### What is this?
@@ -22,7 +24,7 @@ SuQL is syntactic sugar for SQL.
 ### Demo
 See all the examples in the ```tests``` folder and try it [here](https://repl.it/@sagittaracc/suql-example)
 
-# Documentation [![In english](/assets/images/en.png)](README.md) [![На русском](/assets/images/ru.png)](README.ru.md)
+# Documentation
 
 ### Sample Database
 
