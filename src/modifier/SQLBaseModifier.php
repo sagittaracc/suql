@@ -1,5 +1,6 @@
 <?php
 use core\SuQLReservedWords;
+use Helper\CPlaceholder;
 
 class SQLBaseModifier
 {
@@ -16,9 +17,9 @@ class SQLBaseModifier
 
     foreach ($case as $when => $then) {
       if ($when === 'default') {
-        $caseList[] = "else $then";
+        $caseList[] = (new CPlaceholder("else ?"))->bind($then);
       } else {
-        $caseList[] = "when " . str_replace('$', $fieldName, $when) . " then $then";
+        $caseList[] = "when " . str_replace('$', $fieldName, $when) . (new CPlaceholder(" then ?"))->bind($then);
       }
     }
 

@@ -1,4 +1,6 @@
 <?php
+namespace Helper;
+
 class CPlaceholder {
   private $str;
   private $quote;
