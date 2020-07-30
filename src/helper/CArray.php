@@ -11,4 +11,8 @@ class CArray {
 
     return array_intersect_key($array, array_fill_keys($keys, 0));
   }
+
+  public static function isSequential($arr) {
+    return array_keys($arr) === range(0, count($arr) - 1);
+  }
 }
