@@ -400,9 +400,9 @@ class SQLExtModifier extends SQLBaseModifier
   // ...
   public static function mod_permission($ofield, $params) {
     parent::mod_case([
-      "$ = 'admin'" => "'can do everything'",
-      "$ = 'user'"  => "'can read only'",
-      'default'     => "'can do nothing'",
+      "$ = 'admin'" => 'can do everything',
+      "$ = 'user'"  => 'can read only',
+      'default'     => 'can do nothing',
     ], $ofield, $params);
   }
   // ...
