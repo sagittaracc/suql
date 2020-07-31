@@ -1,8 +1,25 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/sagittaracc/suql)
-[![GitHub license](https://img.shields.io/github/license/sagittaracc/suql)](https://github.com/sagittaracc/suql/blob/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/sagittaracc/suql)](https://github.com/sagittaracc/suql/issues)
+<p align="center">
+  <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
+  <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/sagittaracc/suql" alt="GitHub license"/>
+  </a>
+  <a href="https://github.com/sagittaracc/suql/issues">
+    <img src="https://img.shields.io/github/issues/sagittaracc/suql" alt="GitHub issues"/>
+  </a>
+</p>
 
-[![In english](/assets/images/en.png)](README.md) [![На русском](/assets/images/ru.png)](README.ru.md)
+<p align="center">
+  <a href="README.md">
+    <img src="/assets/images/en.png" alt="Read SuQL documentation in English"/>
+  </a>
+  <a href="README.ru.md">
+    <img src="/assets/images/ru.png" alt="Читать SuQL документация на русском"/>
+  </a>
+</p>
+
+<p align="center">
+  <img src="/assets/images/logo.png" alt="logo"/>
+</p>
 
 # Sugar SQL
 
