@@ -1,4 +1,8 @@
 <p align="center">
+  <img src="/assets/images/logo.png" alt="logo"/>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
   <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/sagittaracc/suql" alt="GitHub license"/>
@@ -15,10 +19,6 @@
   <a href="README.ru.md">
     <img src="/assets/images/ru.png" alt="Читать SuQL документация на русском"/>
   </a>
-</p>
-
-<p align="center">
-  <img src="/assets/images/logo.png" alt="logo"/>
 </p>
 
 # Sugar SQL
