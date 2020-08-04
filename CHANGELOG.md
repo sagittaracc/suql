@@ -1,5 +1,15 @@
 # Change log
 
+## v3.3 - Aug 4, 2020
+
+**New features:**
+- Prepare for submitting to composer
+
+**Bug fixes:**
+- refactor
+
+---
+
 ## v3.2 - Jul 30, 2020
 
 **Bug fixes:**

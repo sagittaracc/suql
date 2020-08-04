@@ -3,16 +3,6 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
-  <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/sagittaracc/suql" alt="GitHub license"/>
-  </a>
-  <a href="https://github.com/sagittaracc/suql/issues">
-    <img src="https://img.shields.io/github/issues/sagittaracc/suql" alt="GitHub issues"/>
-  </a>
-</p>
-
-<p align="center">
   <a href="README.md">
     <img src="/assets/images/en.png" alt="Read SuQL documentation in English"/>
   </a>
@@ -22,6 +12,16 @@
 </p>
 
 # Sugar SQL
+
+<p align="left">
+  <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
+  <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/sagittaracc/suql" alt="GitHub license"/>
+  </a>
+  <a href="https://github.com/sagittaracc/suql/issues">
+    <img src="https://img.shields.io/github/issues/sagittaracc/suql" alt="GitHub issues"/>
+  </a>
+</p>
 
 ### Что это?
 SuQL - это синтаксический сахар для SQL.

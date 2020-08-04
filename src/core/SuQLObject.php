@@ -28,17 +28,6 @@ class SuQLObject {
     return $this;
   }
 
-  public function setDb($db) {
-    if (is_a($db, 'IDb'))
-      $this->db = $db;
-
-    return $this;
-  }
-
-  public function getDb() {
-    return $this->db;
-  }
-
   public function getAdapter() {
     return $this->adapter;
   }
@@ -59,42 +48,6 @@ class SuQLObject {
     $this->clear();
 
     return $sqlList;
-  }
-
-  public function exec($name, $params = []) {
-    if (!$this->db) return null;
-
-    if (!$this->hasQuery($name)) return false;
-
-    if ($this->getQuery($name)->getSemantic() === 'sql')
-      return $this->execSQL($name, $params);
-    else if ($this->getQuery($name)->getSemantic() === 'cmd')
-      return $this->execCMD($name, $params);
-    else
-      return false;
-  }
-
-  private function execSQL($name, $params) {
-    $this->db->setQuery($this->getSQL([$name]));
-
-    if (!empty($params))
-      $this->db->bindParams($params);
-
-    return $this->db->exec();
-  }
-
-  private function execCMD($name, $params) {
-    $data = [];
-
-    $instruction = $this->getQuery($name)->getInstruction();
-    $args = $this->getQuery($name)->getArgs();
-
-    foreach ($args as $query) {
-      $data[] = $this->exec($query, $params);
-    }
-
-    $commandClass = $this->getCommandClass();
-    return call_user_func_array([new $commandClass, $instruction], $data);
   }
 
   public function getFullQueryList() {

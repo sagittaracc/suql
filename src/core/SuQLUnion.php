@@ -17,7 +17,7 @@ class SuQLUnion extends SuQLQuery {
     return 'sql';
   }
 
-  public function getSuql() {
+  public function getSuQL() {
     return $this->suql;
   }
 
