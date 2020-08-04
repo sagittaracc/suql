@@ -3,16 +3,6 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
-  <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/sagittaracc/suql" alt="GitHub license"/>
-  </a>
-  <a href="https://github.com/sagittaracc/suql/issues">
-    <img src="https://img.shields.io/github/issues/sagittaracc/suql" alt="GitHub issues"/>
-  </a>
-</p>
-
-<p align="center">
   <a href="README.md">
     <img src="/assets/images/en.png" alt="Read SuQL documentation in English"/>
   </a>
@@ -22,6 +12,16 @@
 </p>
 
 # Sugar SQL
+
+<p align="left">
+  <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
+  <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/sagittaracc/suql" alt="GitHub license"/>
+  </a>
+  <a href="https://github.com/sagittaracc/suql/issues">
+    <img src="https://img.shields.io/github/issues/sagittaracc/suql" alt="GitHub issues"/>
+  </a>
+</p>
 
 ### What is this?
 SuQL is syntactic sugar for SQL.
@@ -512,7 +512,5 @@ $osuql = (new OSuQL)->query('allTheAdmins')
 
 ## Conclusion
 
-SuQL is all about modifiers. They already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` etc and SQL functions.
-
-More than that, you can develop your own modifiers.
-Also you can develop your own commands in PHP to do everything that SuQL or SQL can't.
+SuQL is all about modifiers and commands. Modifiers already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` and SQL functions etc. Meanwhile commands can do everything that SuQL or SQL can\'t.
+More than that, you can develop your own modifiers and commands.
