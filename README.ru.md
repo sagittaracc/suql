@@ -33,10 +33,25 @@ SuQL - это синтаксический сахар для SQL.
 3. Возможность расширить синтаксис самостоятельно, как угодно, выходя за рамки даже SQL. Границ просто нет.
 
 ### Как это использовать?
-1. Скачайте последний релиз.
-2. Распакуйте папку ```dist``` в папку своего проекта.
-3. Подключите файл ```suql.phar```
-4. Начните использовать.
+1. Установите через composer ```composer require sagittaracc/suql```
+2. Создайте файл ```test.php```
+```php
+<?php
+require 'vendor/autoload.php';
+$suql = (new SuQL)->setAdapter('mysql');
+$sql = $suql->query('
+  SELECT FROM users
+    id,
+    name
+  ;
+')->getSQL();
+echo $sql;
+```
+3. Запустите ```test.php```
+```
+> php test.php
+select users.id, users.name from users
+```
 
 ### Демо
 Все примеры можно посмотреть в папке ```tests``` а затем попробовать их [здесь](https://repl.it/@sagittaracc/suql-example)

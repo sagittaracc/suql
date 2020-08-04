@@ -30,13 +30,29 @@ SuQL is syntactic sugar for SQL.
 1. Make developing process faster.
 2. Write queries that are easy to read and write.
 3. Create a web service by using SuQL only, without post-processing in any language.
-3. Expand SuQL syntax on your own. SQL isn't the limit. There's no limit really.
+4. Expand SuQL syntax on your own. SQL isn't the limit. There's no limit really.
 
 ### How do you use this?
-1. Download the latest release.
-2. Extract the dist folder into your project folder.
-3. Include ```suql.phar```
-4. Start using.
+1. Install via composer ```composer require sagittaracc/suql```
+2. Write an example ```test.php```
+```php
+<?php
+require 'vendor/autoload.php';
+$suql = (new SuQL)->setAdapter('mysql');
+$sql = $suql->query('
+  SELECT FROM users
+    id,
+    name
+  ;
+')->getSQL();
+echo $sql;
+```
+3. Run the test
+```
+> php test.php
+select users.id, users.name from users
+```
+
 
 ### Demo
 See all the examples in the ```tests``` folder and try it [here](https://repl.it/@sagittaracc/suql-example)
