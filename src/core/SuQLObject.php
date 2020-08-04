@@ -7,7 +7,6 @@ class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
   private $adapter = null;
-  private $db      = null;
 
   public function clear() {
     $this->queries = [];

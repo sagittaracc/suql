@@ -4,16 +4,16 @@ use PHPUnit\Framework\TestCase;
 
 final class SuQLTest extends TestCase
 {
-  private $db;
+  private $suql;
 
   private function init()
   {
-    $this->db = new SuQL;
+    $this->suql = new SuQL;
 
-    $this->db->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
-    $this->db->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+    $this->suql->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
+    $this->suql->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-    $this->db->setAdapter('mysql');
+    $this->suql->setAdapter('mysql');
   }
 
   public function testSelect(): void
@@ -21,7 +21,7 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
           id,
           name
@@ -29,20 +29,20 @@ final class SuQLTest extends TestCase
       ')->getSQL(),
       'select users.id, users.name from users'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
           *
         ;
       ')->getSQL(),
       'select users.* from users'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
           id@uid,
           name@uname
@@ -50,7 +50,7 @@ final class SuQLTest extends TestCase
       ')->getSQL(),
       'select users.id as uid, users.name as uname from users'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testSelectWhere(): void
@@ -58,7 +58,7 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
           id@uid,
           name@uname
@@ -66,10 +66,10 @@ final class SuQLTest extends TestCase
       ')->getSQL(),
       'select users.id as uid, users.name as uname from users where users.id % 2 = 0'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         @users_belong_to_any_group = SELECT DISTINCT FROM user_group
                                       user_id
                                      ;
@@ -80,7 +80,7 @@ final class SuQLTest extends TestCase
       ')->getSQL(),
       'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testSelectLimit(): void
@@ -88,14 +88,14 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
           *
         LIMIT 0, 2;
       ')->getSQL(),
       'select users.* from users limit 2'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testSelectDistinct(): void
@@ -103,14 +103,14 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT DISTINCT FROM users
           name
         ;
       ')->getSQL(),
       'select distinct users.name from users'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testSelectJoin(): void
@@ -118,7 +118,7 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
         INNER JOIN user_group
         INNER JOIN groups
@@ -133,11 +133,11 @@ final class SuQLTest extends TestCase
       'inner join user_group on users.id = user_group.user_id '.
       'inner join groups on user_group.group_id = groups.id'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
 
     // join and where
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
           id,
           registration
@@ -155,7 +155,7 @@ final class SuQLTest extends TestCase
       'inner join groups on user_group.group_id = groups.id '.
       'where groups.name = \'admin\''
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testSelectGroup(): void
@@ -163,7 +163,7 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
         INNER JOIN user_group
         INNER JOIN groups
@@ -180,7 +180,7 @@ final class SuQLTest extends TestCase
       'where groups.name = \'admin\' '.
       'group by groups.name'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testNestedQueries(): void
@@ -188,7 +188,7 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         @allGroupCount = SELECT FROM users
                          INNER JOIN user_group
                          INNER JOIN groups
@@ -214,7 +214,7 @@ final class SuQLTest extends TestCase
       ') allGroupCount '.
       'where gname = \'admin\''
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testSorting(): void
@@ -222,7 +222,7 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         SELECT FROM users
         INNER JOIN user_group
         INNER JOIN groups
@@ -239,7 +239,7 @@ final class SuQLTest extends TestCase
       'group by groups.name '.
       'order by count asc'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 
   public function testUnion(): void
@@ -247,7 +247,7 @@ final class SuQLTest extends TestCase
     $this->init();
 
     $this->assertEquals(
-      $this->db->query('
+      $this->suql->query('
         @firstRegisration = SELECT FROM users
                               registration.min@reg_interval
                             ;
@@ -260,6 +260,6 @@ final class SuQLTest extends TestCase
         'union '.
       '(select max(users.registration) as reg_interval from users)'
     );
-    $this->assertNull($this->db->getSQL());
+    $this->assertNull($this->suql->getSQL());
   }
 }
