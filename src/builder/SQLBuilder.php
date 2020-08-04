@@ -75,7 +75,7 @@ class SQLBuilder
 
   private function buildUnionQuery($query)
   {
-    return $this->osuql->getQuery($query)->getSuql();
+    return $this->osuql->getQuery($query)->getSuQL();
   }
 
   private function composeQuery($query)
