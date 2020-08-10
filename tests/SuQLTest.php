@@ -10,9 +10,11 @@ final class SuQLTest extends TestCase
   {
     $this->suql = new SuQL;
 
+    // Init the database scheme
     $this->suql->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
     $this->suql->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
+    // Setting DBMS
     $this->suql->setAdapter('mysql');
   }
 
