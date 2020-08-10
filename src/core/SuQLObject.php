@@ -111,6 +111,7 @@ class SuQLObject {
       $this->queries[$name]->addUnionTable($unionType, $table);
   }
 
+  // PHP command as a store procedure
   public function addCommand($name, $instruction, $args) {
     $this->queries[$name] = new SuQLCommand($this, $instruction, $args);
   }
