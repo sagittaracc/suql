@@ -467,7 +467,7 @@ $osuql = (new OSuQL)->query()
 
 
 ## COMMANDS
-You can run different commands as PHP functions.
+Commands are the equivalent of SQL stored procedures. Use them to do anything that SQL can't.
 
 To develop your own commands:
 1. Include `dist/suql.phar` in your project
