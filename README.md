@@ -24,13 +24,14 @@
 </p>
 
 ### What is this?
-SuQL is syntactic sugar for SQL.
+SuQL is syntactic sugar for SQL used by [SuQL Script](https://github.com/sagittaracc/suql-script).
 
 ### Why do you need this?
-1. Make developing process faster.
-2. Write queries that are easy to read and write.
-3. Create a web service by using SuQL only, without post-processing in any language.
-4. Expand SuQL syntax on your own. SQL isn't the limit. There's no limit really.
+1. Write queries once, use for every DBMS.
+2. Make developing process faster.
+3. Write queries that are easy to read and write.
+4. Create a web service by using SuQL only, without post-processing in any language.
+5. Expand SuQL syntax on your own. SQL isn't the limit. There's no limit really.
 
 ### How do you use this?
 1. Install via composer ```composer require sagittaracc/suql```
