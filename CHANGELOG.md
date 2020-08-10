@@ -1,5 +1,11 @@
 # Change log
 
+## v3.4 - Aug 10, 2020
+
+- Work on documentation
+
+---
+
 ## v3.3 - Aug 4, 2020
 
 **New features:**
