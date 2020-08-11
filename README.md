@@ -30,7 +30,7 @@ SuQL is syntactic sugar for SQL used by [SuQL Script](https://github.com/sagitta
 Click on the image below to see the whole demo on YouTube.
 <p align="center">
   <a href="https://www.youtube.com/watch?v=9-WSjChYwn4">
-    <img src="https://s7.gifyu.com/images/suql-demo.gif" alt="Sugar SQL (SuQL) demo by sagittaracc"/>
+    <img src="https://s7.gifyu.com/images/suql-demo-by-sagittaracc.gif" alt="Sugar SQL (SuQL) demo by sagittaracc"/>
   </a>
 </p>
 
