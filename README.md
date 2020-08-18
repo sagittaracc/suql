@@ -24,7 +24,7 @@
 </p>
 
 ### What is this?
-SuQL is syntactic sugar for SQL used by [SuQL Script](https://github.com/sagittaracc/suql-script).
+SuQL is syntactic sugar for SQL.
 
 ### How does this work?
 Click on the image below to see the whole demo on YouTube.
