@@ -2,6 +2,7 @@
 use PHPUnit\Framework\TestCase;
 
 use core\SuQLObject;
+use core\SuQLError;
 
 final class SuQLObjectTest extends TestCase
 {
@@ -249,5 +250,16 @@ final class SuQLObjectTest extends TestCase
       '(select max(users.registration) as reg_interval from users)'
     );
     $this->assertNull($this->osuql->getSQL('all'));
+  }
+
+  public function testEmptyAdapter(): void
+  {
+    $this->osuql = new SuQLObject;
+    $this->osuql->addSelect('main');
+    $this->osuql->getQuery('main')->addFrom('users');
+    $this->assertFalse($this->osuql->getSQL(['main']));
+    $this->assertEquals($this->osuql->getLog(), [
+      'error' => [SuQLError::ADAPTER_NOT_DEFINED],
+    ]);
   }
 }
