@@ -7,6 +7,7 @@ class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
   private $adapter = null;
+  private $log = [];
 
   public function clear() {
     $this->queries = [];
@@ -31,8 +32,27 @@ class SuQLObject {
     return $this->adapter;
   }
 
+  protected function setError($error) {
+    $this->log['error'][] = $error;
+  }
+
+  protected function setWarning($warning) {
+    $this->log['warning'][] = $warning;
+  }
+
+  protected function setNotice($notice) {
+    $this->log['notice'][] = $notice;
+  }
+
+  public function getLog() {
+    return $this->log;
+  }
+
   public function getSQL($queryList) {
-    if (!$this->adapter) return null;
+    if (!$this->adapter) {
+      $this->setError(SuQLError::ADAPTER_NOT_DEFINED);
+      return false;
+    }
 
     if ($queryList === 'all')
       $queryList = $this->getFullQueryList();
