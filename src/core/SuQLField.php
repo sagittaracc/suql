@@ -6,6 +6,7 @@ class SuQLField {
 
   private $table;
   private $field;
+  private $originalField;
   private $alias;
   private $visible;
   private $modifier = [];
@@ -14,6 +15,7 @@ class SuQLField {
     $this->oselect = $oselect;
     $this->table = $table;
     $this->field = $field;
+    $this->originalField = $field;
     $this->alias = $alias;
     $this->visible = $visible;
   }
@@ -44,6 +46,10 @@ class SuQLField {
 
   public function setField($field) {
     $this->field = $field;
+  }
+
+  public function getOriginalField() {
+    return $this->originalField;
   }
 
   public function hasAlias() {
