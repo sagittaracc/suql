@@ -20,7 +20,7 @@ class SuQLParser
    *    [offset <offset>]
    *    [limit <limit>]
    */
-  const REGEX_SELECT = "/(select\s+(?<modif>\w+))?\s+(?<type>from|join)\s+{:v:}?(?<table>\w+)\s+((?<fields>.*?)(where\s+(?<where>.*?)\s*)?)?(?<next>left|right|inner|limit\s+(?<offset>\d+)\s*,\s*(?<limit>\d+)|;)/msi";
+  const REGEX_SELECT = "/\n\s*(?<join>[<>]?)\s*(?<table>\w+)\s*{(?<fields>.*?)}/msi";
   // <field_name[.modif1[(<params>)].modif2.modif3...][field_alias], ...
   const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)({:f:}(?<alias>\w+))?\s*,?\s*$/msi';
   const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
@@ -56,21 +56,16 @@ class SuQLParser
 
   public static function parseSelect($suql) {
     $clauses = (new SuQLRegExp(self::REGEX_SELECT))->match_all($suql);
-    array_unshift($clauses['next'], array_pop($clauses['next']));
     $tables = ['tables' => [], 'offset' => null, 'limit' => null];
     for ($i = 0, $n = count($clauses['table']); $i < $n; $i++) {
       $tables['tables'][$clauses['table'][$i]] = [
-        'type' => strtolower($clauses['type'][$i]),
+        'type' => strtolower($clauses['join'][$i]),
         'fields' => $clauses['fields'][$i],
-        'where' => $clauses['where'][$i],
-        'next' => strtolower($clauses['next'][$i]),
-        'modifier' => strtolower($clauses['modif'][$i]),
+        'where' => '',
+        'next' => '',
+        'modifier' => '', // Модификатор самого select (например distinct). Теперь будет как модификатор запроса
       ];
     }
-    if ($clauses['offset'][count($clauses['offset']) - 1] !== '')
-      $tables['offset'] = $clauses['offset'][count($clauses['offset']) - 1];
-    if ($clauses['limit'][count($clauses['limit']) - 1] !== '')
-      $tables['limit'] = $clauses['limit'][count($clauses['limit']) - 1];
     return $tables;
   }
 

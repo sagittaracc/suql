@@ -59,4 +59,28 @@ class SQLBaseModifier
   public static function mod_sum($ofield, $params) {
     self::default_handler('sum', $ofield, $params);
   }
+
+  public static function mod_round($ofield, $params) {
+    self::default_handler('round', $ofield, $params);
+  }
+
+  public static function mod_greater($ofield, $params) {
+    if ($ofield->hasAlias())
+      $ofield->getOSelect()->addHaving($ofield->getAlias() . ' > ' . $params[0]);
+    else
+      $ofield->getOSelect()->addWhere($ofield->getField() . ' > ' . $params[0]);
+  }
+
+  public static function mod_implode($ofield, $params) {
+    $ofield->setField("group_concat(".$ofield->getField()." separator {$params[0]})");
+    $ofield->delModifier('implode');
+  }
+
+  public static function mod_andNotEqual($ofield, $params) {
+    // Default handler for adding where clause
+    if ($ofield->hasAlias())
+      $ofield->getOSelect()->addHaving($ofield->getAlias() . ' <> ' . $params[0]);
+    else
+      $ofield->getOSelect()->addWhere($ofield->getField() . ' <> ' . $params[0]);
+  }
 }
