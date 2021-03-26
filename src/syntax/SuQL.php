@@ -59,11 +59,14 @@ class SuQL extends SuQLObject
     $clauses = SuQLParser::parseSelect($query);
 
     foreach ($clauses['tables'] as $table => $options) {
-      if ($options['type'] === 'from')
+      if ($options['type'] === '')
         parent::getQuery($name)->addFrom($table);
 
-      else if ($options['type'] === 'join')
-        parent::getQuery($name)->addJoin($options['next'], $table);
+      else if ($options['type'] === '>')
+        parent::getQuery($name)->addJoin('right', $table);
+
+      else if ($options['type'] === '<')
+        parent::getQuery($name)->addJoin('left', $table);
 
       else
         return false;
