@@ -84,7 +84,7 @@ class SQLBuilder
       return '';
     $suql = $this->sql[$query];
 
-    $subQueries = (new SuQLRegExp(self::REGEX_SUB_QUERY))->match_all($suql);
+    $subQueries = (new SuQLRegexp(self::REGEX_SUB_QUERY))->match_all($suql);
     if (empty($subQueries['name']))
       return $suql;
     else {

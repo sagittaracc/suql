@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1285283f232a78cb32ca0856d063d71",
+    "content-hash": "30aeca3d172f13063253a918b0143f98",
     "packages": [
         {
             "name": "sagittaracc/config",
@@ -36,6 +36,37 @@
                 "source": "https://github.com/sagittaracc/config/tree/master"
             },
             "time": "2021-03-26T13:48:42+00:00"
+        },
+        {
+            "name": "sagittaracc/regexp",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sagittaracc/regexp.git",
+                "reference": "e4db6a160932885295b9e4f4efde48afbdf6ebd6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sagittaracc/regexp/zipball/e4db6a160932885295b9e4f4efde48afbdf6ebd6",
+                "reference": "e4db6a160932885295b9e4f4efde48afbdf6ebd6",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "issues": "https://github.com/sagittaracc/regexp/issues",
+                "source": "https://github.com/sagittaracc/regexp/tree/master"
+            },
+            "time": "2021-03-26T15:12:11+00:00"
         }
     ],
     "packages-dev": [
@@ -2134,7 +2165,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "sagittaracc/config": 20
+        "sagittaracc/config": 20,
+        "sagittaracc/regexp": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
