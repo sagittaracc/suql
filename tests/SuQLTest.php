@@ -57,8 +57,8 @@ final class NewSuQLTest extends TestCase
         clients {
           id.count.greater(1):count,
           id.implode(':'):listId,
-          lat.round(4).andNotEqual('0.0000').group:lat,
-          lon.round(4).andNotEqual('0.0000').group:lon
+          lat.round(4).notEqual('0.0000').group:lat,
+          lon.round(4).notEqual('0.0000').group:lon
         }
       ;
     ")->getSQL(),

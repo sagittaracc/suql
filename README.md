@@ -41,7 +41,7 @@ Click on the image below to see the whole demo on YouTube.
 
 ### How do you use this?
 Example:
-Show all the clients in the same place.
+Show all the clients that are located in the same place.
 The pure sql would be like this:
 ```sql
 select
@@ -60,11 +60,11 @@ But you can do this in a more readable way like this:
 select
   clients {
     lat.round(4)              -- round up to 4 signs after the dot
-       .andNotEqual('0.0000') -- zero values are not interesting for us
+       .notEqual('0.0000')    -- zero values are not interesting for us
        .group:lat,            -- group by the result column
 
     lon.round(4)              -- do the same thing for longitude
-       .andNotEqual('0.0000')
+       .notEqual('0.0000')
        .group:lon,
 
     id.count                  -- how many users in the same place?

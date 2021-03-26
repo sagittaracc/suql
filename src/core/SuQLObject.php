@@ -144,8 +144,15 @@ class SuQLObject {
     return isset($this->queries[$name]);
   }
 
-  public function getModifierClass() {
-    return class_exists('SQLExtModifier') ? 'SQLExtModifier' : 'SQLBaseModifier';
+  public function getModifierClass($modifierHandler) {
+    $modifierClassList = ['SQLBaseModifier', 'SQLWhereModifier', 'SQLExtModifier'];
+
+    foreach ($modifierClassList as $modifierClass) {
+      if (method_exists($modifierClass, $modifierHandler))
+        return $modifierClass;
+    }
+
+    return null;
   }
 
   public function getCommandClass() {
