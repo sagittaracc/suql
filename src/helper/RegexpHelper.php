@@ -1,7 +1,7 @@
 <?php
-namespace Helper;
+namespace sagittaracc\helpers;
 
-class CRegExp {
+class RegexpHelper {
   private $regex;
   private $flags;
   protected $sequenceList = [];
@@ -28,7 +28,7 @@ class CRegExp {
   }
 
   public function registerSequence($name, $set) {
-    $sequence = new CRegSequence($name, $set);
+    $sequence = new RegexpSequenceHelper($name, $set);
 
     if ($sequence->valid())
       $this->sequenceList[$sequence->name] = $sequence->set;

@@ -1,7 +1,7 @@
 <?php
-namespace Helper;
+namespace sagittaracc\helpers;
 
-class SuQLLog
+class LogHelper
 {
   public static function error($suql, $index)
   {

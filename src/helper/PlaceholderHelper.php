@@ -1,7 +1,7 @@
 <?php
-namespace Helper;
+namespace sagittaracc\helpers;
 
-class CPlaceholder {
+class PlaceholderHelper {
   private $str;
   private $quote;
 
@@ -45,7 +45,7 @@ class CPlaceholder {
         return "{$this->quote}$param{$this->quote}";
 
       case 'array':
-        return CArray::isSequential($param)
+        return ArrayHelper::isSequential($param)
                  ? '['.implode(',', array_map(array($this, 'format'), $param)).']'
                  : '#array';
 

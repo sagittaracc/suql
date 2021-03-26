@@ -1,8 +1,8 @@
 <?php
 use core\SuQLSpecialSymbols;
-use Helper\CRegExp;
+use sagittaracc\helpers\RegexpHelper;
 
-class SuQLRegExp extends CRegExp {
+class SuQLRegExp extends RegexpHelper {
   function __construct($regex, $flags = '') {
     parent::registerSequence('v', [SuQLSpecialSymbols::$prefix_declare_variable]);
     parent::registerSequence('f', [SuQLSpecialSymbols::$prefix_declare_field_alias]);

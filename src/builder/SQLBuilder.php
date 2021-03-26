@@ -1,8 +1,8 @@
 <?php
 use core\SuQLSpecialSymbols;
 use core\SuQLName;
-use Helper\CArray;
-use Helper\CString;
+use sagittaracc\helpers\ArrayHelper;
+use sagittaracc\helpers\StringHelper;
 
 class SQLBuilder
 {
@@ -21,7 +21,7 @@ class SQLBuilder
   {
     if (empty($this->sql)) return null;
 
-    $sqlList = CArray::slice_by_keys($this->sql, $queryList);
+    $sqlList = ArrayHelper::slice_by_keys($this->sql, $queryList);
 
     return count($queryList) === 1 && count($sqlList) === 1
             ? reset($sqlList)
@@ -126,7 +126,7 @@ class SQLBuilder
     $selectList = empty($selectList) ? '*' : implode(', ', $selectList);
     $modifier = $oselect->hasModifier() ? $oselect->getModifier() : '';
 
-    return CString::stripDoubleSpaces("select $modifier $selectList");
+    return StringHelper::stripDoubleSpaces("select $modifier $selectList");
   }
 
   protected function buildFrom($query)
