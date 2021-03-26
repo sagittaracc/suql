@@ -29,11 +29,11 @@ class SuQLParser
   const REGEX_TRIM_SEMICOLON = '/(.*?);/';
 
   public static function getQueryHandler($suql) {
-    if ((new SuQLRegExp(self::REGEX_DETECT_SELECT_QUERY_TYPE))->match($suql))
+    if ((new SuQLRegexp(self::REGEX_DETECT_SELECT_QUERY_TYPE))->match($suql))
       return 'SELECT';
-    else if ((new SuQLRegExp(self::REGEX_DETECT_UNION_QUERY_TYPE))->match($suql))
+    else if ((new SuQLRegexp(self::REGEX_DETECT_UNION_QUERY_TYPE))->match($suql))
       return 'UNION';
-    else if ((new SuQLRegExp(self::REGEX_DETECT_COMMAND_QUERY_TYPE))->match($suql))
+    else if ((new SuQLRegexp(self::REGEX_DETECT_COMMAND_QUERY_TYPE))->match($suql))
       return 'COMMAND';
     else
       return null;
@@ -46,16 +46,16 @@ class SuQLParser
   }
 
   public static function getNestedQueries($suql) {
-    $nestedQueries = (new SuQLRegExp(self::REGEX_NESTED_QUERY))->match_all($suql);
+    $nestedQueries = (new SuQLRegexp(self::REGEX_NESTED_QUERY))->match_all($suql);
     return array_combine($nestedQueries['name'], $nestedQueries['query']);
   }
 
   public static function getMainQuery($suql) {
-    return (new SuQLRegExp(self::REGEX_MAIN_SELECT))->match($suql);
+    return (new SuQLRegexp(self::REGEX_MAIN_SELECT))->match($suql);
   }
 
   public static function parseSelect($suql) {
-    $clauses = (new SuQLRegExp(self::REGEX_SELECT))->match_all($suql);
+    $clauses = (new SuQLRegexp(self::REGEX_SELECT))->match_all($suql);
     $tables = ['tables' => [], 'offset' => null, 'limit' => null];
     for ($i = 0, $n = count($clauses['table']); $i < $n; $i++) {
       $tables['tables'][$clauses['table'][$i]] = [
@@ -70,16 +70,16 @@ class SuQLParser
   }
 
   public static function getFieldList($suql) {
-    return (new SuQLRegExp(self::REGEX_FIELDS))->match_all($suql);
+    return (new SuQLRegexp(self::REGEX_FIELDS))->match_all($suql);
   }
 
   public static function getFieldModifierList($suql) {
-    $fieldModifierList = (new SuQLRegExp(self::REGEX_FIELD_MODIFIERS))->match_all($suql);
+    $fieldModifierList = (new SuQLRegexp(self::REGEX_FIELD_MODIFIERS))->match_all($suql);
     return array_combine($fieldModifierList['name'], $fieldModifierList['params']);
   }
 
   public static function parseCommand($suql) {
-    $command = (new SuQLRegExp(self::REGEX_COMMAND))->match_all($suql);
+    $command = (new SuQLRegexp(self::REGEX_COMMAND))->match_all($suql);
     $command = $command['part'];
 
     $instruction = array_shift($command);
@@ -92,6 +92,6 @@ class SuQLParser
   }
 
   public static function trimSemicolon($suql) {
-    return trim((new SuQLRegExp(self::REGEX_TRIM_SEMICOLON))->match($suql));
+    return trim((new SuQLRegexp(self::REGEX_TRIM_SEMICOLON))->match($suql));
   }
 }

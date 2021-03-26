@@ -15,7 +15,8 @@
       ]
     },
     "require": {
-      "sagittaracc/config": "@dev"
+      "sagittaracc/config": "@dev",
+      "sagittaracc/regexp": "@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^9"
