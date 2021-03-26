@@ -1,7 +1,7 @@
 <?php
-namespace Helper;
+namespace sagittaracc\helpers;
 
-class CArray {
+class ArrayHelper {
   public static function slice_by_keys($array, $keys) {
     if (!is_array($array) || !is_array($keys))
       return null;

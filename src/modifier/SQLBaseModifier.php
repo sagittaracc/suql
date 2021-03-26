@@ -1,6 +1,6 @@
 <?php
 use core\SuQLReservedWords;
-use Helper\CPlaceholder;
+use sagittaracc\helpers\PlaceholderHelper;
 
 class SQLBaseModifier
 {
@@ -17,23 +17,13 @@ class SQLBaseModifier
 
     foreach ($case as $when => $then) {
       if ($when === 'default') {
-        $caseList[] = (new CPlaceholder("else ?"))->bind($then);
+        $caseList[] = (new PlaceholderHelper("else ?"))->bind($then);
       } else {
-        $caseList[] = "when " . str_replace('$', $fieldName, $when) . (new CPlaceholder(" then ?"))->bind($then);
+        $caseList[] = "when " . str_replace('$', $fieldName, $when) . (new PlaceholderHelper(" then ?"))->bind($then);
       }
     }
 
     $ofield->setField('case ' . implode(' ', $caseList) . ' end');
-  }
-
-  public static function mod_asc($ofield, $params) {
-    $field = $ofield->hasAlias() ? $ofield->getAlias() : $ofield->getField();
-    $ofield->getOSelect()->addOrder($field, 'asc');
-  }
-
-  public static function mod_desc($ofield, $params) {
-    $field = $ofield->hasAlias() ? $ofield->getAlias() : $ofield->getField();
-    $ofield->getOSelect()->addOrder($field, 'desc');
   }
 
   public static function mod_group($ofield, $params) {
@@ -64,23 +54,8 @@ class SQLBaseModifier
     self::default_handler('round', $ofield, $params);
   }
 
-  public static function mod_greater($ofield, $params) {
-    if ($ofield->hasAlias())
-      $ofield->getOSelect()->addHaving($ofield->getAlias() . ' > ' . $params[0]);
-    else
-      $ofield->getOSelect()->addWhere($ofield->getField() . ' > ' . $params[0]);
-  }
-
   public static function mod_implode($ofield, $params) {
     $ofield->setField("group_concat(".$ofield->getField()." separator {$params[0]})");
     $ofield->delModifier('implode');
-  }
-
-  public static function mod_andNotEqual($ofield, $params) {
-    // Default handler for adding where clause
-    if ($ofield->hasAlias())
-      $ofield->getOSelect()->addHaving($ofield->getAlias() . ' <> ' . $params[0]);
-    else
-      $ofield->getOSelect()->addWhere($ofield->getField() . ' <> ' . $params[0]);
   }
 }

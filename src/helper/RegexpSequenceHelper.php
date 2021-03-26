@@ -1,7 +1,7 @@
 <?php
-namespace Helper;
+namespace sagittaracc\helpers;
 
-class CRegSequence {
+class RegexpSequenceHelper {
   public $name;
   public $set;
 

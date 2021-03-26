@@ -1,7 +1,7 @@
 <?php
-namespace Helper;
+namespace sagittaracc\helpers;
 
-class CString {
+class StringHelper {
   public static function stripDoubleSpaces($s) {
     return str_replace('  ', ' ', $s);
   }
