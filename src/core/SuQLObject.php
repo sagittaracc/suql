@@ -2,12 +2,14 @@
 namespace core;
 
 use builder\SQLAdapter;
+use sagittaracc\Config;
 
 class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
   private $adapter = null;
   private $log = [];
+  private $configFile = __DIR__ . '/../../config/main.php';
 
   public function clear() {
     $this->queries = [];
@@ -145,7 +147,7 @@ class SuQLObject {
   }
 
   public function getModifierClass($modifierHandler) {
-    $modifierClassList = SuQLConfig::load()->get('modifier.handler');
+    $modifierClassList = Config::load($this->configFile)->get('modifier.handler');
 
     foreach ($modifierClassList as $modifierClass) {
       if (method_exists($modifierClass, $modifierHandler))

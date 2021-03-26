@@ -2,7 +2,7 @@
 use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
 
-final class NewSuQLTest extends TestCase
+final class SuQLTest extends TestCase
 {
   private $suql;
 
