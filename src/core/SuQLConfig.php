@@ -5,7 +5,7 @@ class SuQLConfig
 {
   private static $instance = null;
   private $config;
-  private $configFile = 'config/main.php';
+  private $configFile = __DIR__ . '/../../config/main.php';
 
   protected function __construct()
   {
@@ -14,7 +14,7 @@ class SuQLConfig
 
   protected function __clone() {}
 
-  public static function getInstance()
+  public static function load()
   {
     if (is_null(self::$instance)) {
       self::$instance = new static();
@@ -23,13 +23,18 @@ class SuQLConfig
     return self::$instance;
   }
 
-  public function getModifierConfig()
+  public function get($path)
   {
-    return $this->config['modifier'];
-  }
+    $cfg = $this->config;
 
-  public function getModifierClassList()
-  {
-    return $this->getModifierConfig()['handler'];
+    $pathKey = explode('.', $path);
+    foreach ($pathKey as $key) {
+      if (!isset($cfg[$key]))
+        return null;
+
+      $cfg = $cfg[$key];
+    }
+
+    return $cfg;
   }
 }

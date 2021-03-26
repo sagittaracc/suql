@@ -145,7 +145,7 @@ class SuQLObject {
   }
 
   public function getModifierClass($modifierHandler) {
-    $modifierClassList = SuQLConfig::getInstance()->getModifierClassList();
+    $modifierClassList = SuQLConfig::load()->get('modifier.handler');
 
     foreach ($modifierClassList as $modifierClass) {
       if (method_exists($modifierClass, $modifierHandler))
