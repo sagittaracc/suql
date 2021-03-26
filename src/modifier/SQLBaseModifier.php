@@ -26,16 +26,6 @@ class SQLBaseModifier
     $ofield->setField('case ' . implode(' ', $caseList) . ' end');
   }
 
-  public static function mod_asc($ofield, $params) {
-    $field = $ofield->hasAlias() ? $ofield->getAlias() : $ofield->getField();
-    $ofield->getOSelect()->addOrder($field, 'asc');
-  }
-
-  public static function mod_desc($ofield, $params) {
-    $field = $ofield->hasAlias() ? $ofield->getAlias() : $ofield->getField();
-    $ofield->getOSelect()->addOrder($field, 'desc');
-  }
-
   public static function mod_group($ofield, $params) {
     $ofield->getOSelect()->addGroup($ofield->getOriginalField());
     if (!empty($params)) {

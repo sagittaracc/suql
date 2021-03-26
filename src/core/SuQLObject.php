@@ -145,7 +145,13 @@ class SuQLObject {
   }
 
   public function getModifierClass($modifierHandler) {
-    $modifierClassList = ['SQLBaseModifier', 'SQLWhereModifier', 'SQLExtModifier'];
+    // TODO: Put this in a config or something
+    $modifierClassList = [
+      'SQLBaseModifier',
+      'SQLWhereModifier',
+      'SQLOrderModifier',
+      'SQLExtModifier'
+    ];
 
     foreach ($modifierClassList as $modifierClass) {
       if (method_exists($modifierClass, $modifierHandler))

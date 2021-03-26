@@ -55,23 +55,24 @@ final class NewSuQLTest extends TestCase
     $this->assertEquals($this->suql->query("
       select
         clients {
-          id.count.greater(1):count,
-          id.implode(':'):listId,
           lat.round(4).notEqual('0.0000').group:lat,
-          lon.round(4).notEqual('0.0000').group:lon
+          lon.round(4).notEqual('0.0000').group:lon,
+          id.count.greater(1).asc:count,
+          id.implode(':'):listId
         }
       ;
     ")->getSQL(),
     'select '.
-      'count(clients.id) as count, '.
-      'group_concat(clients.id separator \':\') as listId, '.
       'round(clients.lat, 4) as lat, '.
-      'round(clients.lon, 4) as lon '.
+      'round(clients.lon, 4) as lon, '.
+      'count(clients.id) as count, '.
+      'group_concat(clients.id separator \':\') as listId '.
     'from clients '.
     'group by clients.lat, clients.lon '.
-    'having count > 1 '.
-      'and lat <> \'0.0000\' '.
-      'and lon <> \'0.0000\''
+    'having lat <> \'0.0000\' '.
+      'and lon <> \'0.0000\' '.
+      'and count > 1 '.
+    'order by count asc'
     );
   }
 }
