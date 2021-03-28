@@ -5,23 +5,9 @@ class SuQLParser
   const REGEX_DETECT_UNION_QUERY_TYPE = '/^({:v:}\w+\s+union\s+(all\s+)?)+{:v:}\w+\s*;/msi';
   const REGEX_DETECT_COMMAND_QUERY_TYPE = '/{:c:}\w+\s+({:v:}\w+,?\s*)*;/msi';
 
-  // <var_name> = <query>;
   const REGEX_NESTED_QUERY = '/{:v:}(?<name>\w+)\s*=\s*(?<query>.*?;)/msi';
   const REGEX_MAIN_SELECT = '/^;?\s*(select.*?;)/msi';
-  /*
-   *    select from <table>
-   *        <field list>
-   *    [where <conditions>]
-   *    [
-   *        (left|right|inner) join <table>
-   *            <field list>
-   *        [where <conditions>]
-    *    ]
-   *    [offset <offset>]
-   *    [limit <limit>]
-   */
   const REGEX_SELECT = "/\n\s*(?<join>[<>]?)\s*(?<table>\w+)\s*{(?<fields>.*?)}/msi";
-  // <field_name[.modif1[(<params>)].modif2.modif3...][field_alias], ...
   const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)({:f:}(?<alias>\w+))?\s*,?\s*$/msi';
   const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
   const REGEX_COMMAND = '/{:p:}(?<part>\w+)/msi';
@@ -89,9 +75,5 @@ class SuQLParser
       'instruction' => $instruction,
       'args' => $args,
     ];
-  }
-
-  public static function trimSemicolon($suql) {
-    return trim((new SuQLRegexp(self::REGEX_TRIM_SEMICOLON))->match($suql));
   }
 }
