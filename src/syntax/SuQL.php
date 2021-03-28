@@ -112,7 +112,7 @@ class SuQL extends SuQLObject
   }
 
   private function UNION($name, $query) {
-    parent::addUnion($name, SuQLParser::trimSemicolon($query));
+    parent::addUnion($name, rtrim($query, ';'));
     return true;
   }
 
