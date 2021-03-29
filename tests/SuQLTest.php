@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SuQLTest extends TestCase
 {
-  private $suql;
+  private $suql = null;
 
   private function init()
   {
@@ -78,6 +78,40 @@ final class SuQLTest extends TestCase
         ;
       ")->getSQL(),
       "select users.id, users.name from users where users.name like '%admin%'"
+    );
+  }
+
+  public function testCustomWhere(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query("
+        select
+          users {
+            id.where('$ mod 2 = 0')
+          }
+        ;
+      ")->getSQL(),
+      "select users.id from users where users.id mod 2 = 0"
+    );
+  }
+
+  public function testQueryNestedInWhere(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query("
+        @q1 = select users {};
+
+        select
+          groups {
+            name.where($ not in @q1)
+          }
+        ;
+      ")->getSQL(),
+      "select groups.name from groups where groups.name not in (select * from users)"
     );
   }
 
