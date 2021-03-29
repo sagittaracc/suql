@@ -60,7 +60,10 @@ class SuQL extends SuQLObject
 
     foreach ($clauses['tables'] as $table => $options) {
       if ($options['type'] === '')
-        parent::getQuery($name)->addFrom($table);
+        if (!parent::getQuery($name)->getFrom())
+          parent::getQuery($name)->addFrom($table);
+        else
+          parent::getQuery($name)->addJoin('inner', $table);
 
       else if ($options['type'] === '>')
         parent::getQuery($name)->addJoin('right', $table);
