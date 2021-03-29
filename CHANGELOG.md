@@ -1,5 +1,13 @@
 # Change log
 
+## v4.0.1 - March 29, 2021
+
+**New features:**
+- New SuQL syntax
+- Remove OSuQL syntax
+
+---
+
 ## v3.4 - Aug 10, 2020
 
 - Work on documentation
