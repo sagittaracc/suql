@@ -7,7 +7,7 @@ class SuQLParser
 
   const REGEX_NESTED_QUERY = '/{:v:}(?<name>\w+)\s*=\s*(?<query>.*?;)/msi';
   const REGEX_MAIN_SELECT = '/^;?\s*(select.*?;)/msi';
-  const REGEX_SELECT = "/\n\s*(?<join>[<>]?)\s*(?<table>\w+)\s*{(?<fields>.*?)}/msi";
+  const REGEX_SELECT = "/\n?\s*(?<join>[<>]?)\s*(?<table>\w+)\s*{(?<fields>.*?)}/msi";
   const REGEX_FIELDS = '/(?<name>[\*\w]+)(?<modif>.*?)({:f:}(?<alias>\w+))?\s*,?\s*$/msi';
   const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
   const REGEX_COMMAND = '/{:p:}(?<part>\w+)/msi';

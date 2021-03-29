@@ -24,13 +24,9 @@ final class SuQLTest extends TestCase
 
     $this->assertEquals(
       $this->suql->query('
-        select
-          users {
-            *
-          }
-        ;
+        select users {};
       ')->getSQL(),
-      'select users.* from users'
+      'select * from users'
     );
   }
 
@@ -85,20 +81,15 @@ final class SuQLTest extends TestCase
     );
   }
 
-  public function testSelect(): void
+  public function testJoin(): void
   {
     $this->init();
 
     $this->assertEquals(
       $this->suql->query('
         select
-          users {
-            id:uid,
-            name
-          }
-          > user_group {
-
-          }
+          users {}
+          user_group {}
           < groups {
             name,
             name.group.count:count
@@ -106,16 +97,64 @@ final class SuQLTest extends TestCase
         ;
       ')->getSQL(),
       'select '.
-        'users.id as uid, users.name, groups.name, count(groups.name) as count '.
+        'groups.name, count(groups.name) as count '.
       'from users '.
-      'right join user_group on users.id = user_group.user_id '.
+      'inner join user_group on users.id = user_group.user_id '.
       'left join groups on user_group.group_id = groups.id '.
       'group by groups.name'
     );
     $this->assertNull($this->suql->getSQL());
   }
 
-  public function testSome(): void
+  public function testNestedQuery(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query('
+        @userCount = select
+                      users {}
+                      user_group {}
+                      > groups {
+                        name,
+                        name.group.count:count
+                      }
+        ;
+
+        select
+          userCount {
+            name,
+            count.less(3)
+          }
+        ;
+      ')->getSQL(),
+      'select userCount.name, userCount.count '.
+      'from ('.
+        'select groups.name, count(groups.name) as count '.
+        'from users '.
+        'inner join user_group on users.id = user_group.user_id '.
+        'right join groups on user_group.group_id = groups.id '.
+        'group by groups.name'
+      .') userCount '.
+      'where userCount.count < 3'
+    );
+  }
+
+  public function testUnionQuery(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query('
+        @q1 = select users {*};
+        @q2 = select groups {*};
+        @q3 = @q1 union @q2;
+      ')->getSQL(['q3']),
+      '(select users.* from users) union (select groups.* from groups)'
+    );
+  }
+
+  public function testComplicatedQuery(): void
   {
     $this->init();
 
@@ -129,17 +168,17 @@ final class SuQLTest extends TestCase
         }
       ;
     ")->getSQL(),
-    'select '.
-      'round(clients.lat, 4) as lat, '.
-      'round(clients.lon, 4) as lon, '.
-      'count(clients.id) as count, '.
-      'group_concat(clients.id separator \':\') as listId '.
-    'from clients '.
-    'group by clients.lat, clients.lon '.
-    'having lat <> \'0.0000\' '.
-      'and lon <> \'0.0000\' '.
-      'and count > 1 '.
-    'order by count asc'
+    "select ".
+      "round(clients.lat, 4) as lat, ".
+      "round(clients.lon, 4) as lon, ".
+      "count(clients.id) as count, ".
+      "group_concat(clients.id separator ':') as listId ".
+    "from clients ".
+    "group by clients.lat, clients.lon ".
+    "having lat <> '0.0000' ".
+      "and lon <> '0.0000' ".
+      "and count > 1 ".
+    "order by count asc"
     );
   }
 }
