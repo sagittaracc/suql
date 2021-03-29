@@ -1,8 +1,8 @@
 <?php
 use core\SuQLSpecialSymbols;
 use core\SuQLName;
-use sagittaracc\helpers\ArrayHelper;
-use sagittaracc\helpers\StringHelper;
+use sagittaracc\ArrayHelper;
+use sagittaracc\StringHelper;
 
 class SQLBuilder
 {
