@@ -12,8 +12,6 @@ class SuQLParser
   const REGEX_FIELD_MODIFIERS = '/.(?<name>\w+)(\((?<params>.*?)\))?/msi';
   const REGEX_COMMAND = '/{:p:}(?<part>\w+)/msi';
 
-  const REGEX_TRIM_SEMICOLON = '/(.*?);/';
-
   public static function getQueryHandler($suql) {
     if ((new SuQLRegexp(self::REGEX_DETECT_SELECT_QUERY_TYPE))->match($suql))
       return 'SELECT';
