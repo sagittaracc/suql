@@ -51,6 +51,9 @@ class SQLWhereModifier extends SQLBaseModifier
   }
 
   public static function mod_where($ofield, $params) {
-    // TODO: Custom where
+    if ($ofield->hasAlias())
+      $ofield->getOSelect()->addHaving(str_replace('$', $ofield->getAlias(), trim($params[0], "'")));
+    else
+      $ofield->getOSelect()->addWhere(str_replace('$', $ofield->getField(), trim($params[0], "'")));
   }
 }
