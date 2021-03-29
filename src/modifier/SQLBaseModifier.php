@@ -1,6 +1,6 @@
 <?php
 use core\SuQLReservedWords;
-use sagittaracc\helpers\PlaceholderHelper;
+use sagittaracc\PlaceholderHelper;
 
 class SQLBaseModifier
 {
