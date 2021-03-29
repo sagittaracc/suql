@@ -18,6 +18,73 @@ final class SuQLTest extends TestCase
     $this->suql->setAdapter('mysql');
   }
 
+  public function testSelectAll(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query('
+        select
+          users {
+            *
+          }
+        ;
+      ')->getSQL(),
+      'select users.* from users'
+    );
+  }
+
+  public function testSelectFields(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query('
+        select
+          users {
+            id,
+            name
+          }
+        ;
+      ')->getSQL(),
+      'select users.id, users.name from users'
+    );
+  }
+
+  public function testSelectFieldsWithAliases(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query('
+        select
+          users {
+            id:uid,
+            name:uname
+          }
+        ;
+      ')->getSQL(),
+      'select users.id as uid, users.name as uname from users'
+    );
+  }
+
+  public function testSelectWhere(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query("
+        select
+          users {
+            id,
+            name.like('admin')
+          }
+        ;
+      ")->getSQL(),
+      "select users.id, users.name from users where users.name like '%admin%'"
+    );
+  }
+
   public function testSelect(): void
   {
     $this->init();
