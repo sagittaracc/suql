@@ -24,6 +24,10 @@ class SuQLField {
     return $this->oselect;
   }
 
+  public function getTable() {
+    return $this->table;
+  }
+
   public function addModifier($name, $params = []) {
     $this->modifier[$name] = $params;
   }
