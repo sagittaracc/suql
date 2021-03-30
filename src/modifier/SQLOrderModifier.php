@@ -1,5 +1,5 @@
 <?php
-class SQLOrderModifier extends SQLBaseModifier
+class SQLOrderModifier
 {
   public static function default_order_handler($ofield, $params, $direction) {
     $field = $ofield->hasAlias() ? $ofield->getAlias() : $ofield->getField();
