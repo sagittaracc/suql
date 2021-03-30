@@ -304,4 +304,46 @@ final class SuQLTest extends TestCase
     "order by count asc"
     );
   }
+
+  public function testAnotherComplicatedQuery(): void
+  {
+    $this->init();
+
+    // TODO: underscore needs because counter ends with an 'r' and resurs starts with an 'r'. It leads to incorrect replacements
+    $this->suql->rel(['counter' => 'c_'], ['resurs' => 'r_'], 'r_.id_Resurs = c_.Id_Resurs');
+    $this->suql->rel(['counter' => 'c_'], ['users' => 'u_'], 'u_.Obj_Id_User = c_.Obj_Id_User');
+
+    $this->assertEquals($this->suql->query("
+      select
+        counter {
+          AI_Counter:id,
+          Obj_Id_User,
+          Obj_Id_Counter:counter_id,
+          Name.concat(' [', @SerialNumber, ']'):caption,
+          State:state,
+        }
+
+        resurs {
+          Name_Resurs:resurs,
+          Unit:unit
+        }
+
+        users {
+
+        }
+      ;
+    ")->getSQL(),
+    "select ".
+    	"counter.AI_Counter as id, ".
+    	"counter.Obj_Id_User, ".
+    	"counter.Obj_Id_Counter as counter_id, ".
+      "concat(counter.Name, ' [', counter.SerialNumber, ']') as caption, ".
+      "counter.State as state, ".
+    	"resurs.Name_Resurs as resurs, ".
+    	"resurs.Unit as unit ".
+    "from counter ".
+    "inner join resurs on resurs.id_Resurs = counter.Id_Resurs ".
+    "inner join users on users.Obj_Id_User = counter.Obj_Id_User"
+    );
+  }
 }
