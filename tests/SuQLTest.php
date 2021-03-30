@@ -231,6 +231,22 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testUseNowSQLSpecialWord(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          register.datediffnow()
+        }
+      ;
+    ")->getSQL(),
+    "select datediff(users.register, now()) ".
+    "from users"
+  );
+  }
+
   public function testComplicatedQuery(): void
   {
     $this->init();
