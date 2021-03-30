@@ -56,7 +56,10 @@ class SQLFunctionModifier
 
   public static function mod_concat($ofield, $params) {
     // TODO: global processing the params
-    $params = array_map(fn($param) => str_replace('@', "{$ofield->getTable()}.", $param), $params);
+    foreach ($params as &$param) {
+      $param = str_replace('@', "{$ofield->getTable()}.", $param);
+    }
+    unset($param);
     self::default_function_handler('concat', $ofield, $params);
   }
 }
