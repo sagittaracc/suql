@@ -321,6 +321,11 @@ final class SuQLTest extends TestCase
           Obj_Id_Counter:counter_id,
           Name.concat(' [', @SerialNumber, ']'):caption,
           State:state,
+          NextVerification.datediffnow.abs:nextVerificationInDays,
+          NextVerification.datediffnow.div(30).round.abs:nextVerificationInMonths,
+          NextVerification.datediffnow.div(365).round.abs:nextVerificationInYears,
+          PreviousVerification.date_format('%e %M %Y'):previousVerification,
+          NextVerification.datediffnow.sign.ifNegative('просрочено', 'через'):verificationState
         }
 
         resurs {
@@ -339,8 +344,13 @@ final class SuQLTest extends TestCase
     	"counter.Obj_Id_Counter as counter_id, ".
       "concat(counter.Name, ' [', counter.SerialNumber, ']') as caption, ".
       "counter.State as state, ".
-    	"resurs.Name_Resurs as resurs, ".
-    	"resurs.Unit as unit ".
+      "abs(datediff(counter.NextVerification, now())) as nextVerificationInDays, ".
+    	"abs(round(datediff(counter.NextVerification, now()) / 30)) as nextVerificationInMonths, ".
+    	"abs(round(datediff(counter.NextVerification, now()) / 365)) as nextVerificationInYears, ".
+      "date_format(counter.PreviousVerification, '%e %M %Y') as previousVerification, ".
+      "if(sign(datediff(counter.NextVerification, now())) < 0, 'просрочено', 'через') as verificationState, ".
+      "resurs.Name_Resurs as resurs, ".
+      "resurs.Unit as unit ".
     "from counter ".
     "inner join resurs on resurs.id_Resurs = counter.Id_Resurs ".
     "inner join users on users.Obj_Id_User = counter.Obj_Id_User"

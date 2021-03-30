@@ -16,4 +16,9 @@ class SQLConditionModifier
   {
     self::default_condition_handler('if', '$ = 0', $ofield, $params);
   }
+
+  public static function mod_ifNegative($ofield, $params)
+  {
+    self::default_condition_handler('if', '$ < 0', $ofield, $params);
+  }
 }
