@@ -4,7 +4,7 @@ use sagittaracc\PlaceholderHelper;
 
 class SQLCaseModifier
 {
-  public static function mod_case($case, $ofield, $params) {
+  private static function mod_case($case, $ofield, $params) {
     $fieldName = $ofield->getField();
     $caseList = [];
 
@@ -17,5 +17,14 @@ class SQLCaseModifier
     }
 
     $ofield->setField('case ' . implode(' ', $caseList) . ' end');
+  }
+
+  public static function mod_role($ofield, $params) {
+    self::mod_case([
+      '$ = 1'   => 'admin',
+      '$ = 2'   => 'user',
+      '$ = 3'   => 'guest',
+      'default' => '',
+    ], $ofield, $params);
   }
 }
