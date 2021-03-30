@@ -9,6 +9,7 @@ return [
       'SQLGroupModifier',
       'SQLFunctionModifier',
       'SQLCaseModifier',
+      'SQLConditionModifier',
     ],
   ]
 ];

@@ -210,6 +210,27 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testIfFunction(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          id,
+          role.ifNull('no role', 'role'),
+          role.ifZero('no role', 'role'):zeroRole
+        }
+      ;
+    ")->getSQL(),
+    "select ".
+      "users.id, ".
+      "if(users.role is null, 'no role', 'role'), ".
+      "if(users.role = 0, 'no role', 'role') as zeroRole ".
+    "from users"
+    );
+  }
+
   public function testComplicatedQuery(): void
   {
     $this->init();
