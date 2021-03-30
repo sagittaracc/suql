@@ -231,6 +231,21 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testFunctionInCaseClause(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          id.mod(2).even:isEven
+        }
+      ;
+    ")->getSQL(),
+    "select case when mod(users.id, 2) = 1 then 'no' when mod(users.id, 2) = 0 then 'yes' end as isEven from users"
+    );
+  }
+
   public function testUseNowSQLSpecialWord(): void
   {
     $this->init();

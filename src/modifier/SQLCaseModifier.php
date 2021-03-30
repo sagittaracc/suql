@@ -27,4 +27,11 @@ class SQLCaseModifier
       'default' => '',
     ], $ofield, $params);
   }
+
+  public static function mod_even($ofield, $params) {
+    self::mod_case([
+      '$ = 1' => 'no',
+      '$ = 0' => 'yes',
+    ], $ofield, $params);
+  }
 }

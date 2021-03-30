@@ -37,4 +37,8 @@ class SQLFunctionModifier
     $params[] = 'now()';
     self::default_function_handler('datediff', $ofield, $params);
   }
+
+  public static function mod_mod($ofield, $params) {
+    self::default_function_handler('mod', $ofield, $params);
+  }
 }
