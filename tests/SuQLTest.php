@@ -246,6 +246,21 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testArithmetic(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          id.div(2)
+        }
+      ;
+    ")->getSQL(),
+    "select users.id / 2 from users"
+    );
+  }
+
   public function testUseNowSQLSpecialWord(): void
   {
     $this->init();

@@ -10,6 +10,7 @@ return [
       'SQLFunctionModifier',
       'SQLCaseModifier',
       'SQLConditionModifier',
+      'SQLArithmeticModifier',
     ],
   ]
 ];
