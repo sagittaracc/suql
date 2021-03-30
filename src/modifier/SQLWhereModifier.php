@@ -1,5 +1,5 @@
 <?php
-class SQLWhereModifier extends SQLBaseModifier
+class SQLWhereModifier
 {
   public static function default_where_handler($ofield, $params, $compare) {
     if ($ofield->hasAlias())

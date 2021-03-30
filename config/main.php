@@ -6,6 +6,9 @@ return [
       'SQLBaseModifier',
       'SQLWhereModifier',
       'SQLOrderModifier',
+      'SQLGroupModifier',
+      'SQLFunctionModifier',
+      'SQLCaseModifier',
     ],
   ]
 ];

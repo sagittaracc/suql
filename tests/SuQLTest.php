@@ -188,6 +188,28 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testCase(): void
+  {
+    $this->init();
+
+    $this->assertEquals(
+      $this->suql->query('
+        select
+          users {
+            role.role:caption
+          }
+        ;
+      ')->getSQL(),
+      "select ".
+        "case ".
+          "when users.role = 1 then 'admin' ".
+          "when users.role = 2 then 'user' ".
+          "when users.role = 3 then 'guest' ".
+          "else '' end as caption ".
+      "from users"
+    );
+  }
+
   public function testComplicatedQuery(): void
   {
     $this->init();
