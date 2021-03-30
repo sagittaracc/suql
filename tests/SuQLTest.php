@@ -210,6 +210,73 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testIfFunction(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          id,
+          role.ifNull('no role', 'role'),
+          role.ifZero('no role', 'role'):zeroRole
+        }
+      ;
+    ")->getSQL(),
+    "select ".
+      "users.id, ".
+      "if(users.role is null, 'no role', 'role'), ".
+      "if(users.role = 0, 'no role', 'role') as zeroRole ".
+    "from users"
+    );
+  }
+
+  public function testFunctionInCaseClause(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          id.mod(2).even:isEven
+        }
+      ;
+    ")->getSQL(),
+    "select case when mod(users.id, 2) = 1 then 'no' when mod(users.id, 2) = 0 then 'yes' end as isEven from users"
+    );
+  }
+
+  public function testArithmetic(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          id.div(2)
+        }
+      ;
+    ")->getSQL(),
+    "select users.id / 2 from users"
+    );
+  }
+
+  public function testUseNowSQLSpecialWord(): void
+  {
+    $this->init();
+
+    $this->assertEquals($this->suql->query("
+      select
+        users {
+          register.datediffnow()
+        }
+      ;
+    ")->getSQL(),
+    "select datediff(users.register, now()) ".
+    "from users"
+  );
+  }
+
   public function testComplicatedQuery(): void
   {
     $this->init();

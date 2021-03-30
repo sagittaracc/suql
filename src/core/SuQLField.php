@@ -63,4 +63,9 @@ class SuQLField {
   public function visible() {
     return $this->visible === true;
   }
+
+  public function compileIntoString($s)
+  {
+    return str_replace('$', $this->field, $s);
+  }
 }

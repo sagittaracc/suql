@@ -32,4 +32,13 @@ class SQLFunctionModifier
     $ofield->setField("group_concat(".$ofield->getField()." separator {$params[0]})");
     $ofield->delModifier('implode');
   }
+
+  public static function mod_datediffnow($ofield, $params) {
+    $params[] = 'now()';
+    self::default_function_handler('datediff', $ofield, $params);
+  }
+
+  public static function mod_mod($ofield, $params) {
+    self::default_function_handler('mod', $ofield, $params);
+  }
 }
