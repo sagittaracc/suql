@@ -8,6 +8,10 @@ class SQLFunctionModifier
     $ofield->delModifier($modifier);
   }
 
+  public static function mod_abs($ofield, $params) {
+    self::default_function_handler('abs', $ofield, $params);
+  }
+
   public static function mod_count($ofield, $params) {
     self::default_function_handler('count', $ofield, $params);
   }
@@ -40,6 +44,14 @@ class SQLFunctionModifier
 
   public static function mod_mod($ofield, $params) {
     self::default_function_handler('mod', $ofield, $params);
+  }
+
+  public static function mod_date_format($ofield, $params) {
+    self::default_function_handler('date_format', $ofield, $params);
+  }
+
+  public static function mod_sign($ofield, $params) {
+    self::default_function_handler('sign', $ofield, $params);
   }
 
   public static function mod_concat($ofield, $params) {
