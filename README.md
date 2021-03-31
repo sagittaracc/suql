@@ -31,43 +31,6 @@ SuQL is syntactic sugar for SQL.
 2. Write queries that are easy to read and write.
 3. Expand SuQL syntax on your own. SQL isn't the limit. There's no limit really.
 
-### How do you use this?
-Example:
-Show all the clients that are located in the same place.
-The pure sql would be like this:
-```sql
-select
-  count(clients.id) as count
-  group_concat(clients.id separator ':') as listId
-  round(clients.lat, 4) as lat
-  round(clients.lon, 4) as lon
-from clients
-group by clients.lat, clients.lon
-having count > 1
-  and lat <> '0.0000'
-  and lon <> '0.0000'
-```
-But you can do this in a more readable way like this:
-```sql
-select
-  clients {
-    lat.round(4)              -- round up to 4 signs after the dot
-       .notEqual('0.0000')    -- zero values are not interesting for us
-       .group:lat,            -- group by the result column
-
-    lon.round(4)              -- do the same thing for longitude
-       .notEqual('0.0000')
-       .group:lon,
-
-    id.count                  -- how many users in the same place?
-      .greater(1):count,      -- we are interested only
-                              -- if they are more than one in the same place
-
-    id.implode(':'):listId    -- concat the ids
-  }
-;
-```
-
 ## Conclusion
 
 SuQL is all about modifiers and commands. Modifiers already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` and SQL functions etc. Meanwhile commands can do everything that SuQL or SQL can\'t.
