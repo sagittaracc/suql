@@ -7,22 +7,21 @@ use sagittaracc\model\GroupView;
 
 final class SuQLTest extends TestCase
 {
-  // public function testUser(): void
-  // {
-  //   var_dump(User::find());
-  //   $this->assertEquals(
-  //     User::find()->getSQL('all'),
-  //     'select users.* from users'
-  //   );
-  // }
-
-  public function testUserView(): void
+  public function testUser(): void
   {
     $this->assertEquals(
-      UserView::find()->getSQL(['userView']),
-      'select * from (select users.* from users) userView'
+      User::find()->getRawSql(),
+      'select * from users'
     );
   }
+
+  // public function testUserView(): void
+  // {
+  //   $this->assertEquals(
+  //     UserView::find()->getSQL(['userView']),
+  //     'select * from (select users.* from users) userView'
+  //   );
+  // }
 
   // public function testGroupView(): void
   // {
