@@ -63,4 +63,54 @@ final class SuQLTest extends TestCase
       'select * from (select * from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id) user'
     );
   }
+
+  public function testWhere(): void
+  {
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'where' => ['$ mod 2 = 0']
+              ])
+              ->field(['name' => 'userName'])
+              ->getRawSql(),
+      'select users.id, users.name as userName from users where users.id mod 2 = 0'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('name', [
+                'like' => ['yuriy']
+              ])
+              ->field('id', [
+                'greater' => [10],
+              ])
+              ->getRawSql(),
+      "select users.name, users.id from users where users.name like '%yuriy%' and users.id > 10"
+    );
+  }
+
+  public function testOrder(): void
+  {
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'asc' => []
+              ])
+              ->field('name')
+              ->getRawSql(),
+      'select users.id, users.name from users order by users.id asc'
+    );
+  }
+
+  public function testFunction(): void
+  {
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'max' => []
+              ])
+              ->getRawSql(),
+      'select max(users.id) from users'
+    );
+  }
 }
