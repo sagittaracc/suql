@@ -10,8 +10,10 @@ final class SuQLTest extends TestCase
   public function testUser(): void
   {
     $this->assertEquals(
-      User::find()->getRawSql(),
-      'select * from users'
+      User::find()
+              ->select(['id', 'name'])
+              ->getRawSql(),
+      'select users.id, users.name from users'
     );
   }
 

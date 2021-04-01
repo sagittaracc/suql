@@ -24,4 +24,12 @@ class SuQL extends SuQLObject
 
     return $instance;
   }
+
+  public function select($fields)
+  {
+    foreach ($fields as $field)
+      $this->getQuery($this->query())->addField($this->table(), $field);
+
+    return $this;
+  }
 }
