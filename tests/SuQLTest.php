@@ -113,4 +113,12 @@ final class SuQLTest extends TestCase
       'select max(users.id) from users'
     );
   }
+
+  public function testSuQLExt(): void
+  {
+    $this->assertEquals(
+      User::find()->max('id')->getRawSql(),
+      'select max(users.id) from users'
+    );
+  }
 }

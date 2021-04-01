@@ -3,8 +3,9 @@
 namespace sagittaracc\model;
 
 use \SuQL;
+use \SuQLExt;
 
-class User extends SuQL
+class User extends SuQLExt
 {
 	public function query()
 	{
