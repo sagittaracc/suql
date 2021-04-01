@@ -5,11 +5,6 @@ class SuQL extends SuQLObject
 {
   protected $adapter = 'mysql';
 
-  public function query()
-  {
-    return 'main';
-  }
-
   public function getRawSql()
   {
     return parent::getSQL([$this->query()]);
@@ -20,7 +15,16 @@ class SuQL extends SuQLObject
     $instance = new static();
 
     $instance->addSelect($instance->query());
-    $instance->getQuery($instance->query())->addFrom($instance->table());
+    if (method_exists($instance, 'view'))
+    {
+      $view = $instance->view();
+      $instance->extend($view->getQueries());
+      $instance->getQuery($instance->query())->addFrom($view->query());
+    }
+    else
+    {
+      $instance->getQuery($instance->query())->addFrom($instance->table());
+    }
 
     return $instance;
   }
@@ -28,7 +32,12 @@ class SuQL extends SuQLObject
   public function select($fields)
   {
     foreach ($fields as $field)
-      $this->getQuery($this->query())->addField($this->table(), $field);
+    {
+      $this->getQuery($this->query())->addField(
+        method_exists($this, 'table') ? $this->table() : $this->view()->query(),
+        $field
+      );
+    }
 
     return $this;
   }

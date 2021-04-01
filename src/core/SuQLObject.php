@@ -71,6 +71,14 @@ class SuQLObject {
     return $sqlList;
   }
 
+  public function getQueries() {
+    return $this->queries;
+  }
+
+  public function extend($queries) {
+    $this->queries = array_merge($this->queries, $queries);
+  }
+
   public function getFullQueryList() {
     return array_keys($this->queries);
   }

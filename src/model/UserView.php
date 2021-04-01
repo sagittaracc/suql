@@ -6,13 +6,13 @@ use \SuQL;
 
 class UserView extends SuQL
 {
-	public function alias()
+	public function query()
 	{
 		return 'userView';
 	}
 
 	public function view()
 	{
-		return User::find();
+		return User::find()->select(['id', 'name']);
 	}
 }

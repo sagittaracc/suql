@@ -17,19 +17,19 @@ final class SuQLTest extends TestCase
     );
   }
 
-  // public function testUserView(): void
-  // {
-  //   $this->assertEquals(
-  //     UserView::find()->getSQL(['userView']),
-  //     'select * from (select users.* from users) userView'
-  //   );
-  // }
+  public function testUserView(): void
+  {
+    $this->assertEquals(
+      UserView::find()->getRawSql(),
+      'select * from (select users.id, users.name from users) user'
+    );
+  }
 
-  // public function testGroupView(): void
-  // {
-  //   $this->assertEquals(
-  //     GroupView::find()->getSQL(['groupView']),
-  //     'select * from (select userView.* from userView) groupView'
-  //   );
-  // }
+  public function testGroupView(): void
+  {
+    $this->assertEquals(
+      GroupView::find()->getRawSql(),
+      'select * from (select * from (select users.id, users.name from users) user) userView'
+    );
+  }
 }

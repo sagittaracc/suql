@@ -6,7 +6,7 @@ use \SuQL;
 
 class GroupView extends SuQL
 {
-  public function alias()
+  public function query()
   {
     return 'groupView';
   }
