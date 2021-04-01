@@ -3,8 +3,9 @@
 namespace sagittaracc\model;
 
 use \SuQL;
+use \SuQLExt;
 
-class User extends SuQL
+class User extends SuQLExt
 {
 	public function query()
 	{
@@ -14,5 +15,12 @@ class User extends SuQL
 	public function table()
 	{
 		return 'users';
+	}
+
+	public function link()
+	{
+		return [
+			UserGroup::class => ['id' => 'user_id'],
+		];
 	}
 }
