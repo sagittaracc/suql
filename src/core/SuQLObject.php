@@ -7,7 +7,7 @@ use sagittaracc\Config;
 class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
-  private $adapter = null;
+  protected $adapter = null;
   private $log = [];
   private $configFile = __DIR__ . '/../../config/main.php';
 
@@ -69,6 +69,14 @@ class SuQLObject {
     $this->clear();
 
     return $sqlList;
+  }
+
+  public function getQueries() {
+    return $this->queries;
+  }
+
+  public function extend($queries) {
+    $this->queries = array_merge($this->queries, $queries);
   }
 
   public function getFullQueryList() {

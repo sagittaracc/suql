@@ -3,27 +3,42 @@ use core\SuQLObject;
 
 class SuQL extends SuQLObject
 {
+  protected $adapter = 'mysql';
+
+  public function getRawSql()
+  {
+    return parent::getSQL([$this->query()]);
+  }
+
   public static function find()
   {
-    $instance = new static;
-    $instance->setAdapter('mysql');
+    $instance = new static();
 
-    if (method_exists($instance, 'tableName')) {
-      $instance->addSelect('main');
-      $instance->getQuery('main')->addFrom($instance->tableName());
-      $instance->getQuery('main')->addField($instance->tableName(), 'id');
+    $instance->addSelect($instance->query());
+    if (method_exists($instance, 'view'))
+    {
+      $view = $instance->view();
+      $instance->extend($view->getQueries());
+      $instance->getQuery($instance->query())->addFrom($view->query());
     }
-    else {
-      $tableView = $instance->tableView();
-      foreach ($tableView as $alias => $view) ;
-      $table = $view->getQuery('main')->getFrom();
-      $instance->addSelect($alias);
-      $instance->getQuery($alias)->addFrom($table);
-      $instance->getQuery($alias)->addField($table, 'id');
-      $instance->addSelect('main');
-      $instance->getQuery('main')->addFrom($alias);
+    else
+    {
+      $instance->getQuery($instance->query())->addFrom($instance->table());
     }
 
     return $instance;
+  }
+
+  public function select($fields)
+  {
+    foreach ($fields as $field)
+    {
+      $this->getQuery($this->query())->addField(
+        method_exists($this, 'table') ? $this->table() : $this->view()->query(),
+        $field
+      );
+    }
+
+    return $this;
   }
 }

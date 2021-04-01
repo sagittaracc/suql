@@ -6,8 +6,13 @@ use \SuQL;
 
 class UserView extends SuQL
 {
-	public function tableView()
+	public function query()
 	{
-		return ['subquery' => User::find()];
+		return 'userView';
+	}
+
+	public function view()
+	{
+		return User::find()->select(['id', 'name']);
 	}
 }

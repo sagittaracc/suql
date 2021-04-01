@@ -6,7 +6,12 @@ use \SuQL;
 
 class User extends SuQL
 {
-	public function tableName()
+	public function query()
+	{
+		return 'user';
+	}
+
+	public function table()
 	{
 		return 'users';
 	}
