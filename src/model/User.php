@@ -15,4 +15,11 @@ class User extends SuQL
 	{
 		return 'users';
 	}
+
+	public function link()
+	{
+		return [
+			UserGroup::class => ['id' => 'user_id'],
+		];
+	}
 }

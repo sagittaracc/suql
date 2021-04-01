@@ -2,34 +2,49 @@
 use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\model\User;
-use sagittaracc\model\UserView;
-use sagittaracc\model\GroupView;
+use sagittaracc\model\UserGroup;
+use sagittaracc\model\Group;
+use sagittaracc\model\UserGroupView;
 
 final class SuQLTest extends TestCase
 {
-  public function testUser(): void
+  public function testSelect(): void
   {
+    // Select all the fields
     $this->assertEquals(
-      User::find()
-              ->select(['id', 'name'])
-              ->getRawSql(),
+      User::find()->getRawSql(),
+      'select * from users'
+    );
+
+    // Select some specific fields
+    $this->assertEquals(
+      User::find()->select(['id', 'name'])->getRawSql(),
       'select users.id, users.name from users'
     );
-  }
 
-  public function testUserView(): void
-  {
+    // Set aliases for the fields
     $this->assertEquals(
-      UserView::find()->getRawSql(),
-      'select * from (select users.id, users.name from users) user'
+      User::find()->select(['id' => 'uid', 'name' => 'uname'])->getRawSql(),
+      'select users.id as uid, users.name as uname from users'
     );
   }
 
-  public function testGroupView(): void
+  public function testJoin(): void
+  {
+    // Join all tables
+    $this->assertEquals(
+      User::find()->join(UserGroup::class)
+                  ->join(Group::class)
+                  ->getRawSql(),
+      'select * from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id'
+    );
+  }
+
+  public function testView(): void
   {
     $this->assertEquals(
-      GroupView::find()->getRawSql(),
-      'select * from (select * from (select users.id, users.name from users) user) userView'
+      UserGroupView::find()->getRawSql(),
+      'select * from (select * from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id) user'
     );
   }
 }

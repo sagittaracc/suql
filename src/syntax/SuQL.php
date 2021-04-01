@@ -1,9 +1,12 @@
 <?php
+
 use core\SuQLObject;
+use sagittaracc\ArrayHelper;
 
 class SuQL extends SuQLObject
 {
   protected $adapter = 'mysql';
+  private $storage = [];
 
   public function getRawSql()
   {
@@ -29,15 +32,61 @@ class SuQL extends SuQLObject
     return $instance;
   }
 
-  public function select($fields)
+  public function select(array $fields)
   {
-    foreach ($fields as $field)
+    if (ArrayHelper::isSequential($fields))
     {
-      $this->getQuery($this->query())->addField(
-        method_exists($this, 'table') ? $this->table() : $this->view()->query(),
-        $field
-      );
+      foreach ($fields as $field)
+      {
+        $this->getQuery($this->query())->addField(
+          method_exists($this, 'table') ? $this->table() : $this->view()->query(),
+          $field
+        );
+      }
     }
+    else
+    {
+      foreach ($fields as $field => $alias)
+      {
+        $this->getQuery($this->query())->addField(
+          method_exists($this, 'table') ? $this->table() : $this->view()->query(),
+          [$field => $alias]
+        );
+      }
+    }
+
+    return $this;
+  }
+
+  public function join(string $model)
+  {
+    $links = $this->link();
+
+    if (!isset($links[$model]))
+    {
+      foreach ($this->storage as $models)
+      {
+        $table = $models->table();
+        $links = $models->link();
+        if (isset($links[$model]))
+        {
+          $link = $links[$model];
+          break;
+        }
+      }
+    }
+    else
+    {
+      $table = $this->table();
+      $link = $links[$model];
+    }
+
+    foreach ($link as $a => $b) ;
+
+    $this->rel($table, (new $model)->table(), "$table.$a = " . (new $model)->table() . ".$b");
+    $this->getQuery($this->query())->addJoin('inner', (new $model)->table());
+
+    $this->storage[] = new $model;
 
     return $this;
   }
