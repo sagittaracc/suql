@@ -7,6 +7,7 @@ class SuQL extends SuQLObject
 {
   protected $adapter = 'mysql';
   private $storage = [];
+  private $currentModel;
 
   public function getRawSql()
   {
@@ -16,6 +17,7 @@ class SuQL extends SuQLObject
   public static function find()
   {
     $instance = new static();
+    $instance->currentModel = get_class($instance);
 
     $instance->addSelect($instance->query());
     if (method_exists($instance, 'view'))
@@ -58,8 +60,23 @@ class SuQL extends SuQLObject
     return $this;
   }
 
+  public function field($name, $modifiers = [])
+  {
+    $currentModel = new $this->currentModel;
+
+    $this->getQuery($this->query())->addField($currentModel->table(), $name);
+
+    foreach ($modifiers as $modifier => $params)
+    {
+      $this->getQuery($this->query())->getField($currentModel->table(), $name)->addModifier($modifier, $params);
+    }
+
+    return $this;
+  }
+
   public function join(string $model)
   {
+    $this->currentModel = $model;
     $links = $this->link();
 
     if (!isset($links[$model]))
