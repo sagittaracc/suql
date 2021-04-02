@@ -15,7 +15,6 @@
       ]
     },
     "require": {
-      "sagittaracc/config": "@dev",
       "sagittaracc/regexp": "@dev",
       "sagittaracc/strings": "@dev",
       "sagittaracc/arrays": "@dev",

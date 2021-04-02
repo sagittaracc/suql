@@ -133,7 +133,7 @@ final class SuQLTest extends TestCase
     );
   }
 
-  public function testSuQLExt(): void
+  public function testSuQLExtension(): void
   {
     $this->assertEquals(
       User::find()->max('id')->getRawSql(),
@@ -148,6 +148,16 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       User::find()->filterLike('name', null)->getRawSql(),
       'select users.name from users'
+    );
+  }
+
+  public function testSuQLExtensionArithmeticModifier(): void
+  {
+    $this->assertEquals(
+      User::find()->field('id', [
+        'div' => [2]
+      ])->getRawSql(),
+      'select users.id / 2 from users'
     );
   }
 }
