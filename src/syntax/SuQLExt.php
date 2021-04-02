@@ -12,4 +12,13 @@ class SuQLExt extends SuQL
 
     return $this;
   }
+
+  public function filterLike($field, $value)
+  {
+    $this->field($field, [
+      'filter' => ['like', $value],
+    ]);
+
+    return $this;
+  }
 }

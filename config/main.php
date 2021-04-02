@@ -5,6 +5,7 @@ return [
     'handler' => [
       'SQLBaseModifier',
       'SQLWhereModifier',
+      'SQLFilterModifier',
       'SQLOrderModifier',
       'SQLGroupModifier',
       'SQLFunctionModifier',
