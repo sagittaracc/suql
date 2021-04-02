@@ -1,5 +1,12 @@
 # Change log
 
+## v5.0.1 - April 2, 2021
+
+**New features:**
+- Add filter modifier
+
+---
+
 ## v5.0 - April 1, 2021
 
 **New features:**

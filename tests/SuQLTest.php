@@ -87,6 +87,25 @@ final class SuQLTest extends TestCase
               ->getRawSql(),
       "select users.name, users.id from users where users.name like '%yuriy%' and users.id > 10"
     );
+
+    // Where by filters
+    $this->assertEquals(
+      User::find()
+              ->field('name', [
+                'filter' => ['like', 'yuriy']
+              ])
+              ->getRawSql(),
+      "select users.name from users where users.name like '%yuriy%'"
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('name', [
+                'filter' => ['like', null]
+              ])
+              ->getRawSql(),
+      "select users.name from users"
+    );
   }
 
   public function testOrder(): void
@@ -119,6 +138,16 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       User::find()->max('id')->getRawSql(),
       'select max(users.id) from users'
+    );
+
+    $this->assertEquals(
+      User::find()->filterLike('name', 'yuriy')->getRawSql(),
+      "select users.name from users where users.name like '%yuriy%'"
+    );
+
+    $this->assertEquals(
+      User::find()->filterLike('name', null)->getRawSql(),
+      'select users.name from users'
     );
   }
 }
