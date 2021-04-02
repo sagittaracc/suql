@@ -4,17 +4,17 @@ namespace sagittaracc\model;
 
 use \PDOSuQL;
 
-class UserDb extends PDOSuQL
+class ProductDb extends PDOSuQL
 {
-	protected $dbname = 'test';
+	protected $dbname = 'store';
 
 	public function query()
 	{
-		return 'user';
+		return 'store';
 	}
 
 	public function table()
 	{
-		return 'users';
+		return 'products';
 	}
 }
