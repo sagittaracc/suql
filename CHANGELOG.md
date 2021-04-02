@@ -1,5 +1,12 @@
 # Change log
 
+## v5.0.2 - April 2, 2021
+
+**New features:**
+-- Support PDO
+
+---
+
 ## v5.0.1 - April 2, 2021
 
 **New features:**
