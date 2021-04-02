@@ -1,6 +1,6 @@
 <?php
 
-// Example: max function
+// Example: extend SuQL functionality on your own
 
 class SuQLExt extends SuQL
 {
