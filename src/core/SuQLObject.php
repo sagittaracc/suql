@@ -2,14 +2,26 @@
 namespace core;
 
 use builder\SQLAdapter;
-use sagittaracc\Config;
 
 class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
   protected $adapter = null;
   private $log = [];
-  private $configFile = __DIR__ . '/../../config/main.php';
+
+  protected function modifierList()
+  {
+    return [
+      'SQLBaseModifier',
+      'SQLWhereModifier',
+      'SQLFilterModifier',
+      'SQLOrderModifier',
+      'SQLGroupModifier',
+      'SQLFunctionModifier',
+      'SQLCaseModifier',
+      'SQLConditionModifier',
+    ];
+  }
 
   public function clear() {
     $this->queries = [];
@@ -141,11 +153,6 @@ class SuQLObject {
       $this->queries[$name]->addUnionTable($unionType, $table);
   }
 
-  // PHP command as a store procedure
-  public function addCommand($name, $instruction, $args) {
-    $this->queries[$name] = new SuQLCommand($this, $instruction, $args);
-  }
-
   public function getQuery($name) {
     return $this->queries[$name];
   }
@@ -155,17 +162,11 @@ class SuQLObject {
   }
 
   public function getModifierClass($modifierHandler) {
-    $modifierClassList = Config::load($this->configFile)->get('modifier.handler');
-
-    foreach ($modifierClassList as $modifierClass) {
+    foreach ($this->modifierList() as $modifierClass) {
       if (method_exists($modifierClass, $modifierHandler))
         return $modifierClass;
     }
 
     return null;
-  }
-
-  public function getCommandClass() {
-    return class_exists('SuQLExtCommand') ? 'SuQLExtCommand' : 'SuQLBaseCommand';
   }
 }

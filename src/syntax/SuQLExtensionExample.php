@@ -1,9 +1,19 @@
 <?php
 
-// Example: max function
+// Example: extend SuQL functionality on your own
 
-class SuQLExt extends SuQL
+class SuQLExtensionExample extends SuQL
 {
+  protected function modifierList()
+  {
+    return array_merge(
+      parent::modifierList(),
+      [
+        'SQLArithmeticModifier',
+      ]
+    );
+  }
+
   public function max($field)
   {
     $this->field($field, [

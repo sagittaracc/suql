@@ -32,7 +32,7 @@ SuQL is syntactic sugar for SQL.
 3. Expand SuQL syntax on your own. SQL isn't the limit. There's no limit really.
 
 ### Examples
-There are couple examples in the ```tests``` directory
+There are couple examples in the ```tests``` directory and an example of extending SuQL syntax in the ```syntax``` directory.
 
 ## Conclusion
 SuQL is all about modifiers and commands. Modifiers already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` and SQL functions etc. Meanwhile commands can do everything that SuQL or SQL can\'t.

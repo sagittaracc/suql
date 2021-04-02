@@ -5,6 +5,7 @@
 **New features:**
 - Add filter modifier
 - Remove commands (no need anymore since we use orm approach)
+- Add examples of extending SuQL syntax
 
 ---
 
