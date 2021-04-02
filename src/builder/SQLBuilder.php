@@ -9,7 +9,7 @@ class SQLBuilder
   private $osuql = null;
   private $sql = [];
 
-  const SELECT_TEMPLATE = "#select##from##join##where##group##having##order##limit#";
+  const SELECT_TEMPLATE = "{select}{from}{join}{where}{group}{having}{order}{limit}";
   const REGEX_SUB_QUERY = '/{:v:}(?<name>\w+)/msi';
 
   function __construct($osuql)
@@ -61,14 +61,14 @@ class SQLBuilder
 
     $selectTemplate = self::SELECT_TEMPLATE;
 
-    $selectTemplate = str_replace('#select#', $this->buildSelect($query), $selectTemplate);
-    $selectTemplate = str_replace('#from#'  , $this->buildFrom($query),   $selectTemplate);
-    $selectTemplate = str_replace('#join#'  , $this->buildJoin($query),   $selectTemplate);
-    $selectTemplate = str_replace('#group#' , $this->buildGroup($query),  $selectTemplate);
-    $selectTemplate = str_replace('#where#' , $this->buildWhere($query),  $selectTemplate);
-    $selectTemplate = str_replace('#having#', $this->buildHaving($query), $selectTemplate);
-    $selectTemplate = str_replace('#order#' , $this->buildOrder($query),  $selectTemplate);
-    $selectTemplate = str_replace('#limit#' , $this->buildLimit($query),  $selectTemplate);
+    $selectTemplate = str_replace('{select}', $this->buildSelect($query), $selectTemplate);
+    $selectTemplate = str_replace('{from}'  , $this->buildFrom($query),   $selectTemplate);
+    $selectTemplate = str_replace('{join}'  , $this->buildJoin($query),   $selectTemplate);
+    $selectTemplate = str_replace('{group}' , $this->buildGroup($query),  $selectTemplate);
+    $selectTemplate = str_replace('{where}' , $this->buildWhere($query),  $selectTemplate);
+    $selectTemplate = str_replace('{having}', $this->buildHaving($query), $selectTemplate);
+    $selectTemplate = str_replace('{order}' , $this->buildOrder($query),  $selectTemplate);
+    $selectTemplate = str_replace('{limit}' , $this->buildLimit($query),  $selectTemplate);
 
     return $selectTemplate;
   }

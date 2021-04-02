@@ -5,7 +5,6 @@ use sagittaracc\model\User;
 use sagittaracc\model\UserGroup;
 use sagittaracc\model\Group;
 use sagittaracc\model\UserGroupView;
-use SuQLGroupModifier;
 
 final class SuQLTest extends TestCase
 {
