@@ -34,8 +34,13 @@ Expand SuQL syntax on your own. There's no limit really.
 There are example models in the ```examples``` directory and there are couple examples of using them in the ```tests``` directory and examples of extending SuQL ORM syntax in the ```syntax``` directory.
 
 ### Install
-Via composer
-```composer require sagittaracc/suql```
+1. Clone the repository
+
+```git clone https://github.com/sagittaracc/suql.git```
+
+2. Run
+
+```composer install```
 
 ## Conclusion
 SuQL is all about modifiers. They already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` and SQL functions etc.
