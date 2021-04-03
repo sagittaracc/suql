@@ -34,17 +34,17 @@ SuQL расшифровывается как Sugar Query Language и это лу
 В папке ```examples``` Вы можете найти примеры моделей, а в папке ```tests``` Вы можете найти примеры их использования, а также примеры расширения функциональности синтаксиса SuQL ORM в директории ```syntax```.
 
 ### Установка
-1. Склонируйте репозиторий
+- Через composer
 
-```git clone https://github.com/sagittaracc/suql.git```
+```composer require sagittaracc/suql```
 
-2. Перейдите в папку
+- Или установка вручную
 
-```cd suql```
-
-3. Запустите
-
-```composer install```
+```
+git clone https://github.com/sagittaracc/suql.git
+cd suql
+composer install
+```
 
 ## Итоги
 SuQL работает через модификаторы. Они уже реализуют стандартные SQL секции как `WHERE`, `GROUP`, `JOIN`, `ORDER` и SQL функции и т.д.
