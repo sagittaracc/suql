@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
-use sagittaracc\model\UserDb;
-use sagittaracc\model\ProductDb;
+use app\model\UserDb;
+use app\model\ProductDb;
 
 final class SuQLPdoTest extends TestCase
 {

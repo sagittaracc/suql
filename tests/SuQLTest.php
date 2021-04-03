@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
-use sagittaracc\model\User;
-use sagittaracc\model\UserGroup;
-use sagittaracc\model\Group;
-use sagittaracc\model\UserGroupView;
+use app\model\User;
+use app\model\UserGroup;
+use app\model\Group;
+use app\model\UserGroupView;
 
 final class SuQLTest extends TestCase
 {
