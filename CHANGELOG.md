@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.4 - April 3, 2021
+
+- Install via composer
+
+---
+
 ## v5.0.3 - April 3, 2021
 
 - Add install instruction
