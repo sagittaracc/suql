@@ -38,7 +38,11 @@ There are example models in the ```examples``` directory and there are couple ex
 
 ```git clone https://github.com/sagittaracc/suql.git```
 
-2. Run
+2. Move to the ```suql``` directory
+
+```cd suql```
+
+3. Run
 
 ```composer install```
 
