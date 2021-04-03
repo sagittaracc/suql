@@ -6,15 +6,15 @@ use \PDOSuQL;
 
 class ProductDb extends PDOSuQL
 {
-	protected $dbname = 'store';
+  protected $dbname = 'store';
 
-	public function query()
-	{
-		return 'store';
-	}
+  public function query()
+  {
+    return 'store';
+  }
 
-	public function table()
-	{
-		return 'products';
-	}
+  public function table()
+  {
+    return 'products';
+  }
 }
