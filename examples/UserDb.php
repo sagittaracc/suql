@@ -6,15 +6,15 @@ use \PDOSuQL;
 
 class UserDb extends PDOSuQL
 {
-	protected $dbname = 'test';
+  protected $dbname = 'test';
 
-	public function query()
-	{
-		return 'user';
-	}
+  public function query()
+  {
+    return 'user';
+  }
 
-	public function table()
-	{
-		return 'users';
-	}
+  public function table()
+  {
+    return 'users';
+  }
 }
