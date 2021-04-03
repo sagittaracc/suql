@@ -15,13 +15,6 @@ class MySuQLExt extends SuQL
     );
   }
 
-  /**
-   *
-   * Now we can use it something like this:
-   *   Model::find()->max(<field>)->getRawSql()
-   * 
-   * See the example testSuQLExtension in the tests/SuQLTest.php file
-   */
   public function max($field)
   {
     $this->field($field, [
@@ -31,13 +24,6 @@ class MySuQLExt extends SuQL
     return $this;
   }
 
-  /**
-   *
-   * Now we can use it something like this:
-   *   Model::find()->filterLike('name', 'yuriy')->getRawSql()
-   *
-   * See the example testSuQLExtension in the tests/SuQLTest.php file
-   */
   public function filterLike($field, $value)
   {
     $this->field($field, [
