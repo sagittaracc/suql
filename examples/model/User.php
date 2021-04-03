@@ -3,9 +3,9 @@
 namespace app\model;
 
 use \SuQL;
-use \SuQLExtensionExample;
+use \MySuQLExt;
 
-class User extends SuQLExtensionExample
+class User extends MySuQLExt
 {
   public function query()
   {
