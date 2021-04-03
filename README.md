@@ -38,7 +38,7 @@ There are example models in the ```examples``` directory and there are couple ex
 
 ```composer require sagittaracc/suql```
 
-- Clone the repository
+- Or by cloning the repository
 
 ```
 git clone https://github.com/sagittaracc/suql.git
