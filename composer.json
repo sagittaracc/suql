@@ -16,10 +16,10 @@
       ]
     },
     "require": {
-      "sagittaracc/regexp": "@dev",
-      "sagittaracc/strings": "@dev",
-      "sagittaracc/arrays": "@dev",
-      "sagittaracc/placeholder": "@dev"
+      "sagittaracc/regexp": "dev-master",
+      "sagittaracc/strings": "dev-master",
+      "sagittaracc/arrays": "dev-master",
+      "sagittaracc/placeholder": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^9"
