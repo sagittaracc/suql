@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.5 - April 3, 2021
+
+- Refactor code structure
+
+---
+
 ## v5.0.4 - April 3, 2021
 
 - Install via composer

@@ -31,7 +31,9 @@ It has a conceptually new way of approaching databases.
 Expand SuQL syntax on your own. There's no limit really.
 
 ### Examples
-There are example models in the ```examples``` directory and there are couple examples of using them in the ```tests``` directory and examples of extending SuQL ORM syntax in the ```syntax``` directory.
+In the ```examples``` directory see the examples of how you should define models, custom modifiers and extend SuQL ORM syntax on your own.
+In the ```tests/MySuQLExtTest.php``` see how you should use what you define in those examples.
+In the ```tests/SuQLTest.php``` see the build-in capabilities of SuQL ORM syntax.
 
 ### Install
 - Via composer

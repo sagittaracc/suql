@@ -3,7 +3,7 @@
 // Example: extend SuQL functionality on your own
 // Don't forget to extend your model from this class
 
-class SuQLExtensionExample extends SuQL
+class MySuQLExt extends SuQL
 {
   protected function modifierList()
   {
