@@ -38,7 +38,11 @@ SuQL расшифровывается как Sugar Query Language и это лу
 
 ```git clone https://github.com/sagittaracc/suql.git```
 
-2. Запустите
+2. Перейдите в папку
+
+```cd suql```
+
+3. Запустите
 
 ```composer install```
 
