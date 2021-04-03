@@ -11,7 +11,8 @@
     ],
     "autoload": {
       "classmap": [
-        "src/"
+        "src/",
+        "examples"
       ]
     },
     "require": {

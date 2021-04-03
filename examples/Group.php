@@ -1,6 +1,6 @@
 <?php
 
-namespace sagittaracc\model;
+namespace app\model;
 
 use \SuQL;
 
