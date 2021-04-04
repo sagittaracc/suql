@@ -3,7 +3,7 @@
 use core\SuQLObject;
 use sagittaracc\ArrayHelper;
 
-class SuQL extends SuQLObject
+abstract class SuQL extends SuQLObject implements SuQLInterface
 {
   protected $adapter = 'mysql';
   private $storage = [];

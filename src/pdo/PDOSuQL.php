@@ -1,6 +1,6 @@
 <?php
 
-class PDOSuQL extends SuQL
+abstract class PDOSuQL extends SuQL
 {
   private $dbh;
 
