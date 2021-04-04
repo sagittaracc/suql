@@ -10,9 +10,9 @@ class PDOSuQL extends SuQL
   protected $password = '';
   protected $dbname = '';
 
-  public static function db()
+  public static function find()
   {
-    $instance = static::find();
+    $instance = parent::find();
 
     $instance->dbh = new PDO(
       "{$instance->driver}:dbname={$instance->dbname};host={$instance->host}",
