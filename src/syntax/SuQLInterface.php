@@ -2,5 +2,5 @@
 
 interface SuQLInterface
 {
-	public function query();
+  public function query();
 }
