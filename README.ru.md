@@ -42,11 +42,6 @@ use \SuQL;
 
 class User extends SuQL
 {
-  public function query()
-  {
-    return 'user';
-  }
-
   public function table()
   {
     return 'users';
@@ -68,14 +63,9 @@ namespace app\model;
 
 use \PDOSuQL;
 
-class UserDb extends PDOSuQL
+class User extends PDOSuQL
 {
   protected $dbname = 'test';
-
-  public function query()
-  {
-    return 'user';
-  }
 
   public function table()
   {
@@ -86,7 +76,7 @@ class UserDb extends PDOSuQL
 ```
 
 ```php
-  print_r(UserDb::find()->fetch());
+  print_r(User::find()->fetch());
 ```
 
 В папке ```examples``` смотрите примеры как Вы можете определять свои модели, кастомные модификаторы, и расширять SuQL ORM синтакс самостоятельно.

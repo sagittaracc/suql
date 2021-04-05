@@ -6,11 +6,6 @@ use \SuQL;
 
 class Group extends SuQL
 {
-  public function query()
-  {
-    return 'group';
-  }
-
   public function table()
   {
     return 'groups';

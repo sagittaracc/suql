@@ -7,11 +7,6 @@ use \MySuQLExt;
 
 class User extends MySuQLExt
 {
-  public function query()
-  {
-    return 'user';
-  }
-
   public function table()
   {
     return 'users';
