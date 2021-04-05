@@ -6,7 +6,7 @@ use sagittaracc\ArrayHelper;
 abstract class SuQL extends SuQLObject implements SuQLInterface
 {
   protected $adapter = 'mysql';
-  private $storage = [];
+  private $joinChain = [];
   private $currentModel;
 
   public function query()
@@ -91,7 +91,7 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
     if (!isset($relations[$model]))
     {
-      foreach ($this->storage as $models)
+      foreach ($this->joinChain as $models)
       {
         $table = $models->table();
         $relations = $models->relations();
@@ -115,7 +115,7 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     $this->rel($table, $self->table(), "$table.$a = " . $self->table() . ".$b");
     $this->getQuery($this->query())->addJoin('inner', $self->table());
 
-    $this->storage[] = $self;
+    $this->joinChain[] = $self;
 
     return $this;
   }
