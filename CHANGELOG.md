@@ -1,6 +1,6 @@
 # Change log
 
-## v5.0.5 - April 3, 2021
+## v5.0.5 - April 5, 2021
 
 - Refactor code structure
 
