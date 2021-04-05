@@ -3,6 +3,7 @@
 ## v5.0.5 - April 5, 2021
 
 - Refactor code structure
+- Add query modifiers
 
 ---
 

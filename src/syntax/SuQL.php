@@ -9,6 +9,8 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   private $joinChain = [];
   private $currentModel;
 
+  use SQLDistinctModifier;
+
   public function query()
   {
     return str_replace('\\', '_', get_class($this));

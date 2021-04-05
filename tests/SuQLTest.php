@@ -131,4 +131,17 @@ final class SuQLTest extends TestCase
       'select max(users.id) from users'
     );
   }
+
+  public function testQueryModifier(): void
+  {
+    $this->assertEquals(
+      User::find()->distinct()->getRawSql(),
+      'select distinct * from users'
+    );
+
+    $this->assertEquals(
+      User::find()->distinct()->field('name')->getRawSql(),
+      'select distinct users.name from users'
+    );
+  }
 }
