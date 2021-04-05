@@ -10,7 +10,6 @@ class SQLBuilder
   private $sql = [];
 
   const SELECT_TEMPLATE = "{select}{from}{join}{where}{group}{having}{order}{limit}";
-  const REGEX_SUB_QUERY = '/{:v:}(?<name>\w+)/msi';
 
   function __construct($osuql)
   {
@@ -84,7 +83,8 @@ class SQLBuilder
       return '';
     $suql = $this->sql[$query];
 
-    $subQueries = (new SuQLRegexp(self::REGEX_SUB_QUERY))->match_all($suql);
+    preg_match_all('/@(?<name>\w+)/msi', $suql, $subQueries);
+
     if (empty($subQueries['name']))
       return $suql;
     else {
