@@ -16,7 +16,7 @@ class UserGroup extends SuQL
     return 'user_group';
   }
 
-  public function link()
+  public function relations()
   {
     return [
       User::class => ['user_id' => 'id'],

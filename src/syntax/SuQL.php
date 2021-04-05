@@ -87,17 +87,17 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   public function join(string $model)
   {
     $this->currentModel = $model;
-    $links = $this->link();
+    $relations = $this->relations();
 
-    if (!isset($links[$model]))
+    if (!isset($relations[$model]))
     {
       foreach ($this->storage as $models)
       {
         $table = $models->table();
-        $links = $models->link();
-        if (isset($links[$model]))
+        $relations = $models->relations();
+        if (isset($relations[$model]))
         {
-          $link = $links[$model];
+          $relation = $relations[$model];
           break;
         }
       }
@@ -105,10 +105,10 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     else
     {
       $table = $this->table();
-      $link = $links[$model];
+      $relation = $relations[$model];
     }
 
-    foreach ($link as $a => $b) ;
+    foreach ($relation as $a => $b) ;
 
     $this->rel($table, (new $model)->table(), "$table.$a = " . (new $model)->table() . ".$b");
     $this->getQuery($this->query())->addJoin('inner', (new $model)->table());

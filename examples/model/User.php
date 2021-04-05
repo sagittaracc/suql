@@ -17,7 +17,7 @@ class User extends MySuQLExt
     return 'users';
   }
 
-  public function link()
+  public function relations()
   {
     return [
       UserGroup::class => ['id' => 'user_id'],
