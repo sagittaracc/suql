@@ -15,7 +15,7 @@ final class SuQLObjectTest extends TestCase
     $this->osuql->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
     $this->osuql->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
-    $this->osuql->setAdapter('mysql');
+    $this->osuql->setDriver('mysql');
   }
 
   public function testSelect(): void
@@ -252,14 +252,14 @@ final class SuQLObjectTest extends TestCase
     $this->assertNull($this->osuql->getSQL('all'));
   }
 
-  public function testEmptyAdapter(): void
+  public function testEmptyDriver(): void
   {
     $this->osuql = new SuQLObject;
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->assertFalse($this->osuql->getSQL(['main']));
     $this->assertEquals($this->osuql->getLog(), [
-      'error' => [SuQLError::ADAPTER_NOT_DEFINED],
+      'error' => [SuQLError::DRIVER_NOT_DEFINED],
     ]);
   }
 }

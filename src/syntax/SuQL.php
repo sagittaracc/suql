@@ -5,7 +5,7 @@ use sagittaracc\ArrayHelper;
 
 abstract class SuQL extends SuQLObject implements SuQLInterface
 {
-  protected $adapter = 'mysql';
+  protected $driver = 'mysql';
   private $joinChain = [];
   private $currentModel;
 

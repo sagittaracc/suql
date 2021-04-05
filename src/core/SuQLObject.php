@@ -1,12 +1,12 @@
 <?php
 namespace core;
 
-use builder\SQLAdapter;
+use builder\SQLDriver;
 
 class SuQLObject {
   private $queries = [];
   private $scheme  = ['rel' => [], 'temp_rel' => []];
-  protected $adapter = null;
+  protected $driver = null;
   private $log = [];
 
   protected function modifierList()
@@ -32,18 +32,18 @@ class SuQLObject {
     $this->queries = [];
     $this->scheme['rel'] = [];
     $this->scheme['temp_rel'] = [];
-    $this->adapter = null;
+    $this->driver = null;
   }
 
-  public function setAdapter($adapter) {
-    if (SQLAdapter::exists($adapter))
-      $this->adapter = $adapter;
+  public function setDriver($driver) {
+    if (SQLDriver::exists($driver))
+      $this->driver = $driver;
 
     return $this;
   }
 
-  public function getAdapter() {
-    return $this->adapter;
+  public function getDriver() {
+    return $this->driver;
   }
 
   protected function setError($error) {
@@ -63,8 +63,8 @@ class SuQLObject {
   }
 
   public function getSQL($queryList) {
-    if (!$this->adapter) {
-      $this->setError(SuQLError::ADAPTER_NOT_DEFINED);
+    if (!$this->driver) {
+      $this->setError(SuQLError::DRIVER_NOT_DEFINED);
       return false;
     }
 
@@ -73,7 +73,7 @@ class SuQLObject {
 
     if (!is_array($queryList)) return null;
 
-    $classBuilder = SQLAdapter::get($this->adapter);
+    $classBuilder = SQLDriver::get($this->driver);
     $SQLBuilder = new $classBuilder($this);
     $SQLBuilder->run($queryList);
     $sqlList = $SQLBuilder->getSql($queryList);
