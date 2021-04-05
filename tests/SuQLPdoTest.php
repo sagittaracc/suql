@@ -23,9 +23,12 @@ final class SuQLPdoTest extends TestCase
     // ProductDb gets the data from the store database (see the ProductDb model)
     //
     // $this->assertEquals(
-    //   ProductDb::find()->fetch(), [
-    //     Some data
-    //   ]
+    //   ProductDb::find()->field('id', [
+    //     'greater' => [
+    //       ['integer' => 1],
+    //       ['boolean' => false],
+    //     ]
+    //   ])->fetch()
     // );
   }
 }
