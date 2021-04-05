@@ -86,7 +86,7 @@ class UserDb extends PDOSuQL
 ```
 
 ```php
-  print_r(UserDb::find()->fetch());
+print_r(UserDb::find()->fetch());
 ```
 
 In the ```examples``` directory see the examples of how you should define models, customize modifiers and extend SuQL ORM syntax on your own.
