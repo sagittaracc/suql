@@ -59,7 +59,7 @@ final class SuQLTest extends TestCase
   {
     $this->assertEquals(
       UserGroupView::find()->getRawSql(),
-      'select * from (select * from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id) app_model_User'
+      'select * from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id'
     );
   }
 

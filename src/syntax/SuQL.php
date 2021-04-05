@@ -31,15 +31,20 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     $instance = new static();
     $instance->currentModel = get_class($instance);
 
-    $instance->addSelect($instance->query());
     if (method_exists($instance, 'view'))
     {
       $view = $instance->view();
-      $instance->extend($view->getQueries());
-      $instance->getQuery($instance->query())->addFrom($view->query());
+
+      // TODO: in ArrayHelper Replace key of the first element
+      $queries = $view->getQueries();
+      $query = array_shift($queries);
+      $query = array_combine([$instance->query()], [$query]);
+
+      $instance->extend($query);
     }
     else
     {
+      $instance->addSelect($instance->query());
       $instance->getQuery($instance->query())->addFrom($instance->table());
     }
 
