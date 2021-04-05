@@ -44,7 +44,7 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     return $instance;
   }
 
-  public function select(array $fields)
+  public function select($fields)
   {
     if (ArrayHelper::isSequential($fields))
     {
@@ -84,7 +84,7 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     return $this;
   }
 
-  public function join(string $model)
+  public function join($model)
   {
     $this->currentModel = $model;
     $relations = $this->relations();
