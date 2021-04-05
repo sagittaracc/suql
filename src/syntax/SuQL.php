@@ -11,12 +11,12 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
   public function query()
   {
-    return 'main';
+    return str_replace('\\', '_', get_class($this));
   }
 
   public function table()
   {
-    return 'main';
+    return str_replace('\\', '_', get_class($this));
   }
 
   public function getRawSql()
