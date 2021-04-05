@@ -110,10 +110,12 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
     foreach ($relation as $a => $b) ;
 
-    $this->rel($table, (new $model)->table(), "$table.$a = " . (new $model)->table() . ".$b");
-    $this->getQuery($this->query())->addJoin('inner', (new $model)->table());
+    $self = new $model;
 
-    $this->storage[] = new $model;
+    $this->rel($table, $self->table(), "$table.$a = " . $self->table() . ".$b");
+    $this->getQuery($this->query())->addJoin('inner', $self->table());
+
+    $this->storage[] = $self;
 
     return $this;
   }

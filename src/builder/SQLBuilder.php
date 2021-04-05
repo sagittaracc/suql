@@ -1,5 +1,4 @@
 <?php
-use core\SuQLSpecialSymbols;
 use core\SuQLName;
 use sagittaracc\ArrayHelper;
 use sagittaracc\StringHelper;
@@ -89,7 +88,7 @@ class SQLBuilder
       return $suql;
     else {
       foreach ($subQueries['name'] as $subQuery)
-        $suql = str_replace(SuQLSpecialSymbols::nestedQueryPlaceholder($subQuery), '('.$this->composeQuery($subQuery).')', $suql);
+        $suql = str_replace("@$subQuery", '('.$this->composeQuery($subQuery).')', $suql);
 
       return $suql;
     }
@@ -137,7 +136,7 @@ class SQLBuilder
       return '';
 
     return $this->osuql->hasQuery($from)
-            ? ' from ' . SuQLSpecialSymbols::nestedQueryPlaceholder($from) . " $from"
+            ? " from @$from $from"
             : " from $from";
   }
 
@@ -155,7 +154,7 @@ class SQLBuilder
       $on = $ojoin->getOn();
 
       $table = $this->osuql->hasQuery($table)
-                ? SuQLSpecialSymbols::nestedQueryPlaceholder($table) . " $table"
+                ? "@$table $table"
                 : $table;
 
       $joinList[] = "$type join $table on $on";
