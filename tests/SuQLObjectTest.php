@@ -142,6 +142,25 @@ final class SuQLObjectTest extends TestCase
       'where groups.name = \'admin\''
     );
     $this->assertNull($this->osuql->getSQL('all'));
+
+    $this->osuql->rel(['users' => 'u'], ['view' => 'v'], 'u.id = v.id');
+    $this->osuql->addSelect('main');
+    $this->osuql->getQuery('main')->addFrom('users');
+    $this->osuql->getQuery('main')->addField('users', 'id');
+    $this->osuql->getQuery('main')->addJoin('inner', 'view');
+    $this->osuql->addSelect('view');
+    $this->osuql->getQuery('view')->addFrom('users');
+    $this->osuql->getQuery('view')->addField('users', 'id');
+    $this->assertEquals($this->osuql->getSQL(['main']),
+      'select '.
+        'users.id '.
+      'from users '.
+      'inner join ('.
+        'select '.
+          'users.id '.
+        'from users'.
+      ') view on users.id = view.id'
+    );
   }
 
   public function testSelectGroup(): void
