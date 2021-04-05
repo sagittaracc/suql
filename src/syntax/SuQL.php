@@ -9,6 +9,16 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   private $storage = [];
   private $currentModel;
 
+  public function query()
+  {
+    return 'main';
+  }
+
+  public function table()
+  {
+    return 'main';
+  }
+
   public function getRawSql()
   {
     return parent::getSQL([$this->query()]);
