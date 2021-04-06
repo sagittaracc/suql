@@ -8,6 +8,7 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   protected $driver = 'mysql';
   private $joinChain = [];
   private $currentModel;
+  private $isView = false;
 
   use SQLDistinctModifier;
 
@@ -33,14 +34,23 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
     if (method_exists($instance, 'view'))
     {
+      $instance->isView = true;
       $view = $instance->view();
 
-      // TODO: in ArrayHelper Replace key of the first element
-      $queries = $view->getQueries();
-      $query = array_shift($queries);
-      $query = array_combine([$instance->query()], [$query]);
-
-      $instance->extend($query);
+      if ($view->isView)
+      {
+        $instance->addSelect($instance->query());
+        $instance->getQuery($instance->query())->addFrom($view->query());
+        $instance->extend($view->getQueries());
+      }
+      else
+      {
+        // TODO: in ArrayHelper Replace key of the first element
+        $queries = $view->getQueries();
+        $query = array_shift($queries);
+        $query = array_combine([$instance->query()], [$query]);
+        $instance->extend($query);
+      }
     }
     else
     {

@@ -5,6 +5,7 @@ use app\model\User;
 use app\model\UserGroup;
 use app\model\Group;
 use app\model\UserGroupView;
+use app\model\SubUserGroupView;
 
 final class SuQLTest extends TestCase
 {
@@ -73,6 +74,19 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       UserGroupView::find()->getRawSql(),
       'select * from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id'
+    );
+
+    // Nested query (view inside view)
+    $this->assertEquals(
+      SubUserGroupView::find()->getRawSql(),
+      'select * from ('.
+        'select '.
+          'app_model_UserGroupView.id, '.
+          'app_model_UserGroupView.name '.
+        'from users '.
+        'inner join user_group on users.id = user_group.user_id '.
+        'inner join groups on user_group.group_id = groups.id'.
+      ') app_model_UserGroupView'
     );
   }
 
