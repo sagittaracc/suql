@@ -16,6 +16,7 @@ class User extends MySuQLExt
   {
     return [
       UserGroup::class => ['id' => 'user_id'],
+      UserGroupView::class => ['id' => 'user_id'],
     ];
   }
 }

@@ -119,8 +119,24 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
     $self = new $model;
 
-    $this->rel($table, $self->table(), "$table.$a = " . $self->table() . ".$b");
-    $this->getQuery($this->query())->addJoin('inner', $self->table());
+    if (method_exists($self, 'view'))
+    {
+      $this->temp_rel($table, $self->query(), "$table.$a = " . $self->query() . ".$b");
+      $this->getQuery($this->query())->addJoin('inner', $self->query());
+      $view = $self->view();
+
+      // TODO: in ArrayHelper Replace key of the first element
+      $queries = $view->getQueries();
+      $query = array_shift($queries);
+      $query = array_combine([$self->query()], [$query]);
+
+      $this->extend($query);
+    }
+    else
+    {
+      $this->rel($table, $self->table(), "$table.$a = " . $self->table() . ".$b");
+      $this->getQuery($this->query())->addJoin('inner', $self->table());
+    }
 
     $this->joinChain[] = $self;
 

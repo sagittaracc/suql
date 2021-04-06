@@ -40,6 +40,19 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testJoinWithView(): void
+  {
+    $this->assertEquals(
+      User::find()->join(UserGroupView::class)->getRawSql(),
+      'select * from users '.
+      'inner join ('.
+        'select * from users '.
+        'inner join user_group on users.id = user_group.user_id '.
+        'inner join groups on user_group.group_id = groups.id'.
+      ') app_model_UserGroupView on users.id = app_model_UserGroupView.user_id'
+    );
+  }
+
   public function testModifiers(): void
   {
     $this->assertEquals(
