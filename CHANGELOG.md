@@ -1,5 +1,12 @@
 # Change log
 
+## v5.0.6 - April 6, 2021
+
+- Add join with view
+- Add nested queries (view inside view)
+
+---
+
 ## v5.0.5 - April 5, 2021
 
 - Refactor code structure

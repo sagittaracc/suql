@@ -31,54 +31,6 @@ SuQL расшифровывается как Sugar Query Language и это лу
 Расширяйте возможности SuQL ORM самостоятельно. Вы ограничены лишь Вашей фантазией.
 
 ### Примеры
-
-Отнаследуйтесь от ```SuQL``` чтобы работать только с SQL ORM синтаксическим сахаром
-
-```php
-
-namespace app\model;
-
-use \SuQL;
-
-class User extends SuQL
-{
-  public function table()
-  {
-    return 'users';
-  }
-}
-
-```
-
-```php
-// 'select users.id, users.name from users'
-echo User::find()->select(['id', 'name'])->getRawSql();
-```
-
-Отнаследуйтесь от ```PDOSuQL``` чтобы непосредственно работать с базой данных
-
-```php
-
-namespace app\model;
-
-use \PDOSuQL;
-
-class User extends PDOSuQL
-{
-  protected $dbname = 'test';
-
-  public function table()
-  {
-    return 'users';
-  }
-}
-
-```
-
-```php
-  print_r(User::find()->fetch());
-```
-
 В папке ```examples``` смотрите примеры как Вы можете определять свои модели, кастомные модификаторы, и расширять SuQL ORM синтакс самостоятельно.
 В файле ```tests/MySuQLExtTest.php``` смотрите как использовать сделанное Вами расширение SuQL ORM синтаксиса.
 В файле ```tests/SuQLTest.php``` смотрите что на данный момент может SuQL ORM из коробки.
