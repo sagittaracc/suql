@@ -37,7 +37,17 @@ Expand SuQL syntax on your own. There's no limit really.
 
 [Use Views](https://github.com/sagittaracc/suql/wiki/Use-Views)
 
+[Field Modifiers](https://github.com/sagittaracc/suql/wiki/Field-Modifiers)
+
 [Query Modifiers](https://github.com/sagittaracc/suql/wiki/Query-Modifiers)
+
+[Order Data](https://github.com/sagittaracc/suql/wiki/Order-Data)
+
+[Functions](https://github.com/sagittaracc/suql/wiki/Functions)
+
+[Extend SuQL](https://github.com/sagittaracc/suql/wiki/Extend-SuQL)
+
+[Fetch data from databases](https://github.com/sagittaracc/suql/wiki/Fetch-data-from-databases)
 
 More examples in the ```tests``` directory
 
