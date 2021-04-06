@@ -31,6 +31,16 @@ It has a conceptually new way of approaching databases.
 Expand SuQL syntax on your own. There's no limit really.
 
 ### Examples
+[Select Query](https://github.com/sagittaracc/suql/wiki/Select-Query)
+
+[Join Query](https://github.com/sagittaracc/suql/wiki/Join-Query)
+
+[Use Views](https://github.com/sagittaracc/suql/wiki/Use-Views)
+
+[Query Modifiers](https://github.com/sagittaracc/suql/wiki/Query-Modifiers)
+
+More examples in the ```tests``` directory
+
 In the ```examples``` directory see the examples of how you should define models, customize modifiers and extend SuQL ORM syntax on your own.
 In the ```tests/MySuQLExtTest.php``` see how you should use what you define in those examples.
 In the ```tests/SuQLTest.php``` see the build-in capabilities of SuQL ORM syntax.
