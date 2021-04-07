@@ -84,11 +84,11 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     return $this;
   }
 
-  public function field($name, $modifiers = [])
+  public function field($name, $modifiers = [], $visible = true)
   {
     $currentModel = new $this->currentModel;
 
-    $this->getQuery($this->query())->addField($currentModel->table(), $name);
+    $this->getQuery($this->query())->addField($currentModel->table(), $name, $visible);
 
     if (ArrayHelper::isSequential($modifiers))
     {

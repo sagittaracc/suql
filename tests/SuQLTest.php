@@ -171,4 +171,19 @@ final class SuQLTest extends TestCase
       'select distinct users.name from users'
     );
   }
+
+  public function testUserModelExtension(): void
+  {
+    $this->assertEquals(
+      User::find()->new()->getRawSql(),
+      'select users.* from users where DATE(users.register) = CURDATE()'
+    );
+
+    $this->assertEquals(
+      User::find()->field(['name' => 'user_name'], [
+        'ucname'
+      ])->getRawSql(),
+      'select CONCAT(UCASE(LEFT(users.name, 1)), SUBSTRING(users.name, 2)) as user_name from users'
+    );
+  }
 }
