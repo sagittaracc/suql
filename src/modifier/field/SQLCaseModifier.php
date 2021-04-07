@@ -4,7 +4,7 @@ use sagittaracc\PlaceholderHelper;
 
 class SQLCaseModifier
 {
-  private static function mod_case($case, $ofield, $params) {
+  public static function mod_case($case, $ofield, $params) {
     $fieldName = $ofield->getField();
     $caseList = [];
 
