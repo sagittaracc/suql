@@ -18,7 +18,7 @@ abstract class MySuQLExt extends SuQL
   public function max($field)
   {
     $this->field($field, [
-      'max' => [],
+      'max',
     ]);
 
     return $this;

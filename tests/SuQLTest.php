@@ -61,8 +61,8 @@ final class SuQLTest extends TestCase
                   ->join(Group::class)
                     ->field('name')
                     ->field(['name' => 'count'], [
-                      'group' => [],
-                      'count' => [],
+                      'group',
+                      'count'
                     ])
                   ->getRawSql(),
       'select groups.name, count(groups.name) as count from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id group by groups.name'
@@ -139,7 +139,7 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       User::find()
               ->field('id', [
-                'asc' => []
+                'asc'
               ])
               ->field('name')
               ->getRawSql(),
@@ -152,7 +152,7 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       User::find()
               ->field('id', [
-                'max' => []
+                'max'
               ])
               ->getRawSql(),
       'select max(users.id) from users'

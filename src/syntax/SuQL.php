@@ -90,9 +90,19 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
     $this->getQuery($this->query())->addField($currentModel->table(), $name);
 
-    foreach ($modifiers as $modifier => $params)
+    if (ArrayHelper::isSequential($modifiers))
     {
-      $this->getQuery($this->query())->getField($currentModel->table(), $name)->addModifier($modifier, $params);
+      foreach ($modifiers as $modifier)
+      {
+        $this->getQuery($this->query())->getField($currentModel->table(), $name)->addModifier($modifier);
+      }
+    }
+    else
+    {
+      foreach ($modifiers as $modifier => $params)
+      {
+        $this->getQuery($this->query())->getField($currentModel->table(), $name)->addModifier($modifier, $params);
+      }
     }
 
     return $this;
