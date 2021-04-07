@@ -45,11 +45,8 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
       }
       else
       {
-        // TODO: in ArrayHelper Replace key of the first element
-        $queries = $view->getQueries();
-        $query = array_shift($queries);
-        $query = array_combine([$instance->query()], [$query]);
-        $instance->extend($query);
+        $queries = ArrayHelper::rename_keys($view->getQueries(), [$instance->query()]);
+        $instance->extend($queries);
       }
     }
     else
@@ -135,12 +132,8 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
       $this->getQuery($this->query())->addJoin('inner', $self->query());
       $view = $self->view();
 
-      // TODO: in ArrayHelper Replace key of the first element
-      $queries = $view->getQueries();
-      $query = array_shift($queries);
-      $query = array_combine([$self->query()], [$query]);
-
-      $this->extend($query);
+      $queries = ArrayHelper::rename_keys($view->getQueries(), [$self->query()]);
+      $this->extend($queries);
     }
     else
     {

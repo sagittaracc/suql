@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "sagittaracc/arrays",
-            "version": "v0.1",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sagittaracc/arrays.git",
-                "reference": "5fbff3dd6adf04f68e0e149b40521eae16246059"
+                "reference": "dec525ad956d2f816502b4ddf629c51060f080fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sagittaracc/arrays/zipball/5fbff3dd6adf04f68e0e149b40521eae16246059",
-                "reference": "5fbff3dd6adf04f68e0e149b40521eae16246059",
+                "url": "https://api.github.com/repos/sagittaracc/arrays/zipball/dec525ad956d2f816502b4ddf629c51060f080fa",
+                "reference": "dec525ad956d2f816502b4ddf629c51060f080fa",
                 "shasum": ""
             },
             "require-dev": {
@@ -32,9 +32,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "support": {
                 "issues": "https://github.com/sagittaracc/arrays/issues",
-                "source": "https://github.com/sagittaracc/arrays/tree/v0.1"
+                "source": "https://github.com/sagittaracc/arrays/tree/v0.1.1"
             },
-            "time": "2021-03-29T11:31:12+00:00"
+            "time": "2021-04-07T06:59:10+00:00"
         },
         {
             "name": "sagittaracc/placeholder",
