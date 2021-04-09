@@ -30,7 +30,10 @@ SuQL stands for Sugar Query Language and it's the best and simplest ORM. Easy to
 It has a conceptually new way of approaching databases.
 Expand SuQL syntax on your own. There's no limit really.
 
-### Examples
+### Real live example
+See the live example step by step [here](https://github.com/sagittaracc/suql/wiki/Live-example)
+
+### Documentation
 [Select Query](https://github.com/sagittaracc/suql/wiki/Select-Query)
 
 [Join Query](https://github.com/sagittaracc/suql/wiki/Join-Query)
