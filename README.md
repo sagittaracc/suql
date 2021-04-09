@@ -41,8 +41,6 @@ See the live example step by step [here](https://github.com/sagittaracc/suql/wik
 
 More examples in the ```tests``` directory
 
-In the ```examples``` directory see an example of how your app folder structure should look like.
-
 ### Install
 - Via composer
 

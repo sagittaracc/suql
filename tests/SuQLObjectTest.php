@@ -18,7 +18,7 @@ final class SuQLObjectTest extends TestCase
     $this->osuql->setDriver('mysql');
   }
 
-  public function testSelect1(): void
+  public function testSelect(): void
   {
     $this->init();
 
