@@ -28,6 +28,18 @@ final class SuQLTest extends TestCase
       User::find()->select(['id' => 'uid', 'name' => 'uname'])->getRawSql(),
       'select users.id as uid, users.name as uname from users'
     );
+
+    // Select raw expression
+    $this->assertEquals(
+      RawSuQL::find()->field('2 * 2')->field("'Yuriy' as author")->getRawSql(),
+      "select 2 * 2, 'Yuriy' as author"
+    );
+
+    // Select raw within a real model
+    $this->assertEquals(
+      User::find()->field('id')->raw('2 * 2')->getRawSql(),
+      'select users.id, 2 * 2 from users'
+    );
   }
 
   public function testJoin(): void

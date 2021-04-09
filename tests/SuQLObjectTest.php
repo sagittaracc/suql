@@ -54,8 +54,8 @@ final class SuQLObjectTest extends TestCase
     // Select raw expression
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addField(null, "2 * 2");
-    $this->osuql->getQuery('main')->addField(null, "'project' as f");
-    $this->assertEquals($this->osuql->getSQL('all'), "select 2 * 2, 'project' as f");
+    $this->osuql->getQuery('main')->addField(null, "'Yuriy' as author");
+    $this->assertEquals($this->osuql->getSQL('all'), "select 2 * 2, 'Yuriy' as author");
     $this->assertNull($this->osuql->getSQL(['main']));
   }
 

@@ -108,6 +108,12 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     return $this;
   }
 
+  public function raw($field)
+  {
+    $this->getQuery($this->query())->addField(null, $field);
+    return $this;
+  }
+
   public function join($model)
   {
     $this->currentModel = $model;
