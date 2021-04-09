@@ -28,7 +28,15 @@ class SuQLSelect extends SuQLQuery {
 
   public function addField($table, $name, $visible = true) {
     $field = new SuQLFieldName($table, $name);
-    $this->select[] = new SuQLField($this, $table, $field->format('%t.%n'), $field->format('%a'), $visible);
+    $this->select[] = new SuQLField(
+      $this,
+      $table,
+      $table
+        ? $field->format('%t.%n')
+        : $field->format('%n'),
+      $field->format('%a'),
+      $visible
+    );
     return $field;
   }
 

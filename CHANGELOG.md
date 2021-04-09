@@ -5,6 +5,7 @@
 - Add join with view
 - Add nested queries (view inside view)
 - Remove string helper
+- Add select raw expression
 
 ---
 

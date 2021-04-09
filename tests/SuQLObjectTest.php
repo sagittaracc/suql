@@ -18,7 +18,7 @@ final class SuQLObjectTest extends TestCase
     $this->osuql->setDriver('mysql');
   }
 
-  public function testSelect(): void
+  public function testSelect1(): void
   {
     $this->init();
 
@@ -49,6 +49,13 @@ final class SuQLObjectTest extends TestCase
     $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
     $this->osuql->getQuery('main')->addField('users', 'name@uname'); // just another way to set an alias
     $this->assertEquals($this->osuql->getSQL('all'), 'select users.id as uid, users.name as uname from users');
+    $this->assertNull($this->osuql->getSQL(['main']));
+
+    // Select raw expression
+    $this->osuql->addSelect('main');
+    $this->osuql->getQuery('main')->addField(null, "2 * 2");
+    $this->osuql->getQuery('main')->addField(null, "'project' as f");
+    $this->assertEquals($this->osuql->getSQL('all'), "select 2 * 2, 'project' as f");
     $this->assertNull($this->osuql->getSQL(['main']));
   }
 
