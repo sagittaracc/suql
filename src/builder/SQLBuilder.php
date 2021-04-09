@@ -123,9 +123,10 @@ class SQLBuilder
     }
 
     $selectList = empty($selectList) ? '*' : implode(', ', $selectList);
-    $modifier = $oselect->hasModifier() ? $oselect->getModifier() : '';
 
-    return StringHelper::stripDoubleSpaces("select $modifier $selectList");
+    return $oselect->hasModifier()
+             ? "select {$oselect->getModifier()} $selectList"
+             : "select $selectList";
   }
 
   protected function buildFrom($query)

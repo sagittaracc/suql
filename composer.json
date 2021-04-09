@@ -16,7 +16,6 @@
       ]
     },
     "require": {
-      "sagittaracc/strings": "^0.1",
       "sagittaracc/arrays": "^0.1",
       "sagittaracc/placeholder": "^0.1"
     },
