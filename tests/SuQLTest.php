@@ -198,4 +198,17 @@ final class SuQLTest extends TestCase
       'select CONCAT(UCASE(LEFT(users.name, 1)), SUBSTRING(users.name, 2)) as user_name from users'
     );
   }
+
+  public function testToStringSuQL(): void
+  {
+    $this->assertEquals(
+      User::find(),
+      'select * from users'
+    );
+
+    $this->assertEquals(
+      User::find()->select(['id', 'name']),
+      'select users.id, users.name from users'
+    );
+  }
 }

@@ -27,6 +27,11 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     return parent::getSQL([$this->query()]);
   }
 
+  public function __toString()
+  {
+    return $this->getRawSql();
+  }
+
   public static function find()
   {
     $instance = new static();
