@@ -53,6 +53,8 @@ git clone https://github.com/sagittaracc/suql.git
 cd suql
 composer install
 ```
+## Tests
+`./vendor/bin/phpunit tests`
 
 ## Conclusion
 SuQL is all about modifiers. They already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` and SQL functions etc.
