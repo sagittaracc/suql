@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.7 - April 10, 2021
+
+- Support field modifiers as anonymous functions
+
+---
+
 ## v5.0.6 - April 9, 2021
 
 - Add join with view
