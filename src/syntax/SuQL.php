@@ -95,7 +95,11 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
     $this->getQuery($this->query())->addField($currentModel->table(), $name, $visible);
 
-    if (ArrayHelper::isSequential($modifiers))
+    if ($modifiers instanceof Closure)
+    {
+      $this->getQuery($this->query())->getField($currentModel->table(), $name)->addCallbackModifier($modifiers);
+    }
+    else if (ArrayHelper::isSequential($modifiers))
     {
       foreach ($modifiers as $modifier)
       {

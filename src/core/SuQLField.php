@@ -32,6 +32,10 @@ class SuQLField {
     $this->modifier[$name] = $params;
   }
 
+  public function addCallbackModifier($callback) {
+    $this->modifier["callback"] = $callback;
+  }
+
   public function delModifier($name) {
     unset($this->modifier[$name]);
   }

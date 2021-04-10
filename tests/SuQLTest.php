@@ -211,4 +211,14 @@ final class SuQLTest extends TestCase
       'select users.id, users.name from users'
     );
   }
+
+  public function testCallbackModifier(): void
+  {
+    $this->assertEquals(
+      User::find()->field('id', function($ofield){
+        $ofield->getOSelect()->addWhere("{$ofield->getField()} > 5");
+      })->getRawSql(),
+      'select users.id from users where users.id > 5'
+    );
+  }
 }

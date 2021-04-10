@@ -101,10 +101,15 @@ class SQLBuilder
     foreach ($oselect->getSelect() as $field => $ofield) {
       if ($ofield->hasModifier()) {
         foreach ($ofield->getModifierList() as $name => $params) {
-          $modifierHandler = "mod_$name";
-          $modifierClass = $this->osuql->getModifierClass($modifierHandler);
-          if ($modifierClass)
-            $modifierClass::$modifierHandler($ofield, $params);
+          if ($name === 'callback' && $params instanceof Closure) {
+            $params($ofield);
+          }
+          else {
+            $modifierHandler = "mod_$name";
+            $modifierClass = $this->osuql->getModifierClass($modifierHandler);
+            if ($modifierClass)
+              $modifierClass::$modifierHandler($ofield, $params);
+            }
         }
       }
     }

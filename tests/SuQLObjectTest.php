@@ -288,4 +288,20 @@ final class SuQLObjectTest extends TestCase
       'error' => [SuQLError::DRIVER_NOT_DEFINED],
     ]);
   }
+
+  public function testCallbackModifier(): void
+  {
+    $this->init();
+
+    $this->osuql->addSelect('main');
+    $this->osuql->getQuery('main')->addFrom('users');
+    $this->osuql->getQuery('main')->addField('users', 'id');
+    $this->osuql->getQuery('main')->getField('users', 'id')->addCallbackModifier(function($ofield){
+      $ofield->getOSelect()->addWhere("{$ofield->getField()} > 5");
+    });
+    $this->assertEquals($this->osuql->getSQL(['main']),
+      'select users.id from users where users.id > 5'
+    );
+    $this->assertNull($this->osuql->getSQL('all'));
+  }
 }
