@@ -2,6 +2,7 @@
 use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
 use app\model\UserDb;
+use app\model\User;
 use app\model\ProductDb;
 
 final class SuQLPdoTest extends TestCase
@@ -16,7 +17,13 @@ final class SuQLPdoTest extends TestCase
     // $this->assertObjectHasAttribute('id', UserDb::find()->fetchOne());
     // $this->assertEquals(1, UserDb::find()->fetchOne()->id);
     //
-    // $userList = UserDb::find()->fetchAll();
+    // $userList = UserDb::find()
+    //               ->select(['id', 'login', 'password', 'role'])
+    //               ->field('id', [
+    //                 'equal' => [':id']
+    //               ], false)
+    //               ->fetchAll([':id' => 1]);
+    //
     // foreach ($userList as $user)
     // {
     //   $this->assertObjectHasAttribute('id', $user);

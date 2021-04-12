@@ -23,12 +23,11 @@ abstract class PDOSuQL extends SuQL
     return $instance;
   }
 
-  public function fetchAll()
+  public function fetchAll($params = [])
   {
+    $stmt = $this->fetch($params);
+
     $rows = [];
-
-    $stmt = $this->dbh->query($this->getRawSql());
-
     foreach ($stmt->fetchAll(PDO::FETCH_OBJ) as $row)
     {
       $rows[] = $row;
@@ -37,12 +36,50 @@ abstract class PDOSuQL extends SuQL
     return $rows;
   }
 
-  public function fetchOne()
+  public function fetchOne($params = [])
   {
-    $stmt = $this->dbh->query($this->getRawSql());
-
+    $stmt = $this->fetch($params);
     $row = $stmt->fetch(PDO::FETCH_OBJ);
-
     return $row ? $row : null;
+  }
+
+  private function fetch($params = [])
+  {
+    if (empty($params))
+    {
+      $stmt = $this->dbh->query($this->getRawSql());
+    }
+    else
+    {
+      $stmt = $this->dbh->prepare($this->getRawSql());
+
+      foreach ($params as $param => $value)
+      {
+        $stmt->bindValue($param, $value, $this->getPDOParamType($value));
+      }
+
+      $stmt->execute();
+    }
+
+    return $stmt;
+  }
+
+  private function getPDOParamType($param)
+  {
+    switch (gettype($param))
+    {
+      case 'boolean':
+        return PDO::PARAM_BOOL;
+      case 'integer':
+        return PDO::PARAM_INT;
+      case 'double':
+        return PDO::PARAM_STR;
+      case 'string':
+        return PDO::PARAM_STR;
+      case 'NULL':
+        return PDO::PARAM_NULL;
+      default:
+        return PDO::PARAM_STR;
+    }
   }
 }
