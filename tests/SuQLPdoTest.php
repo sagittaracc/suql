@@ -13,11 +13,23 @@ final class SuQLPdoTest extends TestCase
     //
     // UserDb gets the data from the test database (see the UserDb model)
     //
-    // $this->assertEquals(
-    //   UserDb::find()->fetch(), [
-    //     Some data
-    //   ]
-    // );
+    // $this->assertObjectHasAttribute('id', UserDb::find()->fetchOne());
+    // $this->assertEquals(1, UserDb::find()->fetchOne()->id);
+    //
+    // $userList = UserDb::find()->fetchAll();
+    // foreach ($userList as $user)
+    // {
+    //   $this->assertObjectHasAttribute('id', $user);
+    //   $this->assertObjectHasAttribute('login', $user);
+    //   $this->assertObjectHasAttribute('password', $user);
+    //   $this->assertObjectHasAttribute('role', $user);
+    // }
+    //
+    // $user = UserDb::find()->field('id', ['greater' => [1]])->fetchOne();
+    // $this->assertNull($user);
+    //
+    // $user = UserDb::find()->field('login', ['like' => ['Yuriy']])->fetchAll();
+    // $this->assertEmpty($user);
 
     //
     // ProductDb gets the data from the store database (see the ProductDb model)

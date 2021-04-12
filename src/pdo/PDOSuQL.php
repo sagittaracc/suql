@@ -23,15 +23,26 @@ abstract class PDOSuQL extends SuQL
     return $instance;
   }
 
-  public function fetch()
+  public function fetchAll()
   {
     $rows = [];
 
-    foreach ($this->dbh->query($this->getRawSql()) as $row)
+    $stmt = $this->dbh->query($this->getRawSql());
+
+    foreach ($stmt->fetchAll(PDO::FETCH_OBJ) as $row)
     {
       $rows[] = $row;
     }
 
     return $rows;
+  }
+
+  public function fetchOne()
+  {
+    $stmt = $this->dbh->query($this->getRawSql());
+
+    $row = $stmt->fetch(PDO::FETCH_OBJ);
+
+    return $row ? $row : null;
   }
 }
