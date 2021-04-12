@@ -41,6 +41,8 @@ See the live example step by step [here](https://github.com/sagittaracc/suql/wik
 
 [Insert Query](https://github.com/sagittaracc/suql/wiki/Insert-Query)
 
+[Execute Query](https://github.com/sagittaracc/suql/wiki/Execute-queries)
+
 More examples in the ```tests``` directory
 
 ### Install
