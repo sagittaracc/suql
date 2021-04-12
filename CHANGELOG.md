@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.9 - April 12, 2021
+
+- Execute select & insert queries
+
+---
+
 ## v5.0.8 - April 12, 2021
 
 - Add insert query
