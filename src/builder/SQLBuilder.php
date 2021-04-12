@@ -9,6 +9,7 @@ class SQLBuilder
   private $sql = [];
 
   const SELECT_TEMPLATE = "{select}{from}{join}{where}{group}{having}{order}{limit}";
+  const INSERT_TEMPLATE = "insert into {table} ({fields}) values ({values})";
 
   function __construct($osuql)
   {
@@ -74,6 +75,17 @@ class SQLBuilder
   private function buildUnionQuery($query)
   {
     return $this->osuql->getQuery($query)->getSuQL();
+  }
+
+  private function buildInsertQuery($query)
+  {
+    $insertTemplate = self::INSERT_TEMPLATE;
+
+    $insertTemplate = str_replace('{table}', $this->osuql->getQuery($query)->getTable(), $insertTemplate);
+    $insertTemplate = str_replace('{fields}', $this->osuql->getQuery($query)->getFields(), $insertTemplate);
+    $insertTemplate = str_replace('{values}', $this->osuql->getQuery($query)->getValues(), $insertTemplate);
+
+    return $insertTemplate;
   }
 
   private function composeQuery($query)

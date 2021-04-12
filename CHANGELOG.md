@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.8 - April 12, 2021
+
+- Add insert query
+
+---
+
 ## v5.0.7 - April 10, 2021
 
 - Support field modifiers as anonymous functions

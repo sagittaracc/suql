@@ -142,6 +142,11 @@ class SuQLObject {
     $this->queries[$name] = new SuQLSelect($this);
   }
 
+  public function addInsert($name)
+  {
+    $this->queries[$name] = new SuQLInsert($this);
+  }
+
   public function addUnion($name, $query) {
     $this->queries[$name] = new SuQLUnion($this, $query);
   }

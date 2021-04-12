@@ -304,4 +304,32 @@ final class SuQLObjectTest extends TestCase
     );
     $this->assertNull($this->osuql->getSQL('all'));
   }
+
+  public function testInsert(): void
+  {
+    $this->init();
+
+    $this->osuql->addInsert('main');
+    $this->osuql->getQuery('main')->addInto('users');
+    $this->osuql->getQuery('main')->addValue('id', 1);
+    $this->osuql->getQuery('main')->addValue('name', 'Yuriy');
+    $this->assertEquals($this->osuql->getSQL(['main']),
+      "insert into users (id,name) values (1,'Yuriy')"
+    );
+    $this->assertNull($this->osuql->getSQL('all'));
+  }
+
+  public function testInsertWithPlaceholder(): void
+  {
+    $this->init();
+
+    $this->osuql->addInsert('main');
+    $this->osuql->getQuery('main')->addInto('users');
+    $this->osuql->getQuery('main')->addPlaceholder('id', ':id');
+    $this->osuql->getQuery('main')->addPlaceholder('name', ':name');
+    $this->assertEquals($this->osuql->getSQL(['main']),
+      "insert into users (id,name) values (:id,:name)"
+    );
+    $this->assertNull($this->osuql->getSQL('all'));
+  }
 }

@@ -221,4 +221,31 @@ final class SuQLTest extends TestCase
       'select users.id from users where users.id > 5'
     );
   }
+
+  public function testInsert(): void
+  {
+    $user = new User();
+
+    $user->insert([
+      'id' => 1,
+      'name' => 'Yuriy',
+    ]);
+
+    $this->assertEquals(
+      $user->getRawSql(),
+      "insert into users (id,name) values (1,'Yuriy')"
+    );
+  }
+
+  public function testInsertWithPlaceholder(): void
+  {
+    $user = new User();
+
+    $user->insert(['id', 'name']);
+
+    $this->assertEquals(
+      $user->getRawSql(),
+      'insert into users (id,name) values (:id,:name)'
+    );
+  }
 }
