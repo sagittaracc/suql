@@ -39,6 +39,8 @@ See the live example step by step [here](https://github.com/sagittaracc/suql/wik
 
 [Fetch data from databases](https://github.com/sagittaracc/suql/wiki/Fetch-data-from-databases)
 
+[Insert Query](https://github.com/sagittaracc/suql/wiki/Insert-Query)
+
 More examples in the ```tests``` directory
 
 ### Install
