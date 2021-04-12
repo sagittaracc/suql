@@ -42,6 +42,19 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testLimit(): void
+  {
+    $this->assertEquals(
+      User::find()->limit(0, 3)->getRawSql(),
+      'select * from users limit 3'
+    );
+
+    $this->assertEquals(
+      User::find()->limit(3, 6)->getRawSql(),
+      'select * from users limit 3, 6'
+    );
+  }
+
   public function testJoin(): void
   {
     // Join all tables

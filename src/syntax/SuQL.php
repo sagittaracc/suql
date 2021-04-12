@@ -112,6 +112,14 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     return $this;
   }
 
+  public function limit($offset, $limit)
+  {
+    $this->getQuery($this->query())->addOffset($offset);
+    $this->getQuery($this->query())->addLimit($limit);
+
+    return $this;
+  }
+
   public function field($name, $modifiers = [], $visible = true)
   {
     $currentModel = new $this->currentModel;

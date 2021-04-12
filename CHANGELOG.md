@@ -3,6 +3,7 @@
 ## v5.0.8 - April 12, 2021
 
 - Add insert query
+- Add select offset limit support
 
 ---
 
