@@ -10,17 +10,34 @@ abstract class PDOSuQL extends SuQL
   protected $password = '';
   protected $dbname = '';
 
-  public static function find()
+  protected $data = [];
+
+  function __construct($data = [])
   {
-    $instance = parent::find();
+    if (!empty($data))
+    {
+      $this->data = $data;
+    }
 
-    $instance->dbh = new PDO(
-      "{$instance->driver}:dbname={$instance->dbname};host={$instance->host}",
-      $instance->user,
-      $instance->password
+    parent::__construct(array_keys($data));
+
+    $this->dbh = new PDO(
+      "{$this->driver}:dbname={$this->dbname};host={$this->host}",
+      $this->user,
+      $this->password
     );
+  }
 
-    return $instance;
+  public function save()
+  {
+    $stmt = $this->dbh->prepare($this->getRawSql());
+
+    foreach ($this->data as $field => $value)
+    {
+      $stmt->bindValue(":$field", $value, $this->getPDOParamType($value));
+    }
+
+    $stmt->execute();
   }
 
   public function fetchAll($params = [])

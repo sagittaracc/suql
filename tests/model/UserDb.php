@@ -6,7 +6,7 @@ use \PDOSuQL;
 
 class UserDb extends PDOSuQL
 {
-  protected $dbname = 'test';
+  protected $dbname = 'ug';
 
   public function table()
   {

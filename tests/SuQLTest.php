@@ -237,9 +237,7 @@ final class SuQLTest extends TestCase
 
   public function testInsert(): void
   {
-    $user = new User();
-
-    $user->insert([
+    $user = new User([
       'id' => 1,
       'name' => 'Yuriy',
     ]);
@@ -252,9 +250,7 @@ final class SuQLTest extends TestCase
 
   public function testInsertWithPlaceholder(): void
   {
-    $user = new User();
-
-    $user->insert(['id', 'name']);
+    $user = new User(['id', 'name']);
 
     $this->assertEquals(
       $user->getRawSql(),

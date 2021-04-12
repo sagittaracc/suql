@@ -10,6 +10,14 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   private $currentModel;
   private $isView = false;
 
+  function __construct($data = [])
+  {
+    if (!empty($data))
+    {
+      $this->insert($data);
+    }
+  }
+
   use SQLDistinctModifier;
 
   public function query()

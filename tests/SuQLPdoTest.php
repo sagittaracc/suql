@@ -50,4 +50,15 @@ final class SuQLPdoTest extends TestCase
     //   ])->fetch()
     // );
   }
+
+  public function testInsert(): void
+  {
+    // $user = new UserDb([
+    //   'id' => 0,
+    //   'login' => 'user'
+    // ]);
+    //
+    // $user->save();
+    $this->assertTrue(true);
+  }
 }
