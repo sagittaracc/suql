@@ -56,4 +56,8 @@ class SQLWhereModifier
     else
       $ofield->getOSelect()->addWhere(str_replace('$', $ofield->getField(), trim($params[0], "'")));
   }
+
+  public static function mod_having($ofield, $params) {
+    $ofield->getOSelect()->addHaving(str_replace('$', $ofield->getJustField(), trim($params[0], "'")));
+  }
 }

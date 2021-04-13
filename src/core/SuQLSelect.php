@@ -31,9 +31,7 @@ class SuQLSelect extends SuQLQuery {
     $this->select[] = new SuQLField(
       $this,
       $table,
-      $table
-        ? $field->format('%t.%n')
-        : $field->format('%n'),
+      $field,
       $field->format('%a'),
       $visible
     );

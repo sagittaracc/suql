@@ -159,6 +159,18 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testHaving(): void
+  {
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'having' => ['$ > 3']
+              ])
+              ->getRawSql(),
+      'select users.id from users having id > 3'
+    );
+  }
+
   public function testOrder(): void
   {
     $this->assertEquals(
