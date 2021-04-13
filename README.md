@@ -43,6 +43,8 @@ See the live example step by step [here](https://github.com/sagittaracc/suql/wik
 
 [Execute Query](https://github.com/sagittaracc/suql/wiki/Execute-queries)
 
+[Compatibility with other frameworks](https://github.com/sagittaracc/suql/wiki/Compatibility-with-other-frameworks)
+
 More examples in the ```tests``` directory
 
 ### Install
