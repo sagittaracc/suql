@@ -316,6 +316,24 @@ final class SuQLObjectTest extends TestCase
     $this->assertEquals($this->osuql->getSQL(['main']),
       'select users.id as uid from users'
     );
+
+    $this->osuql->addSelect('main');
+    $this->osuql->getQuery('main')->addFrom('users');
+    $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
+    $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
+    $this->osuql->params[':id'] = null;
+    $this->assertEquals($this->osuql->getSQL(['main']),
+      'select users.id as uid from users'
+    );
+
+    $this->osuql->addSelect('main');
+    $this->osuql->getQuery('main')->addFrom('users');
+    $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
+    $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
+    $this->osuql->params[':id'] = 5;
+    $this->assertEquals($this->osuql->getSQL(['main']),
+      'select users.id as uid from users where users.id > :id'
+    );
   }
 
   public function testInsert(): void
