@@ -8,6 +8,7 @@ class SuQLObject {
   private $scheme  = ['rel' => [], 'temp_rel' => []];
   protected $driver = null;
   private $log = [];
+  public $params = [];
 
   protected function modifierList()
   {

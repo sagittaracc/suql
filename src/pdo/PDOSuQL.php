@@ -62,13 +62,17 @@ abstract class PDOSuQL extends SuQL
 
   private function fetch($params = [])
   {
+    $sql = $this->getRawSql();
+
+    $params = array_merge($this->params, $params);
+
     if (empty($params))
     {
-      $stmt = $this->dbh->query($this->getRawSql());
+      $stmt = $this->dbh->query($sql);
     }
     else
     {
-      $stmt = $this->dbh->prepare($this->getRawSql());
+      $stmt = $this->dbh->prepare($sql);
 
       foreach ($params as $param => $value)
       {

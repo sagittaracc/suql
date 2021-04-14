@@ -2,10 +2,12 @@
 class SQLWhereModifier
 {
   public static function default_where_handler($ofield, $params, $compare) {
+    $placeholder = 'ph_'.md5($ofield->getField());
+    $ofield->getOSelect()->getOSuQL()->params[":$placeholder"] = $params[0];
     if ($ofield->hasAlias())
-      $ofield->getOSelect()->addHaving("{$ofield->getAlias()} $compare {$params[0]}");
+      $ofield->getOSelect()->addHaving("{$ofield->getAlias()} $compare :$placeholder");
     else
-      $ofield->getOSelect()->addWhere("{$ofield->getField()} $compare {$params[0]}");
+      $ofield->getOSelect()->addWhere("{$ofield->getField()} $compare :$placeholder");
   }
 
   public static function mod_greater($ofield, $params) {

@@ -136,7 +136,7 @@ final class SuQLTest extends TestCase
                 'greater' => [10],
               ])
               ->getRawSql(),
-      "select users.name, users.id from users where users.name like '%yuriy%' and users.id > 10"
+      "select users.name, users.id from users where users.name like :ph_12cb8fae9701df6e8e8b1b972362a7ff and users.id > :ph_fc02896e3034a4ed53259916e2e2d82d"
     );
 
     // Where by filters
@@ -146,7 +146,7 @@ final class SuQLTest extends TestCase
                 'filter' => ['like', 'yuriy']
               ])
               ->getRawSql(),
-      "select users.name from users where users.name like '%yuriy%'"
+      "select users.name from users where users.name like :ph_12cb8fae9701df6e8e8b1b972362a7ff"
     );
 
     $this->assertEquals(
