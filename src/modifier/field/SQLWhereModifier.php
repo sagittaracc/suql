@@ -2,7 +2,9 @@
 class SQLWhereModifier
 {
   public static function default_where_handler($ofield, $params, $compare, $isFilter) {
-    $placeholder = 'ph_'.md5($ofield->getField());
+    $placeholder = substr($params[0], 0, 1) === ':'
+                      ? substr($params[0], (-1) * (strlen($params[0]) - 1))
+                      : 'ph_'.md5($ofield->getField());
     $ofield->getOSelect()->getOSuQL()->params[":$placeholder"] = $params[0];
     if ($ofield->hasAlias())
       $ofield->getOSelect()->addHaving("{$ofield->getAlias()} $compare :$placeholder");

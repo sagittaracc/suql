@@ -10,8 +10,6 @@ final class SuQLPdoTest extends TestCase
 {
   public function testSelectFromTwoDifferentDatabases(): void
   {
-    $this->assertTrue(true);
-
     //
     // UserDb gets the data from the test database (see the UserDb model)
     //
@@ -50,6 +48,7 @@ final class SuQLPdoTest extends TestCase
     //     ]
     //   ])->fetch()
     // );
+    $this->assertTrue(true);
   }
 
   public function testInsert(): void
@@ -66,7 +65,7 @@ final class SuQLPdoTest extends TestCase
   public function testFilterView(): void
   {
     // $query = FilterUserGroupView::find();
-    // $data = $query->fetchAll([':ph_fc02896e3034a4ed53259916e2e2d82d' => null]);
+    // $data = $query->fetchAll([':uid' => 2]);
     // var_dump($data);
     $this->assertTrue(true);
   }
