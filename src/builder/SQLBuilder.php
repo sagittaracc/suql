@@ -198,8 +198,9 @@ class SQLBuilder
   protected function buildWhere($query)
   {
     $whereList = $this->osuql->getQuery($query)->getWhere();
+    $filterWhereList = $this->osuql->getQuery($query)->getFilterWhere();
 
-    if (empty($whereList))
+    if (empty($whereList) && empty($filterWhereList))
       return '';
 
     $fieldList = $this->osuql->getQuery($query)->getFieldList();
@@ -211,7 +212,21 @@ class SQLBuilder
     }
     unset($where);
 
-    $whereList = implode(' and ', $whereList);
+    foreach ($filterWhereList as $placeholder => &$filterWhere) {
+      if (!$this->osuql->paramIsDefined($placeholder)) {
+        unset($filterWhereList[$placeholder]);
+        continue;
+      }
+
+      $filterWhere = str_replace($aliases, $fields, $filterWhere);
+    }
+    unset($filterWhere);
+
+    $fullWhereList = array_merge($whereList, $filterWhereList);
+    if (empty($fullWhereList))
+      return '';
+
+    $whereList = implode(' and ', $fullWhereList);
 
     return " where $whereList";
   }

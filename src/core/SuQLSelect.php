@@ -2,17 +2,18 @@
 namespace core;
 
 class SuQLSelect extends SuQLQuery {
-  private $select     = [];
-  private $from       = null;
-  private $where      = [];
-  private $having     = [];
-  private $join       = [];
-  private $group      = [];
-  private $order      = [];
-  private $modifier   = null;
-  private $offset     = null;
-  private $limit      = null;
-  private $table_list = [];
+  private $select      = [];
+  private $from        = null;
+  private $where       = [];
+  private $filterWhere = [];
+  private $having      = [];
+  private $join        = [];
+  private $group       = [];
+  private $order       = [];
+  private $modifier    = null;
+  private $offset      = null;
+  private $limit       = null;
+  private $table_list  = [];
 
   public function getType() {
     return 'select';
@@ -83,6 +84,14 @@ class SuQLSelect extends SuQLQuery {
 
   public function getWhere() {
     return $this->where;
+  }
+
+  public function addFilterWhere($filter, $where) {
+    $this->filterWhere[$filter] = $where;
+  }
+
+  public function getFilterWhere() {
+    return $this->filterWhere;
   }
 
   public function addHaving($having) {

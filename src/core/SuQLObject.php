@@ -59,6 +59,10 @@ class SuQLObject {
     $this->log['notice'][] = $notice;
   }
 
+  public function paramIsDefined($param) {
+    return isset($this->params[$param]) && !is_null($this->params[$param]);
+  }
+
   public function getLog() {
     return $this->log;
   }
