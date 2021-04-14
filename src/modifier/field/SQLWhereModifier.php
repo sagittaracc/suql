@@ -1,55 +1,64 @@
 <?php
 class SQLWhereModifier
 {
-  public static function default_where_handler($ofield, $params, $compare) {
+  public static function default_where_handler($ofield, $params, $compare, $isFilter) {
     $placeholder = 'ph_'.md5($ofield->getField());
     $ofield->getOSelect()->getOSuQL()->params[":$placeholder"] = $params[0];
     if ($ofield->hasAlias())
       $ofield->getOSelect()->addHaving("{$ofield->getAlias()} $compare :$placeholder");
     else
-      $ofield->getOSelect()->addWhere("{$ofield->getField()} $compare :$placeholder");
+    {
+      if ($isFilter)
+      {
+        $ofield->getOSelect()->addFilterWhere(":$placeholder", "{$ofield->getField()} $compare :$placeholder");
+      }
+      else
+      {
+        $ofield->getOSelect()->addWhere("{$ofield->getField()} $compare :$placeholder");
+      }
+    }
   }
 
-  public static function mod_greater($ofield, $params) {
-    self::default_where_handler($ofield, $params, '>');
+  public static function mod_greater($ofield, $params, $isFilter = false) {
+    self::default_where_handler($ofield, $params, '>', $isFilter);
   }
 
-  public static function mod_greaterOrEqual($ofield, $params) {
-    self::default_where_handler($ofield, $params, '>=');
+  public static function mod_greaterOrEqual($ofield, $params, $isFilter = false) {
+    self::default_where_handler($ofield, $params, '>=', $isFilter);
   }
 
-  public static function mod_less($ofield, $params) {
-    self::default_where_handler($ofield, $params, '<');
+  public static function mod_less($ofield, $params, $isFilter = false) {
+    self::default_where_handler($ofield, $params, '<', $isFilter);
   }
 
-  public static function mod_lessOrEqual($ofield, $params) {
-    self::default_where_handler($ofield, $params, '<=');
+  public static function mod_lessOrEqual($ofield, $params, $isFilter = false) {
+    self::default_where_handler($ofield, $params, '<=', $isFilter);
   }
 
-  public static function mod_equal($ofield, $params) {
-    self::default_where_handler($ofield, $params, '=');
+  public static function mod_equal($ofield, $params, $isFilter = false) {
+    self::default_where_handler($ofield, $params, '=', $isFilter);
   }
 
-  public static function mod_notEqual($ofield, $params) {
-    self::default_where_handler($ofield, $params, '<>');
+  public static function mod_notEqual($ofield, $params, $isFilter = false) {
+    self::default_where_handler($ofield, $params, '<>', $isFilter);
   }
 
-  public static function mod_like($ofield, $params) {
+  public static function mod_like($ofield, $params, $isFilter = false) {
     $params[0] = trim($params[0], "'");
     $params[0] = "'%{$params[0]}%'";
-    self::default_where_handler($ofield, $params, 'like');
+    self::default_where_handler($ofield, $params, 'like', $isFilter);
   }
 
-  public static function mod_startsWith($ofield, $params) {
+  public static function mod_startsWith($ofield, $params, $isFilter = false) {
     $params[0] = trim($params[0], "'");
     $params[0] = "'{$params[0]}%'";
-    self::default_where_handler($ofield, $params, 'like');
+    self::default_where_handler($ofield, $params, 'like', $isFilter);
   }
 
-  public static function mod_endsWith($ofield, $params) {
+  public static function mod_endsWith($ofield, $params, $isFilter = false) {
     $params[0] = trim($params[0], "'");
     $params[0] = "'%{$params[0]}'";
-    self::default_where_handler($ofield, $params, 'like');
+    self::default_where_handler($ofield, $params, 'like', $isFilter);
   }
 
   public static function mod_where($ofield, $params) {
