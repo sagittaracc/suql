@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use app\model\UserDb;
 use app\model\User;
 use app\model\ProductDb;
+use app\model\FilterUserGroupView;
 
 final class SuQLPdoTest extends TestCase
 {
@@ -59,6 +60,14 @@ final class SuQLPdoTest extends TestCase
     // ]);
     //
     // $user->save();
+    $this->assertTrue(true);
+  }
+
+  public function testFilterView(): void
+  {
+    // $query = FilterUserGroupView::find();
+    // $data = $query->fetchAll([':ph_fc02896e3034a4ed53259916e2e2d82d' => null]);
+    // var_dump($data);
     $this->assertTrue(true);
   }
 }
