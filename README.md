@@ -29,6 +29,8 @@ See the live example step by step [here](https://github.com/sagittaracc/suql/wik
 
 [Field Modifiers](https://github.com/sagittaracc/suql/wiki/Field-Modifiers)
 
+[Filter View](https://github.com/sagittaracc/suql/wiki/Filter-View)
+
 [Query Modifiers](https://github.com/sagittaracc/suql/wiki/Query-Modifiers)
 
 [Order Data](https://github.com/sagittaracc/suql/wiki/Order-Data)
