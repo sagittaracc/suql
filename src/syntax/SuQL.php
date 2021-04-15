@@ -19,12 +19,6 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     }
   }
 
-  public function setCurrentModel($currentModel)
-  {
-    $this->currentModel = $currentModel;
-    return $this;
-  }
-
   use SQLDistinctModifier;
 
   public function query()
