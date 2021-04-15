@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.10 - April 15, 2021
+
+- Filter View
+
+---
+
 ## v5.0.9 - April 12, 2021
 
 - Execute select & insert queries
