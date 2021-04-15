@@ -8,6 +8,15 @@ class SubUserGroupView extends SuQL
 {
   public function view()
   {
-    return UserGroupView::find()->select(['id', 'name']);
+    return UserGroupView::find();
+  }
+
+  public function normalize()
+  {
+    $this->setCurrentModel(UserGroupView::class)
+         ->field('id')
+         ->field('name');
+
+    return $this;
   }
 }

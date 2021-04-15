@@ -17,7 +17,10 @@ final class SuQLPdoTest extends TestCase
     // $this->assertEquals(1, UserDb::find()->fetchOne()->id);
     //
     // $query = UserDb::find()
-    //            ->select(['id', 'login', 'password', 'role'])
+    //            ->field('id')
+    //            ->field('login')
+    //            ->field('password')
+    //            ->field('role')
     //            ->field('id', [
     //              'equal' => [1],
     //            ], false);
@@ -64,8 +67,13 @@ final class SuQLPdoTest extends TestCase
 
   public function testFilterView(): void
   {
-    // $query = FilterUsersView::find();
-    // $data = $query->fetchAll([':uid' => null]);
+    // $query = FilterUsersView::find()->normalize();
+    // $data = $query->fetchAll([
+    //   ':uid' => null,
+    //   ':username' => null,
+    //   ':gid' => null,
+    //   ':groupname' => null,
+    // ]);
     // var_dump($data);
     $this->assertTrue(true);
   }

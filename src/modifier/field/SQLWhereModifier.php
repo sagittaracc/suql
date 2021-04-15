@@ -5,7 +5,12 @@ class SQLWhereModifier
     $placeholder = substr($params[0], 0, 1) === ':'
                       ? substr($params[0], (-1) * (strlen($params[0]) - 1))
                       : 'ph_'.md5($ofield->getField());
-    $ofield->getOSelect()->getOSuQL()->params[":$placeholder"] = $params[0];
+
+    if (!array_key_exists(":$placeholder", $ofield->getOSelect()->getOSuQL()->params))
+    {
+      $ofield->getOSelect()->getOSuQL()->params[":$placeholder"] = $params[0];
+    }
+
     if ($ofield->hasAlias())
       $ofield->getOSelect()->addHaving("{$ofield->getAlias()} $compare :$placeholder");
     else

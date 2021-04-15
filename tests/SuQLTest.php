@@ -19,13 +19,13 @@ final class SuQLTest extends TestCase
 
     // Select some specific fields
     $this->assertEquals(
-      User::find()->select(['id', 'name'])->getRawSql(),
+      User::find()->field('id')->field('name')->getRawSql(),
       'select users.id, users.name from users'
     );
 
     // Set aliases for the fields
     $this->assertEquals(
-      User::find()->select(['id' => 'uid', 'name' => 'uname'])->getRawSql(),
+      User::find()->field(['id' => 'uid'])->field(['name' => 'uname'])->getRawSql(),
       'select users.id as uid, users.name as uname from users'
     );
 
@@ -103,11 +103,13 @@ final class SuQLTest extends TestCase
 
     // Nested query (view inside view)
     $this->assertEquals(
-      SubUserGroupView::find()->getRawSql(),
-      'select * from ('.
+      SubUserGroupView::find()->normalize()->getRawSql(),
+      'select '.
+        'app_model_UserGroupView.id, '.
+        'app_model_UserGroupView.name '.
+      'from ('.
         'select '.
-          'app_model_UserGroupView.id, '.
-          'app_model_UserGroupView.name '.
+          '* '.
         'from users '.
         'inner join user_group on users.id = user_group.user_id '.
         'inner join groups on user_group.group_id = groups.id'.
@@ -232,7 +234,7 @@ final class SuQLTest extends TestCase
     );
 
     $this->assertEquals(
-      User::find()->select(['id', 'name']),
+      User::find()->field('id')->field('name'),
       'select users.id, users.name from users'
     );
   }

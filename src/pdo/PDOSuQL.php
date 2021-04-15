@@ -76,7 +76,8 @@ abstract class PDOSuQL extends SuQL
 
       foreach ($this->params as $param => $value)
       {
-        $stmt->bindValue($param, $value, $this->getPDOParamType($value));
+        if ($value)
+          $stmt->bindValue($param, $value, $this->getPDOParamType($value));
       }
 
       $stmt->execute();

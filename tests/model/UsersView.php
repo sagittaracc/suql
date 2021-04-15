@@ -14,6 +14,6 @@ class UsersView extends SuQL
              ->join(UserGroup::class)
              ->join(Group::class)
                ->field(['id' => 'gid'])
-               ->field(['name' => 'group_name']);
+               ->field(['name' => 'groupname']);
   }
 }

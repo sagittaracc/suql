@@ -18,6 +18,12 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     }
   }
 
+  public function setCurrentModel($currentModel)
+  {
+    $this->currentModel = $currentModel;
+    return $this;
+  }
+
   use SQLDistinctModifier;
 
   public function query()
@@ -69,32 +75,6 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     }
 
     return $instance;
-  }
-
-  public function select($fields)
-  {
-    if (ArrayHelper::isSequential($fields))
-    {
-      foreach ($fields as $field)
-      {
-        $this->getQuery($this->query())->addField(
-          method_exists($this, 'table') ? $this->table() : $this->view()->query(),
-          $field
-        );
-      }
-    }
-    else
-    {
-      foreach ($fields as $field => $alias)
-      {
-        $this->getQuery($this->query())->addField(
-          method_exists($this, 'table') ? $this->table() : $this->view()->query(),
-          [$field => $alias]
-        );
-      }
-    }
-
-    return $this;
   }
 
   public function insert($values)
