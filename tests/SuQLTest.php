@@ -241,26 +241,26 @@ final class SuQLTest extends TestCase
     );
   }
 
-  // public function testInsert(): void
-  // {
-  //   $user = new User([
-  //     'id' => 1,
-  //     'name' => 'Yuriy',
-  //   ]);
-  //
-  //   $this->assertEquals(
-  //     $user->getRawSql(),
-  //     "insert into users (id,name) values (1,'Yuriy')"
-  //   );
-  // }
-  //
-  // public function testInsertWithPlaceholder(): void
-  // {
-  //   $user = new User(['id', 'name']);
-  //
-  //   $this->assertEquals(
-  //     $user->getRawSql(),
-  //     'insert into users (id,name) values (:id,:name)'
-  //   );
-  // }
+  public function testInsert(): void
+  {
+    $user = new User([
+      'id' => 1,
+      'name' => 'Yuriy',
+    ]);
+
+    $this->assertEquals(
+      $user->getRawSql(),
+      "insert into users (id,name) values (1,'Yuriy')"
+    );
+  }
+
+  public function testInsertWithPlaceholder(): void
+  {
+    $user = new User(['id', 'name']);
+
+    $this->assertEquals(
+      $user->getRawSql(),
+      'insert into users (id,name) values (:id,:name)'
+    );
+  }
 }
