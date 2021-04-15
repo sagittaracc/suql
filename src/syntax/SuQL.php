@@ -8,6 +8,7 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   protected $driver = 'mysql';
   private $joinChain = [];
   private $currentModel;
+  private $currentQuery;
   private $isView = false;
 
   function __construct($data = [])
@@ -38,7 +39,7 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
   public function getRawSql()
   {
-    return parent::getSQL([$this->query()]);
+    return parent::getSQL([$this->currentQuery]);
   }
 
   public function __toString()
@@ -53,23 +54,18 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
 
     if (method_exists($instance, 'view'))
     {
-      $instance->isView = true;
       $view = $instance->view();
 
-      if ($view->isView)
-      {
-        $instance->addSelect($instance->query());
-        $instance->getQuery($instance->query())->addFrom($view->query());
-        $instance->extend($view->getQueries());
-      }
-      else
-      {
-        $queries = ArrayHelper::rename_keys($view->getQueries(), [$instance->query()]);
-        $instance->extend($queries);
-      }
+      $queries = ArrayHelper::rename_keys($view->getQueries(), [$instance->query()]);
+
+      $instance->extend($queries);
+      $instance->currentQuery = md5($instance->query());
+      $instance->addSelect(md5($instance->query()));
+      $instance->getQuery(md5($instance->query()))->addFrom($instance->query());
     }
     else
     {
+      $instance->currentQuery = $instance->query();
       $instance->addSelect($instance->query());
       $instance->getQuery($instance->query())->addFrom($instance->table());
     }
@@ -112,24 +108,24 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   {
     $currentModel = new $this->currentModel;
 
-    $this->getQuery($this->query())->addField($currentModel->table(), $name, $visible);
+    $this->getQuery($this->currentQuery)->addField($currentModel->table(), $name, $visible);
 
     if ($modifiers instanceof Closure)
     {
-      $this->getQuery($this->query())->getField($currentModel->table(), $name)->addCallbackModifier($modifiers);
+      $this->getQuery($this->currentQuery)->getField($currentModel->table(), $name)->addCallbackModifier($modifiers);
     }
     else if (ArrayHelper::isSequential($modifiers))
     {
       foreach ($modifiers as $modifier)
       {
-        $this->getQuery($this->query())->getField($currentModel->table(), $name)->addModifier($modifier);
+        $this->getQuery($this->currentQuery)->getField($currentModel->table(), $name)->addModifier($modifier);
       }
     }
     else
     {
       foreach ($modifiers as $modifier => $params)
       {
-        $this->getQuery($this->query())->getField($currentModel->table(), $name)->addModifier($modifier, $params);
+        $this->getQuery($this->currentQuery)->getField($currentModel->table(), $name)->addModifier($modifier, $params);
       }
     }
 
