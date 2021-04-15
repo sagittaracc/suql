@@ -156,6 +156,15 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
     return $this;
   }
 
+  public function filter($field, $options)
+  {
+    $this->field($field, [
+      'filter' => $options
+    ], false);
+
+    return $this;
+  }
+
   public function raw($field)
   {
     $this->getQuery($this->query())->addField(null, $field);
