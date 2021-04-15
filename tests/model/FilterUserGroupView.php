@@ -11,8 +11,10 @@ class FilterUserGroupView extends \PDOSuQL
                ->field('id', [
                  'filter' => ['equal', ':uid']
                ])
+               ->field('login')
              ->join(UserGroup::class)
              ->join(Group::class)
-               ->field('*');
+               ->field(['id' => 'gid'])
+               ->field(['name' => 'gname']);
   }
 }
