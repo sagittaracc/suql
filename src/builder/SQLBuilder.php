@@ -120,8 +120,10 @@ class SQLBuilder
             $modifierHandler = "mod_$name";
             $modifierClass = $this->osuql->getModifierClass($modifierHandler);
             if ($modifierClass)
+            {
               $modifierClass::$modifierHandler($ofield, $params);
             }
+          }
         }
       }
     }
