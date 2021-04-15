@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use app\model\UserDb;
 use app\model\User;
 use app\model\ProductDb;
-use app\model\FilterUsersView;
+use app\model\UsersView;
 
 final class SuQLPdoTest extends TestCase
 {
@@ -40,17 +40,6 @@ final class SuQLPdoTest extends TestCase
     // $user = UserDb::find()->field('login', ['like' => ['Yuriy']])->fetchAll();
     // $this->assertEmpty($user);
 
-    //
-    // ProductDb gets the data from the store database (see the ProductDb model)
-    //
-    // $this->assertEquals(
-    //   ProductDb::find()->field('id', [
-    //     'greater' => [
-    //       ['integer' => 1],
-    //       ['boolean' => false],
-    //     ]
-    //   ])->fetch()
-    // );
     $this->assertTrue(true);
   }
 
@@ -67,13 +56,19 @@ final class SuQLPdoTest extends TestCase
 
   public function testFilterView(): void
   {
-    // $query = FilterUsersView::find()->normalize();
+    // $query = UsersView::find()
+    //            ->filter('uid', ['equal', ':uid'])
+    //            // ->filter('username', ['like', ':username'])
+    //            ->filter('gid', ['equal', ':gid']);
+    //            // ->filter('groupname', ['like', ':groupname']);
+    //
     // $data = $query->fetchAll([
     //   ':uid' => null,
-    //   ':username' => null,
+    //   // ':username' => null,
     //   ':gid' => null,
-    //   ':groupname' => null,
+    //   // ':groupname' => null,
     // ]);
+    //
     // var_dump($data);
     $this->assertTrue(true);
   }

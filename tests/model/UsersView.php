@@ -2,10 +2,10 @@
 
 namespace app\model;
 
-use \SuQL;
-
-class UsersView extends SuQL
+class UsersView extends \PDOSuQL
 {
+  protected $dbname = 'test';
+
   public function view()
   {
     return User::find()
