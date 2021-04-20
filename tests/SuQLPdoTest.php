@@ -33,12 +33,6 @@ final class SuQLPdoTest extends TestCase
     //   $this->assertObjectHasAttribute('password', $user);
     //   $this->assertObjectHasAttribute('role', $user);
     // }
-    //
-    // $user = UserDb::find()->field('id', ['greater' => [1]])->fetchOne();
-    // $this->assertNull($user);
-    //
-    // $user = UserDb::find()->field('login', ['like' => ['Yuriy']])->fetchAll();
-    // $this->assertEmpty($user);
 
     $this->assertTrue(true);
   }
@@ -58,7 +52,7 @@ final class SuQLPdoTest extends TestCase
   {
     // $query = UsersView::find()
     //            ->filter('uid', ['equal', null])
-    //            ->filter('username', ['like', 'admin'])
+    //            ->filter('username', ['like', null])
     //            ->filter('gid', ['equal', null])
     //            ->filter('groupname', ['like', null]);
 

@@ -186,8 +186,13 @@ class SuQLObject {
     return $this->hasParam($param) && !is_null($this->params[$param]);
   }
 
+  public function getParam($param)
+  {
+    return $this->params[$param];
+  }
+
   public function setParam($param, $value)
   {
-    $this->params[$param] = $value;
+    $this->params[$param] = new SuQLParam($param, $value);
   }
 }
