@@ -141,6 +141,14 @@ final class SuQLTest extends TestCase
 
     $this->assertEquals(
       User::find()
+              ->select(['id', 'name'])
+              ->where('id', '$ mod 2 = 0')
+              ->getRawSql(),
+      'select users.id, users.name from users where users.id mod 2 = 0'
+    );
+
+    $this->assertEquals(
+      User::find()
               ->field('name', [
                 'like' => ['yuriy']
               ])

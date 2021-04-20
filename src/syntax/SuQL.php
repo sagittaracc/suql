@@ -96,6 +96,15 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return $this;
   }
 
+  public function where($field, $where)
+  {
+    $this->field($field, [
+      'where' => [$where]
+    ], false);
+
+    return $this;
+  }
+
   public function filter($field, $options)
   {
     $this->field($field, [
