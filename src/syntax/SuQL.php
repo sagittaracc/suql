@@ -3,21 +3,12 @@
 use core\SuQLObject;
 use sagittaracc\ArrayHelper;
 
-abstract class SuQL extends SuQLObject implements SuQLInterface
+abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 {
   protected $driver = 'mysql';
-  private $joinChain = [];
-  private $currentModel;
-  private $currentQuery;
-  private $isView = false;
-
-  function __construct($data = [])
-  {
-    if (!empty($data))
-    {
-      $this->insert($data);
-    }
-  }
+  protected $joinChain = [];
+  protected $currentModel;
+  protected $currentQuery;
 
   use SQLDistinctModifier;
 
@@ -39,32 +30,6 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   public function __toString()
   {
     return $this->getRawSql();
-  }
-
-  public static function find()
-  {
-    $instance = new static();
-    $instance->currentModel = get_class($instance);
-
-    if (method_exists($instance, 'view'))
-    {
-      $view = $instance->view();
-
-      $queries = ArrayHelper::rename_keys($view->getQueries(), [$instance->query()]);
-
-      $instance->extend($queries);
-      $instance->currentQuery = md5($instance->query());
-      $instance->addSelect(md5($instance->query()));
-      $instance->getQuery(md5($instance->query()))->addFrom($instance->query());
-    }
-    else
-    {
-      $instance->currentQuery = $instance->query();
-      $instance->addSelect($instance->query());
-      $instance->getQuery($instance->query())->addFrom($instance->table());
-    }
-
-    return $instance;
   }
 
   public function insert($values)
@@ -139,6 +104,11 @@ abstract class SuQL extends SuQLObject implements SuQLInterface
   {
     $this->getQuery($this->query())->addField(null, $field);
     return $this;
+  }
+
+  public function relations()
+  {
+    return [];
   }
 
   public function join($model)

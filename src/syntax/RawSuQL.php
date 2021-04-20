@@ -2,7 +2,7 @@
 
 use core\SuQLObject;
 
-class RawSuQL extends SuQLObject implements SuQLInterface
+class RawSuQL extends SuQLObject implements SuQLQueryInterface
 {
   protected $driver = 'mysql';
 

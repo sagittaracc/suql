@@ -2,9 +2,7 @@
 
 namespace app\model;
 
-use \SuQL;
-
-class UserGroup extends SuQL
+class UserGroup extends \SuQLTable
 {
   public function table()
   {
