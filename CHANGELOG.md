@@ -1,5 +1,12 @@
 # Change log
 
+## v5.0.11 - April 20, 2021
+
+- Fix Filter View
+- Refactor
+
+---
+
 ## v5.0.10 - April 15, 2021
 
 - Filter View
