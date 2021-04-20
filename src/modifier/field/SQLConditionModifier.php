@@ -3,7 +3,7 @@ class SQLConditionModifier
 {
   private static function default_condition_handler($function, $condition, $ofield, $params)
   {
-    $ofield->setField($ofield->compileIntoString($condition));
+    $ofield->setField(str_replace('$', $ofield->getField(), $condition));
     SQLFunctionModifier::default_function_handler($function, $ofield, $params);
   }
 
