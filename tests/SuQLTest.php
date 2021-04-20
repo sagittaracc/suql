@@ -204,6 +204,16 @@ final class SuQLTest extends TestCase
               ->getRawSql(),
       'select users.id, users.name from users order by users.id asc'
     );
+
+    $this->assertEquals(
+      User::find()
+              ->orderBy([
+                'id' => 'asc',
+                'name' => 'desc'
+              ])
+              ->getRawSql(),
+      'select users.id, users.name from users order by users.id asc, users.name desc'
+    );
   }
 
   public function testFunction(): void

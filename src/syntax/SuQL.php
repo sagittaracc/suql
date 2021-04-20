@@ -84,6 +84,18 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return $this;
   }
 
+  public function orderBy($fieldList)
+  {
+    foreach ($fieldList as $field => $direction)
+    {
+      $this->field($field, [
+        $direction
+      ]);
+    }
+
+    return $this;
+  }
+
   public function filter($field, $options)
   {
     $this->field($field, [
