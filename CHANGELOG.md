@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.12 - April 20, 2021
+
+- More sugar syntax
+
+---
+
 ## v5.0.11 - April 20, 2021
 
 - Fix Filter View
