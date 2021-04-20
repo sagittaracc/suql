@@ -114,6 +114,13 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return $this;
   }
 
+  public function max($field)
+  {
+    $this->field($field, ['max']);
+
+    return $this;
+  }
+
   public function where($field, $where)
   {
     $this->field($field, [
