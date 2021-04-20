@@ -1,6 +1,6 @@
 <?php
 
-abstract class PDOSuQL extends SuQL
+trait PDOSuQL
 {
   private $dbh;
 
@@ -26,18 +26,6 @@ abstract class PDOSuQL extends SuQL
       $this->user,
       $this->password
     );
-  }
-
-  public function save()
-  {
-    $stmt = $this->dbh->prepare($this->getRawSql());
-
-    foreach ($this->data as $field => $value)
-    {
-      $stmt->bindValue(":$field", $value, $this->getPDOParamType($value));
-    }
-
-    $stmt->execute();
   }
 
   public function fetchAll($params = [])

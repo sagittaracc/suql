@@ -2,16 +2,9 @@
 
 namespace app\model;
 
-use \PDOSuQL;
-
-class ProductDb extends PDOSuQL
+class ProductDb extends \PDOSuQLTable
 {
   protected $dbname = 'store';
-
-  public function getType()
-  {
-    return 'table';
-  }
 
   public function table()
   {

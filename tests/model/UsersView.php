@@ -2,14 +2,9 @@
 
 namespace app\model;
 
-class UsersView extends \PDOSuQL
+class UsersView extends \PDOSuQLView
 {
   protected $dbname = 'test';
-
-  public function getType()
-  {
-    return 'query';
-  }
 
   public function view()
   {

@@ -2,16 +2,9 @@
 
 namespace app\model;
 
-use \PDOSuQL;
-
-class UserDb extends PDOSuQL
+class UserDb extends \PDOSuQLTable
 {
   protected $dbname = 'test';
-
-  public function getType()
-  {
-    return 'table';
-  }
 
   public function table()
   {
