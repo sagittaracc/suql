@@ -96,6 +96,24 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return $this;
   }
 
+  public function groupBy($field)
+  {
+    $this->field($field, [
+      'group'
+    ]);
+
+    return $this;
+  }
+
+  public function countBy($field)
+  {
+    $this->field($field, [
+      'count'
+    ]);
+
+    return $this;
+  }
+
   public function where($field, $where)
   {
     $this->field($field, [

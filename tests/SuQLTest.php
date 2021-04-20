@@ -105,6 +105,15 @@ final class SuQLTest extends TestCase
                   ->getRawSql(),
       'select groups.name, count(groups.name) as count from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id group by groups.name'
     );
+
+    $this->assertEquals(
+      User::find()->join(UserGroup::class)
+                  ->join(Group::class)
+                    ->groupBy('name')
+                    ->countBy(['name' => 'count'])
+                  ->getRawSql(),
+      'select groups.name, count(groups.name) as count from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id group by groups.name'
+    );
   }
 
   public function testView(): void
