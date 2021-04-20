@@ -57,19 +57,12 @@ final class SuQLPdoTest extends TestCase
   public function testFilterView(): void
   {
     // $query = UsersView::find()
-    //            ->filter('uid', ['equal', ':uid'])
-    //            // ->filter('username', ['like', ':username'])
-    //            ->filter('gid', ['equal', ':gid']);
-    //            // ->filter('groupname', ['like', ':groupname']);
-    //
-    // $data = $query->fetchAll([
-    //   ':uid' => null,
-    //   // ':username' => null,
-    //   ':gid' => null,
-    //   // ':groupname' => null,
-    // ]);
-    //
-    // var_dump($data);
+    //            ->filter('uid', ['equal', null])
+    //            ->filter('username', ['like', null])
+    //            ->filter('gid', ['equal', null])
+    //            ->filter('groupname', ['like', null]);
+
+    // var_dump($query->fetchAll());
     $this->assertTrue(true);
   }
 }

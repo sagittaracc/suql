@@ -52,19 +52,19 @@ class SQLWhereModifier
 
   public static function mod_like($ofield, $params, $isFilter = false) {
     $params[0] = trim($params[0], "'");
-    $params[0] = "'%{$params[0]}%'";
+    $params[0] = "%{$params[0]}%";
     self::default_where_handler($ofield, $params, 'like', $isFilter);
   }
 
   public static function mod_startsWith($ofield, $params, $isFilter = false) {
     $params[0] = trim($params[0], "'");
-    $params[0] = "'{$params[0]}%'";
+    $params[0] = "{$params[0]}%";
     self::default_where_handler($ofield, $params, 'like', $isFilter);
   }
 
   public static function mod_endsWith($ofield, $params, $isFilter = false) {
     $params[0] = trim($params[0], "'");
-    $params[0] = "'%{$params[0]}'";
+    $params[0] = "%{$params[0]}";
     self::default_where_handler($ofield, $params, 'like', $isFilter);
   }
 
