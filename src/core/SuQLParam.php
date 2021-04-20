@@ -4,8 +4,8 @@ namespace core;
 
 class SuQLParam
 {
-    private $param;
-    private $value;
+    protected $param;
+    protected $value;
 
     function __construct($param, $value)
     {
@@ -13,9 +13,9 @@ class SuQLParam
         $this->value = $value;
     }
 
-    public function getPlaceholder()
+    public function getParam()
     {
-        return $this->placeholder;
+        return $this->param;
     }
 
     public function getValue()
