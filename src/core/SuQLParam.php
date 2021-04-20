@@ -5,12 +5,12 @@ namespace core;
 class SuQLParam
 {
     protected $field;
-    protected $value;
+    protected $params;
 
-    function __construct($field, $value)
+    function __construct($field, $params)
     {
         $this->field = $field;
-        $this->value = $value;
+        $this->params = $params;
     }
 
     public function getField()
@@ -20,6 +20,6 @@ class SuQLParam
 
     public function getValue()
     {
-        return $this->value;
+        return $this->params[0];
     }
 }

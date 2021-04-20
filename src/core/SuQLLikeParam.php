@@ -6,6 +6,6 @@ class SuQLLikeParam extends SuQLParam
 {
     public function getValue()
     {
-        return "%{$this->value}%";
+        return "%{$this->params[0]}%";
     }
 }
