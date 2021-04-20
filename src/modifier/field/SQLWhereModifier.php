@@ -4,14 +4,12 @@ use core\SuQLLikeParam;
 
 class SQLWhereModifier
 {
-  public static function default_where_handler($ofield, $compare, $params, $paramHandler, $isFilter) {
-    $placeholder = substr($params[0], 0, 1) === ':'
-                      ? $params[0]
-                      : $ofield->getPlaceholderName();
+  public static function default_where_handler($ofield, $compare, $suqlParam, $isFilter) {
+    $placeholder = $ofield->getPlaceholderName();
 
     if (!$ofield->getOSelect()->getOSuQL()->hasParam($placeholder))
     {
-      $ofield->getOSelect()->getOSuQL()->setParam($paramHandler, $placeholder, $params[0]);
+      $ofield->getOSelect()->getOSuQL()->setParam($placeholder, $suqlParam);
     }
 
     if ($ofield->hasAlias())
@@ -29,34 +27,32 @@ class SQLWhereModifier
     }
   }
 
-  // TODO: Подумать над таким вариантом
-  // self::default_where_handler($ofield, '>', new SuQLParam($params), $isFilter);
   public static function mod_greater($ofield, $params, $isFilter = false) {
-    self::default_where_handler($ofield, '>', $params, SuQLParam::class, $isFilter);
+    self::default_where_handler($ofield, '>', new SuQLParam($ofield, $params[0]), $isFilter);
   }
 
   public static function mod_greaterOrEqual($ofield, $params, $isFilter = false) {
-    self::default_where_handler($ofield, '>=', $params, SuQLParam::class, $isFilter);
+    self::default_where_handler($ofield, '>=', new SuQLParam($ofield, $params[0]), $isFilter);
   }
 
   public static function mod_less($ofield, $params, $isFilter = false) {
-    self::default_where_handler($ofield, '<', $params, SuQLParam::class, $isFilter);
+    self::default_where_handler($ofield, '<', new SuQLParam($ofield, $params[0]), $isFilter);
   }
 
   public static function mod_lessOrEqual($ofield, $params, $isFilter = false) {
-    self::default_where_handler($ofield, '<=', $params, SuQLParam::class, $isFilter);
+    self::default_where_handler($ofield, '<=', new SuQLParam($ofield, $params[0]), $isFilter);
   }
 
   public static function mod_equal($ofield, $params, $isFilter = false) {
-    self::default_where_handler($ofield, '=', $params, SuQLParam::class, $isFilter);
+    self::default_where_handler($ofield, '=', new SuQLParam($ofield, $params[0]), $isFilter);
   }
 
   public static function mod_notEqual($ofield, $params, $isFilter = false) {
-    self::default_where_handler($ofield, '<>', $params, SuQLParam::class, $isFilter);
+    self::default_where_handler($ofield, '<>', new SuQLParam($ofield, $params[0]), $isFilter);
   }
 
   public static function mod_like($ofield, $params, $isFilter = false) {
-    self::default_where_handler($ofield, 'like', $params, SuQLLikeParam::class, $isFilter);
+    self::default_where_handler($ofield, 'like', new SuQLLikeParam($ofield, $params[0]), $isFilter);
   }
 
   public static function mod_where($ofield, $params) {

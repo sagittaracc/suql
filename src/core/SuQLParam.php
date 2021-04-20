@@ -4,18 +4,18 @@ namespace core;
 
 class SuQLParam
 {
-    protected $param;
+    protected $field;
     protected $value;
 
-    function __construct($param, $value)
+    function __construct($field, $value)
     {
-        $this->param = $param;
+        $this->field = $field;
         $this->value = $value;
     }
 
-    public function getParam()
+    public function getField()
     {
-        return $this->param;
+        return $this->field;
     }
 
     public function getValue()

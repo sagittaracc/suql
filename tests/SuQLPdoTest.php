@@ -52,7 +52,7 @@ final class SuQLPdoTest extends TestCase
   {
     // $query = UsersView::find()
     //            ->filter('uid', ['equal', null])
-    //            ->filter('username', ['like', 'admin'])
+    //            ->filter('username', ['like', 'admi'])
     //            ->filter('gid', ['equal', null])
     //            ->filter('groupname', ['like', null]);
 

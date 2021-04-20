@@ -191,8 +191,8 @@ class SuQLObject {
     return $this->params[$param];
   }
 
-  public function setParam($paramHandler, $param, $value)
+  public function setParam($param, $suqlParam)
   {
-    $this->params[$param] = new $paramHandler($param, $value);
+    $this->params[$param] = $suqlParam;
   }
 }
