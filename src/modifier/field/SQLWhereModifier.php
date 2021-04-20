@@ -3,25 +3,25 @@ class SQLWhereModifier
 {
   public static function default_where_handler($ofield, $params, $compare, $isFilter) {
     $placeholder = substr($params[0], 0, 1) === ':'
-                      ? substr($params[0], (-1) * (strlen($params[0]) - 1))
-                      : 'ph_'.md5($ofield->getField());
+                      ? $params[0]
+                      : ':ph_'.md5($ofield->getField());
 
-    if (!array_key_exists(":$placeholder", $ofield->getOSelect()->getOSuQL()->params))
+    if (!$ofield->getOSelect()->getOSuQL()->hasParam($placeholder))
     {
-      $ofield->getOSelect()->getOSuQL()->params[":$placeholder"] = $params[0];
+      $ofield->getOSelect()->getOSuQL()->setParam($placeholder, $params[0]);
     }
 
     if ($ofield->hasAlias())
-      $ofield->getOSelect()->addHaving("{$ofield->getAlias()} $compare :$placeholder");
+      $ofield->getOSelect()->addHaving("{$ofield->getAlias()} $compare $placeholder");
     else
     {
       if ($isFilter)
       {
-        $ofield->getOSelect()->addFilterWhere(":$placeholder", "{$ofield->getField()} $compare :$placeholder");
+        $ofield->getOSelect()->addFilterWhere("$placeholder", "{$ofield->getField()} $compare $placeholder");
       }
       else
       {
-        $ofield->getOSelect()->addWhere("{$ofield->getField()} $compare :$placeholder");
+        $ofield->getOSelect()->addWhere("{$ofield->getField()} $compare $placeholder");
       }
     }
   }
