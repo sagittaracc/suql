@@ -12,12 +12,9 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 
   use SQLDistinctModifier;
 
-  public function query()
-  {
-    return str_replace('\\', '_', get_class($this));
-  }
+  abstract public function getType();
 
-  public function table()
+  public function query()
   {
     return str_replace('\\', '_', get_class($this));
   }
@@ -32,29 +29,6 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return $this->getRawSql();
   }
 
-  public function insert($values)
-  {
-    $this->addInsert($this->currentQuery);
-    $this->getQuery($this->currentQuery)->addInto($this->table());
-
-    if (ArrayHelper::isSequential($values))
-    {
-      foreach ($values as $field)
-      {
-        $this->getQuery($this->currentQuery)->addPlaceholder($field, ":$field");
-      }
-    }
-    else
-    {
-      foreach ($values as $field => $value)
-      {
-        $this->getQuery($this->currentQuery)->addValue($field, $value);
-      }
-    }
-
-    return $this;
-  }
-
   public function limit($offset, $limit)
   {
     $this->getQuery($this->query())->addOffset($offset);
@@ -66,25 +40,26 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
   public function field($name, $modifiers = [], $visible = true)
   {
     $currentModel = new $this->currentModel;
+    $type = $currentModel->getType();
 
-    $this->getQuery($this->currentQuery)->addField($currentModel->table(), $name, $visible);
+    $this->getQuery($this->currentQuery)->addField($currentModel->$type(), $name, $visible);
 
     if ($modifiers instanceof Closure)
     {
-      $this->getQuery($this->currentQuery)->getField($currentModel->table(), $name)->addCallbackModifier($modifiers);
+      $this->getQuery($this->currentQuery)->getField($currentModel->$type(), $name)->addCallbackModifier($modifiers);
     }
     else if (ArrayHelper::isSequential($modifiers))
     {
       foreach ($modifiers as $modifier)
       {
-        $this->getQuery($this->currentQuery)->getField($currentModel->table(), $name)->addModifier($modifier);
+        $this->getQuery($this->currentQuery)->getField($currentModel->$type(), $name)->addModifier($modifier);
       }
     }
     else
     {
       foreach ($modifiers as $modifier => $params)
       {
-        $this->getQuery($this->currentQuery)->getField($currentModel->table(), $name)->addModifier($modifier, $params);
+        $this->getQuery($this->currentQuery)->getField($currentModel->$type(), $name)->addModifier($modifier, $params);
       }
     }
 
@@ -120,7 +95,8 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     {
       foreach ($this->joinChain as $models)
       {
-        $table = $models->table();
+        $type = $models->getType();
+        $table = $models->$type();
         $relations = $models->relations();
         if (isset($relations[$model]))
         {
@@ -131,7 +107,8 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     }
     else
     {
-      $table = $this->table();
+      $type = $this->getType();
+      $table = $this->$type();
       $relation = $relations[$model];
     }
 

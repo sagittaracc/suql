@@ -6,7 +6,7 @@ abstract class SuQLView extends SuQL implements SuQLViewInterface
 {
   public function getType()
   {
-    return 'view';
+    return 'query';
   }
 
   public static function find()
