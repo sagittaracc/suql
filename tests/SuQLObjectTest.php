@@ -8,7 +8,7 @@ final class SuQLObjectTest extends TestCase
 {
   private $osuql;
 
-  private function init()
+  protected function setUp(): void
   {
     $this->osuql = new SuQLObject;
 
@@ -18,10 +18,13 @@ final class SuQLObjectTest extends TestCase
     $this->osuql->setDriver('mysql');
   }
 
+  protected function tearDown(): void
+  {
+    $this->osuql = null;
+  }
+
   public function testSelect(): void
   {
-    $this->init();
-
     // Fetching by a field list
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
@@ -61,8 +64,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testSelectWhere(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
@@ -86,8 +87,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testSelectLimit(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addField('users', '*');
@@ -99,8 +98,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testSelectDistinct(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addModifier('distinct');
     $this->osuql->getQuery('main')->addField('users', 'name');
@@ -111,8 +108,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testSelectJoin(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
@@ -172,8 +167,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testSelectGroup(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
@@ -198,8 +191,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testNestedQueries(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('allGroupCount');
     $this->osuql->getQuery('allGroupCount')->addFrom('users');
     $this->osuql->getQuery('allGroupCount')->addJoin('inner', 'user_group');
@@ -233,8 +224,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testSorting(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
@@ -259,8 +248,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testUnion(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('firstRegisration');
     $this->osuql->getQuery('firstRegisration')->addFrom('users');
     $this->osuql->getQuery('firstRegisration')->addField('users', 'registration@reg_interval');
@@ -278,21 +265,8 @@ final class SuQLObjectTest extends TestCase
     $this->assertNull($this->osuql->getSQL('all'));
   }
 
-  public function testEmptyDriver(): void
-  {
-    $this->osuql = new SuQLObject;
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->assertFalse($this->osuql->getSQL(['main']));
-    $this->assertEquals($this->osuql->getLog(), [
-      'error' => [SuQLError::DRIVER_NOT_DEFINED],
-    ]);
-  }
-
   public function testCallbackModifier(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addField('users', 'id');
@@ -307,8 +281,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testFilterWhere(): void
   {
-    $this->init();
-
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
@@ -338,8 +310,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testInsert(): void
   {
-    $this->init();
-
     $this->osuql->addInsert('main');
     $this->osuql->getQuery('main')->addInto('users');
     $this->osuql->getQuery('main')->addValue('id', 1);
@@ -352,8 +322,6 @@ final class SuQLObjectTest extends TestCase
 
   public function testInsertWithPlaceholder(): void
   {
-    $this->init();
-
     $this->osuql->addInsert('main');
     $this->osuql->getQuery('main')->addInto('users');
     $this->osuql->getQuery('main')->addPlaceholder('id', ':id');
