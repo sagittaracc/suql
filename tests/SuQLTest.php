@@ -151,6 +151,16 @@ final class SuQLTest extends TestCase
               ->getRawSql(),
       "select users.name from users"
     );
+
+    // TODO: Вариант для WHERE EXISTS (через модификатор)
+    // $this->assertEquals(
+    //   User::find()
+    //           ->field('id', [
+    //             'exists' => [Admin::find()]
+    //           ])
+    //           ->getRawSql(),
+    //   "select users.id from users where exists (select users.id from users where role = 'admin')"
+    // );
   }
 
   public function testHaving(): void
