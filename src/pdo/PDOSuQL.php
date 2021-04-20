@@ -10,17 +10,8 @@ trait PDOSuQL
   protected $password = '';
   protected $dbname = '';
 
-  protected $data = [];
-
-  function __construct($data = [])
+  public function createConnection()
   {
-    if (!empty($data))
-    {
-      $this->data = $data;
-    }
-
-    parent::__construct(array_keys($data));
-
     $this->dbh = new PDO(
       "{$this->driver}:dbname={$this->dbname};host={$this->host}",
       $this->user,
