@@ -39,6 +39,20 @@ final class SuQLTest extends TestCase
       User::find()->field('id')->raw('2 * 2')->getRawSql(),
       'select users.id, 2 * 2 from users'
     );
+
+    $this->assertEquals(
+      User::find()->select(['id', 'name'])->getRawSql(),
+      'select users.id, users.name from users'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->select([
+                'id' => 'uid',
+                'name' => 'uname'
+              ])->getRawSql(),
+      'select users.id as uid, users.name as uname from users'
+    );
   }
 
   public function testLimit(): void

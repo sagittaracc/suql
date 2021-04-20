@@ -61,6 +61,29 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return $this;
   }
 
+  public function select($fieldList)
+  {
+    $currentModel = new $this->currentModel;
+    $type = $currentModel->getType();
+
+    if (ArrayHelper::isSequential($fieldList))
+    {
+      foreach ($fieldList as $field)
+      {
+        $this->getQuery($this->currentQuery)->addField($currentModel->$type(), $field);
+      }
+    }
+    else
+    {
+      foreach ($fieldList as $field => $alias)
+      {
+        $this->getQuery($this->currentQuery)->addField($currentModel->$type(), [$field => $alias]);
+      }
+    }
+
+    return $this;
+  }
+
   public function filter($field, $options)
   {
     $this->field($field, [
