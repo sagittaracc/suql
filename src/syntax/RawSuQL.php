@@ -11,19 +11,9 @@ class RawSuQL extends SuQLObject implements SuQLQueryInterface
     return 'main';
   }
 
-  public function table()
-  {
-    return null;
-  }
-
   public function getRawSql()
   {
     return parent::getSQL([$this->query()]);
-  }
-
-  public function __toString()
-  {
-    return $this->getRawSql();
   }
 
   public static function find()
@@ -35,7 +25,7 @@ class RawSuQL extends SuQLObject implements SuQLQueryInterface
 
   public function field($raw)
   {
-    $this->getQuery($this->query())->addField($this->table(), $raw);
+    $this->getQuery($this->query())->addField(null, $raw);
     return $this;
   }
 }

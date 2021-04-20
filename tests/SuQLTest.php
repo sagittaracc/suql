@@ -218,19 +218,6 @@ final class SuQLTest extends TestCase
     );
   }
 
-  public function testToStringSuQL(): void
-  {
-    $this->assertEquals(
-      User::find(),
-      'select * from users'
-    );
-
-    $this->assertEquals(
-      User::find()->field('id')->field('name'),
-      'select users.id, users.name from users'
-    );
-  }
-
   public function testCallbackModifier(): void
   {
     $this->assertEquals(

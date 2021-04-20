@@ -24,11 +24,6 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return parent::getSQL([$this->currentQuery]);
   }
 
-  public function __toString()
-  {
-    return $this->getRawSql();
-  }
-
   public function limit($offset, $limit)
   {
     $this->getQuery($this->query())->addOffset($offset);
