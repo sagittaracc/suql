@@ -6,6 +6,11 @@ class UsersView extends \PDOSuQL
 {
   protected $dbname = 'test';
 
+  public function getType()
+  {
+    return 'query';
+  }
+
   public function view()
   {
     return User::find()
