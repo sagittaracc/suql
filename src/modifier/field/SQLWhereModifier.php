@@ -1,4 +1,5 @@
 <?php
+
 use core\SuQLParam;
 use core\SuQLLikeParam;
 
