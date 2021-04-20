@@ -59,11 +59,6 @@ class SuQLObject {
     $this->log['notice'][] = $notice;
   }
 
-  // TODO: Попытаться избавиться от этого метода используется в Builder. Попробовать использовать $this->hasParam
-  public function paramIsDefined($param) {
-    return isset($this->params[$param]) && !is_null($this->params[$param]);
-  }
-
   public function getLog() {
     return $this->log;
   }
@@ -184,6 +179,11 @@ class SuQLObject {
   public function hasParam($param)
   {
     return array_key_exists($param, $this->params);
+  }
+
+  public function hasValuableParam($param)
+  {
+    return $this->hasParam($param) && !is_null($this->params[$param]);
   }
 
   public function setParam($param, $value)

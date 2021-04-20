@@ -215,7 +215,7 @@ class SQLBuilder
     unset($where);
 
     foreach ($filterWhereList as $placeholder => &$filterWhere) {
-      if (!$this->osuql->paramIsDefined($placeholder)) {
+      if (!$this->osuql->hasValuableParam($placeholder)) {
         unset($filterWhereList[$placeholder]);
         continue;
       }
