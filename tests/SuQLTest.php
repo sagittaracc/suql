@@ -156,10 +156,10 @@ final class SuQLTest extends TestCase
     // $this->assertEquals(
     //   User::find()
     //           ->field('id', [
-    //             'exists' => [Admin::find()]
+    //             'exists' => [UserGroup::find()]
     //           ])
     //           ->getRawSql(),
-    //   "select users.id from users where exists (select users.id from users where role = 'admin')"
+    //   "select id from users where exists (select * from user_group where user_id = users.id)"
     // );
   }
 
