@@ -78,4 +78,9 @@ class SuQLField {
   public function visible() {
     return $this->visible === true;
   }
+
+  public function getPlaceholderName()
+  {
+    return ':ph_' . md5($this->getField());
+  }
 }

@@ -4,7 +4,7 @@ class SQLWhereModifier
   public static function default_where_handler($ofield, $params, $compare, $isFilter) {
     $placeholder = substr($params[0], 0, 1) === ':'
                       ? $params[0]
-                      : ':ph_'.md5($ofield->getField());
+                      : $ofield->getPlaceholderName();
 
     if (!$ofield->getOSelect()->getOSuQL()->hasParam($placeholder))
     {
