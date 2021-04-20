@@ -85,7 +85,7 @@ final class SuQLTest extends TestCase
       User::find()->join(UserGroupView::class)->getRawSql(),
       'select * from users '.
       'inner join ('.
-        'select * from users '.
+        'select users.id as uid, users.name as uname, groups.id as gid, groups.name as gname from users '.
         'inner join user_group on users.id = user_group.user_id '.
         'inner join groups on user_group.group_id = groups.id'.
       ') app_model_UserGroupView on users.id = app_model_UserGroupView.user_id'
@@ -110,12 +110,16 @@ final class SuQLTest extends TestCase
   public function testView(): void
   {
     $this->assertEquals(
-      UserGroupView::find()->field('id')->getRawSql(),
+      UserGroupView::find()->select(['uid', 'uname'])->getRawSql(),
       'select '.
-        'app_model_UserGroupView.id '.
+        'app_model_UserGroupView.uid, '.
+        'app_model_UserGroupView.uname '.
       'from ('.
         'select '.
-          '* '.
+          'users.id as uid, '.
+          'users.name as uname, '.
+          'groups.id as gid, '.
+          'groups.name as gname '.
         'from users '.
         'inner join user_group on users.id = user_group.user_id '.
         'inner join groups on user_group.group_id = groups.id'.
