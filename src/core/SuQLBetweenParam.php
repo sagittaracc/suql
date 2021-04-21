@@ -11,7 +11,15 @@ class SuQLBetweenParam extends SuQLParam
 
     public function getPlaceholder()
     {
-        $placeholder = parent::getPlaceholder();
-        return ':ph_' . md5($placeholder . '1') . ' and ' . ':ph_' . md5($placeholder . '2');
+        return implode(' and ', $this->getPlaceholderList());
+    }
+
+    public function getPlaceholderList()
+    {
+        $placeholder = parent::getPlaceholderList()[0];
+        return [
+            ':ph_' . md5($placeholder . '0'),
+            ':ph_' . md5($placeholder . '1')
+        ];
     }
 }

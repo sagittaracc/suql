@@ -11,12 +11,17 @@ class SuQLInParam extends SuQLParam
 
     public function getPlaceholder()
     {
-        $placeholder = parent::getPlaceholder();
-        $paramList = [];
-        foreach ($this->params as $paramId => $param)
+        return '(' . implode(',', $this->getPlaceholderList()) . ')';
+    }
+
+    public function getPlaceholderList()
+    {
+        $list = [];
+        $placeholder = parent::getPlaceholderList()[0];
+        for ($i = 0, $n = count($this->params); $i < $n; $i++)
         {
-            $paramList[] = ':ph_' . md5($placeholder . $paramId);
+            $list[] = ':ph_' . md5($placeholder . $i);
         }
-        return '(' . implode(',', $paramList) . ')';
+        return $list;
     }
 }

@@ -28,7 +28,7 @@ class SuQLParam
       return $this->getPlaceholderList()[0];
     }
 
-    private function getPlaceholderList()
+    public function getPlaceholderList()
     {
         return [
             ':ph_' . md5($this->field->getField())
