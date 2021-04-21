@@ -23,9 +23,7 @@ final class SuQLPdoTest extends TestCase
     //              'password',
     //              ['role' => 'urole']
     //            ])
-    //            ->field('id', [
-    //              'equal' => [1],
-    //            ], false);
+    //            ->where(['id' => 1]);
     // $userList = $query->fetchAll();
     
     // foreach ($userList as $user)

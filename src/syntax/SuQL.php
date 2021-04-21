@@ -125,11 +125,39 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     return $this;
   }
 
-  public function where($field, $where)
+  public function where($options)
   {
-    $this->field($field, [
-      'where' => [$where]
-    ], false);
+    if (is_string($options))
+    {
+      $rawWhere = $options;
+      $this->getQuery($this->currentQuery)->addWhere($rawWhere);
+    }
+    else if (is_array($options))
+    {
+      if (ArrayHelper::isSequential($options))
+      {
+        $field = $options[0];
+        $modifier = $options[1];
+        $params = $options[2];
+
+        $this->field($field, [
+          $modifier => $params
+        ], false);
+      }
+      else
+      {
+        foreach ($options as $field => $value)
+        {
+          $this->field($field, [
+            'equal' => [$value]
+          ], false);
+        }
+      }
+    }
+    else
+    {
+
+    }
 
     return $this;
   }

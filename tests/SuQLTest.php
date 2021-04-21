@@ -151,9 +151,28 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       User::find()
               ->select(['id', 'name'])
-              ->where('id', '$ mod 2 = 0')
+              ->where('id mod 2 = 0')
               ->getRawSql(),
-      'select users.id, users.name from users where users.id mod 2 = 0'
+      'select users.id, users.name from users where id mod 2 = 0'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->select(['id', 'name'])
+              ->where([
+                'id' => 1,
+                'name' => 'users',
+              ])
+              ->getRawSql(),
+      'select users.id, users.name from users where users.id = :ph_fc02896e3034a4ed53259916e2e2d82d and users.name = :ph_12cb8fae9701df6e8e8b1b972362a7ff'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->select(['id', 'name'])
+              ->where(['id', 'greater', [1]])
+              ->getRawSql(),
+      'select users.id, users.name from users where users.id > :ph_fc02896e3034a4ed53259916e2e2d82d'
     );
 
     $this->assertEquals(
