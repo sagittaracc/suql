@@ -8,4 +8,15 @@ class SuQLInParam extends SuQLParam
     {
         return '(' . implode(',', $this->params) . ')';
     }
+
+    public function getPlaceholderName()
+    {
+        $placeholder = parent::getPlaceholderName();
+        $paramList = [];
+        foreach ($this->params as $paramId => $param)
+        {
+            $paramList[] = ':ph_' . md5($placeholder . $paramId);
+        }
+        return '(' . implode(',', $paramList) . ')';
+    }
 }

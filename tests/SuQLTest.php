@@ -206,6 +206,24 @@ final class SuQLTest extends TestCase
       "select users.name from users"
     );
 
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'between' => [1, 2]
+              ], false)
+              ->getRawSql(),
+      'select * from users where users.id between :ph_b05ba045acc2eef36fd0ed5bdb815bb5 and :ph_15a024187fe0b56919f66cfc17f49dcf'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'in' => [1, 2, 3]
+              ], false)
+              ->getRawSql(),
+      'select * from users where users.id in (:ph_98aace064c30b09e0247de93e95303f7,:ph_b05ba045acc2eef36fd0ed5bdb815bb5,:ph_15a024187fe0b56919f66cfc17f49dcf)'
+    );
+
     // TODO: Вариант для WHERE EXISTS (через модификатор)
     // $this->assertEquals(
     //   User::find()
