@@ -9,7 +9,7 @@ class SQLWhereModifier
 {
   public static function default_where_handler($compare, $suqlParam, $isFilter) {
     $ofield = $suqlParam->getField();
-    $placeholder = $suqlParam->getPlaceholderName();
+    $placeholder = $suqlParam->getPlaceholder();
 
     if (!$ofield->getOSelect()->getOSuQL()->hasParam($placeholder))
     {

@@ -23,8 +23,15 @@ class SuQLParam
         return $this->params[0];
     }
 
-    public function getPlaceholderName()
+    public function getPlaceholder()
     {
-      return ':ph_' . md5($this->field->getField());
+      return $this->getPlaceholderList()[0];
+    }
+
+    private function getPlaceholderList()
+    {
+        return [
+            ':ph_' . md5($this->field->getField())
+        ];
     }
 }

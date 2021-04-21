@@ -9,9 +9,9 @@ class SuQLInParam extends SuQLParam
         return '(' . implode(',', $this->params) . ')';
     }
 
-    public function getPlaceholderName()
+    public function getPlaceholder()
     {
-        $placeholder = parent::getPlaceholderName();
+        $placeholder = parent::getPlaceholder();
         $paramList = [];
         foreach ($this->params as $paramId => $param)
         {
