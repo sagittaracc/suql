@@ -11,7 +11,7 @@
 </p>
 
 ### SuQL ORM
-SuQL stands for Sugar Query Language. This is a programming language for creating your own ORM framework or extending this one. There's no limit really.
+SuQL stands for Sugar Query Language. This is a programming language for creating your own ORM framework or extending this one. SuQL is very flexible and lets you do the fuck you want. All you need to do is to learn its concept. 
 
 ### Real live example
 See the live example step by step [here](https://github.com/sagittaracc/suql/wiki/Live-example)
