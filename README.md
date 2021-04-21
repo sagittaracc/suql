@@ -11,11 +11,7 @@
 </p>
 
 ### SuQL ORM
-SuQL stands for Sugar Query Language and it's the best and simplest ORM. Easy to use.
-(MySQL, Sqlite, Oracle, PostgreSQL, SqlServer).
-
-It has a conceptually new way of approaching databases.
-Expand SuQL syntax on your own. There's no limit really.
+SuQL stands for Sugar Query Language. This is a programming language for creating your own ORM framework or extending this one. There's no limit really.
 
 ### Real live example
 See the live example step by step [here](https://github.com/sagittaracc/suql/wiki/Live-example)
