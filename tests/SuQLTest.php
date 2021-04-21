@@ -49,9 +49,9 @@ final class SuQLTest extends TestCase
       User::find()
               ->select([
                 'id' => 'uid',
-                'name' => 'uname'
+                'name'
               ])->getRawSql(),
-      'select users.id as uid, users.name as uname from users'
+      'select users.id as uid, users.name from users'
     );
   }
 
@@ -119,10 +119,10 @@ final class SuQLTest extends TestCase
   public function testView(): void
   {
     $this->assertEquals(
-      UserGroupView::find()->select(['uid', 'uname'])->getRawSql(),
+      UserGroupView::find()->select(['uid', 'uname' => 'vuname'])->getRawSql(),
       'select '.
         'app_model_UserGroupView.uid, '.
-        'app_model_UserGroupView.uname '.
+        'app_model_UserGroupView.uname as vuname '.
       'from ('.
         'select '.
           'users.id as uid, '.

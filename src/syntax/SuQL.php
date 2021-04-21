@@ -66,18 +66,22 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     $currentModel = new $this->currentModel;
     $type = $currentModel->getType();
 
-    if (ArrayHelper::isSequential($fieldList))
+    foreach ($fieldList as $key => $value)
     {
-      foreach ($fieldList as $field)
+      if (is_int($key))
       {
+        $field = $value;
         $this->getQuery($this->currentQuery)->addField($currentModel->$type(), $field);
       }
-    }
-    else
-    {
-      foreach ($fieldList as $field => $alias)
+      else if (is_string($key))
       {
+        $field = $key;
+        $alias = $value;
         $this->getQuery($this->currentQuery)->addField($currentModel->$type(), [$field => $alias]);
+      }
+      else
+      {
+
       }
     }
 

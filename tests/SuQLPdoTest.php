@@ -17,10 +17,12 @@ final class SuQLPdoTest extends TestCase
     // $this->assertEquals(1, UserDb::find()->fetchOne()->id);
     
     // $query = UserDb::find()
-    //            ->field('id')
-    //            ->field('login')
-    //            ->field('password')
-    //            ->field('role')
+    //            ->select([
+    //              ['id' => 'uid'],
+    //              'login',
+    //              'password',
+    //              ['role' => 'urole']
+    //            ])
     //            ->field('id', [
     //              'equal' => [1],
     //            ], false);
@@ -28,10 +30,10 @@ final class SuQLPdoTest extends TestCase
     
     // foreach ($userList as $user)
     // {
-    //   $this->assertObjectHasAttribute('id', $user);
+    //   $this->assertObjectHasAttribute('uid', $user);
     //   $this->assertObjectHasAttribute('login', $user);
     //   $this->assertObjectHasAttribute('password', $user);
-    //   $this->assertObjectHasAttribute('role', $user);
+    //   $this->assertObjectHasAttribute('urole', $user);
     // }
 
     $this->assertTrue(true);
