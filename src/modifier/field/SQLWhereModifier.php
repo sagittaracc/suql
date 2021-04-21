@@ -2,6 +2,8 @@
 
 use core\SuQLParam;
 use core\SuQLLikeParam;
+use core\SuQLBetweenParam;
+use core\SuQLInParam;
 
 class SQLWhereModifier
 {
@@ -55,6 +57,14 @@ class SQLWhereModifier
 
   public static function mod_like($ofield, $params, $isFilter = false) {
     self::default_where_handler('like', new SuQLLikeParam($ofield, $params), $isFilter);
+  }
+
+  public static function mod_between($ofield, $params, $isFilter = false) {
+    self::default_where_handler('between', new SuQLBetweenParam($ofield, $params), $isFilter);
+  }
+
+  public static function mod_in($ofield, $params, $isFilter = false) {
+    self::default_where_handler('in', new SuQLInParam($ofield, $params), $isFilter);
   }
 
   public static function mod_where($ofield, $params) {
