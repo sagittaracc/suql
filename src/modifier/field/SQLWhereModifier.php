@@ -10,10 +10,11 @@ class SQLWhereModifier
   public static function default_where_handler($compare, $suqlParam, $isFilter) {
     $ofield = $suqlParam->getField();
     $placeholder = $suqlParam->getPlaceholder();
+    $paramKey = $suqlParam->getParamKey();
 
-    if (!$ofield->getOSelect()->getOSuQL()->hasParam($placeholder))
+    if (!$ofield->getOSelect()->getOSuQL()->hasParam($paramKey))
     {
-      $ofield->getOSelect()->getOSuQL()->setParam($placeholder, $suqlParam);
+      $ofield->getOSelect()->getOSuQL()->setParam($paramKey, $suqlParam);
     }
 
     if ($ofield->hasAlias())
@@ -22,7 +23,7 @@ class SQLWhereModifier
     {
       if ($isFilter)
       {
-        $ofield->getOSelect()->addFilterWhere("$placeholder", "{$ofield->getField()} $compare $placeholder");
+        $ofield->getOSelect()->addFilterWhere($paramKey, "{$ofield->getField()} $compare $placeholder");
       }
       else
       {

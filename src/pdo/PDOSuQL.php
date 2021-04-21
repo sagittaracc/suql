@@ -51,10 +51,13 @@ trait PDOSuQL
     {
       $stmt = $this->dbh->prepare($sql);
 
-      foreach ($this->params as $param => $suqlParam)
+      foreach ($this->params as $paramKey => $suqlParam)
       {
-        if ($suqlParam->getValue())
-          $stmt->bindValue($param, $suqlParam->getValue(), $this->getPDOParamType($suqlParam->getValue()));
+        $paramList = $suqlParam->getParamList();
+        foreach ($paramList as $placeholder => $value)
+        {
+          $stmt->bindValue($placeholder, $value, $this->getPDOParamType($value)); 
+        }
       }
 
       $stmt->execute();

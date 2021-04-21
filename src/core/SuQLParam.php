@@ -18,10 +18,17 @@ class SuQLParam
         return $this->field;
     }
 
-    public function getValue()
+    //TODO: Возможно paramKey совсем не нужен мы больше не привязываем значения к плейсхолдеру во время fetch
+    public function getParamKey()
     {
-        return $this->params[0];
+        return 'pk_' . md5($this->field->getField());
     }
+
+    public function getParamList()
+    {
+        return array_combine($this->getPlaceholderList(), $this->params);
+    }
+
 
     public function getPlaceholder()
     {

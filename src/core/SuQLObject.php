@@ -181,6 +181,7 @@ class SuQLObject {
     return array_key_exists($param, $this->params);
   }
 
+  // TODO: Возможно это не нужно так как все параметры теперь привязываются непостредственно в модификаторах
   public function hasValuableParam($param)
   {
     return $this->hasParam($param) && !is_null($this->params[$param]);

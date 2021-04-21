@@ -12,7 +12,7 @@ class SQLFilterModifier
       $whereModifier = "mod_$filterFunction";
       if (method_exists('SQLWhereModifier', $whereModifier))
       {
-        SQLWhereModifier::$whereModifier($ofield, [$params[1]], true);
+        SQLWhereModifier::$whereModifier($ofield, [$filterValue], true);
       }
     }
   }
