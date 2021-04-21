@@ -43,6 +43,8 @@ See the live example step by step [here](https://github.com/sagittaracc/suql/wik
 
 [Compatibility with other frameworks](https://github.com/sagittaracc/suql/wiki/Compatibility-with-other-frameworks)
 
+[Complex WHERE Conditions](https://github.com/sagittaracc/suql/wiki/Complex-WHERE-Conditions)
+
 More examples in the ```tests``` directory
 
 ### Install
