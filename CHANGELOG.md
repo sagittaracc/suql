@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.13 - April 21, 2021
+
+- Sugar for WHERE Clause
+
+---
+
 ## v5.0.12 - April 20, 2021
 
 - More sugar syntax
