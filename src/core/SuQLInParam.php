@@ -19,4 +19,15 @@ class SuQLInParam extends SuQLParam
         }
         return $list;
     }
+
+    public function isValuable()
+    {
+        foreach ($this->params as $param)
+        {
+            if (is_null($param))
+                return false;
+        }
+
+        return true;
+    }
 }

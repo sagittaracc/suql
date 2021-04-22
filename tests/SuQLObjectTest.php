@@ -3,6 +3,7 @@ use PHPUnit\Framework\TestCase;
 
 use core\SuQLObject;
 use core\SuQLError;
+use core\SuQLParam;
 
 final class SuQLObjectTest extends TestCase
 {
@@ -302,7 +303,7 @@ final class SuQLObjectTest extends TestCase
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
     $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
-    $this->osuql->params[':id'] = 5;
+    $this->osuql->setParam(':id', new SuQLParam($this->osuql->getQuery('main')->getField('users', ['id' => 'uid']), [5]));
     $this->assertEquals($this->osuql->getSQL(['main']),
       'select users.id as uid from users where users.id > :id'
     );

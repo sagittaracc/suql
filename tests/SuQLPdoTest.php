@@ -56,7 +56,7 @@ final class SuQLPdoTest extends TestCase
     //            ->filter('gid', ['equal', null])
     //            ->filter('groupname', ['like', null]);
 
-    // var_dump($query->fetchAll());
+    // $this->assertEquals(count($query->fetchAll()), 1);
     $this->assertTrue(true);
   }
 }

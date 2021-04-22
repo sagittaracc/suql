@@ -17,4 +17,9 @@ class SuQLBetweenParam extends SuQLParam
             ':ph_' . md5($placeholder . '1')
         ];
     }
+
+    public function isValuable()
+    {
+        return !is_null($this->params[0]) && !is_null($this->params[1]);
+    }
 }

@@ -18,7 +18,11 @@ class SuQLParam
         return $this->field;
     }
 
-    //TODO: Возможно paramKey совсем не нужен мы больше не привязываем значения к плейсхолдеру во время fetch
+    public function isValuable()
+    {
+        return !is_null($this->params[0]);
+    }
+
     public function getParamKey()
     {
         return 'pk_' . md5($this->field->getField());
