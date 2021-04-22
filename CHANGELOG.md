@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.15 - April 22, 2021
+
+- Inline modifiers in the select list
+
+---
+
 ## v5.0.14 - April 22, 2021
 
 - Custom placeholders
