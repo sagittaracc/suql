@@ -5,6 +5,7 @@ use app\model\UserDb;
 use app\model\User;
 use app\model\ProductDb;
 use app\model\UsersView;
+use core\SuQLPlaceholder;
 
 final class SuQLPdoTest extends TestCase
 {
