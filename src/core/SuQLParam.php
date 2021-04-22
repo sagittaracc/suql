@@ -33,7 +33,6 @@ class SuQLParam
         return array_combine($this->getPlaceholderList(), $this->params);
     }
 
-
     public function getPlaceholder()
     {
       return $this->getPlaceholderList()[0];
