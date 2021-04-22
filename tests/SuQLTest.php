@@ -5,6 +5,7 @@ use app\model\User;
 use app\model\UserGroup;
 use app\model\Group;
 use app\model\UserGroupView;
+use core\SuQLPlaceholder;
 
 final class SuQLTest extends TestCase
 {
@@ -187,6 +188,15 @@ final class SuQLTest extends TestCase
       "select users.name, users.id from users where users.name like :ph_12cb8fae9701df6e8e8b1b972362a7ff and users.id > :ph_fc02896e3034a4ed53259916e2e2d82d"
     );
 
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'greater' => [new SuQLPlaceholder('id')]
+              ])
+              ->getRawSql(),
+      'select users.id from users where users.id > :id'
+    );
+
     // Where by filters
     $this->assertEquals(
       User::find()
@@ -194,7 +204,16 @@ final class SuQLTest extends TestCase
                 'filter' => ['like', 'yuriy']
               ])
               ->getRawSql(),
-      "select users.name from users where users.name like :ph_12cb8fae9701df6e8e8b1b972362a7ff"
+      'select users.name from users where users.name like :ph_12cb8fae9701df6e8e8b1b972362a7ff'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('name', [
+                'filter' => ['like', new SuQLPlaceholder('name')]
+              ])
+              ->getRawSql(),
+      'select users.name from users where users.name like :name'
     );
 
     $this->assertEquals(

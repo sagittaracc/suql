@@ -41,7 +41,7 @@ class SuQLParam
     public function getPlaceholderList()
     {
         return [
-            ':ph_' . md5($this->field->getField())
+            $this->params[0] instanceof SuQLPlaceholder ? $this->params[0] : ':ph_' . md5($this->field->getField())
         ];
     }
 }
