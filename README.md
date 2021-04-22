@@ -18,6 +18,9 @@ It has shitloads of killer features such as programmatical views, self-generated
 ### Real live example
 See the live example step by step [here](https://github.com/sagittaracc/suql/wiki/Live-example)
 
+### Requirements
+The minimum requirement - PHP 5.6
+
 ### Documentation
 [Select Query](https://github.com/sagittaracc/suql/wiki/Select-Query)
 
