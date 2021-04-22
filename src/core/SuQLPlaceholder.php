@@ -15,9 +15,4 @@ class SuQLPlaceholder
     {
         return ":$this->placeholder";
     }
-
-    public function __toString()
-    {
-        return $this->getPlaceholder();
-    }
 }
