@@ -1,10 +1,12 @@
 <?php declare(strict_types = 1);
+
 use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
 use app\model\UserDb;
 use app\model\User;
 use app\model\ProductDb;
 use app\model\UsersView;
+use app\model\ModelNotDefined;
 use core\SuQLPlaceholder;
 
 final class SuQLPdoTest extends TestCase
@@ -59,5 +61,11 @@ final class SuQLPdoTest extends TestCase
 
     // $this->assertEquals(count($query->fetchAll()), 1);
     $this->assertTrue(true);
+  }
+
+  public function testModelNotDefined(): void
+  {
+    $this->expectException(DBFailConnection::class);
+    ModelNotDefined::find()->fetchAll();
   }
 }

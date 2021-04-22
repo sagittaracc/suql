@@ -12,11 +12,18 @@ trait PDOSuQL
 
   public function createConnection()
   {
-    $this->dbh = new PDO(
-      "{$this->driver}:dbname={$this->dbname};host={$this->host}",
-      $this->user,
-      $this->password
-    );
+    try
+    {
+      $this->dbh = new PDO(
+        "{$this->driver}:dbname={$this->dbname};host={$this->host}",
+        $this->user,
+        $this->password
+      );
+    }
+    catch (PDOException $e)
+    {
+      throw new DBFailConnection;
+    }
   }
 
   public function fetchAll()
