@@ -2,6 +2,7 @@
 
 use core\SuQLObject;
 use sagittaracc\ArrayHelper;
+use core\SuQLModifier;
 
 abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 {
@@ -68,7 +69,12 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 
     foreach ($fieldList as $key => $value)
     {
-      if (is_int($key))
+      if ($value instanceof SuQLModifier)
+      {
+        $this->getQuery($this->currentQuery)->addField($currentModel->$type(), $value->getField());
+        $this->getQuery($this->currentQuery)->getField($currentModel->$type(), $value->getField())->addModifier($value->getModifier(), $value->getParams());
+      }
+      else if (is_int($key))
       {
         $field = $value;
         $this->getQuery($this->currentQuery)->addField($currentModel->$type(), $field);

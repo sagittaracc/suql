@@ -5,6 +5,7 @@ use app\model\User;
 use app\model\UserGroup;
 use app\model\Group;
 use app\model\UserGroupView;
+use core\SuQLModifier;
 use core\SuQLPlaceholder;
 
 final class SuQLTest extends TestCase
@@ -53,6 +54,18 @@ final class SuQLTest extends TestCase
                 'name'
               ])->getRawSql(),
       'select users.id as uid, users.name from users'
+    );
+  }
+
+  public function testInlineModifiersApplied(): void
+  {
+    $this->assertEquals(
+      User::find()
+              ->select([
+                'name',
+                (new SuQLModifier('max'))->applyTo(['id' => 'max'])
+              ])->getRawSql(),
+      'select users.name, max(users.id) as max from users'
     );
   }
 
