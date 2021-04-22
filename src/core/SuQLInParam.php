@@ -15,7 +15,7 @@ class SuQLInParam extends SuQLParam
         $placeholder = parent::getPlaceholderList()[0];
         for ($i = 0, $n = count($this->params); $i < $n; $i++)
         {
-            $list[] = ':ph_' . md5($placeholder . $i);
+            $list[] = $this->params[$i] instanceof SuQLPlaceholder ? $this->params[$i] : ':ph_' . md5($placeholder . $i);
         }
         return $list;
     }

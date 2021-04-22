@@ -237,10 +237,46 @@ final class SuQLTest extends TestCase
     $this->assertEquals(
       User::find()
               ->field('id', [
+                'between' => [new SuQLPlaceholder('sid'), 2]
+              ], false)
+              ->getRawSql(),
+      'select * from users where users.id between :sid and :ph_82b64d4cd88a68a2f6dd1d94a52a3ecb'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'between' => [new SuQLPlaceholder('sid'), new SuQLPlaceholder('eid')]
+              ], false)
+              ->getRawSql(),
+      'select * from users where users.id between :sid and :eid'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
                 'in' => [1, 2, 3]
               ], false)
               ->getRawSql(),
       'select * from users where users.id in (:ph_98aace064c30b09e0247de93e95303f7,:ph_b05ba045acc2eef36fd0ed5bdb815bb5,:ph_15a024187fe0b56919f66cfc17f49dcf)'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'in' => [new SuQLPlaceholder('id1'), 2, 3]
+              ], false)
+              ->getRawSql(),
+      'select * from users where users.id in (:id1,:ph_3edae988aed81e8ef4db1d63118c000d,:ph_3bc004e03e89da1b7ff4857ef4466802)'
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('id', [
+                'in' => [new SuQLPlaceholder('id1'), new SuQLPlaceholder('id2'), new SuQLPlaceholder('id3')]
+              ], false)
+              ->getRawSql(),
+      'select * from users where users.id in (:id1,:id2,:id3)'
     );
 
     // TODO: Вариант для WHERE EXISTS (через модификатор)
