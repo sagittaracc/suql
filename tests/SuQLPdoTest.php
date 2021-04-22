@@ -60,14 +60,4 @@ final class SuQLPdoTest extends TestCase
     // $this->assertEquals(count($query->fetchAll()), 1);
     $this->assertTrue(true);
   }
-
-  // public function testCustomPlaceholder(): void
-  // {
-  //   $query = UserDb::find()
-  //              ->select(['id', 'login', 'password'])
-  //              ->where(['id' => new SuQLPlaceholder('id')]);
-
-  //   $userList = $query->fetchAll([':id' => 1]);
-  //   var_dump($userList);
-  // }
 }

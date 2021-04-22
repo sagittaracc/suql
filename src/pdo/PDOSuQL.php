@@ -19,9 +19,9 @@ trait PDOSuQL
     );
   }
 
-  public function fetchAll($params = [])
+  public function fetchAll()
   {
-    $stmt = $this->fetch($params);
+    $stmt = $this->fetch();
 
     $rows = [];
     foreach ($stmt->fetchAll(PDO::FETCH_OBJ) as $row)
@@ -32,18 +32,18 @@ trait PDOSuQL
     return $rows;
   }
 
-  public function fetchOne($params = [])
+  public function fetchOne()
   {
-    $stmt = $this->fetch($params);
+    $stmt = $this->fetch();
     $row = $stmt->fetch(PDO::FETCH_OBJ);
     return $row ? $row : null;
   }
 
-  private function fetch($params)
+  private function fetch()
   {
     $sql = $this->getRawSql();
 
-    if (empty($this->params) && empty($params))
+    if (empty($this->params))
     {
       $stmt = $this->dbh->query($sql);
     }
@@ -58,11 +58,6 @@ trait PDOSuQL
         {
           $stmt->bindValue($placeholder, $value, $this->getPDOParamType($value)); 
         }
-      }
-
-      foreach ($params as $placeholder => $value)
-      {
-        $stmt->bindValue($placeholder, $value, $this->getPDOParamType($value));
       }
 
       $stmt->execute();
