@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.14 - April 22, 2021
+
+- Custom placeholders
+
+---
+
 ## v5.0.13 - April 21, 2021
 
 - Sugar for WHERE Clause
