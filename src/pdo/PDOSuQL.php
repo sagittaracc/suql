@@ -41,11 +41,9 @@ trait PDOSuQL
 
   private function fetch($params)
   {
-    $this->params = array_merge($this->params, $params);
-
     $sql = $this->getRawSql();
 
-    if (empty($this->params))
+    if (empty($this->params) && empty($params))
     {
       $stmt = $this->dbh->query($sql);
     }
@@ -60,6 +58,11 @@ trait PDOSuQL
         {
           $stmt->bindValue($placeholder, $value, $this->getPDOParamType($value)); 
         }
+      }
+
+      foreach ($params as $placeholder => $value)
+      {
+        $stmt->bindValue($placeholder, $value, $this->getPDOParamType($value));
       }
 
       $stmt->execute();
