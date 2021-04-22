@@ -45,6 +45,8 @@ See the live example step by step [here](https://github.com/sagittaracc/suql/wik
 
 [Complex WHERE Conditions](https://github.com/sagittaracc/suql/wiki/Complex-WHERE-Conditions)
 
+[Use your own placeholders](https://github.com/sagittaracc/suql/wiki/Use-your-own-placeholders)
+
 More examples in the ```tests``` directory
 
 ### Install
