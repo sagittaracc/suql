@@ -1,15 +1,20 @@
 <?php
 
-$options = getopt(null, [
-    'namespace:',
-    'class:',
-    'type:',
-    'table:',
-]);
+echo 'Namespace [app\models]: ';
+$namespace = trim(fgets(STDIN)) ?: 'app\models';
 
-$file = file_get_contents(__DIR__.'/tpl/suql.php', 'r');
+echo 'Classname [Model]: ';
+$class = trim(fgets(STDIN)) ?: 'Model';
 
-$file = str_replace(
+echo 'What is it, table or view? [table]: ';
+$type = trim(fgets(STDIN)) ?: 'table';
+
+echo ucfirst($type) . " name [{$type}_name]: ";
+$table = trim(fgets(STDIN)) ?: $type.'_name';
+
+$filedata = file_get_contents(__DIR__.'/tpl/suql.php', 'r');
+
+$filedata = str_replace(
     [
         '{namespace}',
         '{class}',
@@ -18,13 +23,25 @@ $file = str_replace(
         '{table}',
     ],
     [
-        "namespace {$options['namespace']}",
-        $options['class'],
-        ucfirst($options['type']),
-        $options['type'],
-        $options['type'] === 'table' ? "'".$options['table']."'" : 'Model::find()',
+        !empty($namespace) ? "namespace $namespace;" : '',
+        $class,
+        ucfirst($type),
+        $type,
+        $type === 'table' ? "'".$table."'" : $table.'::find()',
     ],
-    $file
+    $filedata
 );
 
-echo $file;
+echo $filedata . "\n";
+
+echo 'Is everything okay [y/n]? ';
+$okay = trim(fgets(STDIN)) ?: 'y';
+
+if ($okay === 'y')
+{
+    echo 'Save as: ';
+    $filename = trim(fgets(STDIN));
+
+    if ($filename)
+        file_put_contents($filename, $filedata);
+}
