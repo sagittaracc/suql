@@ -3,16 +3,17 @@
 echo 'Namespace [app\models]: ';
 $namespace = trim(fgets(STDIN)) ?: 'app\models';
 
-echo 'Classname [Model]: ';
-$class = trim(fgets(STDIN)) ?: 'Model';
-
 echo 'What is it, table or view? [table]: ';
 $type = trim(fgets(STDIN)) ?: 'table';
+$postfix = $type === 'view' ? 'View' : '';
 
-echo ucfirst($type) . " name [{$type}_name]: ";
-$table = trim(fgets(STDIN)) ?: $type.'_name';
+echo "Classname [Model{$postfix}]: ";
+$class = trim(fgets(STDIN)) ?: 'Model' . $postfix;
 
-$filedata = file_get_contents(__DIR__.'/tpl/suql.php', 'r');
+echo "Table: ";
+$table = trim(fgets(STDIN));
+
+$filedata = file_get_contents(__DIR__.'/tpl/model.php', 'r');
 
 $filedata = str_replace(
     [
