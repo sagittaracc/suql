@@ -1,16 +1,16 @@
 <?php
 
-namespace {namespace};
+{namespace};
 
-class {class} extends \SuQL{type}
+class {class} extends \SuQL{utype}
 {
-	public function {type}()
-	{
-		return {table};
-	}
+    public function {type}()
+    {
+        return {table};
+    }
 
-	public function relations()
-	{
-		return [];
-	}
+    public function relations()
+    {
+        return [];
+    }
 }
