@@ -6,7 +6,7 @@ class {class} extends \SuQL{type}
 {
 	public function {type}()
 	{
-		return '{name}';
+		return {table};
 	}
 
 	public function relations()

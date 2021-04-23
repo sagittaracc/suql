@@ -8,7 +8,7 @@ class {class} extends \PDOSuQL{type}
 
 	public function {type}()
 	{
-		return '{name}';
+		return {table};
 	}
 
 	public function relations()
