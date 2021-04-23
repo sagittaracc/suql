@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.16 - April 23, 2021
+
+- Code generator (models, views, modifiers)
+
+---
+
 ## v5.0.15 - April 22, 2021
 
 - Inline modifiers in the select list
