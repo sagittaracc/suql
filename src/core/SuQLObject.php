@@ -222,7 +222,9 @@ class SuQLObject
      */
     public function hasValuableParam($param)
     {
-        return $this->hasParam($param) && !is_null($this->params[$param]) && $this->params[$param]->isValuable();
+        return $this->hasParam($param)
+            && !is_null($this->params[$param])
+            && $this->params[$param]->isValuable();
     }
     /**
      * Получает параметр по имени
