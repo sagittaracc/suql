@@ -6,6 +6,7 @@ abstract class PDOSuQLView extends SuQLView
 
   function __construct()
   {
+    parent::__construct();
     $this->createConnection();
   }
 }
