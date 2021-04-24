@@ -16,7 +16,7 @@ class SuQLJoin {
   }
 
   private function getLink() {
-    $scheme        = $this->oselect->getOSuQL()->getRels();
+    $scheme        = $this->oselect->getOSuQL()->getScheme()->getRels();
     $tableList     = $this->oselect->getTableList();
     $tableLinks    = array_keys($scheme[$this->table]);
     $possibleLinks = array_intersect($tableLinks, $tableList);

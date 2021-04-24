@@ -4,6 +4,11 @@ use sagittaracc\ArrayHelper;
 
 abstract class SuQLView extends SuQL implements SuQLViewInterface
 {
+  function __construct()
+  {
+    parent::__construct();
+  }
+  
   public function getType()
   {
     return 'query';

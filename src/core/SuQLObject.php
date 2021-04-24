@@ -17,14 +17,9 @@ class SuQLObject
      */
     private $queries = [];
     /**
-     * @var array связи между таблицами и вьюхами
-     * @rel - постоянные связи между таблицами базы данных
-     * @temp_rel - временные связи между таблицами/вьюхами и временно созданными вьюхами
-     * 
-     * TODO: Проверить возможно на данный момент уже не используется @temp_rel
-     * Вынести обработку схем в отдельный обработчик схем
+     * @var core\SuQLScheme связи между таблицами и вьюхами
      */
-    private $scheme  = ['rel' => [], 'temp_rel' => []];
+    protected $scheme;
     /**
      * @var string драйвер базы данных который мы собираемся использовать (mysql, postgresql etc.)
      */
@@ -39,7 +34,21 @@ class SuQLObject
      * @var array параметры которые биндятся к параметризованному запросу
      */
     public $params = [];
-
+    /**
+     * Constructor
+     */
+    function __construct()
+    {
+        $this->scheme = new SuQLScheme();
+    }
+    /**
+     * Получить схему
+     * @return core\SuQLScheme
+     */
+    public function getScheme()
+    {
+        return $this->scheme;
+    }
     /**
      * Перечень используемых модификаторов
      * TODO: Возможно в будущем отказаться от использования так как
@@ -63,27 +72,23 @@ class SuQLObject
             'SQLConditionModifier',
         ];
     }
-
     /**
      * Очистка текущего запроса после выполнения
      */
     public function clear()
     {
         $this->queries = [];
-        $this->scheme['temp_rel'] = [];
+        $this->scheme->clear();
     }
-
     /**
      * Полный сброс всех настроек
      */
     public function drop()
     {
         $this->queries = [];
-        $this->scheme['rel'] = [];
-        $this->scheme['temp_rel'] = [];
+        $this->scheme->drop();
         $this->driver = null;
     }
-
     /**
      * Установка используемого драйвера СУБД
      * @param string $driver используемый драйвер (mysql, postgresql etc.)
@@ -96,7 +101,6 @@ class SuQLObject
 
         return $this;
     }
-
     /**
      * Получить используемый драйвер СУБД
      * @return string используемый драйвер (mysql, postgresql etc.)
@@ -105,7 +109,6 @@ class SuQLObject
     {
         return $this->driver;
     }
-
     /**
      * Записать возникшую ошибку в лог
      */
@@ -113,7 +116,6 @@ class SuQLObject
     {
         $this->log['error'][] = $error;
     }
-
     /**
      * Записать предупреждение в лог
      */
@@ -121,7 +123,6 @@ class SuQLObject
     {
         $this->log['warning'][] = $warning;
     }
-
     /**
      * Записать замечание в лог
      */
@@ -129,7 +130,6 @@ class SuQLObject
     {
         $this->log['notice'][] = $notice;
     }
-
     /**
      * Получение содержимого лога
      * @return array лог с перечнем ошибок, предупреждений и замечаний
@@ -174,55 +174,6 @@ class SuQLObject
     public function getFullQueryList()
     {
         return array_keys($this->queries);
-    }
-
-    public function rel($leftTable, $rightTable, $on, $temporary = false)
-    {
-        $leftTable = new SuQLTableName($leftTable);
-        $rightTable = new SuQLTableName($rightTable);
-
-        if ($leftTable->alias)
-            $on = str_replace($leftTable->format("%a."), $leftTable->format("%n."), $on);
-
-        if ($rightTable->alias)
-            $on = str_replace($rightTable->format("%a."), $rightTable->format("%n."), $on);
-
-        $this->scheme[$temporary ? 'temp_rel' : 'rel'][$leftTable->name][$rightTable->name] = $on;
-        $this->scheme[$temporary ? 'temp_rel' : 'rel'][$rightTable->name][$leftTable->name] = $on;
-    }
-
-    public function temp_rel($leftTable, $rightTable, $on)
-    {
-        return $this->rel($leftTable, $rightTable, $on, $temporary = true);
-    }
-
-    public function getRels()
-    {
-        return array_merge($this->scheme['rel'], $this->scheme['temp_rel']);
-    }
-
-    public function hasRelBetween($table1, $table2)
-    {
-        return isset($this->scheme['rel'][$table1][$table2])
-            || isset($this->scheme['temp_rel'][$table1][$table2]);
-    }
-
-    public function getRelTypeBetween($table1, $table2)
-    {
-        if (isset($this->scheme['rel'][$table1][$table2]))
-            return 'rel';
-        else if (isset($this->scheme['temp_rel'][$table1][$table2]))
-            return 'temp_rel';
-        else
-            return null;
-    }
-
-    public function getRelBetween($table1, $table2)
-    {
-        if ($this->hasRelBetween($table1, $table2))
-            return $this->scheme[$this->getRelTypeBetween($table1, $table2)][$table1][$table2];
-        else
-            return null;
     }
 
     public function addSelect($name)

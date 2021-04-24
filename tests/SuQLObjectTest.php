@@ -13,8 +13,8 @@ final class SuQLObjectTest extends TestCase
   {
     $this->osuql = new SuQLObject;
 
-    $this->osuql->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
-    $this->osuql->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
+    $this->osuql->getScheme()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
+    $this->osuql->getScheme()->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
 
     $this->osuql->setDriver('mysql');
   }
@@ -146,7 +146,7 @@ final class SuQLObjectTest extends TestCase
     );
     $this->assertNull($this->osuql->getSQL('all'));
 
-    $this->osuql->rel(['users' => 'u'], ['view' => 'v'], 'u.id = v.id');
+    $this->osuql->getScheme()->rel(['users' => 'u'], ['view' => 'v'], 'u.id = v.id');
     $this->osuql->addSelect('main');
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addField('users', 'id');

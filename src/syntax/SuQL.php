@@ -15,6 +15,11 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 
   abstract public function getType();
 
+  function __construct()
+  {
+    parent::__construct();
+  }
+
   public function query()
   {
     return str_replace('\\', '_', get_class($this));
@@ -220,7 +225,7 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 
     if (method_exists($self, 'view'))
     {
-      $this->temp_rel($table, $self->query(), "$table.$a = " . $self->query() . ".$b");
+      $this->scheme->temp_rel($table, $self->query(), "$table.$a = " . $self->query() . ".$b");
       $this->getQuery($this->query())->addJoin('inner', $self->query());
       $view = $self->view();
 
@@ -229,7 +234,7 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
     }
     else
     {
-      $this->rel($table, $self->table(), "$table.$a = " . $self->table() . ".$b");
+      $this->scheme->rel($table, $self->table(), "$table.$a = " . $self->table() . ".$b");
       $this->getQuery($this->query())->addJoin('inner', $self->table());
     }
 

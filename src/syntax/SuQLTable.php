@@ -6,6 +6,8 @@ abstract class SuQLTable extends SuQL implements SuQLTableInterface
 {
   function __construct($data = [])
   {
+    parent::__construct();
+    
     if (!empty($data))
     {
       $this->insert($data);
