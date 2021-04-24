@@ -31,10 +31,11 @@ class SuQLObject
     public $params = [];
     /**
      * Constructor
+     * @param core\SuQLScheme $scheme экземпляр схемы
      */
-    function __construct()
+    function __construct($scheme)
     {
-        $this->scheme = new SuQLScheme();
+        $this->scheme = $scheme;
     }
     /**
      * Получить схему

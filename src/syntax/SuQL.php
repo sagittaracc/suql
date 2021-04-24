@@ -3,6 +3,7 @@
 use core\SuQLObject;
 use sagittaracc\ArrayHelper;
 use core\SuQLModifier;
+use core\SuQLScheme;
 
 abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 {
@@ -17,7 +18,8 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 
   function __construct()
   {
-    parent::__construct();
+    $scheme = new SuQLScheme();
+    parent::__construct($scheme);
   }
 
   public function query()

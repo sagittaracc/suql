@@ -3,6 +3,7 @@ use PHPUnit\Framework\TestCase;
 
 use core\SuQLObject;
 use core\SuQLParam;
+use core\SuQLScheme;
 
 final class SuQLObjectTest extends TestCase
 {
@@ -10,7 +11,8 @@ final class SuQLObjectTest extends TestCase
 
   protected function setUp(): void
   {
-    $this->osuql = new SuQLObject;
+    $scheme = new SuQLScheme();
+    $this->osuql = new SuQLObject($scheme);
 
     $this->osuql->getScheme()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
     $this->osuql->getScheme()->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
