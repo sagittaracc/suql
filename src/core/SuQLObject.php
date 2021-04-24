@@ -85,6 +85,12 @@ class SuQLObject
         $this->scheme->drop();
         $this->driver = null;
     }
+    /**
+     * Возвращает список запрошенных запросов или один основной
+     * @param array|string='all' $queryList список названий запросов для конвертации
+     * или 'all' чтобы получить основной запрос
+     * @return array|string
+     */
     public function getSQL($queryList)
     {
         if (!$this->driver->getBuilder())
@@ -104,27 +110,42 @@ class SuQLObject
 
         return $sqlList;
     }
-
+    /**
+     * Объект с параметрами всех запросов
+     * @return array
+     */
     public function getQueries()
     {
         return $this->queries;
     }
-
+    /**
+     * Расширить текущий объект конфигурации запросов
+     * @param array $queries
+     */
     public function extend($queries)
     {
         $this->queries = array_merge($this->queries, $queries);
     }
-
+    /**
+     * Список названий всех запросов
+     * @return array
+     */
     public function getFullQueryList()
     {
         return array_keys($this->queries);
     }
-
+    /**
+     * Добавляет select запрос по названию
+     * @param string $name название нового запроса
+     */
     public function addSelect($name)
     {
         $this->queries[$name] = new SuQLSelect($this);
     }
-
+    /**
+     * Добавляет insert запрос по названию
+     * @param string $name название нового запроса
+     */
     public function addInsert($name)
     {
         $this->queries[$name] = new SuQLInsert($this);
