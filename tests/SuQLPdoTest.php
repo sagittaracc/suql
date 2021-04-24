@@ -7,8 +7,10 @@ use app\model\User;
 use app\model\ProductDb;
 use app\model\UsersView;
 use app\model\ModelNotDefined;
+use app\model\ModelWithWrongTable;
 use core\SuQLPlaceholder;
 use suql\exception\DBFailConnectionException;
+use suql\exception\SqlQueryFailRunningException;
 
 final class SuQLPdoTest extends TestCase
 {
@@ -68,5 +70,11 @@ final class SuQLPdoTest extends TestCase
   {
     $this->expectException(DBFailConnectionException::class);
     ModelNotDefined::find()->fetchAll();
+  }
+
+  public function testNotExistedTableInDb(): void
+  {
+    $this->expectException(SqlQueryFailRunningException::class);
+    ModelWithWrongTable::find()->fetchAll();
   }
 }

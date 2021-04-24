@@ -1,6 +1,8 @@
 <?php
 
 use suql\exception\DBFailConnectionException;
+use suql\exception\SqlQueryFailRunningException;
+use suql\exception\SqlQueryFailPreparingException;
 
 trait PDOSuQL
 {
@@ -58,10 +60,16 @@ trait PDOSuQL
     if (empty($this->params))
     {
       $stmt = $this->dbh->query($sql);
+
+      if ($stmt === false)
+        throw new SqlQueryFailRunningException($sql);
     }
     else
     {
       $stmt = $this->dbh->prepare($sql);
+
+      if ($stmt === false)
+        throw new SqlQueryFailPreparingException($sql);
 
       foreach ($this->params as $suqlParam)
       {
