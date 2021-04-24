@@ -22,6 +22,7 @@ class SuQLObject
      * @temp_rel - временные связи между таблицами/вьюхами и временно созданными вьюхами
      * 
      * TODO: Проверить возможно на данный момент уже не используется @temp_rel
+     * Вынести обработку схем в отдельный обработчик схем
      */
     private $scheme  = ['rel' => [], 'temp_rel' => []];
     /**
@@ -30,6 +31,7 @@ class SuQLObject
     protected $driver = null;
     /**
      * @var array лог ведения ошибок
+     * TODO: Вынести работу с логом в отдельный обработчик лога
      * На данный момент практически не используется - ждет реализации
      */
     private $log = [];
@@ -62,12 +64,18 @@ class SuQLObject
         ];
     }
 
+    /**
+     * Очистка текущего запроса после выполнения
+     */
     public function clear()
     {
         $this->queries = [];
         $this->scheme['temp_rel'] = [];
     }
 
+    /**
+     * Полный сброс всех настроек
+     */
     public function drop()
     {
         $this->queries = [];
@@ -76,6 +84,11 @@ class SuQLObject
         $this->driver = null;
     }
 
+    /**
+     * Установка используемого драйвера СУБД
+     * @param string $driver используемый драйвер (mysql, postgresql etc.)
+     * @return core\SuQLObject self
+     */
     public function setDriver($driver)
     {
         if (SQLDriver::exists($driver))
@@ -84,26 +97,43 @@ class SuQLObject
         return $this;
     }
 
+    /**
+     * Получить используемый драйвер СУБД
+     * @return string используемый драйвер (mysql, postgresql etc.)
+     */
     public function getDriver()
     {
         return $this->driver;
     }
 
+    /**
+     * Записать возникшую ошибку в лог
+     */
     protected function setError($error)
     {
         $this->log['error'][] = $error;
     }
 
+    /**
+     * Записать предупреждение в лог
+     */
     protected function setWarning($warning)
     {
         $this->log['warning'][] = $warning;
     }
 
+    /**
+     * Записать замечание в лог
+     */
     protected function setNotice($notice)
     {
         $this->log['notice'][] = $notice;
     }
 
+    /**
+     * Получение содержимого лога
+     * @return array лог с перечнем ошибок, предупреждений и замечаний
+     */
     public function getLog()
     {
         return $this->log;
