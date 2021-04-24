@@ -10,12 +10,15 @@ trait PDOSuQL
   protected $host = 'localhost';
   protected $user = 'root';
   protected $password = '';
-  protected $dbname = '';
+  protected $dbname = null;
 
   public function createConnection()
   {
     try
     {
+      if (!$this->dbname)
+        throw new PDOException();
+
       $this->dbh = new PDO(
         "{$this->dbms}:dbname={$this->dbname};host={$this->host}",
         $this->user,
@@ -65,7 +68,7 @@ trait PDOSuQL
         $paramList = $suqlParam->getParamList();
         foreach ($paramList as $placeholder => $value)
         {
-          $stmt->bindValue($placeholder, $value, $this->getPDOParamType($value)); 
+          $stmt->bindValue($placeholder, $value, $this->getPDOParamType($value));
         }
       }
 
