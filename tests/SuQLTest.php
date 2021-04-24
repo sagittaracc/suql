@@ -1,14 +1,13 @@
 <?php declare(strict_types = 1);
-use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
 use app\model\User;
 use app\model\UserGroup;
 use app\model\Group;
 use app\model\UserGroupView;
-use app\models\ModelWithAnEmptyDriver;
+use app\models\ModelWithAnUnsupportedDriver;
 use core\SuQLModifier;
 use core\SuQLPlaceholder;
-use suql\exception\DBDriverNotDefinedException;
+use suql\exception\SqlDriverNotSupportedException;
 
 final class SuQLTest extends TestCase
 {
@@ -428,9 +427,9 @@ final class SuQLTest extends TestCase
     );
   }
 
-  public function testModelWithAnEmptyDriver(): void
+  public function testModelWithAnUnsupportedDriver(): void
   {
-    $this->expectException(DBDriverNotDefinedException::class);
-    ModelWithAnEmptyDriver::find()->getRawSql();
+    $this->expectException(SqlDriverNotSupportedException::class);
+    ModelWithAnUnsupportedDriver::find()->getRawSql();
   }
 }

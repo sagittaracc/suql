@@ -2,8 +2,7 @@
 
 namespace core;
 
-use builder\SQLDriver;
-use suql\exception\DBDriverNotDefinedException;
+use suql\exception\SqlDriverNotSupportedException;
 
 /**
  * Основной объект, хранящий всю структуру запроса
@@ -22,9 +21,9 @@ class SuQLObject
      */
     protected $scheme;
     /**
-     * @var string драйвер базы данных который мы собираемся использовать (mysql, postgresql etc.)
+     * @var suql\builder\SQLDriver экземпляр драйвера базы данных
      */
-    protected $driver = null;
+    protected $driver;
     /**
      * @var array параметры которые биндятся к параметризованному запросу
      */
@@ -33,9 +32,10 @@ class SuQLObject
      * Constructor
      * @param core\SuQLScheme $scheme экземпляр схемы
      */
-    function __construct($scheme)
+    function __construct($scheme, $driver)
     {
         $this->scheme = $scheme;
+        $this->driver = $driver;
     }
     /**
      * Получить схему
@@ -85,37 +85,17 @@ class SuQLObject
         $this->scheme->drop();
         $this->driver = null;
     }
-    /**
-     * Установка используемого драйвера СУБД
-     * @param string $driver используемый драйвер (mysql, postgresql etc.)
-     * @return core\SuQLObject self
-     */
-    public function setDriver($driver)
-    {
-        if (SQLDriver::exists($driver))
-            $this->driver = $driver;
-
-        return $this;
-    }
-    /**
-     * Получить используемый драйвер СУБД
-     * @return string используемый драйвер (mysql, postgresql etc.)
-     */
-    public function getDriver()
-    {
-        return $this->driver;
-    }
     public function getSQL($queryList)
     {
-        if (!$this->driver)
-            throw new DBDriverNotDefinedException();
+        if (!$this->driver->getBuilder())
+            throw new SqlDriverNotSupportedException();
 
         if ($queryList === 'all')
             $queryList = $this->getFullQueryList();
 
         if (!is_array($queryList)) return null;
 
-        $classBuilder = SQLDriver::get($this->driver);
+        $classBuilder = $this->driver->getBuilder();
         $SQLBuilder = new $classBuilder($this);
         $SQLBuilder->run($queryList);
         $sqlList = $SQLBuilder->getSql($queryList);

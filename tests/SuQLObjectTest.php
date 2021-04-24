@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use core\SuQLObject;
 use core\SuQLParam;
 use core\SuQLScheme;
+use suql\builder\SQLDriver;
 
 final class SuQLObjectTest extends TestCase
 {
@@ -12,12 +13,11 @@ final class SuQLObjectTest extends TestCase
   protected function setUp(): void
   {
     $scheme = new SuQLScheme();
-    $this->osuql = new SuQLObject($scheme);
+    $driver = new SQLDriver('mysql');
+    $this->osuql = new SuQLObject($scheme, $driver);
 
     $this->osuql->getScheme()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
     $this->osuql->getScheme()->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
-
-    $this->osuql->setDriver('mysql');
   }
 
   protected function tearDown(): void

@@ -2,15 +2,17 @@
 
 use core\SuQLObject;
 use core\SuQLScheme;
+use suql\builder\SQLDriver;
 
 class RawSuQL extends SuQLObject implements SuQLQueryInterface
 {
-  protected $driver = 'mysql';
+  protected $dbms = 'mysql';
 
   function __construct()
   {
     $scheme = new SuQLScheme();
-    parent::__construct($scheme);
+    $driver = new SQLDriver($this->dbms);
+    parent::__construct($scheme, $driver);
   }
 
   public function query()

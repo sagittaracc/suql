@@ -4,10 +4,11 @@ use core\SuQLObject;
 use sagittaracc\ArrayHelper;
 use core\SuQLModifier;
 use core\SuQLScheme;
+use suql\builder\SQLDriver;
 
 abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 {
-  protected $driver = 'mysql';
+  protected $dbms = 'mysql';
   protected $joinChain = [];
   protected $currentModel;
   protected $currentQuery;
@@ -19,7 +20,8 @@ abstract class SuQL extends SuQLObject implements SuQLQueryInterface
   function __construct()
   {
     $scheme = new SuQLScheme();
-    parent::__construct($scheme);
+    $driver = new SQLDriver($this->dbms);
+    parent::__construct($scheme, $driver);
   }
 
   public function query()

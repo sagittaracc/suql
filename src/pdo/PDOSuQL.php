@@ -6,7 +6,7 @@ trait PDOSuQL
 {
   private $dbh;
 
-  protected $driver = 'mysql';
+  protected $dbms = 'mysql';
   protected $host = 'localhost';
   protected $user = 'root';
   protected $password = '';
@@ -17,7 +17,7 @@ trait PDOSuQL
     try
     {
       $this->dbh = new PDO(
-        "{$this->driver}:dbname={$this->dbname};host={$this->host}",
+        "{$this->dbms}:dbname={$this->dbname};host={$this->host}",
         $this->user,
         $this->password
       );

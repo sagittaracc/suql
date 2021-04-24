@@ -2,9 +2,9 @@
 
 namespace app\models;
 
-class ModelWithAnEmptyDriver extends \SuQLTable
+class ModelWithAnUnsupportedDriver extends \SuQLTable
 {
-    protected $driver = null;
+    protected $dbms = 'oracle';
 
     public function table()
     {
