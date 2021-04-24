@@ -150,12 +150,21 @@ class SuQLObject
     {
         $this->queries[$name] = new SuQLInsert($this);
     }
-
+    /**
+     * Добавляет union запрос по названию
+     * @param string $name название запроса
+     * @param string $query запрос объединения например @query1 union @query2
+     */
     public function addUnion($name, $query)
     {
         $this->queries[$name] = new SuQLUnion($this, $query);
     }
-
+    /**
+     * Добавляет таблицу к union запросу по названию
+     * @param string $name название запроса
+     * @param string $unionType (union|union all)
+     * @param string $table элемент union запроса в виде @table_name
+     */
     public function addUnionTable($name, $unionType, $table)
     {
         if (!isset($this->queries[$name]))
@@ -163,17 +172,29 @@ class SuQLObject
         else
             $this->queries[$name]->addUnionTable($unionType, $table);
     }
-
+    /**
+     * Получить объект запроса по имени
+     * @param string $name
+     * @return core\SuQLSelect
+     */
     public function getQuery($name)
     {
         return $this->queries[$name];
     }
-
+    /**
+     * Проверяет есть ли запрос по имени
+     * @param string $name
+     * @return boolean
+     */
     public function hasQuery($name)
     {
         return isset($this->queries[$name]);
     }
-
+    /**
+     * Ищет класс обработчика модификатора по имени
+     * @param string $modifierHandler название модификатора
+     * @return класс модификатора
+     */
     public function getModifierClass($modifierHandler)
     {
         foreach ($this->modifierList() as $modifierClass) {
@@ -183,22 +204,40 @@ class SuQLObject
 
         return null;
     }
-
+    /**
+     * Проверяет есть ли запрошенный параметр запроса
+     * @param string $param
+     * @return boolean
+     */
     public function hasParam($param)
     {
         return array_key_exists($param, $this->params);
     }
-
+    /**
+     * Проверяет если этот параметр не пустой
+     * Пустота параметра определяется отдельно
+     * в классе обработчика параметра
+     * @param string $param
+     * @return boolean
+     */
     public function hasValuableParam($param)
     {
         return $this->hasParam($param) && !is_null($this->params[$param]) && $this->params[$param]->isValuable();
     }
-
+    /**
+     * Получает параметр по имени
+     * @param string $param
+     * @return core\SuQLParam
+     */
     public function getParam($param)
     {
         return $this->params[$param];
     }
-
+    /**
+     * Устанавливает параметр запроса
+     * @param string $param название параметра
+     * @param core\SuQLParam $suqlParam класс параметра
+     */
     public function setParam($param, $suqlParam)
     {
         $this->params[$param] = $suqlParam;
