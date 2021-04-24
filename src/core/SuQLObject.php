@@ -31,6 +31,7 @@ class SuQLObject
     /**
      * Constructor
      * @param core\SuQLScheme $scheme экземпляр схемы
+     * @param suql\builder\SQLDriver $driver экземляр драйвера
      */
     function __construct($scheme, $driver)
     {
