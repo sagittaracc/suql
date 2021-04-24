@@ -1,5 +1,7 @@
 <?php
 
+use suql\exception\DBFailConnectionException;
+
 trait PDOSuQL
 {
   private $dbh;
@@ -22,7 +24,7 @@ trait PDOSuQL
     }
     catch (PDOException $e)
     {
-      throw new DBFailConnection;
+      throw new DBFailConnectionException();
     }
   }
 

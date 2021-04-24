@@ -5,8 +5,10 @@ use app\model\User;
 use app\model\UserGroup;
 use app\model\Group;
 use app\model\UserGroupView;
+use app\models\ModelWithAnEmptyDriver;
 use core\SuQLModifier;
 use core\SuQLPlaceholder;
+use suql\exception\DBDriverNotDefinedException;
 
 final class SuQLTest extends TestCase
 {
@@ -424,5 +426,11 @@ final class SuQLTest extends TestCase
       ])->getRawSql(),
       'select if(users.id is null, 1, 0) as empty from users'
     );
+  }
+
+  public function testModelWithAnEmptyDriver(): void
+  {
+    $this->expectException(DBDriverNotDefinedException::class);
+    ModelWithAnEmptyDriver::find()->getRawSql();
   }
 }

@@ -8,6 +8,7 @@ use app\model\ProductDb;
 use app\model\UsersView;
 use app\model\ModelNotDefined;
 use core\SuQLPlaceholder;
+use suql\exception\DBFailConnectionException;
 
 final class SuQLPdoTest extends TestCase
 {
@@ -65,7 +66,7 @@ final class SuQLPdoTest extends TestCase
 
   public function testModelNotDefined(): void
   {
-    $this->expectException(DBFailConnection::class);
+    $this->expectException(DBFailConnectionException::class);
     ModelNotDefined::find()->fetchAll();
   }
 }

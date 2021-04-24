@@ -1,6 +1,8 @@
 <?php
 
-class DBFailConnection extends Exception
+namespace suql\exception;
+
+class DBFailConnectionException extends \Exception
 {
 	
 }

@@ -3,6 +3,7 @@
 namespace core;
 
 use builder\SQLDriver;
+use suql\exception\DBDriverNotDefinedException;
 
 /**
  * Основной объект, хранящий всю структуру запроса
@@ -24,12 +25,6 @@ class SuQLObject
      * @var string драйвер базы данных который мы собираемся использовать (mysql, postgresql etc.)
      */
     protected $driver = null;
-    /**
-     * @var array лог ведения ошибок
-     * TODO: Вынести работу с логом в отдельный обработчик лога
-     * На данный момент практически не используется - ждет реализации
-     */
-    private $log = [];
     /**
      * @var array параметры которые биндятся к параметризованному запросу
      */
@@ -109,42 +104,10 @@ class SuQLObject
     {
         return $this->driver;
     }
-    /**
-     * Записать возникшую ошибку в лог
-     */
-    protected function setError($error)
-    {
-        $this->log['error'][] = $error;
-    }
-    /**
-     * Записать предупреждение в лог
-     */
-    protected function setWarning($warning)
-    {
-        $this->log['warning'][] = $warning;
-    }
-    /**
-     * Записать замечание в лог
-     */
-    protected function setNotice($notice)
-    {
-        $this->log['notice'][] = $notice;
-    }
-    /**
-     * Получение содержимого лога
-     * @return array лог с перечнем ошибок, предупреждений и замечаний
-     */
-    public function getLog()
-    {
-        return $this->log;
-    }
-
     public function getSQL($queryList)
     {
-        if (!$this->driver) {
-            $this->setError(SuQLError::DRIVER_NOT_DEFINED);
-            return false;
-        }
+        if (!$this->driver)
+            throw new DBDriverNotDefinedException();
 
         if ($queryList === 'all')
             $queryList = $this->getFullQueryList();

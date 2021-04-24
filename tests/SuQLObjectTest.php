@@ -2,7 +2,6 @@
 use PHPUnit\Framework\TestCase;
 
 use core\SuQLObject;
-use core\SuQLError;
 use core\SuQLParam;
 
 final class SuQLObjectTest extends TestCase
