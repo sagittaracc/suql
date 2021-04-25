@@ -54,6 +54,13 @@ The minimum requirement - PHP 5.6
 
 More examples in the ```tests``` directory
 
+### Code generator
+This mothefucking framework can generate models and modifiers so you can waste no time.
+
+To generate a model run `php gen/model.php` and follow the instructions.
+
+To generate a modifier run `php gen/modifier.php` and follow the instructions.
+
 ### Install
 - Via composer
 
