@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Генератор модификаторов
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
+
 echo 'Namespace [app\modifier]: ';
 $namespace = trim(fgets(STDIN)) ?: 'app\modifier';
 
@@ -36,5 +42,7 @@ if ($okay === 'y')
     $folder = trim(fgets(STDIN));
 
     if ($folder)
+    {
         file_put_contents("$folder/$class.php", $filedata);
+    }
 }

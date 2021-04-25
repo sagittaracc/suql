@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Генератор моделей
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
+
 echo 'Namespace [app\models]: ';
 $namespace = trim(fgets(STDIN)) ?: 'app\models';
 
@@ -44,5 +50,7 @@ if ($okay === 'y')
     $folder = trim(fgets(STDIN));
 
     if ($folder)
+    {
         file_put_contents("$folder/$class.php", $filedata);
+    }
 }
