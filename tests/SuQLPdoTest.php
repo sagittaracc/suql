@@ -4,6 +4,8 @@ use core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
 use app\model\UserDb;
 use app\model\User;
+use app\model\UserGroup;
+use app\model\Group;
 use app\model\ProductDb;
 use app\model\UsersView;
 use app\model\ModelNotDefined;
@@ -76,6 +78,14 @@ final class SuQLPdoTest extends TestCase
   {
     // $this->expectException(SqlQueryFailRunningException::class);
     // ModelWithWrongTable::find()->fetchAll();
+    $this->assertTrue(true);
+  }
+
+  public function testUserGroupName(): void
+  {
+    // $query = UserDb::find()->getGroupName();
+    // $user = $query->fetchOne();
+    // $this->assertEquals($user->group_name, 'admin');
     $this->assertTrue(true);
   }
 }
