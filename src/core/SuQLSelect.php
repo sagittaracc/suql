@@ -57,7 +57,6 @@ class SuQLSelect extends SuQLQuery
      * @var array список таблиц учавствующих в запросе
      */
     private $table_list  = [];
-
     /**
      * TODO: Попробовать избавиться от этого метода и тип запроса определять по классу
      */
@@ -65,7 +64,6 @@ class SuQLSelect extends SuQLQuery
     {
         return 'select';
     }
-
     /**
      * Получить перечень suql\core\SuQLField учавствующий в запросе
      * @return array
