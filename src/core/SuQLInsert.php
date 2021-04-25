@@ -3,16 +3,12 @@
 namespace suql\core;
 
 use sagittaracc\PlaceholderHelper;
+use suql\core\interface\InsertQueryInterface;
 
-class SuQLInsert extends SuQLQuery
+class SuQLInsert extends SuQLQuery implements InsertQueryInterface
 {
   private $table = null;
   private $values = [];
-
-  public function getType()
-  {
-    return 'insert';
-  }
 
   public function addInto($table)
   {

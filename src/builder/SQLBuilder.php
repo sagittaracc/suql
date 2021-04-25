@@ -2,6 +2,9 @@
 use suql\core\SuQLName;
 use sagittaracc\ArrayHelper;
 use sagittaracc\StringHelper;
+use suql\core\interface\InsertQueryInterface;
+use suql\core\interface\SelectQueryInterface;
+use suql\core\interface\UnionQueryInterface;
 
 class SQLBuilder
 {
@@ -47,11 +50,24 @@ class SQLBuilder
 
   private function buildQuery($query)
   {
-    $queryType = $this->osuql->getQuery($query)->getType();
-    $handler = 'build'.ucfirst($queryType).'Query';
-    return method_exists($this, $handler)
-            ? $this->$handler($query)
-            : null;
+    $osuql = $this->osuql->getQuery($query);
+
+    if ($osuql instanceof SelectQueryInterface)
+    {
+      return $this->buildSelectQuery($query);
+    }
+    else if ($osuql instanceof InsertQueryInterface)
+    {
+      return $this->buildInsertQuery($query);
+    }
+    else if ($osuql instanceof UnionQueryInterface)
+    {
+      return $this->buildUnionQuery($query);
+    }
+    else
+    {
+      return null;
+    }
   }
 
   private function buildSelectQuery($query)

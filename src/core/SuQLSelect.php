@@ -2,12 +2,14 @@
 
 namespace suql\core;
 
+use suql\core\interface\SelectQueryInterface;
+
 /**
  * Объект хранящий структуру select запроса
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLSelect extends SuQLQuery
+class SuQLSelect extends SuQLQuery implements SelectQueryInterface
 {
     /**
      * @var array перечень suql\core\SuQLField полей учавствующих в выборке
@@ -57,13 +59,6 @@ class SuQLSelect extends SuQLQuery
      * @var array список таблиц учавствующих в запросе
      */
     private $table_list  = [];
-    /**
-     * TODO: Попробовать избавиться от этого метода и тип запроса определять по классу
-     */
-    public function getType()
-    {
-        return 'select';
-    }
     /**
      * Получить перечень suql\core\SuQLField учавствующий в запросе
      * @return array
