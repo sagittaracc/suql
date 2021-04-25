@@ -67,10 +67,20 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
     {
         return $this->select;
     }
-
+    /**
+     * Добавляет новое поле в выборку
+     * @param string $table таблица из которой происходит выборка поля
+     * @param string|array $name название поля в двух возможных форматах
+     *   1. <field> - строка с названием поля
+     *   2. [<field> => <alias>] - массив поле и его алиас
+     * @param boolean $visible некоторые поля нужны просто чтобы применить к ним модификатор
+     * например поля сортировки или группировки или фильтрации но их не нужно выводить в результат
+     * @return suql\core\SuQLFieldName
+     */
     public function addField($table, $name, $visible = true)
     {
         $field = new SuQLFieldName($table, $name);
+
         $this->select[] = new SuQLField(
             $this,
             $table,
@@ -78,6 +88,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
             $field->format('%a'),
             $visible
         );
+
         return $field;
     }
 
