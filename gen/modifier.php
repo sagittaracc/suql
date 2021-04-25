@@ -1,6 +1,6 @@
 <?php
 
-echo 'Namespace [app\models]: ';
+echo 'Namespace [app\modifier]: ';
 $namespace = trim(fgets(STDIN)) ?: 'app\modifier';
 
 echo "Classname [SuQLClassModifier]: ";
@@ -32,9 +32,9 @@ $okay = trim(fgets(STDIN)) ?: 'y';
 
 if ($okay === 'y')
 {
-    echo 'Save as: ';
-    $filename = trim(fgets(STDIN));
+    echo 'Folder to save into: ';
+    $folder = trim(fgets(STDIN));
 
-    if ($filename)
-        file_put_contents($filename, $filedata);
+    if ($folder)
+        file_put_contents("$folder/$class.php", $filedata);
 }
