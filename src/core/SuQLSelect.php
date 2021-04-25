@@ -70,9 +70,10 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
     /**
      * Добавляет новое поле в выборку
      * @param string $table таблица из которой происходит выборка поля
-     * @param string|array $name название поля в двух возможных форматах
+     * @param string|array $name название поля в трех возможных форматах
      *   1. <field> - строка с названием поля
      *   2. [<field> => <alias>] - массив поле и его алиас
+     *   3. <field>@<alias> - строка с полем и его алиасом
      * @param boolean $visible некоторые поля нужны просто чтобы применить к ним модификатор
      * например поля сортировки или группировки или фильтрации но их не нужно выводить в результат
      * @return suql\core\SuQLFieldName
@@ -91,63 +92,99 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
 
         return $field;
     }
-
+    /**
+     * Проверяет есть ли поле в текущей выборке
+     * @param string $table имя таблицы
+     * @param string|array имя поля в трех возможных форматах описанных ранее
+     * @return suql\core\SuQLField|false возвращает объект поля если найдено
+     */
     public function hasField($table, $name)
     {
         $field = new SuQLFieldName($table, $name);
 
         foreach ($this->select as $ofield) {
-            if (
-                $ofield->getField() === $field->format('%t.%n')
-                && $ofield->getAlias() === $field->format('%a')
-            )
+            if ($ofield->getField() === $field->format('%t.%n')
+             && $ofield->getAlias() === $field->format('%a'))
+            {
                 return $ofield;
+            }
         }
 
         return false;
     }
-
+    /**
+     * Возвращает поле по имени таблицы и имени поля
+     * @param string $table имя таблицы
+     * @param string|array $name имя поля в трех возможных форматах описанных ранее
+     * @return suql\core\SuQLField|null возвращает null если не найдено
+     */
     public function getField($table, $name)
     {
         if ($ofield = $this->hasField($table, $name))
+        {
             return $ofield;
+        }
 
         return null;
     }
-
+    /**
+     * Возвращает текущий перечень полей в выборке
+     * @return array [
+     *   <field_1> => <alias_1>,
+     *   <field_2> => <alias_2>,
+     *   ...
+     * ]
+     */
     public function getFieldList()
     {
         $fieldList = [];
 
-        foreach ($this->select as $ofield) {
+        foreach ($this->select as $ofield)
+        {
             $fieldList[$ofield->getField()] = $ofield->getAlias();
         }
 
         return $fieldList;
     }
-
+    /**
+     * Добавляет таблицу from секции
+     * @param string $table имя таблицы
+     */
     public function addFrom($table)
     {
         $this->from = $table;
         $this->table_list[] = $table;
     }
-
+    /**
+     * Получает таблицу секции from
+     * @return string
+     */
     public function getFrom()
     {
         return $this->from;
     }
-
+    /**
+     * Добавляет условие where
+     * @param string $where
+     */
     public function addWhere($where)
     {
         if ($where)
+        {
             $this->where[] = $where;
+        }
     }
-
+    /**
+     * Возвращает текущий список всех where условий
+     * @return array
+     */
     public function getWhere()
     {
         return $this->where;
     }
-
+    /**
+     * TODO: Проверить возможно @param $filter не используется
+     */
     public function addFilterWhere($filter, $where)
     {
         $this->filterWhere[$filter] = $where;
