@@ -2,12 +2,14 @@
 
 namespace suql\core;
 
+use suql\core\interface\SchemeInterface;
+
 /**
  * Описание схем отношений между таблицами и вьюхами в базе данных
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLScheme
+class SuQLScheme implements SchemeInterface
 {
     /**
      * Постоянные связи между таблицами
