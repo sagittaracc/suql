@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace suql\core;
 
 class SuQLName {
   public $name;

@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 use PHPUnit\Framework\TestCase;
 
-use core\SuQLObject;
-use core\SuQLParam;
-use core\SuQLScheme;
+use suql\core\SuQLObject;
+use suql\core\SuQLParam;
+use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
 
 final class SuQLObjectTest extends TestCase

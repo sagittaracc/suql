@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace suql\core;
 
 abstract class SuQLQuery {
   protected $osuql = null;

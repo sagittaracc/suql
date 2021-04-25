@@ -1,9 +1,9 @@
 <?php
 
-use core\SuQLObject;
+use suql\core\SuQLObject;
 use sagittaracc\ArrayHelper;
-use core\SuQLModifier;
-use core\SuQLScheme;
+use suql\core\SuQLModifier;
+use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
 
 abstract class SuQL extends SuQLObject implements SuQLQueryInterface

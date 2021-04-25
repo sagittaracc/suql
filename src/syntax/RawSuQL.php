@@ -1,7 +1,7 @@
 <?php
 
-use core\SuQLObject;
-use core\SuQLScheme;
+use suql\core\SuQLObject;
+use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
 
 class RawSuQL extends SuQLObject implements SuQLQueryInterface

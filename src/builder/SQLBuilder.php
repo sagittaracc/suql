@@ -1,5 +1,5 @@
 <?php
-use core\SuQLName;
+use suql\core\SuQLName;
 use sagittaracc\ArrayHelper;
 use sagittaracc\StringHelper;
 

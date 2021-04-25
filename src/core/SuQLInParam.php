@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace suql\core;
 
 class SuQLInParam extends SuQLParam
 {

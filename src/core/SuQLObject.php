@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace suql\core;
 
 use suql\exception\SqlDriverNotSupportedException;
 
@@ -17,7 +17,7 @@ class SuQLObject
      */
     private $queries = [];
     /**
-     * @var core\SuQLScheme связи между таблицами и вьюхами
+     * @var suql\core\SuQLScheme связи между таблицами и вьюхами
      */
     protected $scheme;
     /**
@@ -30,7 +30,7 @@ class SuQLObject
     public $params = [];
     /**
      * Constructor
-     * @param core\SuQLScheme $scheme экземпляр схемы
+     * @param suql\core\SuQLScheme $scheme экземпляр схемы
      * @param suql\builder\SQLDriver $driver экземляр драйвера
      */
     function __construct($scheme, $driver)
@@ -40,7 +40,7 @@ class SuQLObject
     }
     /**
      * Получить схему
-     * @return core\SuQLScheme
+     * @return suql\core\SuQLScheme
      */
     public function getScheme()
     {
@@ -176,7 +176,7 @@ class SuQLObject
     /**
      * Получить объект запроса по имени
      * @param string $name
-     * @return core\SuQLSelect
+     * @return suql\core\SuQLSelect
      */
     public function getQuery($name)
     {
@@ -230,7 +230,7 @@ class SuQLObject
     /**
      * Получает параметр по имени
      * @param string $param
-     * @return core\SuQLParam
+     * @return suql\core\SuQLParam
      */
     public function getParam($param)
     {
@@ -239,7 +239,7 @@ class SuQLObject
     /**
      * Устанавливает параметр запроса
      * @param string $param название параметра
-     * @param core\SuQLParam $suqlParam класс параметра
+     * @param suql\core\SuQLParam $suqlParam класс параметра
      */
     public function setParam($param, $suqlParam)
     {

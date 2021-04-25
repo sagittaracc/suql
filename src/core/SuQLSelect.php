@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace suql\core;
 
 class SuQLSelect extends SuQLQuery {
   private $select      = [];

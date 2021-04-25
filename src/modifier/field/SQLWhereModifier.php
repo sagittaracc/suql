@@ -1,9 +1,9 @@
 <?php
 
-use core\SuQLParam;
-use core\SuQLLikeParam;
-use core\SuQLBetweenParam;
-use core\SuQLInParam;
+use suql\core\SuQLParam;
+use suql\core\SuQLLikeParam;
+use suql\core\SuQLBetweenParam;
+use suql\core\SuQLInParam;
 
 class SQLWhereModifier
 {

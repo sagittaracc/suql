@@ -1,5 +1,5 @@
 <?php
-namespace core;
+namespace suql\core;
 
 class SuQLJoin {
   private $oselect = null;

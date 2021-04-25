@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-use core\SuQLSpecialSymbols;
+use suql\core\SuQLSpecialSymbols;
 use PHPUnit\Framework\TestCase;
 use app\model\UserDb;
 use app\model\User;
@@ -10,7 +10,7 @@ use app\model\ProductDb;
 use app\model\UsersView;
 use app\model\ModelNotDefined;
 use app\model\ModelWithWrongTable;
-use core\SuQLPlaceholder;
+use suql\core\SuQLPlaceholder;
 use suql\exception\DBFailConnectionException;
 use suql\exception\SqlQueryFailRunningException;
 

@@ -5,8 +5,8 @@ use app\model\UserGroup;
 use app\model\Group;
 use app\model\UserGroupView;
 use app\models\ModelWithAnUnsupportedDriver;
-use core\SuQLModifier;
-use core\SuQLPlaceholder;
+use suql\core\SuQLModifier;
+use suql\core\SuQLPlaceholder;
 use suql\exception\SqlDriverNotSupportedException;
 
 final class SuQLTest extends TestCase
