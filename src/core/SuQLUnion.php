@@ -13,10 +13,6 @@ class SuQLUnion extends SuQLQuery {
     return 'union';
   }
 
-  public function getSemantic() {
-    return 'sql';
-  }
-
   public function getSuQL() {
     return $this->suql;
   }

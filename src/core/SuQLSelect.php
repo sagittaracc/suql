@@ -1,172 +1,207 @@
 <?php
+
 namespace suql\core;
 
-class SuQLSelect extends SuQLQuery {
-  private $select      = [];
-  private $from        = null;
-  private $where       = [];
-  private $filterWhere = [];
-  private $having      = [];
-  private $join        = [];
-  private $group       = [];
-  private $order       = [];
-  private $modifier    = null;
-  private $offset      = null;
-  private $limit       = null;
-  private $table_list  = [];
+/**
+ * Объект хранящий структуру select запроса
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
+class SuQLSelect extends SuQLQuery
+{
+    private $select      = [];
+    private $from        = null;
+    private $where       = [];
+    private $filterWhere = [];
+    private $having      = [];
+    private $join        = [];
+    private $group       = [];
+    private $order       = [];
+    private $modifier    = null;
+    private $offset      = null;
+    private $limit       = null;
+    private $table_list  = [];
 
-  public function getType() {
-    return 'select';
-  }
-
-  public function getSemantic() {
-    return 'sql';
-  }
-
-  public function getSelect() {
-    return $this->select;
-  }
-
-  public function addField($table, $name, $visible = true) {
-    $field = new SuQLFieldName($table, $name);
-    $this->select[] = new SuQLField(
-      $this,
-      $table,
-      $field,
-      $field->format('%a'),
-      $visible
-    );
-    return $field;
-  }
-
-  public function hasField($table, $name) {
-    $field = new SuQLFieldName($table, $name);
-
-    foreach ($this->select as $ofield) {
-      if ($ofield->getField() === $field->format('%t.%n')
-       && $ofield->getAlias() === $field->format('%a'))
-        return $ofield;
+    public function getType()
+    {
+        return 'select';
     }
 
-    return false;
-  }
-
-  public function getField($table, $name) {
-    if ($ofield = $this->hasField($table, $name))
-      return $ofield;
-
-    return null;
-  }
-
-  public function getFieldList() {
-    $fieldList = [];
-
-    foreach ($this->select as $ofield) {
-      $fieldList[$ofield->getField()] = $ofield->getAlias();
+    public function getSelect()
+    {
+        return $this->select;
     }
 
-    return $fieldList;
-  }
+    public function addField($table, $name, $visible = true)
+    {
+        $field = new SuQLFieldName($table, $name);
+        $this->select[] = new SuQLField(
+            $this,
+            $table,
+            $field,
+            $field->format('%a'),
+            $visible
+        );
+        return $field;
+    }
 
-  public function addFrom($table) {
-    $this->from = $table;
-    $this->table_list[] = $table;
-  }
+    public function hasField($table, $name)
+    {
+        $field = new SuQLFieldName($table, $name);
 
-  public function getFrom() {
-    return $this->from;
-  }
+        foreach ($this->select as $ofield) {
+            if (
+                $ofield->getField() === $field->format('%t.%n')
+                && $ofield->getAlias() === $field->format('%a')
+            )
+                return $ofield;
+        }
 
-  public function addWhere($where) {
-    if ($where)
-      $this->where[] = $where;
-  }
+        return false;
+    }
 
-  public function getWhere() {
-    return $this->where;
-  }
+    public function getField($table, $name)
+    {
+        if ($ofield = $this->hasField($table, $name))
+            return $ofield;
 
-  public function addFilterWhere($filter, $where) {
-    $this->filterWhere[$filter] = $where;
-  }
+        return null;
+    }
 
-  public function getFilterWhere() {
-    return $this->filterWhere;
-  }
+    public function getFieldList()
+    {
+        $fieldList = [];
 
-  public function addHaving($having) {
-    if ($having)
-      $this->having[] = $having;
-  }
+        foreach ($this->select as $ofield) {
+            $fieldList[$ofield->getField()] = $ofield->getAlias();
+        }
 
-  public function getHaving() {
-    return $this->having;
-  }
+        return $fieldList;
+    }
 
-  public function addJoin($type, $table) {
-    $this->join[] = new SuQLJoin($this, $table, $type);
-    $this->table_list[] = $table;
-  }
+    public function addFrom($table)
+    {
+        $this->from = $table;
+        $this->table_list[] = $table;
+    }
 
-  public function getJoin() {
-    return $this->join;
-  }
+    public function getFrom()
+    {
+        return $this->from;
+    }
 
-  public function addGroup($field) {
-    $this->group[] = $field;
-  }
+    public function addWhere($where)
+    {
+        if ($where)
+            $this->where[] = $where;
+    }
 
-  public function getGroup() {
-    return $this->group;
-  }
+    public function getWhere()
+    {
+        return $this->where;
+    }
 
-  public function addOrder($field, $direction = 'asc') {
-    $this->order[] = new SuQLOrder($field, $direction);
-  }
+    public function addFilterWhere($filter, $where)
+    {
+        $this->filterWhere[$filter] = $where;
+    }
 
-  public function getOrder() {
-    return $this->order;
-  }
+    public function getFilterWhere()
+    {
+        return $this->filterWhere;
+    }
 
-  public function addModifier($modifier) {
-    $this->modifier = $modifier;
-  }
+    public function addHaving($having)
+    {
+        if ($having)
+            $this->having[] = $having;
+    }
 
-  public function hasModifier() {
-    return !is_null($this->modifier);
-  }
+    public function getHaving()
+    {
+        return $this->having;
+    }
 
-  public function getModifier() {
-    return $this->modifier;
-  }
+    public function addJoin($type, $table)
+    {
+        $this->join[] = new SuQLJoin($this, $table, $type);
+        $this->table_list[] = $table;
+    }
 
-  public function addOffset($offset) {
-    if ($offset)
-      $this->offset = $offset;
-  }
+    public function getJoin()
+    {
+        return $this->join;
+    }
 
-  public function hasOffset() {
-    return !is_null($this->offset);
-  }
+    public function addGroup($field)
+    {
+        $this->group[] = $field;
+    }
 
-  public function getOffset() {
-    return $this->offset;
-  }
+    public function getGroup()
+    {
+        return $this->group;
+    }
 
-  public function addLimit($limit) {
-    if ($limit)
-      $this->limit = $limit;
-  }
+    public function addOrder($field, $direction = 'asc')
+    {
+        $this->order[] = new SuQLOrder($field, $direction);
+    }
 
-  public function hasLimit() {
-    return !is_null($this->limit);
-  }
+    public function getOrder()
+    {
+        return $this->order;
+    }
 
-  public function getLimit() {
-    return $this->limit;
-  }
+    public function addModifier($modifier)
+    {
+        $this->modifier = $modifier;
+    }
 
-  public function getTableList() {
-    return $this->table_list;
-  }
+    public function hasModifier()
+    {
+        return !is_null($this->modifier);
+    }
+
+    public function getModifier()
+    {
+        return $this->modifier;
+    }
+
+    public function addOffset($offset)
+    {
+        if ($offset)
+            $this->offset = $offset;
+    }
+
+    public function hasOffset()
+    {
+        return !is_null($this->offset);
+    }
+
+    public function getOffset()
+    {
+        return $this->offset;
+    }
+
+    public function addLimit($limit)
+    {
+        if ($limit)
+            $this->limit = $limit;
+    }
+
+    public function hasLimit()
+    {
+        return !is_null($this->limit);
+    }
+
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    public function getTableList()
+    {
+        return $this->table_list;
+    }
 }

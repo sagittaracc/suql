@@ -14,11 +14,6 @@ class SuQLInsert extends SuQLQuery
     return 'insert';
   }
 
-  public function getSemantic()
-  {
-    return 'sql';
-  }
-
   public function addInto($table)
   {
     $this->table = $table;
