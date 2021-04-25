@@ -9,24 +9,67 @@ namespace suql\core;
  */
 class SuQLSelect extends SuQLQuery
 {
-    private $select      = [];
-    private $from        = null;
-    private $where       = [];
+    /**
+     * @var array перечень suql\core\SuQLField полей учавствующих в выборке
+     */
+    private $select = [];
+    /**
+     * @var string таблица/вьюха из которой происходит выборка
+     */
+    private $from = null;
+    /**
+     * @var array список условий where
+     */
+    private $where = [];
+    /**
+     * @var array список условий для фильтрации не будут применяться если фильтры пустые
+     */
     private $filterWhere = [];
-    private $having      = [];
-    private $join        = [];
-    private $group       = [];
-    private $order       = [];
-    private $modifier    = null;
-    private $offset      = null;
-    private $limit       = null;
+    /**
+     * @var array список условий having
+     */
+    private $having = [];
+    /**
+     * @var array список suql\core\SuQLJoin объектов описывающих соединение таблиц
+     */
+    private $join = [];
+    /**
+     * @var array список полей по которым выполняется группировка
+     */
+    private $group = [];
+    /**
+     * @var array список полей по которым выполняется сортировка
+     */
+    private $order = [];
+    /**
+     * @var string модификатор запроса (пока работает только distinct)
+     */
+    private $modifier = null;
+    /**
+     * @var integer $offset
+     */
+    private $offset = null;
+    /**
+     * @var integer $limit
+     */
+    private $limit = null;
+    /**
+     * @var array список таблиц учавствующих в запросе
+     */
     private $table_list  = [];
 
+    /**
+     * TODO: Попробовать избавиться от этого метода и тип запроса определять по классу
+     */
     public function getType()
     {
         return 'select';
     }
 
+    /**
+     * Получить перечень suql\core\SuQLField учавствующий в запросе
+     * @return array
+     */
     public function getSelect()
     {
         return $this->select;
