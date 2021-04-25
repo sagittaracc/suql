@@ -1,7 +1,9 @@
 <?php
+
+namespace suql\builder;
+
 use suql\core\SuQLName;
 use sagittaracc\ArrayHelper;
-use sagittaracc\StringHelper;
 use suql\core\interface\InsertQueryInterface;
 use suql\core\interface\SelectQueryInterface;
 use suql\core\interface\UnionQueryInterface;
@@ -129,7 +131,7 @@ class SQLBuilder
     foreach ($oselect->getSelect() as $field => $ofield) {
       if ($ofield->hasModifier()) {
         foreach ($ofield->getModifierList() as $name => $params) {
-          if ($name === 'callback' && $params instanceof Closure) {
+          if ($name === 'callback' && $params instanceof \Closure) {
             $params($ofield);
           }
           else {

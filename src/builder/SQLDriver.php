@@ -13,7 +13,7 @@ class SQLDriver
      * @var array перечень поддерживаемых СУБД
      */
     private $driverList = [
-        'mysql' => 'MySQLBuilder',
+        'mysql' => MySQLBuilder::class,
     ];
     /**
      * @var string используемый драйвер
@@ -38,7 +38,7 @@ class SQLDriver
     /**
      * Получить класс билдера
      * Возвращает класс билдера или null если запрошенная СУБД не поддерживается
-     * @return SQLBuilder|null
+     * @return suql\builder\SQLBuilder|null
      */
     public function getBuilder()
     {
