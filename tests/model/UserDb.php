@@ -4,7 +4,7 @@ namespace app\model;
 
 class UserDb extends \PDOSuQLTable
 {
-  protected $dbname = 'ug';
+  protected $dbname = 'test';
 
   public function table()
   {
