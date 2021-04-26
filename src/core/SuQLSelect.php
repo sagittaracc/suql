@@ -349,6 +349,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
     }
     /**
      * Цепочка таблиц учавствующая в рамках текущего запроса.
+     * @return array
      */
     public function getTableList()
     {
