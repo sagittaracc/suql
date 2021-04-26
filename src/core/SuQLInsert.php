@@ -3,7 +3,7 @@
 namespace suql\core;
 
 use sagittaracc\PlaceholderHelper;
-use suql\core\interface\InsertQueryInterface;
+use suql\core\InsertQueryInterface;
 
 class SuQLInsert extends SuQLQuery implements InsertQueryInterface
 {

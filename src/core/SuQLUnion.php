@@ -2,7 +2,7 @@
 
 namespace suql\core;
 
-use suql\core\interface\UnionQueryInterface;
+use suql\core\UnionQueryInterface;
 
 /**
  * Объект хранящий структуру union запроса

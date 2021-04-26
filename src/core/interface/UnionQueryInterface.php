@@ -1,6 +1,6 @@
 <?php
 
-namespace suql\core\interface;
+namespace suql\core;
 
 /**
  * Интерфейс union запросов

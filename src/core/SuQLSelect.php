@@ -2,7 +2,7 @@
 
 namespace suql\core;
 
-use suql\core\interface\SelectQueryInterface;
+use suql\core\SelectQueryInterface;
 
 /**
  * Объект хранящий структуру select запроса

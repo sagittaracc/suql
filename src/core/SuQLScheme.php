@@ -2,7 +2,7 @@
 
 namespace suql\core;
 
-use suql\core\interface\SchemeInterface;
+use suql\core\SchemeInterface;
 
 /**
  * Описание схем отношений между таблицами и вьюхами в базе данных

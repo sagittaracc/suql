@@ -4,9 +4,9 @@ namespace suql\builder;
 
 use suql\core\SuQLName;
 use sagittaracc\ArrayHelper;
-use suql\core\interface\InsertQueryInterface;
-use suql\core\interface\SelectQueryInterface;
-use suql\core\interface\UnionQueryInterface;
+use suql\core\InsertQueryInterface;
+use suql\core\SelectQueryInterface;
+use suql\core\UnionQueryInterface;
 
 class SQLBuilder
 {
