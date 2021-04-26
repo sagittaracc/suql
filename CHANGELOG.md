@@ -1,5 +1,11 @@
 # Change log
 
+## v5.0.17 - April 26, 2021
+
+- Add stored procedures and functions
+
+---
+
 ## v5.0.16 - April 23, 2021
 
 - Code generator (models, views, modifiers)
