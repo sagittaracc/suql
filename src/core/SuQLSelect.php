@@ -183,107 +183,173 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
         return $this->where;
     }
     /**
-     * TODO: Проверить возможно @param $filter не используется
+     * Добавляет фильтровое условие where. Не применяется если фильтр пустой.
+     * Пустота фильтра определяется для каждого типа фильтра отдельно.
+     * @param string $filter название фильтра
+     * @param string $where условие where
      */
     public function addFilterWhere($filter, $where)
     {
         $this->filterWhere[$filter] = $where;
     }
-
+    /**
+     * Получить перечень фильтровых условий where
+     * @return array
+     */
     public function getFilterWhere()
     {
         return $this->filterWhere;
     }
-
+    /**
+     * Добавляет условие having
+     * @param string $having
+     */
     public function addHaving($having)
     {
         if ($having)
+        {
             $this->having[] = $having;
+        }
     }
-
+    /**
+     * Получает перечень условий секции having
+     * @return array
+     */
     public function getHaving()
     {
         return $this->having;
     }
-
+    /**
+     * Добавляет таблицу в цепочку join в рамках этого запроса
+     * @param string $type [left|right|inner|cross|...]
+     * @param string $table название таблицы
+     */
     public function addJoin($type, $table)
     {
         $this->join[] = new SuQLJoin($this, $table, $type);
         $this->table_list[] = $table;
     }
-
+    /**
+     * Получить цепочку join
+     * @return array
+     */
     public function getJoin()
     {
         return $this->join;
     }
-
+    /**
+     * Добавляет поле в группировку
+     * @param string $field название поля
+     */
     public function addGroup($field)
     {
         $this->group[] = $field;
     }
-
+    /**
+     * Получить перечень полей учавствующих в группировке
+     * @return array
+     */
     public function getGroup()
     {
         return $this->group;
     }
-
+    /**
+     * Добавляет поле в сортировку
+     * @param string $field название поля
+     * @param string $direction направление сортировки [desc|asc]
+     */
     public function addOrder($field, $direction = 'asc')
     {
         $this->order[] = new SuQLOrder($field, $direction);
     }
-
+    /**
+     * Получить перечень полей в сортировке
+     * @param array
+     */
     public function getOrder()
     {
         return $this->order;
     }
-
+    /**
+     * Добавляет модификатор для запроса. Пока работает только distinct
+     * @param string $modifier название модификатора
+     */
     public function addModifier($modifier)
     {
         $this->modifier = $modifier;
     }
-
+    /**
+     * Проверяет заданы ли для данного запроса какие-либо модификаторы
+     * @return boolean
+     */
     public function hasModifier()
     {
         return !is_null($this->modifier);
     }
-
+    /**
+     * Получает модификатор примененный для данного запроса
+     * @return string
+     */
     public function getModifier()
     {
         return $this->modifier;
     }
-
+    /**
+     * Добавляет отступ в выборке данных
+     * @param int $offset отступ
+     */
     public function addOffset($offset)
     {
         if ($offset)
+        {
             $this->offset = $offset;
+        }
     }
-
+    /**
+     * Проверяет производится ли выборка с отступом
+     * @return boolean
+     */
     public function hasOffset()
     {
         return !is_null($this->offset);
     }
-
+    /**
+     * Получает значение отступа в выборке
+     * @return int
+     */
     public function getOffset()
     {
         return $this->offset;
     }
-
+    /**
+     * Ограничивает итоговую выборку определенным количеством записей
+     * @param int $limit количество записей которым мы ограничиваем выборку
+     */
     public function addLimit($limit)
     {
         if ($limit)
+        {
             $this->limit = $limit;
+        }
     }
-
+    /**
+     * Проверяет задано ли для данного запроса ограничение в итоговой выборке
+     */
     public function hasLimit()
     {
         return !is_null($this->limit);
     }
-
+    /**
+     * Получает количество записей каким ограничена итоговая выборка
+     * @return int
+     */
     public function getLimit()
     {
         return $this->limit;
     }
-
+    /**
+     * Цепочка таблиц учавствующая в рамках текущего запроса.
+     */
     public function getTableList()
     {
         return $this->table_list;
