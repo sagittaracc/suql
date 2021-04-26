@@ -54,7 +54,11 @@ class SQLBuilder
   {
     $osuql = $this->osuql->getQuery($query);
 
-    if ($osuql instanceof SelectQueryInterface)
+    if ($this->osuql instanceof \SuQLProcedure)
+    {
+      return $this->buildStoredProcedure($query);
+    }
+    else if ($osuql instanceof SelectQueryInterface)
     {
       return $this->buildSelectQuery($query);
     }
@@ -70,6 +74,11 @@ class SQLBuilder
     {
       return null;
     }
+  }
+
+  private function buildStoredProcedure($query)
+  {
+    return str_replace('select', 'call', $this->buildSelectQuery($query));
   }
 
   private function buildSelectQuery($query)
