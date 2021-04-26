@@ -1,20 +1,46 @@
 <?php
+
 namespace suql\core;
 
-class SuQLOrder {
-  private $field;
-  private $direction;
-
-  function __construct($field, $direction) {
-    $this->field = $field;
-    $this->direction = $direction;
-  }
-
-  public function getField() {
-    return $this->field;
-  }
-
-  public function getDirection() {
-    return $this->direction;
-  }
+/**
+ * Управление сортировкой полей
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
+class SuQLOrder
+{
+    /**
+     * @var string $field название поля
+     */
+    private $field;
+    /**
+     * @var string $direction направление сортировки
+     */
+    private $direction;
+    /**
+     * Constructor
+     * @param string $field название поля
+     * @param string $direction направление сортировки
+     */
+    function __construct($field, $direction)
+    {
+        $this->field = $field;
+        $this->direction = $direction;
+    }
+    /**
+     * Получает название поля
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+    /**
+     * Получает направление сортировки
+     * @return string
+     */
+    public function getDirection()
+    {
+        return $this->direction;
+    }
 }
