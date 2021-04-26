@@ -56,11 +56,11 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      */
     private $limit = null;
     /**
-     * @var array список таблиц учавствующих в запросе
+     * @var array список таблиц учавствующих в запросе. Необходимо для выполнения автоматического join
      */
     private $table_list  = [];
     /**
-     * Получить перечень suql\core\SuQLField учавствующий в запросе
+     * Получить перечень suql\core\SuQLField учавствующий в запросе.
      * @return array
      */
     public function getSelect()
