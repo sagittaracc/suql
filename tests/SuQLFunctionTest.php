@@ -17,6 +17,11 @@ final class SuQLFunctionTest extends TestCase
     );
 
     $this->assertEquals(
+      SuQLProcedure::find('getSomething')->params(new SuQLPlaceholder('id'), 'string', null)->getRawSql(),
+      "call getSomething(:id,'string',NULL)"
+    );
+
+    $this->assertEquals(
       SuQLFunction::find('getSomething')->params(new SuQLPlaceholder('id'), 'string', null)->getRawSql(),
       "select getSomething(:id,'string',NULL)"
     );
