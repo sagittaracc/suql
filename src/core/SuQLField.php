@@ -17,6 +17,7 @@ class SuQLField {
     $this->table = $table;
     $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
     $this->justField = $field->format('%n');
+    // TODO: Проверить originalField - возможно бесполезно
     $this->originalField = $this->field;
     $this->alias = $alias;
     $this->visible = $visible;
