@@ -4,8 +4,11 @@ namespace suql\builder;
 
 use suql\core\SuQLName;
 use sagittaracc\ArrayHelper;
+use suql\core\FunctionQueryInterface;
 use suql\core\InsertQueryInterface;
+use suql\core\ProcedureQueryInterface;
 use suql\core\SelectQueryInterface;
+use suql\core\SuQLCallInterface;
 use suql\core\UnionQueryInterface;
 
 class SQLBuilder
@@ -54,9 +57,13 @@ class SQLBuilder
   {
     $osuql = $this->osuql->getQuery($query);
 
-    if ($this->osuql instanceof \SuQLProcedure)
+    if ($osuql instanceof ProcedureQueryInterface)
     {
       return $this->buildStoredProcedure($query);
+    }
+    else if ($osuql instanceof FunctionQueryInterface)
+    {
+      return $this->buildStoredFunction($query);
     }
     else if ($osuql instanceof SelectQueryInterface)
     {
@@ -78,7 +85,12 @@ class SQLBuilder
 
   private function buildStoredProcedure($query)
   {
-    return str_replace('select', 'call', $this->buildSelectQuery($query));
+    return '';
+  }
+
+  private function buildStoredFunction($query)
+  {
+    return '';
   }
 
   private function buildSelectQuery($query)

@@ -144,6 +144,22 @@ class SuQLObject
         $this->queries[$name] = new SuQLSelect($this);
     }
     /**
+     * Добавляет call запрос вызова хранимой процедуры
+     * @param string $name название нового запроса
+     */
+    public function addProcedure($name)
+    {
+        $this->queries[$name] = new SuQLProc($this);
+    }
+    /**
+     * Добавляет функцию хранимой процедуры
+     * @param string $name название нового запрос
+     */
+    public function addFunction($name)
+    {
+        $this->queries[$name] = new SuQLFunc($this);
+    }
+    /**
      * Добавляет insert запрос по названию
      * @param string $name название нового запроса
      */

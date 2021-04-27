@@ -33,7 +33,7 @@ final class SuQLTest extends TestCase
 
     // Select raw expression
     $this->assertEquals(
-      RawSuQL::find()->field('2 * 2')->field("'Yuriy' as author")->getRawSql(),
+      RawSuQL::select()->field('2 * 2')->field("'Yuriy' as author")->getRawSql(),
       "select 2 * 2, 'Yuriy' as author"
     );
 
