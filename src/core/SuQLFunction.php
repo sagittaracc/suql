@@ -4,7 +4,7 @@ namespace suql\core;
 
 use sagittaracc\PlaceholderHelper;
 
-class SuQLFunc extends SuQLQuery implements FunctionQueryInterface
+class SuQLFunction extends SuQLQuery implements FunctionQueryInterface
 {
     private $name;
     private $params;

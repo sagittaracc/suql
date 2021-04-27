@@ -150,7 +150,7 @@ class SuQLObject
      */
     public function addProcedure($name, $procName)
     {
-        $this->queries[$name] = new SuQLProc($this, $procName);
+        $this->queries[$name] = new SuQLProcedure($this, $procName);
     }
     /**
      * Добавляет функцию хранимой процедуры
@@ -159,7 +159,7 @@ class SuQLObject
      */
     public function addFunction($name, $funcName)
     {
-        $this->queries[$name] = new SuQLFunc($this, $funcName);
+        $this->queries[$name] = new SuQLFunction($this, $funcName);
     }
     /**
      * Добавляет insert запрос по названию
