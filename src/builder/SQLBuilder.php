@@ -85,12 +85,18 @@ class SQLBuilder
 
   private function buildStoredProcedure($query)
   {
-    return '';
+    $oproc = $this->osuql->getQuery($query);
+    $name = $oproc->getName();
+    $params = $oproc->getParams();
+    return 'call ' . $name . '(' . implode(',', $params) . ')';
   }
 
   private function buildStoredFunction($query)
   {
-    return '';
+    $oproc = $this->osuql->getQuery($query);
+    $name = $oproc->getName();
+    $params = $oproc->getParams();
+    return 'select ' . $name . '(' . implode(',', $params) . ')';
   }
 
   private function buildSelectQuery($query)

@@ -2,7 +2,7 @@
 
 class SuQLFunction extends RawSuQL implements SuQLFunctionInterface
 {
-    private $name;
+    protected $name;
 
     public static function find($name = null)
     {
@@ -11,9 +11,14 @@ class SuQLFunction extends RawSuQL implements SuQLFunctionInterface
         return $function;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function params()
     {
+        $this->getQuery($this->query())->addParams(func_get_args());
         return $this;
-        // return parent::field("{$this->name}(" . implode(',', func_get_args()) . ")");
     }
 }

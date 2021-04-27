@@ -2,7 +2,7 @@
 
 namespace suql\core;
 
-class SuQLProc extends SuQLQuery implements ProcedureQueryInterface
+class SuQLProc extends SuQLFunc implements ProcedureQueryInterface
 {
 
 }

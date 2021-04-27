@@ -7,14 +7,12 @@ final class SuQLFunctionTest extends TestCase
   {
     $this->assertEquals(
         SuQLProcedure::find('setSomething')->params(1, 2, 3)->getRawSql(),
-        // 'call setSomething(1,2,3)'
-        ''
+        'call setSomething(1,2,3)'
     );
 
     $this->assertEquals(
         SuQLFunction::find('getSomething')->params(1, 2, 3)->getRawSql(),
-        // 'select getSomething(1,2,3)'
-        ''
+        'select getSomething(1,2,3)'
     );
   }
 }
