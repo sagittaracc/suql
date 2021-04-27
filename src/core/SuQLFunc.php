@@ -12,7 +12,14 @@ class SuQLFunc extends SuQLQuery implements FunctionQueryInterface
     {
         foreach ($params as $param)
         {
-            $this->params[] = (new PlaceholderHelper("?"))->bind($param);
+            if ($param instanceof SuQLPlaceholder)
+            {
+                $this->params[] = $param->getPlaceholder();
+            }
+            else
+            {
+                $this->params[] = (new PlaceholderHelper("?"))->bind($param);
+            }
         }
     }
 

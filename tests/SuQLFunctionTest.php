@@ -1,5 +1,6 @@
 <?php declare(strict_types = 1);
 use PHPUnit\Framework\TestCase;
+use suql\core\SuQLPlaceholder;
 
 final class SuQLFunctionTest extends TestCase
 {
@@ -13,6 +14,11 @@ final class SuQLFunctionTest extends TestCase
     $this->assertEquals(
         SuQLFunction::find('getSomething')->params(1, 'string', null)->getRawSql(),
         "select getSomething(1,'string',NULL)"
+    );
+
+    $this->assertEquals(
+      SuQLFunction::find('getSomething')->params(new SuQLPlaceholder('id'), 'string', null)->getRawSql(),
+      "select getSomething(:id,'string',NULL)"
     );
   }
 }
