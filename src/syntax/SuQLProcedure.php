@@ -4,8 +4,7 @@ class SuQLProcedure extends SuQLFunction implements SuQLProcedureInterface
 {
     public static function find($name = null)
     {
-        $procedure = parent::proc();
-        $procedure->name = $name;
+        $procedure = parent::proc($name);
         return $procedure;
     }
 }

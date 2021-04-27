@@ -37,17 +37,17 @@ class RawSuQL extends SuQLObject implements SuQLQueryInterface
         return $instance;
     }
 
-    public static function proc()
+    public static function proc($name)
     {
         $instance = new static();
-        $instance->addProcedure($instance->query());
+        $instance->addProcedure($instance->query(), $name);
         return $instance;
     }
 
-    public static function func()
+    public static function func($name)
     {
         $instance = new static();
-        $instance->addFunction($instance->query());
+        $instance->addFunction($instance->query(), $name);
         return $instance;
     }
 

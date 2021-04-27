@@ -6,7 +6,14 @@ use sagittaracc\PlaceholderHelper;
 
 class SuQLFunc extends SuQLQuery implements FunctionQueryInterface
 {
+    private $name;
     private $params;
+
+    function __construct($osuql, $name)
+    {
+        parent::__construct($osuql);
+        $this->name = $name;
+    }
 
     public function addParams($params)
     {
@@ -25,7 +32,7 @@ class SuQLFunc extends SuQLQuery implements FunctionQueryInterface
 
     public function getName()
     {
-        return $this->osuql->getName();
+        return $this->name;
     }
 
     public function getParams()
