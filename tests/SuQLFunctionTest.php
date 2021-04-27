@@ -7,23 +7,13 @@ final class SuQLFunctionTest extends TestCase
   public function testStoredProcedure(): void
   {
     $this->assertEquals(
-        SuQLProcedure::find('setSomething')->params(1, 'string', null, true, false)->getRawSql(),
-        "call setSomething(1,'string',NULL,true,false)"
+        SuQLProcedure::find('setSomething')->params(1, 'string', null, true, false, new SuQLPlaceholder('id'))->getRawSql(),
+        "call setSomething(1,'string',NULL,true,false,:id)"
     );
 
     $this->assertEquals(
-        SuQLFunction::find('getSomething')->params(1, 'string', null, true, false)->getRawSql(),
-        "select getSomething(1,'string',NULL,true,false)"
-    );
-
-    $this->assertEquals(
-      SuQLProcedure::find('getSomething')->params(new SuQLPlaceholder('id'), 'string', null, true, false)->getRawSql(),
-      "call getSomething(:id,'string',NULL,true,false)"
-    );
-
-    $this->assertEquals(
-      SuQLFunction::find('getSomething')->params(new SuQLPlaceholder('id'), 'string', null, true, false)->getRawSql(),
-      "select getSomething(:id,'string',NULL,true,false)"
+        SuQLFunction::find('getSomething')->params(1, 'string', null, true, false, new SuQLPlaceholder('id'))->getRawSql(),
+        "select getSomething(1,'string',NULL,true,false,:id)"
     );
   }
 }
