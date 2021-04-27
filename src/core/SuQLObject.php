@@ -9,7 +9,6 @@ use suql\exception\SqlDriverNotSupportedException;
  * 
  * @author: sagittaracc <sagittaracc@gmail.com>
  */
-
 class SuQLObject
 {
     /**
