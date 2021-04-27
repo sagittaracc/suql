@@ -1,39 +1,80 @@
 <?php
+
 namespace suql\core;
 
-class SuQLName {
-  public $name;
-  public $alias;
+/**
+ * Обработка имени с заданием алиаса в трех возможных форматах:
+ *   Separated new SuQLName(<name>, <alias>)
+ *   Array     new SuQLName([<name> => <alias>])
+ *   String    new SuQLName('<name>@<alias>')
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
+class SuQLName
+{
+    /**
+     * @var string имя
+     */
+    public $name = null;
+    /**
+     * @var string алиас
+     */
+    public $alias = null;
+    /**
+     * Constructor
+     */
+    function __construct()
+    {
+        if (func_num_args() === 2) {
+            $this->parseSeparated(func_get_args());
+        }
+        else if (func_num_args() === 1)
+        {
+            $arg = func_get_arg(0);
 
-  function __construct() {
-    if (func_num_args() === 2) {
-
-      $this->name = func_get_arg(0);
-      $this->alias = func_get_arg(1);
-
-    } else if (func_num_args() === 1) {
-
-      $name = func_get_arg(0);
-
-      if (is_array($name)) {
-        foreach ($name as $name => $alias) break;
+            if (is_array($arg)) {
+                $this->parseArray($arg);
+            }
+            else if (is_string($arg)) {
+                $this->parseString($arg);
+            }
+        }
+    }
+    /**
+     * Разбор параметров в Separated формате
+     */
+    private function parseSeparated($args)
+    {
+        $this->name = $args[0];
+        $this->alias = $args[1];
+    }
+    /**
+     * Разбор параметров в Array формате
+     */
+    private function parseArray($array)
+    {
+        foreach ($array as $name => $alias) break;
         $this->name = $name;
         $this->alias = $alias;
-      } else if (is_string($name)) {
-        $parts = explode('@', $name);
+    }
+    /**
+     * Разбор параметров в String формате
+     */
+    private function parseString($string)
+    {
+        $parts = explode('@', $string);
         $this->name = isset($parts[0]) ? $parts[0] : null;
         $this->alias = isset($parts[1]) ? $parts[1] : null;
-      } else {
-        $this->name = $this->alias = null;
-      }
-
-    } else
-      return null;
-  }
-
-  public function format($s) {
-    return $this->alias
+    }
+    /**
+     * Выводит имя в заданном формате
+     * @param string $s формат вывода. Поддерживает два плейсхолдера %n - имя, %a - алиас
+     * @return string
+     */
+    public function format($s)
+    {
+        return $this->alias
             ? str_replace(['%n', '%a'], [$this->name, $this->alias], $s)
             : $this->name;
-  }
+    }
 }
