@@ -8,6 +8,7 @@ class SQLFunctionModifier
     array_unshift($params, $ofield->getField());
     $params = implode(', ', $params);
     $ofield->setField("$modifier($params)");
+    // TODO: Проверить возможно удалять модификатор необязательно так как все они применяются перед сборкой запроса
     $ofield->delModifier($modifier);
   }
 
