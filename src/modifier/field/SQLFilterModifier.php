@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\modifier\field;
+
 class SQLFilterModifier
 {
   public static function mod_filter($ofield, $params)
@@ -10,7 +12,7 @@ class SQLFilterModifier
     if (!is_null($filterValue))
     {
       $whereModifier = "mod_$filterFunction";
-      if (method_exists('SQLWhereModifier', $whereModifier))
+      if (method_exists(SQLWhereModifier::class, $whereModifier))
       {
         SQLWhereModifier::$whereModifier($ofield, [$filterValue], true);
       }

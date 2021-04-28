@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\modifier\query;
+
 trait SQLDistinctModifier
 {
   public function distinct()

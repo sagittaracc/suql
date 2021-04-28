@@ -1,4 +1,7 @@
 <?php
+
+namespace suql\modifier\field;
+
 class SQLFunctionModifier
 {
   public static function default_function_handler($modifier, $ofield, $params) {

@@ -5,6 +5,7 @@ use sagittaracc\ArrayHelper;
 use suql\core\SuQLModifier;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
+use suql\modifier\query\SQLDistinctModifier;
 
 abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 {

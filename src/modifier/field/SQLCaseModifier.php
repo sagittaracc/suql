@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\modifier\field;
+
 use sagittaracc\PlaceholderHelper;
 
 class SQLCaseModifier

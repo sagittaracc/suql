@@ -3,6 +3,12 @@
 namespace suql\core;
 
 use suql\exception\SqlDriverNotSupportedException;
+use suql\modifier\field\SQLCaseModifier;
+use suql\modifier\field\SQLFilterModifier;
+use suql\modifier\field\SQLFunctionModifier;
+use suql\modifier\field\SQLGroupModifier;
+use suql\modifier\field\SQLOrderModifier;
+use suql\modifier\field\SQLWhereModifier;
 
 /**
  * Основной объект, хранящий всю структуру запроса
@@ -58,13 +64,12 @@ class SuQLObject
     protected function modifierList()
     {
         return [
-            'SQLBaseModifier',
-            'SQLWhereModifier',
-            'SQLFilterModifier',
-            'SQLOrderModifier',
-            'SQLGroupModifier',
-            'SQLFunctionModifier',
-            'SQLCaseModifier',
+            SQLWhereModifier::class,
+            SQLFilterModifier::class,
+            SQLOrderModifier::class,
+            SQLGroupModifier::class,
+            SQLFunctionModifier::class,
+            SQLCaseModifier::class,
         ];
     }
     /**

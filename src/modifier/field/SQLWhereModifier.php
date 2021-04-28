@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\modifier\field;
+
 use suql\core\SuQLParam;
 use suql\core\SuQLLikeParam;
 use suql\core\SuQLBetweenParam;
