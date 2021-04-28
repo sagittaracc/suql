@@ -262,4 +262,23 @@ class SuQLObject
     {
         $this->params[$param] = $suqlParam;
     }
+    /**
+     * Получает список автосгенерированных параметров по плейсхолдерам
+     * @return array
+     */
+    public function getParamList()
+    {
+        $paramList = [];
+
+        foreach ($this->params as $param)
+        {
+            foreach ($param->getParamList() as $placeholder => $value)
+            {
+                if ($value instanceof SuQLPlaceholder) continue;
+                $paramList[$placeholder] = $value;
+            }
+        }
+
+        return $paramList;
+    }
 }
