@@ -425,15 +425,24 @@ final class SuQLTest extends TestCase
 
   public function testQueryParamList(): void
   {
-    $query = User::find();
-    $sql = $query->field('id', [
-      'in' => [new SuQLPlaceholder('id'),2,3]
-    ])->getRawSql();
+    $query = User::find()
+                ->field('id', [
+                  'in' => [new SuQLPlaceholder('id'),2,3]
+                ]);
+
+    $sql = $query->getRawSql();
     $params = $query->getParamList();
 
     $this->assertEquals(
       $sql,
-      'select users.id from users where users.id in (:id,:ph_1c039cba3fa9c33e62bc68badc90d75b,:ph_26844f60882164514b4a0e4a070cc63c)'
+      'select '.
+        'users.id '.
+      'from users '.
+      'where users.id in ('.
+        ':id,'.
+        ':ph_1c039cba3fa9c33e62bc68badc90d75b,'.
+        ':ph_26844f60882164514b4a0e4a070cc63c'.
+      ')'
     );
 
     $this->assertEquals(
