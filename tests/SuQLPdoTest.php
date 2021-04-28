@@ -23,7 +23,7 @@ final class SuQLPdoTest extends TestCase
     //
     // $this->assertObjectHasAttribute('id', UserDb::find()->fetchOne());
     // $this->assertEquals(1, UserDb::find()->fetchOne()->id);
-    //
+    
     // $query = UserDb::find()
     //            ->select([
     //              ['id' => 'uid'],
@@ -33,7 +33,7 @@ final class SuQLPdoTest extends TestCase
     //            ])
     //            ->where(['id' => 1]);
     // $userList = $query->fetchAll();
-    //
+    
     // foreach ($userList as $user)
     // {
     //   $this->assertObjectHasAttribute('uid', $user);
@@ -51,7 +51,7 @@ final class SuQLPdoTest extends TestCase
     //   'id' => 0,
     //   'login' => 'user'
     // ]);
-    //
+    
     // $user->save();
     $this->assertTrue(true);
   }
@@ -63,7 +63,7 @@ final class SuQLPdoTest extends TestCase
     //            ->filter('username', ['like', 'admi'])
     //            ->filter('gid', ['equal', null])
     //            ->filter('groupname', ['like', null]);
-    //
+    
     // $this->assertEquals(count($query->fetchAll()), 1);
     $this->assertTrue(true);
   }
@@ -81,7 +81,7 @@ final class SuQLPdoTest extends TestCase
     $this->assertTrue(true);
   }
 
-  public function testUserGroupName(): void
+  public function testORMRelativity(): void
   {
     // $query = UserDb::find()->getGroupName();
     // $user = $query->fetchOne();
