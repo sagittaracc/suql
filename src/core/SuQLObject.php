@@ -65,7 +65,6 @@ class SuQLObject
             'SQLGroupModifier',
             'SQLFunctionModifier',
             'SQLCaseModifier',
-            'SQLConditionModifier',
         ];
     }
     /**

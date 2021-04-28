@@ -417,16 +417,6 @@ final class SuQLTest extends TestCase
     );
   }
 
-  public function testConditionModifier(): void
-  {
-    $this->assertEquals(
-      User::find()->field(['id' => 'empty'], [
-        'ifNull' => [1, 0]
-      ])->getRawSql(),
-      'select if(users.id is null, 1, 0) as empty from users'
-    );
-  }
-
   public function testModelWithAnUnsupportedDriver(): void
   {
     $this->expectException(SqlDriverNotSupportedException::class);
