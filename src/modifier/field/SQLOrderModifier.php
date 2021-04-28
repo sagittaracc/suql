@@ -2,18 +2,29 @@
 
 namespace suql\modifier\field;
 
+/**
+ * Модификатор order by
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
 class SQLOrderModifier
 {
-  public static function default_order_handler($ofield, $params, $direction) {
-    $field = $ofield->hasAlias() ? $ofield->getAlias() : $ofield->getField();
-    $ofield->getOSelect()->addOrder($field, $direction);
-  }
-
-  public static function mod_asc($ofield, $params) {
-    self::default_order_handler($ofield, $params, 'asc');
-  }
-
-  public static function mod_desc($ofield, $params) {
-    self::default_order_handler($ofield, $params, 'desc');
-  }
+    /**
+     * Модификатор сортировки asc
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params не используется в данном модификаторе
+     */
+    public static function mod_asc($ofield, $params)
+    {
+        $ofield->getOSelect()->addOrder($ofield->getFieldName(), 'asc');
+    }
+    /**
+     * Модификатор сортировки desc
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params не используется в данном модификаторе
+     */
+    public static function mod_desc($ofield, $params)
+    {
+        $ofield->getOSelect()->addOrder($ofield->getFieldName(), 'desc');
+    }
 }

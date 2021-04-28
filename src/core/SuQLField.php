@@ -76,6 +76,11 @@ class SuQLField {
     return $this->alias;
   }
 
+  public function getFieldName()
+  {
+    return $this->hasAlias() ? $this->getAlias() : $this->getField();
+  }
+
   public function visible() {
     return $this->visible === true;
   }
