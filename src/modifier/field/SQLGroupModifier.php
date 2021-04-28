@@ -16,6 +16,6 @@ class SQLGroupModifier
      */
     public static function mod_group($ofield, $params)
     {
-        $ofield->getOSelect()->addGroup($ofield->getOriginalField());
+        $ofield->getOSelect()->addGroup($ofield->getField());
     }
 }

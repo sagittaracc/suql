@@ -7,7 +7,6 @@ class SuQLField {
   private $table;
   private $field;
   private $justField;
-  private $originalField;
   private $alias;
   private $visible;
   private $modifier = [];
@@ -17,8 +16,6 @@ class SuQLField {
     $this->table = $table;
     $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
     $this->justField = $field->format('%n');
-    // TODO: Проверить originalField - возможно бесполезно
-    $this->originalField = $this->field;
     $this->alias = $alias;
     $this->visible = $visible;
   }
@@ -62,10 +59,6 @@ class SuQLField {
   public function getJustField()
   {
     return $this->justField;
-  }
-
-  public function getOriginalField() {
-    return $this->originalField;
   }
 
   public function hasAlias() {
