@@ -3,7 +3,6 @@
 namespace suql\modifier\field;
 
 use sagittaracc\PlaceholderHelper;
-use suql\core\SuQLCaseCondition;
 use suql\core\SuQLCondition;
 use suql\core\SuQLExpression;
 use suql\core\SuQLFieldName;
@@ -49,14 +48,15 @@ class SQLCaseModifier
         $table = $ofield->getTable();
         $field = $ofield->getField();
         $fieldName = new SuQLFieldName($table, $field);
+        $anotherFieldName = new SuQLFieldName('groups', 'id');
 
         self::mod_case([
-            [new SuQLCaseCondition($fieldName, '$ = 1'), 'admin'],
-            [new SuQLCaseCondition($fieldName, '$ = 2'), 'user'],
+            [new SuQLCondition($fieldName, '$ = 1'), 'admin'],
+            [new SuQLCondition($fieldName, '$ = 2'), 'user'],
             [
                 new SuQLExpression('$1 and $2', [
-                    new SuQLCaseCondition($fieldName, '$ > 3'),
-                    new SuQLCaseCondition($fieldName, '$ < 10')
+                    new SuQLCondition($fieldName, '$ > 3'),
+                    new SuQLCondition($anotherFieldName, '$ < 10', '%t.%n')
                 ]),
                 'guest'
             ],

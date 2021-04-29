@@ -27,7 +27,7 @@ class SuQLCondition
      * @param string $condition условное выражение
      * @param string $format формат вывода поля
      */
-    function __construct($field, $condition, $format = '%t.%n')
+    function __construct($field, $condition, $format = '%n')
     {
         $this->field = $field;
         $this->condition = $condition;

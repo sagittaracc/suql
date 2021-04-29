@@ -15,8 +15,8 @@ final class SuQLExpressionTest extends TestCase
             new SuQLExpression(
                 '$1 and $2',
                 [
-                    new SuQLCondition(new SuQLFieldName('users', 'id'), '$ > 0'),
-                    new SuQLCondition(new SuQLFieldName('users', 'id'), '$ < 10'),
+                    (new SuQLCondition(new SuQLFieldName('users', 'id'), '$ > 0'))->setFormat('%t.%n'),
+                    (new SuQLCondition(new SuQLFieldName('users', 'id'), '$ < 10'))->setFormat('%t.%n'),
                 ]
             ),
             'users.id > 0 and users.id < 10'

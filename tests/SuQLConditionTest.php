@@ -13,7 +13,8 @@ final class SuQLConditionTest extends TestCase
         $this->assertEquals(
             new SuQLCondition(
                 new SuQLFieldName('users', 'id'),
-                '$ > 0'
+                '$ > 0',
+                '%t.%n'
             ),
             'users.id > 0'
         );
