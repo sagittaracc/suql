@@ -2,68 +2,123 @@
 
 namespace suql\modifier\field;
 
+/**
+ * Модификатор Функция
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
 class SQLFunctionModifier
 {
-  public static function default_function_handler($modifier, $ofield, $params) {
-    array_unshift($params, $ofield->getField());
-    $params = implode(', ', $params);
-    $ofield->setField("$modifier($params)");
-    // TODO: Проверить возможно удалять модификатор необязательно так как все они применяются перед сборкой запроса
-    $ofield->delModifier($modifier);
-  }
-
-  public static function mod_abs($ofield, $params) {
-    self::default_function_handler('abs', $ofield, $params);
-  }
-
-  public static function mod_count($ofield, $params) {
-    self::default_function_handler('count', $ofield, $params);
-  }
-
-  public static function mod_min($ofield, $params) {
-    self::default_function_handler('min', $ofield, $params);
-  }
-
-  public static function mod_max($ofield, $params) {
-    self::default_function_handler('max', $ofield, $params);
-  }
-
-  public static function mod_sum($ofield, $params) {
-    self::default_function_handler('sum', $ofield, $params);
-  }
-
-  public static function mod_round($ofield, $params) {
-    self::default_function_handler('round', $ofield, $params);
-  }
-
-  public static function mod_implode($ofield, $params) {
-    $ofield->setField("group_concat(".$ofield->getField()." separator {$params[0]})");
-    $ofield->delModifier('implode');
-  }
-
-  public static function mod_datediffnow($ofield, $params) {
-    $params[] = 'now()';
-    self::default_function_handler('datediff', $ofield, $params);
-  }
-
-  public static function mod_mod($ofield, $params) {
-    self::default_function_handler('mod', $ofield, $params);
-  }
-
-  public static function mod_date_format($ofield, $params) {
-    self::default_function_handler('date_format', $ofield, $params);
-  }
-
-  public static function mod_sign($ofield, $params) {
-    self::default_function_handler('sign', $ofield, $params);
-  }
-
-  public static function mod_concat($ofield, $params) {
-    // TODO: global processing the params
-    foreach ($params as &$param) {
-      $param = str_replace('@', "{$ofield->getTable()}.", $param);
+    /**
+     * Основной обработчик функций
+     * @param string $func название функции
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    private static function func($func, $ofield, $params)
+    {
+        array_unshift($params, $ofield->getField());
+        $params = implode(', ', $params);
+        $ofield->setField("$func($params)");
     }
-    unset($param);
-    self::default_function_handler('concat', $ofield, $params);
-  }
+    /**
+     * Модуль
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_abs($ofield, $params)
+    {
+        self::func('abs', $ofield, $params);
+    }
+    /**
+     * Количество записей
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_count($ofield, $params)
+    {
+        self::func('count', $ofield, $params);
+    }
+    /**
+     * Минимальный
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_min($ofield, $params)
+    {
+        self::func('min', $ofield, $params);
+    }
+    /**
+     * Максимальный
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_max($ofield, $params)
+    {
+        self::func('max', $ofield, $params);
+    }
+    /**
+     * Сумма
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_sum($ofield, $params)
+    {
+        self::func('sum', $ofield, $params);
+    }
+    /**
+     * Округление чисел
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_round($ofield, $params)
+    {
+        self::func('round', $ofield, $params);
+    }
+    /**
+     * Group concat
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_implode($ofield, $params)
+    {
+        $ofield->setField("group_concat(" . $ofield->getField() . " separator {$params[0]})");
+    }
+    /**
+     * Промежуток времени до текущего момента
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_datediffnow($ofield, $params)
+    {
+        $params[] = 'now()';
+        self::func('datediff', $ofield, $params);
+    }
+    /**
+     * Остаток от деления
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_mod($ofield, $params)
+    {
+        self::func('mod', $ofield, $params);
+    }
+    /**
+     * Форматирование даты
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_date_format($ofield, $params)
+    {
+        self::func('date_format', $ofield, $params);
+    }
+    /**
+     * Знак
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
+    public static function mod_sign($ofield, $params)
+    {
+        self::func('sign', $ofield, $params);
+    }
 }
