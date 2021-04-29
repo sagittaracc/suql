@@ -17,25 +17,27 @@ class SQLCaseModifier
 {
     /**
      * Основной обработчик перечня case условий
-     * @param array $case перечень case условий
+     * @param array $options перечень case условий
      * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
      * @param array $params не используется в данном модификаторе
      */
-    private static function case($case, $ofield, $params)
+    private static function case($options, $ofield, $params)
     {
         $caseList = [];
 
-        foreach ($case as $list) {
-            $when = $list[0];
-            $then = $list[1];
+        foreach ($options as $option) {
+            $when = $option[0];
+            $then = $option[1];
+
+            $then = (new PlaceholderHelper("?"))->bind($then);
 
             if ($when === 'default')
             {
-                $caseList[] = (new PlaceholderHelper("else ?"))->bind($then);
+                $caseList[] = "else $then";
             }
             else if ($when instanceof SuQLExpression || $when instanceof SuQLCondition)
             {
-                $caseList[] = "when $when " . (new PlaceholderHelper("then ?"))->bind($then);
+                $caseList[] = "when $when then $then";
             }
         }
 
