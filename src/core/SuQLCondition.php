@@ -29,6 +29,7 @@ class SuQLCondition
     }
     /**
      * Конвертирует в строку
+     * @return string
      */
     public function __toString()
     {
