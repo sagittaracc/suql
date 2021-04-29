@@ -52,6 +52,8 @@ The minimum requirement - PHP 5.6
 
 [Use your own placeholders](https://github.com/sagittaracc/suql/wiki/Use-your-own-placeholders)
 
+[Expressions and Conditions](https://github.com/sagittaracc/suql/wiki/Expressions-and-Conditions)
+
 More examples in the ```tests``` directory
 
 ### Code generator
