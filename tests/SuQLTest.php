@@ -72,6 +72,36 @@ final class SuQLTest extends TestCase
               "end ".
       "from users"
     );
+
+    $this->assertEquals(
+      User::find()
+              ->field('id', ['test_case', 'asc'], false)
+              ->getRawSql(),
+      "select ".
+        "* ".
+      "from users ".
+      "order by case ".
+                  "when users.id = 1 then 'admin' ".
+                  "when users.id = 2 then 'user' ".
+                  "when users.id > 3 and groups.id < 10 then 'guest' ".
+                  "else 'nobody' ".
+                "end asc"
+    );
+
+    $this->assertEquals(
+      User::find()
+              ->field('id', ['test_case', 'group'], false)
+              ->getRawSql(),
+      "select ".
+        "* ".
+      "from users ".
+      "group by case ".
+                  "when users.id = 1 then 'admin' ".
+                  "when users.id = 2 then 'user' ".
+                  "when users.id > 3 and groups.id < 10 then 'guest' ".
+                  "else 'nobody' ".
+                "end"
+    );
   }
 
   public function testInlineModifiersApplied(): void
