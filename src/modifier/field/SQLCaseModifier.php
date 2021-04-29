@@ -115,10 +115,12 @@ class SQLCaseModifier
         
         self::parse([
             [
-                [$fieldName, '$ = 1'], 'admin',
+                [$fieldName, '$ = 1'],
+                'admin',
             ],
             [
-                [$fieldName, '$ = 2'], 'user',
+                [$fieldName, '$ = 2'],
+                'user',
             ],
             [
                 '$1 and $2' => [
