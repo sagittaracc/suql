@@ -44,11 +44,42 @@ class SQLCaseModifier
         $ofield->setField('case ' . implode(' ', $caseList) . ' end');
     }
     /**
-     * Case expression
-     * @param array $case 
+     * Простое условие в case
+     * @param array $case настройки case условия
+     * Формат данного условия следующий (пример):
+     * [
+     *     [<suql\core\SuQLFieldName>, '$ = 1'],
+     *     <then>,
+     * ]
+     * @return array из одного элемента класса suql\core\SuQLCondition
+     */
+    private static function condition($case)
+    {
+        $when = $case[0];
+        $then = $case[1];
+
+        $field = $when[0];
+        $condition = $when[1];
+
+        return [new SuQLCondition($field, $condition), $then];
+    }
+    /**
+     * Составное условие в case
+     * @param array $case настройки case условия
+     * Формат данного условия следующий (пример):
+     * [
+     *     '$1 and $2' => [
+     *         [<suql\core\SuQLFieldName>, '$ > 1'],
+     *         [<suql\core\SuQLFieldName>, '$ < 3', '%t.%n']
+     *     ],
+     *     <then>
+     * ]
+     * @return array из одного элемента класса suql\core\SuQLExpression
      */
     private static function expression($case)
     {
+        $conditionList = [];
+
         foreach ($case as $key => $value)
         {
             if ($key === 0)
@@ -58,52 +89,65 @@ class SQLCaseModifier
             else
             {
                 $expression = $key;
-                $list = [];
-                foreach ($value as $cond)
+                foreach ($value as $condition)
                 {
                     $reflector = new ReflectionClass(SuQLCondition::class);
-                    $list[] = $reflector->newInstanceArgs($cond);
+                    $conditionList[] = $reflector->newInstanceArgs($condition);
                 }
             }
         }
-        return [new SuQLExpression($expression, $list), $then];
-    }
-    /**
-     * Case condition
-     * @param array $case
-     */
-    private static function condition($case)
-    {
-        return [new SuQLCondition($case[0][0], $case[0][1]), $case[1]];
+
+        return [new SuQLExpression($expression, $conditionList), $then];
     }
     /**
      * Парсер case условий
-     * @param array $caseList
-     * @param suql\core\SuQLField $ofield
-     * @param array $params
+     * @param array $options перечень case условий
+     * Формат данного перечня следующий (пример):
+     * [
+     *     // Пример простого условия
+     *     [
+     *         [<suql\core\SuQLFieldName>, '$ = 1'],
+     *         <then>,
+     *     ],
+     *     // Пример составного условия
+     *     [
+     *         '$1 and $2' => [
+     *             [<suql\core\SuQLFieldName>, '$ > 1'],
+     *             [<suql\core\SuQLFieldName>, '$ < 3', '%t.%n']
+     *         ],
+     *         <then>
+     *     ],
+     *     [
+     *         <default>
+     *     ]
+     * ]
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
      */
-    public static function parse($caseList, $ofield, $params)
+    public static function parse($options, $ofield, $params)
     {
-        $list = [];
-        foreach ($caseList as $case)
+        $caseList = [];
+
+        foreach ($options as $option)
         {
-            if (is_string($case[0]))
+            if (is_string($option[0]))
             {
-                if (count($case) === 1)
+                if (count($option) === 1)
                 {
-                    $list[] = ['default', $case[0]];
+                    $caseList[] = ['default', $option[0]];
                 }
                 else
                 {
-                    $list[] = self::expression($case);
+                    $caseList[] = self::expression($option);
                 }
             }
-            else if (is_array($case[0]))
+            else if (is_array($option[0]))
             {
-                $list[] = self::condition($case);
+                $caseList[] = self::condition($option);
             }
         }
-        self::case($list, $ofield, $params);
+
+        self::case($caseList, $ofield, $params);
     }
     /**
      * Тестовый case модификатор
