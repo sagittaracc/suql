@@ -18,14 +18,29 @@ class SuQLCondition
      */
     private $condition;
     /**
+     * @var string формат вывода поля
+     */
+    private $format;
+    /**
      * Constructor
      * @param suql\core\SuQLFieldName $field объект поля
      * @param string $condition условное выражение
+     * @param string $format формат вывода поля
      */
-    function __construct($field, $condition)
+    function __construct($field, $condition, $format = '%t.%n')
     {
         $this->field = $field;
         $this->condition = $condition;
+        $this->format = $format;
+    }
+    /**
+     * Установить формат вывода поля
+     * @param string $format
+     */
+    public function setFormat($format)
+    {
+        $this->format = $format;
+        return $this;
     }
     /**
      * Конвертирует в строку
@@ -33,6 +48,6 @@ class SuQLCondition
      */
     public function __toString()
     {
-        return str_replace('$', $this->field->format('%t.%n'), $this->condition);
+        return str_replace('$', $this->field->format($this->format), $this->condition);
     }
 }

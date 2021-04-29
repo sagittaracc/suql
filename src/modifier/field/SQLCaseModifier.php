@@ -3,20 +3,13 @@
 namespace suql\modifier\field;
 
 use sagittaracc\PlaceholderHelper;
+use suql\core\SuQLCaseCondition;
+use suql\core\SuQLCondition;
+use suql\core\SuQLExpression;
+use suql\core\SuQLFieldName;
 
 /**
  * Модификатор case when
- * Пример:
- * 
- * public static function mod_role($ofield, $params) {
- *     self::mod_case([
- *         (new SuQLModifier('between', [1, 2]))->applyTo($ofield->getField()) => new SuQLFieldName(<table>, <name>)
- *         '$ = 1'   => 'admin',
- *         '$ = 2'   => 'user',
- *         '$ = 3'   => 'guest',
- *         'default' => '',
- *     ], $ofield, $params);
- * }
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
@@ -30,17 +23,43 @@ class SQLCaseModifier
      */
     public static function mod_case($case, $ofield, $params)
     {
-        $fieldName = $ofield->getField();
         $caseList = [];
 
-        foreach ($case as $when => $then) {
-            if ($when === 'default') {
+        foreach ($case as $list) {
+            $when = $list[0];
+            $then = $list[1];
+
+            if ($when === 'default')
+            {
                 $caseList[] = (new PlaceholderHelper("else ?"))->bind($then);
-            } else {
-                $caseList[] = "when " . str_replace('$', $fieldName, $when) . (new PlaceholderHelper(" then ?"))->bind($then);
+            }
+            else if ($when instanceof SuQLExpression || $when instanceof SuQLCondition)
+            {
+                $caseList[] = "when $when " . (new PlaceholderHelper("then ?"))->bind($then);
             }
         }
 
         $ofield->setField('case ' . implode(' ', $caseList) . ' end');
+    }
+    /**
+     * Тестовый case модификатор
+     */
+    public static function mod_test_case($ofield, $params)
+    {
+        $table = $ofield->getTable();
+        $field = $ofield->getField();
+        $fieldName = new SuQLFieldName($table, $field);
+
+        self::mod_case([
+            [new SuQLCaseCondition($fieldName, '$ = 1'), 'admin'],
+            [new SuQLCaseCondition($fieldName, '$ = 2'), 'user'],
+            [
+                new SuQLExpression('$1 and $2', [
+                    new SuQLCaseCondition($fieldName, '$ > 3'),
+                    new SuQLCaseCondition($fieldName, '$ < 10')
+                ]),
+                'guest'
+            ],
+        ], $ofield, $params);
     }
 }

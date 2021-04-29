@@ -58,6 +58,21 @@ final class SuQLTest extends TestCase
     );
   }
 
+  public function testCaseWhen(): void
+  {
+    $this->assertEquals(
+      User::find()
+              ->field('id', ['test_case'])
+              ->getRawSql(),
+      "select case ".
+                "when users.id = 1 then 'admin' ".
+                "when users.id = 2 then 'user' ".
+                "when users.id > 3 and users.id < 10 then 'guest' ".
+              "end ".
+      "from users"
+    );
+  }
+
   public function testInlineModifiersApplied(): void
   {
     $this->assertEquals(
