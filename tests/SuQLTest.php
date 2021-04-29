@@ -211,6 +211,15 @@ final class SuQLTest extends TestCase
 
     $this->assertEquals(
       User::find()
+              ->field(['id' => 'uid'], [
+                'where' => ['$ mod 2 = 0']
+              ])
+              ->getRawSql(),
+      'select users.id as uid from users having uid mod 2 = 0'
+    );
+
+    $this->assertEquals(
+      User::find()
               ->select(['id', 'name'])
               ->where('id mod 2 = 0')
               ->getRawSql(),
@@ -354,11 +363,11 @@ final class SuQLTest extends TestCase
   {
     $this->assertEquals(
       User::find()
-              ->field('id', [
+              ->field(['id' => 'uid'], [
                 'having' => ['$ > 3']
               ])
               ->getRawSql(),
-      'select users.id from users having id > 3'
+      'select users.id as uid from users having uid > 3'
     );
   }
 

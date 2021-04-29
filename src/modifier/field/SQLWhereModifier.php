@@ -5,6 +5,8 @@ namespace suql\modifier\field;
 use suql\core\SuQLParam;
 use suql\core\SuQLLikeParam;
 use suql\core\SuQLBetweenParam;
+use suql\core\SuQLCondition;
+use suql\core\SuQLFieldName;
 use suql\core\SuQLInParam;
 
 class SQLWhereModifier
@@ -71,13 +73,22 @@ class SQLWhereModifier
   }
 
   public static function mod_where($ofield, $params) {
+    $fieldName = new SuQLFieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
+    $condition = new SuQLCondition($fieldName, $params[0]);
+
     if ($ofield->hasAlias())
-      $ofield->getOSelect()->addHaving(str_replace('$', $ofield->getAlias(), $params[0]));
+    {
+      $ofield->getOSelect()->addHaving($condition->setFormat('%a'));
+    }
     else
-      $ofield->getOSelect()->addWhere(str_replace('$', $ofield->getField(), $params[0]));
+    {
+      $ofield->getOSelect()->addWhere($condition);
+    }
   }
 
   public static function mod_having($ofield, $params) {
-    $ofield->getOSelect()->addHaving(str_replace('$', $ofield->getJustField(), $params[0]));
+    $fieldName = new SuQLFieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
+    $condition = new SuQLCondition($fieldName, $params[0], '%a');
+    $ofield->getOSelect()->addHaving($condition);
   }
 }
