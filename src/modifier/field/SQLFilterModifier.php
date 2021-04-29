@@ -2,18 +2,32 @@
 
 namespace suql\modifier\field;
 
-// TODO: Должно наследоваться от SQLWhereModifier
-class SQLFilterModifier
+/**
+ * Фильтры
+ * Расширение возможностей Where Clause
+ * Не применяются если параметры фильтра пустые
+ * Пустота параметров определяется в классе параметра
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
+class SQLFilterModifier extends SQLWhereModifier
 {
+    /**
+     * Модификатор filter
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param array $params параметры модификатора
+     */
     public static function mod_filter($ofield, $params)
     {
         $filterFunction = $params[0];
         $filterValue = $params[1];
 
-        if (!is_null($filterValue)) {
+        if (!is_null($filterValue))
+        {
             $whereModifier = "mod_$filterFunction";
-            if (method_exists(SQLWhereModifier::class, $whereModifier)) {
-                SQLWhereModifier::$whereModifier($ofield, [$filterValue], true);
+            if (method_exists(static::class, $whereModifier))
+            {
+                static::$whereModifier($ofield, [$filterValue], true);
             }
         }
     }
