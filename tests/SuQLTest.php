@@ -68,6 +68,7 @@ final class SuQLTest extends TestCase
                 "when users.id = 1 then 'admin' ".
                 "when users.id = 2 then 'user' ".
                 "when users.id > 3 and groups.id < 10 then 'guest' ".
+                "else 'nobody' ".
               "end ".
       "from users"
     );
