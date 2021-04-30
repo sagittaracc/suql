@@ -2,9 +2,9 @@
 use PHPUnit\Framework\TestCase;
 
 use suql\core\SuQLObject;
-use suql\core\SuQLParam;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
+use suql\core\SuQLSimpleParam;
 
 final class SuQLObjectTest extends TestCase
 {
@@ -304,7 +304,7 @@ final class SuQLObjectTest extends TestCase
     $this->osuql->getQuery('main')->addFrom('users');
     $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
     $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
-    $this->osuql->setParam(':id', new SuQLParam($this->osuql->getQuery('main')->getField('users', ['id' => 'uid']), [5]));
+    $this->osuql->setParam(':id', new SuQLSimpleParam($this->osuql->getQuery('main')->getField('users', ['id' => 'uid']), [5]));
     $this->assertEquals($this->osuql->getSQL(['main']),
       'select users.id as uid from users where users.id > :id'
     );
