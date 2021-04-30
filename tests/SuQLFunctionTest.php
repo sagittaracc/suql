@@ -1,6 +1,8 @@
 <?php declare(strict_types = 1);
 use PHPUnit\Framework\TestCase;
 use suql\core\SuQLPlaceholder;
+use suql\syntax\SuQLFunction;
+use suql\syntax\SuQLProcedure;
 
 final class SuQLFunctionTest extends TestCase
 {

@@ -5,7 +5,6 @@ namespace suql\syntax;
 use suql\core\SuQLObject;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
-use suql\syntax\SuQLQueryInterface;
 
 /**
  * Сырые sql запросы и выражения
