@@ -1,6 +1,7 @@
 <?php
 
 use sagittaracc\ArrayHelper;
+use suql\syntax\SuQLTableInterface;
 
 abstract class SuQLTable extends SuQL implements SuQLTableInterface
 {

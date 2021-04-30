@@ -3,6 +3,7 @@
 use suql\core\SuQLObject;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
+use suql\syntax\SuQLQueryInterface;
 
 class RawSuQL extends SuQLObject implements SuQLQueryInterface
 {

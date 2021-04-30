@@ -1,5 +1,7 @@
 <?php
 
+use suql\syntax\SuQLFunctionInterface;
+
 class SuQLFunction extends RawSuQL implements SuQLFunctionInterface
 {
     public static function find($name = null)

@@ -6,6 +6,7 @@ use suql\core\SuQLModifier;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
 use suql\modifier\query\SQLDistinctModifier;
+use suql\syntax\SuQLQueryInterface;
 
 abstract class SuQL extends SuQLObject implements SuQLQueryInterface
 {
