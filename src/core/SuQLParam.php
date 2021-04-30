@@ -18,14 +18,19 @@ class SuQLParam
         return $this->field;
     }
 
-    public function isValuable()
+    public function getFieldHash()
     {
-        return !is_null($this->params[0]);
+        return md5($this->field->getField());
+    }
+
+    public function getParams()
+    {
+        return $this->params;
     }
 
     public function getParamKey()
     {
-        return 'pk_' . md5($this->field->getField());
+        return "pk_{$this->getFieldHash()}";
     }
 
     public function getParamList()
@@ -33,15 +38,28 @@ class SuQLParam
         return array_combine($this->getPlaceholderList(), $this->params);
     }
 
-    public function getPlaceholder()
-    {
-      return $this->getPlaceholderList()[0];
-    }
-
     public function getPlaceholderList()
     {
-        return [
-            $this->params[0] instanceof SuQLPlaceholder ? $this->params[0]->getPlaceholder() : ':ph_' . md5($this->field->getField())
-        ];
+        $placeholderList = [];
+
+        foreach ($this->params as $index => $param)
+        {
+            $placeholderList[] = $param instanceof SuQLPlaceholder ? $param->getPlaceholder() : ":ph{$index}_{$this->getFieldHash()}";
+        }
+
+        return $placeholderList;
+    }
+
+    public function isValuable()
+    {
+        foreach ($this->params as $param)
+        {
+            if (is_null($param))
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

@@ -2,12 +2,12 @@
 
 namespace suql\modifier\field;
 
-use suql\core\SuQLParam;
 use suql\core\SuQLLikeParam;
 use suql\core\SuQLBetweenParam;
 use suql\core\SuQLCondition;
 use suql\core\SuQLFieldName;
 use suql\core\SuQLInParam;
+use suql\core\SuQLSimpleParam;
 
 /**
  * Where Clause
@@ -61,7 +61,7 @@ class SQLWhereModifier
      */
     public static function mod_greater($ofield, $params, $isFilter = false)
     {
-        self::where('>', new SuQLParam($ofield, $params), $isFilter);
+        self::where('>', new SuQLSimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '>='
@@ -71,7 +71,7 @@ class SQLWhereModifier
      */
     public static function mod_greaterOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('>=', new SuQLParam($ofield, $params), $isFilter);
+        self::where('>=', new SuQLSimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '<'
@@ -81,7 +81,7 @@ class SQLWhereModifier
      */
     public static function mod_less($ofield, $params, $isFilter = false)
     {
-        self::where('<', new SuQLParam($ofield, $params), $isFilter);
+        self::where('<', new SuQLSimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '<='
@@ -91,7 +91,7 @@ class SQLWhereModifier
      */
     public static function mod_lessOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<=', new SuQLParam($ofield, $params), $isFilter);
+        self::where('<=', new SuQLSimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '='
@@ -101,7 +101,7 @@ class SQLWhereModifier
      */
     public static function mod_equal($ofield, $params, $isFilter = false)
     {
-        self::where('=', new SuQLParam($ofield, $params), $isFilter);
+        self::where('=', new SuQLSimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '<>'
@@ -111,7 +111,7 @@ class SQLWhereModifier
      */
     public static function mod_notEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<>', new SuQLParam($ofield, $params), $isFilter);
+        self::where('<>', new SuQLSimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор like

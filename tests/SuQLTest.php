@@ -234,7 +234,7 @@ final class SuQLTest extends TestCase
                 'name' => 'users',
               ])
               ->getRawSql(),
-      'select users.id, users.name from users where users.id = :ph_fc02896e3034a4ed53259916e2e2d82d and users.name = :ph_12cb8fae9701df6e8e8b1b972362a7ff'
+      'select users.id, users.name from users where users.id = :ph0_fc02896e3034a4ed53259916e2e2d82d and users.name = :ph0_12cb8fae9701df6e8e8b1b972362a7ff'
     );
 
     $this->assertEquals(
@@ -242,7 +242,7 @@ final class SuQLTest extends TestCase
               ->select(['id', 'name'])
               ->where(['id', 'greater', [1]])
               ->getRawSql(),
-      'select users.id, users.name from users where users.id > :ph_fc02896e3034a4ed53259916e2e2d82d'
+      'select users.id, users.name from users where users.id > :ph0_fc02896e3034a4ed53259916e2e2d82d'
     );
 
     $this->assertEquals(
@@ -254,7 +254,7 @@ final class SuQLTest extends TestCase
                 'greater' => [10],
               ])
               ->getRawSql(),
-      "select users.name, users.id from users where users.name like :ph_12cb8fae9701df6e8e8b1b972362a7ff and users.id > :ph_fc02896e3034a4ed53259916e2e2d82d"
+      "select users.name, users.id from users where users.name like :ph0_12cb8fae9701df6e8e8b1b972362a7ff and users.id > :ph0_fc02896e3034a4ed53259916e2e2d82d"
     );
 
     $this->assertEquals(
@@ -273,7 +273,7 @@ final class SuQLTest extends TestCase
                 'filter' => ['like', 'yuriy']
               ])
               ->getRawSql(),
-      'select users.name from users where users.name like :ph_12cb8fae9701df6e8e8b1b972362a7ff'
+      'select users.name from users where users.name like :ph0_12cb8fae9701df6e8e8b1b972362a7ff'
     );
 
     $this->assertEquals(
@@ -300,7 +300,7 @@ final class SuQLTest extends TestCase
                 'between' => [1, 2]
               ], false)
               ->getRawSql(),
-      'select * from users where users.id between :ph_98aace064c30b09e0247de93e95303f7 and :ph_b05ba045acc2eef36fd0ed5bdb815bb5'
+      'select * from users where users.id between :ph0_fc02896e3034a4ed53259916e2e2d82d and :ph1_fc02896e3034a4ed53259916e2e2d82d'
     );
 
     $this->assertEquals(
@@ -309,7 +309,7 @@ final class SuQLTest extends TestCase
                 'between' => [new SuQLPlaceholder('sid'), 2]
               ], false)
               ->getRawSql(),
-      'select * from users where users.id between :sid and :ph_82b64d4cd88a68a2f6dd1d94a52a3ecb'
+      'select * from users where users.id between :sid and :ph1_fc02896e3034a4ed53259916e2e2d82d'
     );
 
     $this->assertEquals(
@@ -327,7 +327,7 @@ final class SuQLTest extends TestCase
                 'in' => [1, 2, 3]
               ], false)
               ->getRawSql(),
-      'select * from users where users.id in (:ph_98aace064c30b09e0247de93e95303f7,:ph_b05ba045acc2eef36fd0ed5bdb815bb5,:ph_15a024187fe0b56919f66cfc17f49dcf)'
+      'select * from users where users.id in (:ph0_fc02896e3034a4ed53259916e2e2d82d,:ph1_fc02896e3034a4ed53259916e2e2d82d,:ph2_fc02896e3034a4ed53259916e2e2d82d)'
     );
 
     $this->assertEquals(
@@ -336,7 +336,7 @@ final class SuQLTest extends TestCase
                 'in' => [new SuQLPlaceholder('id1'), 2, 3]
               ], false)
               ->getRawSql(),
-      'select * from users where users.id in (:id1,:ph_3edae988aed81e8ef4db1d63118c000d,:ph_3bc004e03e89da1b7ff4857ef4466802)'
+      'select * from users where users.id in (:id1,:ph1_fc02896e3034a4ed53259916e2e2d82d,:ph2_fc02896e3034a4ed53259916e2e2d82d)'
     );
 
     $this->assertEquals(
@@ -495,16 +495,16 @@ final class SuQLTest extends TestCase
       'from users '.
       'where users.id in ('.
         ':id,'.
-        ':ph_1c039cba3fa9c33e62bc68badc90d75b,'.
-        ':ph_26844f60882164514b4a0e4a070cc63c'.
+        ':ph1_fc02896e3034a4ed53259916e2e2d82d,'.
+        ':ph2_fc02896e3034a4ed53259916e2e2d82d'.
       ')'
     );
 
     $this->assertEquals(
       $params,
       [
-        ':ph_1c039cba3fa9c33e62bc68badc90d75b' => 2,
-        ':ph_26844f60882164514b4a0e4a070cc63c' => 3,
+        ':ph1_fc02896e3034a4ed53259916e2e2d82d' => 2,
+        ':ph2_fc02896e3034a4ed53259916e2e2d82d' => 3,
       ]
     );
   }

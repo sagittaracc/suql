@@ -8,26 +8,4 @@ class SuQLInParam extends SuQLParam
     {
         return '(' . implode(',', $this->getPlaceholderList()) . ')';
     }
-
-    public function getPlaceholderList()
-    {
-        $list = [];
-        $placeholder = parent::getPlaceholderList()[0];
-        for ($i = 0, $n = count($this->params); $i < $n; $i++)
-        {
-            $list[] = $this->params[$i] instanceof SuQLPlaceholder ? $this->params[$i]->getPlaceholder() : ':ph_' . md5($placeholder . $i);
-        }
-        return $list;
-    }
-
-    public function isValuable()
-    {
-        foreach ($this->params as $param)
-        {
-            if (is_null($param))
-                return false;
-        }
-
-        return true;
-    }
 }
