@@ -16,7 +16,7 @@ class SQLOrderModifier
      */
     public static function mod_asc($ofield, $params)
     {
-        $ofield->getOSelect()->addOrder($ofield->getFieldName(), 'asc');
+        $ofield->getOSelect()->addOrder(self::getFieldNameToOrderBy($ofield), 'asc');
     }
     /**
      * Модификатор сортировки desc
@@ -25,6 +25,15 @@ class SQLOrderModifier
      */
     public static function mod_desc($ofield, $params)
     {
-        $ofield->getOSelect()->addOrder($ofield->getFieldName(), 'desc');
+        $ofield->getOSelect()->addOrder(self::getFieldNameToOrderBy($ofield), 'desc');
+    }
+    /**
+     * Получение поля сортировки
+     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @return string имя поля - алиас если он задан или реальное имя поля в противном случае
+     */
+    private static function getFieldNameToOrderBy($ofield)
+    {
+        return $ofield->hasAlias() ? $ofield->getAlias() : $ofield->getField();
     }
 }

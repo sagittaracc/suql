@@ -1,80 +1,146 @@
 <?php
+
 namespace suql\core;
 
-class SuQLField {
-  private $oselect = null;
-
-  private $table;
-  private $field;
-  private $justField;
-  private $alias;
-  private $visible;
-  private $modifier = [];
-
-  function __construct($oselect, $table, $field, $alias, $visible) {
-    $this->oselect = $oselect;
-    $this->table = $table;
-    $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
-    $this->justField = $field->format('%n');
-    $this->alias = $alias;
-    $this->visible = $visible;
-  }
-
-  public function getOSelect() {
-    return $this->oselect;
-  }
-
-  public function getTable() {
-    return $this->table;
-  }
-
-  public function addModifier($name, $params = []) {
-    $this->modifier[$name] = $params;
-  }
-
-  public function addCallbackModifier($callback) {
-    $this->modifier["callback"] = $callback;
-  }
-
-  public function delModifier($name) {
-    unset($this->modifier[$name]);
-  }
-
-  public function hasModifier() {
-    return !empty($this->modifier);
-  }
-
-  public function getModifierList() {
-    return $this->modifier;
-  }
-
-  public function getField() {
-    return $this->field;
-  }
-
-  public function setField($field) {
-    $this->field = $field;
-  }
-
-  public function getJustField()
-  {
-    return $this->justField;
-  }
-
-  public function hasAlias() {
-    return !empty($this->alias);
-  }
-
-  public function getAlias() {
-    return $this->alias;
-  }
-
-  public function getFieldName()
-  {
-    return $this->hasAlias() ? $this->getAlias() : $this->getField();
-  }
-
-  public function visible() {
-    return $this->visible === true;
-  }
+/**
+ * Объект обработки полей запроса
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
+class SuQLField
+{
+    /**
+     * @var siql\core\SuQLSelect Ссылка на основной объект выборки
+     */
+    private $oselect = null;
+    /**
+     * @var string название таблицы которой принадлежит это поле
+     */
+    private $table;
+    /**
+     * @var string название поля (полное с таблицей если таблица указана)
+     */
+    private $field;
+    /**
+     * @var string алиас поля если указан
+     */
+    private $alias;
+    /**
+     * @var boolean флаг говорящий выводить это поле в выборке или нет
+     * Иногда необходимо использовать поле только в служебных целях
+     * например чтобы применить модификатор
+     */
+    private $visible;
+    /**
+     * @var array перечень модификаторов которые будут применяться к полю
+     */
+    private $modifier = [];
+    /**
+     * Constructor
+     * @param suql\core\SuQLSelect ссылка на основной объект выборки
+     * @param string $table название таблицы
+     * @param suql\core\SuQLFieldName $field объект с параметрами поля
+     * @param string $alias алиас поля
+     * @param boolean $visible добавить поле в выборку или нет
+     */
+    function __construct($oselect, $table, $field, $alias, $visible)
+    {
+        $this->oselect = $oselect;
+        $this->table = $table;
+        $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
+        $this->alias = $alias;
+        $this->visible = $visible;
+    }
+    /**
+     * Вернуть ссылку на основной объект выборки
+     * @return suql\core\SuQLSelect
+     */
+    public function getOSelect()
+    {
+        return $this->oselect;
+    }
+    /**
+     * Вернуть название таблицы
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+    /**
+     * Вернуть название поля
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+    /**
+     * Установить новое значение поле
+     * Например после применения модификатора
+     * @param string $field новое значение поля
+     * @return string
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+    }
+    /**
+     * Проверяет задан ли у поля алиас
+     * @return boolean
+     */
+    public function hasAlias()
+    {
+        return !empty($this->alias);
+    }
+    /**
+     * Возвращает алиас поля
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+    /**
+     * Возвращает видимое ли поле
+     * Добавить ли его в общую выборку
+     * @return boolean
+     */
+    public function visible()
+    {
+        return $this->visible === true;
+    }
+    /**
+     * Добавить модификатор полю
+     * @param string $name название модификатора
+     * @param array $params параметры модификатора
+     */
+    public function addModifier($name, $params = [])
+    {
+        $this->modifier[$name] = $params;
+    }
+    /**
+     * Добавить инлайновый модификатор (типа callback Closure) полю
+     * @param Closure $callback инлайновый модификатор-обработчик
+     */
+    public function addCallbackModifier($callback)
+    {
+        $this->modifier["callback"] = $callback;
+    }
+    /**
+     * Проверяет заданы ли у поля какие-либо модификаторы
+     * @return boolean
+     */
+    public function hasModifier()
+    {
+        return !empty($this->modifier);
+    }
+    /**
+     * Получить перечень заданных для поля модификаторов
+     * @return array перечень модификаторов
+     */
+    public function getModifierList()
+    {
+        return $this->modifier;
+    }
 }
