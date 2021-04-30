@@ -4,11 +4,11 @@ use suql\syntax\SuQLView;
 
 abstract class PDOSuQLView extends SuQLView
 {
-  use PDOSuQL;
+    use PDOSuQL;
 
-  function __construct()
-  {
-    parent::__construct();
-    $this->createConnection();
-  }
+    function __construct()
+    {
+        parent::__construct();
+        $this->createConnection();
+    }
 }

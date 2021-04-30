@@ -4,31 +4,29 @@ use suql\syntax\SuQLTable;
 
 abstract class PDOSuQLTable extends SuQLTable
 {
-  use PDOSuQL;
+    use PDOSuQL;
 
-  protected $data = [];
+    protected $data = [];
 
-  function __construct($data = [])
-  {
-    if (!empty($data))
+    function __construct($data = [])
     {
-      $this->data = $data;
+        if (!empty($data)) {
+            $this->data = $data;
+        }
+
+        parent::__construct(array_keys($data));
+
+        $this->createConnection();
     }
 
-    parent::__construct(array_keys($data));
-
-    $this->createConnection();
-  }
-
-  public function save()
-  {
-    $stmt = $this->dbh->prepare($this->getRawSql());
-
-    foreach ($this->data as $field => $value)
+    public function save()
     {
-      $stmt->bindValue(":$field", $value, $this->getPDOParamType($value));
-    }
+        $stmt = $this->dbh->prepare($this->getRawSql());
 
-    $stmt->execute();
-  }
+        foreach ($this->data as $field => $value) {
+            $stmt->bindValue(":$field", $value, $this->getPDOParamType($value));
+        }
+
+        $stmt->execute();
+    }
 }
