@@ -1,5 +1,6 @@
 <?php
 
+use suql\syntax\RawSuQL;
 use suql\syntax\SuQLFunctionInterface;
 
 class SuQLFunction extends RawSuQL implements SuQLFunctionInterface

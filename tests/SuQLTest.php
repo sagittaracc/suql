@@ -8,6 +8,7 @@ use app\models\ModelWithAnUnsupportedDriver;
 use suql\core\SuQLModifier;
 use suql\core\SuQLPlaceholder;
 use suql\exception\SqlDriverNotSupportedException;
+use suql\syntax\RawSuQL;
 
 final class SuQLTest extends TestCase
 {
