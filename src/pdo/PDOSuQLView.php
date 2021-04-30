@@ -1,5 +1,7 @@
 <?php
 
+use suql\syntax\SuQLView;
+
 abstract class PDOSuQLView extends SuQLView
 {
   use PDOSuQL;

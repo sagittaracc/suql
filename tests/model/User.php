@@ -2,7 +2,9 @@
 
 namespace app\model;
 
-class User extends \SuQLTable
+use suql\syntax\SuQLTable;
+
+class User extends SuQLTable
 {
   protected function modifierList()
   {

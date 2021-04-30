@@ -1,34 +1,35 @@
 <?php
 
+namespace suql\syntax;
+
 use sagittaracc\ArrayHelper;
-use suql\syntax\SuQLViewInterface;
 
 abstract class SuQLView extends SuQL implements SuQLViewInterface
 {
-  function __construct()
-  {
-    parent::__construct();
-  }
-  
-  public function getType()
-  {
-    return 'query';
-  }
+    function __construct()
+    {
+        parent::__construct();
+    }
 
-  public static function find()
-  {
-    $instance = new static();
-    $instance->currentModel = get_class($instance);
+    public function getType()
+    {
+        return 'query';
+    }
 
-    $view = $instance->view();
+    public static function find()
+    {
+        $instance = new static();
+        $instance->currentModel = get_class($instance);
 
-    $queries = ArrayHelper::rename_keys($view->getQueries(), [$instance->query()]);
+        $view = $instance->view();
 
-    $instance->extend($queries);
-    $instance->currentQuery = md5($instance->query());
-    $instance->addSelect(md5($instance->query()));
-    $instance->getQuery(md5($instance->query()))->addFrom($instance->query());
+        $queries = ArrayHelper::rename_keys($view->getQueries(), [$instance->query()]);
 
-    return $instance;
-  }
+        $instance->extend($queries);
+        $instance->currentQuery = md5($instance->query());
+        $instance->addSelect(md5($instance->query()));
+        $instance->getQuery(md5($instance->query()))->addFrom($instance->query());
+
+        return $instance;
+    }
 }

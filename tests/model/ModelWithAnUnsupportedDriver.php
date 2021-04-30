@@ -2,7 +2,9 @@
 
 namespace app\models;
 
-class ModelWithAnUnsupportedDriver extends \SuQLTable
+use suql\syntax\SuQLTable;
+
+class ModelWithAnUnsupportedDriver extends SuQLTable
 {
     protected $dbms = 'oracle';
 

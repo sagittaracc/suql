@@ -2,7 +2,9 @@
 
 namespace app\model;
 
-class UserGroupView extends \SuQLView
+use suql\syntax\SuQLView;
+
+class UserGroupView extends SuQLView
 {
   public function view()
   {

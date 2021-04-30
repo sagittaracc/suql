@@ -1,5 +1,7 @@
 <?php
 
+use suql\syntax\SuQLTable;
+
 abstract class PDOSuQLTable extends SuQLTable
 {
   use PDOSuQL;
