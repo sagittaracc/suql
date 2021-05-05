@@ -11,9 +11,7 @@
     ],
     "autoload": {
       "classmap": [
-        "src/",
-        "tests/model/",
-        "tests/modifier/"
+        "src/"
       ]
     },
     "require": {
