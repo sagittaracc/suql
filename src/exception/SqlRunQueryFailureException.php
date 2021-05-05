@@ -8,6 +8,6 @@ namespace suql\exception;
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SqlQueryFailRunningException extends \Exception
+class SqlRunQueryFailureException extends \Exception
 {
 }

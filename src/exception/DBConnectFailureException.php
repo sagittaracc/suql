@@ -8,6 +8,6 @@ namespace suql\exception;
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class DBFailConnectionException extends \Exception
+class DBConnectFailureException extends \Exception
 {
 }
