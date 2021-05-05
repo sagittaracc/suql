@@ -32,7 +32,7 @@ class SuQLObject
     /**
      * @var array параметры которые биндятся к параметризованному запросу
      */
-    public $params = [];
+    protected $params = [];
     /**
      * Constructor
      * @param suql\core\SuQLScheme $scheme экземпляр схемы
