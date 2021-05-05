@@ -188,27 +188,54 @@ final class SuQLObjectTest extends TestCase
         $this->assertNull($this->osuql->getSQL(['stored_procedure']));
     }
 
-    public function testSelectWhere(): void
+    public function testStrictWhere(): void
     {
-        $this->osuql->addSelect('main');
-        $this->osuql->getQuery('main')->addFrom('users');
-        $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
-        $this->osuql->getQuery('main')->addField('users', ['name' => 'uname']);
-        $this->osuql->getQuery('main')->addWhere('uid % 2 = 0');
-        $this->assertEquals($this->osuql->getSQL(['main']), 'select users.id as uid, users.name as uname from users where users.id % 2 = 0');
-        $this->assertNull($this->osuql->getSQL(['main']));
+        $sql =
+            'select '.
+                'users.id as uid, '.
+                'users.name as uname '.
+            'from users '.
+            'where users.id % 2 = 0';
 
-        $this->osuql->addSelect('users_belong_to_any_group');
-        $this->osuql->getQuery('users_belong_to_any_group')->addModifier('distinct');
-        $this->osuql->getQuery('users_belong_to_any_group')->addFrom('user_group');
-        $this->osuql->getQuery('users_belong_to_any_group')->addField('user_group', 'user_id');
-        $this->osuql->addSelect('main');
-        $this->osuql->getQuery('main')->addFrom('users');
-        $this->osuql->getQuery('main')->addField('users', 'id@uid');
-        $this->osuql->getQuery('main')->addField('users', 'name');
-        $this->osuql->getQuery('main')->addWhere('uid not in @users_belong_to_any_group');
-        $this->assertEquals($this->osuql->getSQL(['main']), 'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)');
-        $this->assertNull($this->osuql->getSQL('all'));
+        $this->osuql->addSelect('strict_where');
+        $this->osuql->getQuery('strict_where')->addFrom('users');
+        $this->osuql->getQuery('strict_where')->addField('users', ['id' => 'uid']);
+        $this->osuql->getQuery('strict_where')->addField('users', ['name' => 'uname']);
+        $this->osuql->getQuery('strict_where')->addWhere('uid % 2 = 0');
+        $suql = $this->osuql->getSQL(['strict_where']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['strict_where']));
+    }
+
+    public function testSelectWhereSubQuery(): void
+    {
+        $sql =
+            'select '.
+                'users.id as uid, '.
+                'users.name '.
+            'from users '.
+            'where users.id not in ('.
+                'select distinct '.
+                    'user_group.user_id '.
+                'from user_group'.
+            ')';
+
+        $this->osuql->addSelect('main_query');
+        $this->osuql->getQuery('main_query')->addFrom('users');
+        $this->osuql->getQuery('main_query')->addField('users', 'id@uid');
+        $this->osuql->getQuery('main_query')->addField('users', 'name');
+        $this->osuql->getQuery('main_query')->addWhere('uid not in @sub_query_users_belong_to_any_group');
+
+        $this->osuql->addSelect('sub_query_users_belong_to_any_group');
+        $this->osuql->getQuery('sub_query_users_belong_to_any_group')->addModifier('distinct');
+        $this->osuql->getQuery('sub_query_users_belong_to_any_group')->addFrom('user_group');
+        $this->osuql->getQuery('sub_query_users_belong_to_any_group')->addField('user_group', 'user_id');
+
+        $suql = $this->osuql->getSQL(['main_query']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['main_query']));
     }
 
     public function testSelectJoin(): void
