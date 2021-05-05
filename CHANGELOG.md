@@ -1,5 +1,11 @@
 # Change log
 
+## v6.0.0 - May 5, 2021
+
+- ...
+
+---
+
 ## v5.0.17 - April 26, 2021
 
 - Add stored procedures and functions
