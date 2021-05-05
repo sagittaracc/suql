@@ -1,4 +1,7 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 
 use suql\core\SuQLObject;
@@ -8,329 +11,418 @@ use suql\core\SuQLSimpleParam;
 
 final class SuQLObjectTest extends TestCase
 {
-  private $osuql;
+    private $osuql;
 
-  protected function setUp(): void
-  {
-    $scheme = new SuQLScheme();
-    $driver = new SQLDriver('mysql');
-    $this->osuql = new SuQLObject($scheme, $driver);
+    protected function setUp(): void
+    {
+        $scheme = new SuQLScheme();
+        $scheme->rel('users', 'user_group', 'users.id = user_group.user_id');
+        $scheme->rel('user_group', 'groups', 'user_group.group_id = groups.id');
 
-    $this->osuql->getScheme()->rel(['users' => 'u'], ['user_group' => 'ug'], 'u.id = ug.user_id');
-    $this->osuql->getScheme()->rel(['user_group' => 'ug'], ['groups' => 'g'], 'ug.group_id = g.id');
-  }
+        $driver = new SQLDriver('mysql');
 
-  protected function tearDown(): void
-  {
-    $this->osuql = null;
-  }
+        $this->osuql = new SuQLObject($scheme, $driver);
+    }
 
-  public function testSelect(): void
-  {
-    // Fetching by a field list
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', 'id');
-    $this->osuql->getQuery('main')->addField('users', 'name');
+    protected function tearDown(): void
+    {
+        $this->osuql = null;
+    }
 
-    $this->assertEquals($this->osuql->getSQL('all'), 'select users.id, users.name from users');
-    $this->assertNull($this->osuql->getSQL('all'));
+    public function testSelectAll(): void
+    {
+        $sql =
+            'select '.
+                '* '.
+            'from users';
 
-    // Fetching all the fields
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', '*');
-    $this->assertEquals($this->osuql->getSQL(['main']), 'select users.* from users');
-    $this->assertNull($this->osuql->getSQL(['main']));
+        $this->osuql->addSelect('select_all');
+        $this->osuql->getQuery('select_all')->addFrom('users');
+        $suql = $this->osuql->getSQL(['select_all']);
 
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->assertEquals($this->osuql->getSQL(['main']), 'select * from users');
-    $this->assertNull($this->osuql->getSQL(['main']));
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_all']));
+    }
 
-    // Fetching some fields with aliases
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
-    $this->osuql->getQuery('main')->addField('users', 'name@uname'); // just another way to set an alias
-    $this->assertEquals($this->osuql->getSQL('all'), 'select users.id as uid, users.name as uname from users');
-    $this->assertNull($this->osuql->getSQL(['main']));
+    public function testSelectAllWithTableName(): void
+    {
+        $sql =
+            'select '.
+                'users.* '.
+            'from users';
 
-    // Select raw expression
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addField(null, "2 * 2");
-    $this->osuql->getQuery('main')->addField(null, "'Yuriy' as author");
-    $this->assertEquals($this->osuql->getSQL('all'), "select 2 * 2, 'Yuriy' as author");
-    $this->assertNull($this->osuql->getSQL(['main']));
-  }
+        $this->osuql->addSelect('select_all_with_table_name');
+        $this->osuql->getQuery('select_all_with_table_name')->addFrom('users');
+        $this->osuql->getQuery('select_all_with_table_name')->addField('users', '*');
+        $suql = $this->osuql->getSQL(['select_all_with_table_name']);
 
-  public function testSelectWhere(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
-    $this->osuql->getQuery('main')->addField('users', ['name' => 'uname']);
-    $this->osuql->getQuery('main')->addWhere('uid % 2 = 0');
-    $this->assertEquals($this->osuql->getSQL(['main']), 'select users.id as uid, users.name as uname from users where users.id % 2 = 0');
-    $this->assertNull($this->osuql->getSQL(['main']));
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_all_with_table_name']));
+    }
 
-    $this->osuql->addSelect('users_belong_to_any_group');
-    $this->osuql->getQuery('users_belong_to_any_group')->addModifier('distinct');
-    $this->osuql->getQuery('users_belong_to_any_group')->addFrom('user_group');
-    $this->osuql->getQuery('users_belong_to_any_group')->addField('user_group', 'user_id');
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', 'id@uid');
-    $this->osuql->getQuery('main')->addField('users', 'name');
-    $this->osuql->getQuery('main')->addWhere('uid not in @users_belong_to_any_group');
-    $this->assertEquals($this->osuql->getSQL(['main']), 'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)');
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+    public function testSelectFieldList(): void
+    {
+        $sql =
+            'select '.
+                'users.id, '.
+                'users.name '.
+            'from users';
 
-  public function testSelectLimit(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', '*');
-    $this->osuql->getQuery('main')->addOffset(0);
-    $this->osuql->getQuery('main')->addLimit(2);
-    $this->assertEquals($this->osuql->getSQL(['main']), 'select users.* from users limit 2');
-    $this->assertNull($this->osuql->getSQL(['main']));
-  }
+        $this->osuql->addSelect('select_field_list');
+        $this->osuql->getQuery('select_field_list')->addFrom('users');
+        $this->osuql->getQuery('select_field_list')->addField('users', 'id');
+        $this->osuql->getQuery('select_field_list')->addField('users', 'name');
+        $suql = $this->osuql->getSQL(['select_field_list']);
 
-  public function testSelectDistinct(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addModifier('distinct');
-    $this->osuql->getQuery('main')->addField('users', 'name');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->assertEquals($this->osuql->getSQL('all'), 'select distinct users.name from users');
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_field_list']));
+    }
 
-  public function testSelectJoin(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
-    $this->osuql->getQuery('main')->addJoin('inner', 'groups');
-    $this->osuql->getQuery('main')->addField('groups', 'id@gid');
-    $this->osuql->getQuery('main')->addField('groups', 'name@gname');
-    $this->assertEquals($this->osuql->getSQL('all'),
-      'select '.
-        'groups.id as gid, '.
-        'groups.name as gname '.
-      'from users '.
-      'inner join user_group on users.id = user_group.user_id '.
-      'inner join groups on user_group.group_id = groups.id'
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
+    public function testSelectUsingAliases(): void
+    {
+        $sql =
+            'select '.
+                'users.id as uid, '.
+                'users.name as uname '.
+            'from users';
 
-    // join and where
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', 'id');
-    $this->osuql->getQuery('main')->addField('users', 'registration');
-    $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
-    $this->osuql->getQuery('main')->addJoin('inner', 'groups');
-    $this->osuql->getQuery('main')->addField('groups', ['name' => 'group']);
-    $this->osuql->getQuery('main')->addWhere("group = 'admin'");
-    $this->assertEquals($this->osuql->getSQL('all'),
-      'select '.
-        'users.id, '.
-        'users.registration, '.
-        'groups.name as group '.
-      'from users '.
-      'inner join user_group on users.id = user_group.user_id '.
-      'inner join groups on user_group.group_id = groups.id '.
-      'where groups.name = \'admin\''
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
+        $this->osuql->addSelect('select_using_aliases');
+        $this->osuql->getQuery('select_using_aliases')->addFrom('users');
+        $this->osuql->getQuery('select_using_aliases')->addField('users', ['id' => 'uid']);
+        $this->osuql->getQuery('select_using_aliases')->addField('users', 'name@uname'); // just another way to set an alias
+        $suql = $this->osuql->getSQL(['select_using_aliases']);
 
-    $this->osuql->getScheme()->rel(['users' => 'u'], ['view' => 'v'], 'u.id = v.id');
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', 'id');
-    $this->osuql->getQuery('main')->addJoin('inner', 'view');
-    $this->osuql->addSelect('view');
-    $this->osuql->getQuery('view')->addFrom('users');
-    $this->osuql->getQuery('view')->addField('users', 'id');
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      'select '.
-        'users.id '.
-      'from users '.
-      'inner join ('.
-        'select '.
-          'users.id '.
-        'from users'.
-      ') view on users.id = view.id'
-    );
-  }
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_using_aliases']));
+    }
 
-  public function testSelectGroup(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
-    $this->osuql->getQuery('main')->addJoin('inner', 'groups');
-    $this->osuql->getQuery('main')->addField('groups', 'name@gname');
-    $this->osuql->getQuery('main')->addField('groups', 'name@count');
-    $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('group');
-    $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('count');
-    $this->osuql->getQuery('main')->addWhere("gname = 'admin'");
-    $this->assertEquals($this->osuql->getSQL('all'),
-      'select '.
-        'groups.name as gname, '.
-        'count(groups.name) as count '.
-      'from users '.
-      'inner join user_group on users.id = user_group.user_id '.
-      'inner join groups on user_group.group_id = groups.id '.
-      'where groups.name = \'admin\' '.
-      'group by groups.name'
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+    public function testSelectRaw(): void
+    {
+        $sql = "select 2 * 2, 'Yuriy' as author";
 
-  public function testNestedQueries(): void
-  {
-    $this->osuql->addSelect('allGroupCount');
-    $this->osuql->getQuery('allGroupCount')->addFrom('users');
-    $this->osuql->getQuery('allGroupCount')->addJoin('inner', 'user_group');
-    $this->osuql->getQuery('allGroupCount')->addJoin('inner', 'groups');
-    $this->osuql->getQuery('allGroupCount')->addField('groups', 'name@gname');
-    $this->osuql->getQuery('allGroupCount')->addField('groups', 'name@count');
-    $this->osuql->getQuery('allGroupCount')->getField('groups', 'name@count')->addModifier('group');
-    $this->osuql->getQuery('allGroupCount')->getField('groups', 'name@count')->addModifier('count');
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('allGroupCount');
-    $this->osuql->getQuery('main')->addField('allGroupCount', 'gname');
-    $this->osuql->getQuery('main')->addField('allGroupCount', 'count');
-    $this->osuql->getQuery('main')->addWhere("gname = 'admin'");
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      'select '.
-        'allGroupCount.gname, '.
-        'allGroupCount.count '.
-      'from ('.
-        'select '.
-          'groups.name as gname, '.
-          'count(groups.name) as count '.
-        'from users '.
-        'inner join user_group on users.id = user_group.user_id '.
-        'inner join groups on user_group.group_id = groups.id '.
-        'group by groups.name'.
-      ') allGroupCount '.
-      'where gname = \'admin\''
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+        $this->osuql->addSelect('select_raw');
+        $this->osuql->getQuery('select_raw')->addField(null, "2 * 2");
+        $this->osuql->getQuery('select_raw')->addField(null, "'Yuriy' as author");
+        $suql = $this->osuql->getSQL(['select_raw']);
 
-  public function testSorting(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
-    $this->osuql->getQuery('main')->addJoin('inner', 'groups');
-    $this->osuql->getQuery('main')->addField('groups', 'name@gname');
-    $this->osuql->getQuery('main')->addField('groups', 'name@count');
-    $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('group');
-    $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('count');
-    $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('asc');
-    $this->assertEquals($this->osuql->getSQL('all'),
-      'select '.
-        'groups.name as gname, '.
-        'count(groups.name) as count '.
-      'from users '.
-      'inner join user_group on users.id = user_group.user_id '.
-      'inner join groups on user_group.group_id = groups.id '.
-      'group by groups.name '.
-      'order by count asc'
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_raw']));
+    }
 
-  public function testUnion(): void
-  {
-    $this->osuql->addSelect('firstRegisration');
-    $this->osuql->getQuery('firstRegisration')->addFrom('users');
-    $this->osuql->getQuery('firstRegisration')->addField('users', 'registration@reg_interval');
-    $this->osuql->getQuery('firstRegisration')->getField('users', 'registration@reg_interval')->addModifier('min');
-    $this->osuql->addSelect('lastRegisration');
-    $this->osuql->getQuery('lastRegisration')->addFrom('users');
-    $this->osuql->getQuery('lastRegisration')->addField('users', 'registration@reg_interval');
-    $this->osuql->getQuery('lastRegisration')->getField('users', 'registration@reg_interval')->addModifier('max');
-    $this->osuql->addUnion('main', '@firstRegisration union @lastRegisration');
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      '(select min(users.registration) as reg_interval from users) '.
-        'union '.
-      '(select max(users.registration) as reg_interval from users)'
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+    public function testSelectLimit(): void
+    {
+        $sql =
+            'select '.
+                'users.* '.
+            'from users '.
+            'limit 3';
 
-  public function testCallbackModifier(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', 'id');
-    $this->osuql->getQuery('main')->getField('users', 'id')->addCallbackModifier(function($ofield){
-      $ofield->getOSelect()->addWhere("{$ofield->getField()} > 5");
-    });
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      'select users.id from users where users.id > 5'
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+        $this->osuql->addSelect('select_limit');
+        $this->osuql->getQuery('select_limit')->addFrom('users');
+        $this->osuql->getQuery('select_limit')->addField('users', '*');
+        $this->osuql->getQuery('select_limit')->addOffset(0);
+        $this->osuql->getQuery('select_limit')->addLimit(3);
+        $suql = $this->osuql->getSQL(['select_limit']);
 
-  public function testFilterWhere(): void
-  {
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
-    $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      'select users.id as uid from users'
-    );
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_limit']));
+    }
 
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
-    $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
-    $this->osuql->params[':id'] = null;
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      'select users.id as uid from users'
-    );
+    public function testSelectOffsetLimit(): void
+    {
+        $sql =
+            'select '.
+                'users.* '.
+            'from users '.
+            'limit 3, 3';
 
-    $this->osuql->addSelect('main');
-    $this->osuql->getQuery('main')->addFrom('users');
-    $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
-    $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
-    $this->osuql->setParam(':id', new SuQLSimpleParam($this->osuql->getQuery('main')->getField('users', ['id' => 'uid']), [5]));
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      'select users.id as uid from users where users.id > :id'
-    );
-  }
+        $this->osuql->addSelect('select_offset_limit');
+        $this->osuql->getQuery('select_offset_limit')->addFrom('users');
+        $this->osuql->getQuery('select_offset_limit')->addField('users', '*');
+        $this->osuql->getQuery('select_offset_limit')->addOffset(3);
+        $this->osuql->getQuery('select_offset_limit')->addLimit(3);
+        $suql = $this->osuql->getSQL(['select_offset_limit']);
 
-  public function testInsert(): void
-  {
-    $this->osuql->addInsert('main');
-    $this->osuql->getQuery('main')->addInto('users');
-    $this->osuql->getQuery('main')->addValue('id', 1);
-    $this->osuql->getQuery('main')->addValue('name', 'Yuriy');
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      "insert into users (id,name) values (1,'Yuriy')"
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_offset_limit']));
+    }
 
-  public function testInsertWithPlaceholder(): void
-  {
-    $this->osuql->addInsert('main');
-    $this->osuql->getQuery('main')->addInto('users');
-    $this->osuql->getQuery('main')->addPlaceholder('id', ':id');
-    $this->osuql->getQuery('main')->addPlaceholder('name', ':name');
-    $this->assertEquals($this->osuql->getSQL(['main']),
-      "insert into users (id,name) values (:id,:name)"
-    );
-    $this->assertNull($this->osuql->getSQL('all'));
-  }
+    public function testSelectDistinct(): void
+    {
+        $sql =
+            'select distinct '.
+                'users.name '.
+            'from users';
+
+        $this->osuql->addSelect('select_distinct');
+        $this->osuql->getQuery('select_distinct')->addModifier('distinct');
+        $this->osuql->getQuery('select_distinct')->addField('users', 'name');
+        $this->osuql->getQuery('select_distinct')->addFrom('users');
+        $suql = $this->osuql->getSQL(['select_distinct']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_distinct']));
+    }
+
+    public function testSelectWhere(): void
+    {
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
+        $this->osuql->getQuery('main')->addField('users', ['name' => 'uname']);
+        $this->osuql->getQuery('main')->addWhere('uid % 2 = 0');
+        $this->assertEquals($this->osuql->getSQL(['main']), 'select users.id as uid, users.name as uname from users where users.id % 2 = 0');
+        $this->assertNull($this->osuql->getSQL(['main']));
+
+        $this->osuql->addSelect('users_belong_to_any_group');
+        $this->osuql->getQuery('users_belong_to_any_group')->addModifier('distinct');
+        $this->osuql->getQuery('users_belong_to_any_group')->addFrom('user_group');
+        $this->osuql->getQuery('users_belong_to_any_group')->addField('user_group', 'user_id');
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', 'id@uid');
+        $this->osuql->getQuery('main')->addField('users', 'name');
+        $this->osuql->getQuery('main')->addWhere('uid not in @users_belong_to_any_group');
+        $this->assertEquals($this->osuql->getSQL(['main']), 'select users.id as uid, users.name from users where users.id not in (select distinct user_group.user_id from user_group)');
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
+
+    public function testSelectJoin(): void
+    {
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
+        $this->osuql->getQuery('main')->addJoin('inner', 'groups');
+        $this->osuql->getQuery('main')->addField('groups', 'id@gid');
+        $this->osuql->getQuery('main')->addField('groups', 'name@gname');
+        $this->assertEquals(
+            $this->osuql->getSQL('all'),
+            'select ' .
+                'groups.id as gid, ' .
+                'groups.name as gname ' .
+                'from users ' .
+                'inner join user_group on users.id = user_group.user_id ' .
+                'inner join groups on user_group.group_id = groups.id'
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+
+        // join and where
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', 'id');
+        $this->osuql->getQuery('main')->addField('users', 'registration');
+        $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
+        $this->osuql->getQuery('main')->addJoin('inner', 'groups');
+        $this->osuql->getQuery('main')->addField('groups', ['name' => 'group']);
+        $this->osuql->getQuery('main')->addWhere("group = 'admin'");
+        $this->assertEquals(
+            $this->osuql->getSQL('all'),
+            'select ' .
+                'users.id, ' .
+                'users.registration, ' .
+                'groups.name as group ' .
+                'from users ' .
+                'inner join user_group on users.id = user_group.user_id ' .
+                'inner join groups on user_group.group_id = groups.id ' .
+                'where groups.name = \'admin\''
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+
+        $this->osuql->getScheme()->rel(['users' => 'u'], ['view' => 'v'], 'u.id = v.id');
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', 'id');
+        $this->osuql->getQuery('main')->addJoin('inner', 'view');
+        $this->osuql->addSelect('view');
+        $this->osuql->getQuery('view')->addFrom('users');
+        $this->osuql->getQuery('view')->addField('users', 'id');
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            'select ' .
+                'users.id ' .
+                'from users ' .
+                'inner join (' .
+                'select ' .
+                'users.id ' .
+                'from users' .
+                ') view on users.id = view.id'
+        );
+    }
+
+    public function testSelectGroup(): void
+    {
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
+        $this->osuql->getQuery('main')->addJoin('inner', 'groups');
+        $this->osuql->getQuery('main')->addField('groups', 'name@gname');
+        $this->osuql->getQuery('main')->addField('groups', 'name@count');
+        $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('group');
+        $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('count');
+        $this->osuql->getQuery('main')->addWhere("gname = 'admin'");
+        $this->assertEquals(
+            $this->osuql->getSQL('all'),
+            'select ' .
+                'groups.name as gname, ' .
+                'count(groups.name) as count ' .
+                'from users ' .
+                'inner join user_group on users.id = user_group.user_id ' .
+                'inner join groups on user_group.group_id = groups.id ' .
+                'where groups.name = \'admin\' ' .
+                'group by groups.name'
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
+
+    public function testNestedQueries(): void
+    {
+        $this->osuql->addSelect('allGroupCount');
+        $this->osuql->getQuery('allGroupCount')->addFrom('users');
+        $this->osuql->getQuery('allGroupCount')->addJoin('inner', 'user_group');
+        $this->osuql->getQuery('allGroupCount')->addJoin('inner', 'groups');
+        $this->osuql->getQuery('allGroupCount')->addField('groups', 'name@gname');
+        $this->osuql->getQuery('allGroupCount')->addField('groups', 'name@count');
+        $this->osuql->getQuery('allGroupCount')->getField('groups', 'name@count')->addModifier('group');
+        $this->osuql->getQuery('allGroupCount')->getField('groups', 'name@count')->addModifier('count');
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('allGroupCount');
+        $this->osuql->getQuery('main')->addField('allGroupCount', 'gname');
+        $this->osuql->getQuery('main')->addField('allGroupCount', 'count');
+        $this->osuql->getQuery('main')->addWhere("gname = 'admin'");
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            'select ' .
+                'allGroupCount.gname, ' .
+                'allGroupCount.count ' .
+                'from (' .
+                'select ' .
+                'groups.name as gname, ' .
+                'count(groups.name) as count ' .
+                'from users ' .
+                'inner join user_group on users.id = user_group.user_id ' .
+                'inner join groups on user_group.group_id = groups.id ' .
+                'group by groups.name' .
+                ') allGroupCount ' .
+                'where gname = \'admin\''
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
+
+    public function testSorting(): void
+    {
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addJoin('inner', 'user_group');
+        $this->osuql->getQuery('main')->addJoin('inner', 'groups');
+        $this->osuql->getQuery('main')->addField('groups', 'name@gname');
+        $this->osuql->getQuery('main')->addField('groups', 'name@count');
+        $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('group');
+        $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('count');
+        $this->osuql->getQuery('main')->getField('groups', 'name@count')->addModifier('asc');
+        $this->assertEquals(
+            $this->osuql->getSQL('all'),
+            'select ' .
+                'groups.name as gname, ' .
+                'count(groups.name) as count ' .
+                'from users ' .
+                'inner join user_group on users.id = user_group.user_id ' .
+                'inner join groups on user_group.group_id = groups.id ' .
+                'group by groups.name ' .
+                'order by count asc'
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
+
+    public function testUnion(): void
+    {
+        $this->osuql->addSelect('firstRegisration');
+        $this->osuql->getQuery('firstRegisration')->addFrom('users');
+        $this->osuql->getQuery('firstRegisration')->addField('users', 'registration@reg_interval');
+        $this->osuql->getQuery('firstRegisration')->getField('users', 'registration@reg_interval')->addModifier('min');
+        $this->osuql->addSelect('lastRegisration');
+        $this->osuql->getQuery('lastRegisration')->addFrom('users');
+        $this->osuql->getQuery('lastRegisration')->addField('users', 'registration@reg_interval');
+        $this->osuql->getQuery('lastRegisration')->getField('users', 'registration@reg_interval')->addModifier('max');
+        $this->osuql->addUnion('main', '@firstRegisration union @lastRegisration');
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            '(select min(users.registration) as reg_interval from users) ' .
+                'union ' .
+                '(select max(users.registration) as reg_interval from users)'
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
+
+    public function testCallbackModifier(): void
+    {
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', 'id');
+        $this->osuql->getQuery('main')->getField('users', 'id')->addCallbackModifier(function ($ofield) {
+            $ofield->getOSelect()->addWhere("{$ofield->getField()} > 5");
+        });
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            'select users.id from users where users.id > 5'
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
+
+    public function testFilterWhere(): void
+    {
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
+        $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            'select users.id as uid from users'
+        );
+
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
+        $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
+        $this->osuql->params[':id'] = null;
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            'select users.id as uid from users'
+        );
+
+        $this->osuql->addSelect('main');
+        $this->osuql->getQuery('main')->addFrom('users');
+        $this->osuql->getQuery('main')->addField('users', ['id' => 'uid']);
+        $this->osuql->getQuery('main')->addFilterWhere(':id', 'uid > :id');
+        $this->osuql->setParam(':id', new SuQLSimpleParam($this->osuql->getQuery('main')->getField('users', ['id' => 'uid']), [5]));
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            'select users.id as uid from users where users.id > :id'
+        );
+    }
+
+    public function testInsert(): void
+    {
+        $this->osuql->addInsert('main');
+        $this->osuql->getQuery('main')->addInto('users');
+        $this->osuql->getQuery('main')->addValue('id', 1);
+        $this->osuql->getQuery('main')->addValue('name', 'Yuriy');
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            "insert into users (id,name) values (1,'Yuriy')"
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
+
+    public function testInsertWithPlaceholder(): void
+    {
+        $this->osuql->addInsert('main');
+        $this->osuql->getQuery('main')->addInto('users');
+        $this->osuql->getQuery('main')->addPlaceholder('id', ':id');
+        $this->osuql->getQuery('main')->addPlaceholder('name', ':name');
+        $this->assertEquals(
+            $this->osuql->getSQL(['main']),
+            "insert into users (id,name) values (:id,:name)"
+        );
+        $this->assertNull($this->osuql->getSQL('all'));
+    }
 }
