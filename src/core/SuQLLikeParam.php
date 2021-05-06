@@ -10,7 +10,7 @@ namespace suql\core;
 class SuQLLikeParam extends SuQLSimpleParam
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getParamList()
     {

@@ -10,7 +10,7 @@ namespace suql\core;
 class SuQLInParam extends SuQLParam
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getPlaceholder()
     {

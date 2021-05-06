@@ -10,7 +10,7 @@ namespace suql\core;
 class SuQLBetweenParam extends SuQLParam
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getPlaceholder()
     {
