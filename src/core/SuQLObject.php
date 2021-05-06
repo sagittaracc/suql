@@ -97,8 +97,8 @@ class SuQLObject
      */
     public function getSQL($queryList)
     {
-        if (!$this->driver->getBuilder())
-            throw new SqlDriverNotSupportedException();
+        // if (!$this->driver->getBuilder())
+        //     throw new SqlDriverNotSupportedException();
 
         if ($queryList === 'all')
             $queryList = $this->getFullQueryList();
@@ -272,17 +272,18 @@ class SuQLObject
      */
     public function getParamList()
     {
-        $paramList = [];
+        return $this->params;
+        // $paramList = [];
 
-        foreach ($this->params as $param)
-        {
-            foreach ($param->getParamList() as $placeholder => $value)
-            {
-                if ($value instanceof SuQLPlaceholder) continue;
-                $paramList[$placeholder] = $value;
-            }
-        }
+        // foreach ($this->params as $param)
+        // {
+        //     foreach ($param->getParamList() as $placeholder => $value)
+        //     {
+        //         if ($value instanceof SuQLPlaceholder) continue;
+        //         $paramList[$placeholder] = $value;
+        //     }
+        // }
 
-        return $paramList;
+        // return $paramList;
     }
 }

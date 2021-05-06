@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase;
 use suql\core\SuQLObject;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
+use suql\core\SuQLCondition;
+use suql\core\SuQLExpression;
 use suql\core\SuQLFieldName;
 use suql\core\SuQLPlaceholder;
 use suql\core\SuQLSimpleParam;
@@ -208,6 +210,34 @@ final class SuQLObjectTest extends TestCase
 
         $this->assertEquals($sql, $suql);
         $this->assertNull($this->osuql->getSQL(['strict_where']));
+    }
+
+    public function testExpressionWhere(): void
+    {
+        $sql =
+            'select '.
+                '* '.
+            'from users '.
+            'where '.
+                'id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b '.
+            'and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363';
+
+        $this->osuql->addSelect('expression_where');
+        $this->osuql->getQuery('expression_where')->addFrom('users');
+        $this->osuql->getQuery('expression_where')->addWhere(
+            new SuQLExpression('$1 and $2', [
+                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [1]), '$ > ?'),
+                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [3]), '$ < ?')
+            ])
+            );
+        $suql = $this->osuql->getSQL(['expression_where']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertEquals([
+            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
+            ':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3,
+        ], $this->osuql->getParamList());
+        $this->assertNull($this->osuql->getSQL(['expression_where']));
     }
 
     public function testSelectWhereSubQuery(): void
@@ -472,7 +502,7 @@ final class SuQLObjectTest extends TestCase
         $this->assertEquals($sql, $suql);
         $this->assertNull($this->osuql->getSQL(['empty_filter']));
     }
-
+/*
     public function testFilterNotEmpty(): void
     {
         $sql =
@@ -500,7 +530,7 @@ final class SuQLObjectTest extends TestCase
             ':ph0_0f72a972e7f619703055fa27830b62d7' => 5,
         ]);
     }
-
+*/
     public function testInsert(): void
     {
         $sql = "insert into users (id,name) values (1,'Yuriy')";

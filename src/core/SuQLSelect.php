@@ -169,9 +169,36 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      */
     public function addWhere($where)
     {
-        if ($where)
+        if (!$where) return;
+
+        if (is_string($where))
         {
-            $this->where[] = $where;
+            $this->addStringWhere($where);
+        }
+        else if ($where instanceof SuQLExpression)
+        {
+            $this->addExpressionWhere($where);
+        }
+    }
+    /**
+     * Добавляет условие where из строки
+     * @param string $where
+     */
+    private function addStringWhere($where)
+    {
+        $this->where[] = $where;
+    }
+    /**
+     * Добавляет условие where из expression
+     * @param suql\core\SuQLExpression
+     */
+    private function addExpressionWhere($where)
+    {
+        $this->where[] = $where->getExpression();
+
+        foreach ($where->getParams() as $param => $value)
+        {
+            $this->getOSuQL()->setParam($param, $value);
         }
     }
     /**
