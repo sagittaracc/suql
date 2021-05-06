@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use suql\core\SuQLObject;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
+use suql\core\SuQLFieldName;
 use suql\core\SuQLPlaceholder;
 use suql\core\SuQLSimpleParam;
 
@@ -484,7 +485,7 @@ final class SuQLObjectTest extends TestCase
         $this->osuql->getQuery('not_empty_filter')->addFrom('users');
         $this->osuql->getQuery('not_empty_filter')->addField('users', ['id' => 'uid']);
 
-        $param = new SuQLSimpleParam($this->osuql->getQuery('not_empty_filter')->getField('users', ['id' => 'uid']), [5]);
+        $param = new SuQLSimpleParam(new SuQLFieldName('users', ['id' => 'uid']), [5]);
         $placeholder = $param->getPlaceholder();
 
         $this->osuql->getQuery('not_empty_filter')->addFilterWhere($placeholder, "uid > $placeholder");
@@ -496,7 +497,7 @@ final class SuQLObjectTest extends TestCase
         $this->assertNull($this->osuql->getSQL(['not_empty_filter']));
 
         $this->assertEquals($this->osuql->getParamList(), [
-            ':ph0_a012d9825caf93883f27785d1fbc346f' => 5,
+            ':ph0_fc02896e3034a4ed53259916e2e2d82d' => 5,
         ]);
     }
 

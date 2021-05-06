@@ -31,15 +31,30 @@ class SuQLExpression
      * Конвертирует в строку
      * @return string
      */
-    public function __toString()
+    public function getExpression()
     {
         $expression = $this->expression;
 
         foreach ($this->conditions as $index => $condition)
         {
-            $expression = str_replace('$'.($index+1), $condition, $expression);
+            $expression = str_replace('$'.($index+1), $condition->getCondition(), $expression);
         }
 
         return $expression;
+    }
+    /**
+     * Возвращает перечень параметров
+     * @return array
+     */
+    public function getParams()
+    {
+        $paramList = [];
+
+        foreach ($this->conditions as $condition)
+        {
+            $paramList = array_merge($paramList, $condition->getParams());
+        }
+
+        return $paramList;
     }
 }
