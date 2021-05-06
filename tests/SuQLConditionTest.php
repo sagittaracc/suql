@@ -44,8 +44,8 @@ final class SuQLConditionTest extends TestCase
 
     public function testSimpleParamCondition(): void
     {
-        $expectedCondition = 'id = :ph0_fc02896e3034a4ed53259916e2e2d82d';
-        $expectedParams = [':ph0_fc02896e3034a4ed53259916e2e2d82d' => 1];
+        $expectedCondition = 'id = :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b';
+        $expectedParams = [':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1];
 
         $actualCondition = new SuQLCondition($this->simpleParam, '$ = ?');
 
@@ -55,10 +55,10 @@ final class SuQLConditionTest extends TestCase
 
     public function testBetweenParamCondition(): void
     {
-        $expectedCondition = 'users.id between :ph0_fc02896e3034a4ed53259916e2e2d82d and :ph1_fc02896e3034a4ed53259916e2e2d82d';
+        $expectedCondition = 'users.id between :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b and :ph1_b90e7265948fc8b12c62f17f6f2c5363';
         $expectedParams = [
-            ':ph0_fc02896e3034a4ed53259916e2e2d82d' => 1,
-            ':ph1_fc02896e3034a4ed53259916e2e2d82d' => 3,
+            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
+            ':ph1_b90e7265948fc8b12c62f17f6f2c5363' => 3,
         ];
 
         $actualCondition = new SuQLCondition($this->betweenParam, '$ between ?');
@@ -70,11 +70,11 @@ final class SuQLConditionTest extends TestCase
 
     public function testInParamCondition(): void
     {
-        $expectedCondition = 'id in (:ph0_fc02896e3034a4ed53259916e2e2d82d,:ph1_fc02896e3034a4ed53259916e2e2d82d,:ph2_fc02896e3034a4ed53259916e2e2d82d)';
+        $expectedCondition = 'id in (:ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b,:ph1_3aeb5fe8e84508eecd31e480918704a7,:ph2_b90e7265948fc8b12c62f17f6f2c5363)';
         $expectedParams = [
-            ':ph0_fc02896e3034a4ed53259916e2e2d82d' => 1,
-            ':ph1_fc02896e3034a4ed53259916e2e2d82d' => 2,
-            ':ph2_fc02896e3034a4ed53259916e2e2d82d' => 3,
+            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
+            ':ph1_3aeb5fe8e84508eecd31e480918704a7' => 2,
+            ':ph2_b90e7265948fc8b12c62f17f6f2c5363' => 3,
         ];
 
         $actualCondition = new SuQLCondition($this->inParam, '$ in ?');
@@ -85,9 +85,9 @@ final class SuQLConditionTest extends TestCase
 
     public function testLikeParamCondition(): void
     {
-        $expectedCondition = 'users.name like :ph0_12cb8fae9701df6e8e8b1b972362a7ff';
+        $expectedCondition = 'users.name like :ph0_c52e9ca1ce023b250556fab760727d9e';
         $expectedParams = [
-            ':ph0_12cb8fae9701df6e8e8b1b972362a7ff' => '%sagittaracc%',
+            ':ph0_c52e9ca1ce023b250556fab760727d9e' => '%sagittaracc%',
         ];
 
         $actualCondition = new SuQLCondition($this->likeParam, '$ like ?', '%t.%n');

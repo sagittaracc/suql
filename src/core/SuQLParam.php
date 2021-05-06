@@ -29,11 +29,12 @@ abstract class SuQLParam
     }
     /**
      * Получает хэш поля
+     * @param mixed $value значение параметра
      * @return string
      */
-    public function getFieldHash()
+    public function getFieldHash($value = 0)
     {
-        return md5($this->field->format('%t.%n'));
+        return md5($this->field->format('%t.%n') . ':' . $value);
     }
     /**
      * Получить поле
@@ -77,7 +78,7 @@ abstract class SuQLParam
 
         foreach ($this->params as $index => $param)
         {
-            $placeholderList[] = $param instanceof SuQLPlaceholder ? $param->getPlaceholder() : ":ph{$index}_{$this->getFieldHash()}";
+            $placeholderList[] = $param instanceof SuQLPlaceholder ? $param->getPlaceholder() : ":ph{$index}_{$this->getFieldHash($param)}";
         }
 
         return $placeholderList;

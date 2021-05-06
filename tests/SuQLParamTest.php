@@ -30,11 +30,10 @@ class SuQLParamTest extends TestCase
     {
         $simpleParam = new SuQLSimpleParam($this->fieldUserId, [1]);
 
-        $this->assertEquals(md5('users.id'), $simpleParam->getFieldHash());
         $this->assertEquals([1], $simpleParam->getParams());
-        $this->assertEquals('pk_' . md5('users.id'), $simpleParam->getParamKey());
+        $this->assertEquals('pk_' . md5('users.id:0'), $simpleParam->getParamKey());
         $this->assertEquals([
-            ':ph0_' . md5('users.id') => 1,
+            ':ph0_' . md5('users.id:1') => 1,
         ], $simpleParam->getParamList());
         $this->assertTrue($simpleParam->isValuable());
     }
@@ -43,12 +42,11 @@ class SuQLParamTest extends TestCase
     {
         $betweenParam = new SuQLBetweenParam($this->fieldUserId, [1, 3]);
 
-        $this->assertEquals(md5('users.id'), $betweenParam->getFieldHash());
         $this->assertEquals([1, 3], $betweenParam->getParams());
-        $this->assertEquals('pk_' . md5('users.id'), $betweenParam->getParamKey());
+        $this->assertEquals('pk_' . md5('users.id:0'), $betweenParam->getParamKey());
         $this->assertEquals([
-            ':ph0_' . md5('users.id') => 1,
-            ':ph1_' . md5('users.id') => 3,
+            ':ph0_' . md5('users.id:1') => 1,
+            ':ph1_' . md5('users.id:3') => 3,
         ], $betweenParam->getParamList());
         $this->assertTrue($betweenParam->isValuable());
     }
@@ -57,13 +55,12 @@ class SuQLParamTest extends TestCase
     {
         $inParam = new SuQLInParam($this->fieldUserId, [1, 2, 3]);
 
-        $this->assertEquals(md5('users.id'), $inParam->getFieldHash());
         $this->assertEquals([1, 2, 3], $inParam->getParams());
-        $this->assertEquals('pk_' . md5('users.id'), $inParam->getParamKey());
+        $this->assertEquals('pk_' . md5('users.id:0'), $inParam->getParamKey());
         $this->assertEquals([
-            ':ph0_' . md5('users.id') => 1,
-            ':ph1_' . md5('users.id') => 2,
-            ':ph2_' . md5('users.id') => 3,
+            ':ph0_' . md5('users.id:1') => 1,
+            ':ph1_' . md5('users.id:2') => 2,
+            ':ph2_' . md5('users.id:3') => 3,
         ], $inParam->getParamList());
         $this->assertTrue($inParam->isValuable());
     }
@@ -72,11 +69,10 @@ class SuQLParamTest extends TestCase
     {
         $likeParam = new SuQLLikeParam($this->fieldUserName, ['sagittaracc']);
 
-        $this->assertEquals(md5('users.name'), $likeParam->getFieldHash());
         $this->assertEquals(['sagittaracc'], $likeParam->getParams());
-        $this->assertEquals('pk_' . md5('users.name'), $likeParam->getParamKey());
+        $this->assertEquals('pk_' . md5('users.name:0'), $likeParam->getParamKey());
         $this->assertEquals([
-            ':ph0_' . md5('users.name') => '%sagittaracc%',
+            ':ph0_' . md5('users.name:sagittaracc') => '%sagittaracc%',
         ], $likeParam->getParamList());
         $this->assertTrue($likeParam->isValuable());
     }
