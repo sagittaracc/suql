@@ -7,6 +7,7 @@ use suql\core\SuQLBetweenParam;
 use suql\core\SuQLFieldName;
 use suql\core\SuQLInParam;
 use suql\core\SuQLLikeParam;
+use suql\core\SuQLPlaceholder;
 use suql\core\SuQLSimpleParam;
 
 class SuQLParamTest extends TestCase
@@ -88,5 +89,14 @@ class SuQLParamTest extends TestCase
         $this->assertFalse($betweenParam->isValuable());
         $this->assertFalse($inParam->isValuable());
         $this->assertFalse($likeParam->isValuable());
+    }
+
+    public function testPlaceholderParam(): void
+    {
+        $placeholderParam = new SuQLSimpleParam($this->fieldUserId, [new SuQLPlaceholder('id')]);
+
+        $this->assertArrayHasKey(':id', $placeholderParam->getParamList());
+        $this->assertCount(1, $placeholderParam->getParamList());
+        $this->assertInstanceOf(SuQLPlaceholder::class, $placeholderParam->getParamList()[':id']);
     }
 }

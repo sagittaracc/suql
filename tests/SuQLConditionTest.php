@@ -8,6 +8,7 @@ use suql\core\SuQLCondition;
 use suql\core\SuQLFieldName;
 use suql\core\SuQLInParam;
 use suql\core\SuQLLikeParam;
+use suql\core\SuQLPlaceholder;
 use suql\core\SuQLSimpleParam;
 
 final class SuQLConditionTest extends TestCase
@@ -19,6 +20,7 @@ final class SuQLConditionTest extends TestCase
     private $betweenParam;
     private $inParam;
     private $likeParam;
+    private $placeholderParam;
 
     protected function setUp(): void
     {
@@ -29,6 +31,7 @@ final class SuQLConditionTest extends TestCase
         $this->betweenParam = new SuQLBetweenParam($this->fieldUserId, [1, 3]);
         $this->inParam = new SuQLInParam($this->fieldUserId, [1, 2, 3]);
         $this->likeParam = new SuQLLikeParam($this->fieldUserName, ['sagittaracc']);
+        $this->placeholderParam = new SuQLSimpleParam($this->fieldUserId, [new SuQLPlaceholder('id')]);
     }
 
     protected function tearDown(): void
@@ -40,6 +43,7 @@ final class SuQLConditionTest extends TestCase
         $this->betweenParam = null;
         $this->inParam = null;
         $this->likeParam = null;
+        $this->placeholderParam = null;
     }
 
     public function testSimpleParamCondition(): void
@@ -94,5 +98,14 @@ final class SuQLConditionTest extends TestCase
 
         $this->assertEquals($expectedCondition, $actualCondition->getCondition());
         $this->assertEquals($expectedParams, $actualCondition->getParams());
+    }
+
+    public function testPlaceholderParamCondition(): void
+    {
+        $expectedCondition = 'id = :id';
+
+        $actualCondition = new SuQLCondition($this->placeholderParam, '$ = ?');
+
+        $this->assertEquals($expectedCondition, $actualCondition->getCondition());
     }
 }
