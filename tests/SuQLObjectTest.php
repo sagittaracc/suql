@@ -229,7 +229,7 @@ final class SuQLObjectTest extends TestCase
                 new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [1]), '$ > ?'),
                 new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [3]), '$ < ?')
             ])
-            );
+        );
         $suql = $this->osuql->getSQL(['expression_where']);
 
         $this->assertEquals($sql, $suql);
