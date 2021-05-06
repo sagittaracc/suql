@@ -10,9 +10,9 @@ namespace suql\core;
 class SuQLCondition
 {
     /**
-     * @var suql\core\SuQLFieldName имя поля
+     * @var suql\core\SuQLParam
      */
-    private $field;
+    private $param;
     /**
      * @var string условное выражение
      */
@@ -23,13 +23,13 @@ class SuQLCondition
     private $format;
     /**
      * Constructor
-     * @param suql\core\SuQLFieldName $field объект поля
+     * @param suql\core\SuQLParam $param
      * @param string $condition условное выражение
      * @param string $format формат вывода поля
      */
-    function __construct($field, $condition, $format = '%n')
+    function __construct($param, $condition, $format = '%n')
     {
-        $this->field = $field;
+        $this->param = $param;
         $this->condition = $condition;
         $this->format = $format;
     }
@@ -46,8 +46,26 @@ class SuQLCondition
      * Конвертирует в строку
      * @return string
      */
-    public function __toString()
+    public function getCondition()
     {
-        return str_replace('$', $this->field->format($this->format), $this->condition);
+        return str_replace(
+            [
+                '$',
+                '?',
+            ],
+            [
+                $this->param->getField()->format($this->format),
+                $this->param->getPlaceholder(),
+            ],
+            $this->condition
+        );
+    }
+    /**
+     * Получает параметры
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->param->getParamList();
     }
 }

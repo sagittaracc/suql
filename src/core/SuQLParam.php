@@ -19,12 +19,12 @@ abstract class SuQLParam
     protected $params;
     /**
      * Constructor
-     * @param suql\core\SuQLField поле для которого применяются параметры
-     * @param array параметры применения
+     * @param suql\core\SuQLFieldName $field поле для которого применяются параметры
+     * @param array $params параметры применения
      */
     function __construct($field, $params)
     {
-        $this->field = new SuQLFieldName($field->getTable(), [$field->getField() => $field->getAlias()]);
+        $this->field = $field;
         $this->params = $params;
     }
     /**
@@ -34,6 +34,14 @@ abstract class SuQLParam
     public function getFieldHash()
     {
         return md5($this->field->format('%t.%n'));
+    }
+    /**
+     * Получить поле
+     * @return suql\core\SuQLFieldName
+     */
+    public function getField()
+    {
+        return $this->field;
     }
     /**
      * Получить параметры поля
