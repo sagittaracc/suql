@@ -10,7 +10,7 @@ namespace suql\core;
 abstract class SuQLParam
 {
     /**
-     * @var suql\core\SuQLField поле для которого применяются параметры
+     * @var suql\core\SuQLFieldName поле для которого применяются параметры
      */
     protected $field;
     /**
@@ -24,16 +24,8 @@ abstract class SuQLParam
      */
     function __construct($field, $params)
     {
-        $this->field = $field;
+        $this->field = new SuQLFieldName($field->getTable(), [$field->getField() => $field->getAlias()]);
         $this->params = $params;
-    }
-    /**
-     * Получить информацию по полю
-     * @return suql\core\SuQLField
-     */
-    public function getField()
-    {
-        return $this->field;
     }
     /**
      * Получает хэш поля
@@ -41,7 +33,7 @@ abstract class SuQLParam
      */
     public function getFieldHash()
     {
-        return md5($this->field->getField());
+        return md5($this->field->format('%t.%n'));
     }
     /**
      * Получить параметры поля
