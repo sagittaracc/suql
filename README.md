@@ -1,6 +1,8 @@
-# Sugar SQL
-
-<p align="left">
+<p align="center">
+  <img src="https://i.ibb.co/26mCWTx/suql-logo.png" alt="suql-logo" border="0" />
+</p>
+<h1 align="center">Sugar SQL</h1>
+<p align="center">
   <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
   <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/sagittaracc/suql" alt="GitHub license"/>
