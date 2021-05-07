@@ -1,6 +1,3 @@
-<div align="center">
-  <img src="https://i.ibb.co/26mCWTx/suql-logo.png" alt="suql-logo" border="0" />
-</div>
 <h1 align="center">Sugar SQL</h1>
 <p align="center">
   <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
