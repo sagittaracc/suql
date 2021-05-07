@@ -16,46 +16,16 @@ final class SuQLExpressionTest extends TestCase
     private $fieldUserId;
     private $fieldUserName;
 
-    private $simpleParam;
-    private $betweenParam;
-    private $inParam;
-    private $likeParam;
-
-    private $conditionOne;
-    private $conditionTwo;
-    private $conditionThree;
-    private $conditionFour;
-
     protected function setUp(): void
     {
         $this->fieldUserId = new SuQLFieldName('users', 'id');
         $this->fieldUserName = new SuQLFieldName('users', 'name');
-
-        $this->simpleParam = new SuQLSimpleParam($this->fieldUserId, [1]);
-        $this->betweenParam = new SuQLBetweenParam($this->fieldUserId, [3, 6]);
-        $this->inParam = new SuQLInParam($this->fieldUserId, [10, 20, 30]);
-        $this->likeParam = new SuQLLikeParam($this->fieldUserName, ['sagittaracc']);
-
-        $this->conditionOne = new SuQLCondition($this->simpleParam, '$ > ?');
-        $this->conditionTwo = new SuQLCondition($this->betweenParam, '$ between ?');
-        $this->conditionThree = new SuQLCondition($this->inParam, '$ in ?');
-        $this->conditionFour = new SuQLCondition($this->likeParam, '$ like ?');
     }
 
     protected function tearDown(): void
     {
         $this->fieldUserId = null;
         $this->fieldUserName = null;
-
-        $this->simpleParam = null;
-        $this->betweenParam = null;
-        $this->inParam = null;
-        $this->likeParam = null;
-
-        $this->conditionOne = null;
-        $this->conditionTwo = null;
-        $this->conditionThree = null;
-        $this->conditionFour = null;
     }
 
     public function testSimpleExpression(): void
@@ -78,9 +48,19 @@ final class SuQLExpressionTest extends TestCase
             ':ph0_c52e9ca1ce023b250556fab760727d9e' => '%sagittaracc%',
         ];
 
+        $simpleParam = new SuQLSimpleParam($this->fieldUserId, [1]);
+        $betweenParam = new SuQLBetweenParam($this->fieldUserId, [3, 6]);
+        $inParam = new SuQLInParam($this->fieldUserId, [10, 20, 30]);
+        $likeParam = new SuQLLikeParam($this->fieldUserName, ['sagittaracc']);
+
+        $conditionOne = new SuQLCondition($simpleParam, '$ > ?');
+        $conditionTwo = new SuQLCondition($betweenParam, '$ between ?');
+        $conditionThree = new SuQLCondition($inParam, '$ in ?');
+        $conditionFour = new SuQLCondition($likeParam, '$ like ?');
+
         $actualExpression = new SuQLExpression(
             '($1 or $2) and $3 and $4',
-            [$this->conditionOne, $this->conditionTwo, $this->conditionThree, $this->conditionFour]
+            [$conditionOne, $conditionTwo, $conditionThree, $conditionFour]
         );
         $this->assertEquals($expectedExpression, $actualExpression->getExpression());
         $this->assertEquals($expectedParams, $actualExpression->getParams());
