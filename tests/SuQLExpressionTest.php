@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use sagittaracc\StringHelper;
 use suql\core\SuQLBetweenParam;
 use suql\core\SuQLCondition;
 use suql\core\SuQLExpression;
@@ -30,14 +31,15 @@ final class SuQLExpressionTest extends TestCase
 
     public function testSimpleExpression(): void
     {
-        $expectedExpression =
-            '('.
-                'id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b '.
-                    'or '.
-                'id between :ph0_b90e7265948fc8b12c62f17f6f2c5363 and :ph1_da199b6888edd6f08c25ae0ea30517e8'.
-            ') '.
-            'and id in (:ph0_51fef196e04482fdb96e7bec99b86eda,:ph1_e0b4e60b9c0768e467e61af1ce864b27,:ph2_0bef107bc85293380a4cab23cdd72201) '.
-            'and name like :ph0_c52e9ca1ce023b250556fab760727d9e';
+        $expectedExpression = StringHelper::trimSql(<<<SQL
+            (
+                id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
+                    or
+                id between :ph0_b90e7265948fc8b12c62f17f6f2c5363 and :ph1_da199b6888edd6f08c25ae0ea30517e8
+            )
+            and id in (:ph0_51fef196e04482fdb96e7bec99b86eda,:ph1_e0b4e60b9c0768e467e61af1ce864b27,:ph2_0bef107bc85293380a4cab23cdd72201)
+            and name like :ph0_c52e9ca1ce023b250556fab760727d9e
+SQL);
         $expectedParams = [
             ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
             ':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3,

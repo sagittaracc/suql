@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-
+use sagittaracc\StringHelper;
 use suql\core\SuQLObject;
 use suql\core\SuQLScheme;
 use suql\builder\SQLDriver;
@@ -35,10 +35,11 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectAll(): void
     {
-        $sql =
-            'select '.
-                '* '.
-            'from users';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+SQL);
 
         $this->osuql->addSelect('select_all');
         $this->osuql->getQuery('select_all')->addFrom('users');
@@ -50,10 +51,11 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectAllWithTableName(): void
     {
-        $sql =
-            'select '.
-                'users.* '.
-            'from users';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.*
+            from users
+SQL);
 
         $this->osuql->addSelect('select_all_with_table_name');
         $this->osuql->getQuery('select_all_with_table_name')->addFrom('users');
@@ -66,11 +68,12 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectFieldList(): void
     {
-        $sql =
-            'select '.
-                'users.id, '.
-                'users.name '.
-            'from users';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id,
+                users.name
+            from users
+SQL);
 
         $this->osuql->addSelect('select_field_list');
         $this->osuql->getQuery('select_field_list')->addFrom('users');
@@ -84,11 +87,12 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectUsingAliases(): void
     {
-        $sql =
-            'select '.
-                'users.id as uid, '.
-                'users.name as uname '.
-            'from users';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id as uid,
+                users.name as uname
+            from users
+SQL);
 
         $this->osuql->addSelect('select_using_aliases');
         $this->osuql->getQuery('select_using_aliases')->addFrom('users');
@@ -102,7 +106,9 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectRaw(): void
     {
-        $sql = "select 2 * 2, 'Yuriy' as author";
+        $sql = StringHelper::trimSql(<<<SQL
+            select 2 * 2, 'Yuriy' as author
+SQL);
 
         $this->osuql->addSelect('select_raw');
         $this->osuql->getQuery('select_raw')->addField(null, "2 * 2");
@@ -115,11 +121,12 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectLimit(): void
     {
-        $sql =
-            'select '.
-                'users.* '.
-            'from users '.
-            'limit 3';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.*
+            from users
+            limit 3
+SQL);
 
         $this->osuql->addSelect('select_limit');
         $this->osuql->getQuery('select_limit')->addFrom('users');
@@ -134,11 +141,12 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectOffsetLimit(): void
     {
-        $sql =
-            'select '.
-                'users.* '.
-            'from users '.
-            'limit 3, 3';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.*
+            from users
+            limit 3, 3
+SQL);
 
         $this->osuql->addSelect('select_offset_limit');
         $this->osuql->getQuery('select_offset_limit')->addFrom('users');
@@ -153,10 +161,11 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectDistinct(): void
     {
-        $sql =
-            'select distinct '.
-                'users.name '.
-            'from users';
+        $sql = StringHelper::trimSql(<<<SQL
+            select distinct
+                users.name
+            from users
+SQL);
 
         $this->osuql->addSelect('select_distinct');
         $this->osuql->getQuery('select_distinct')->addModifier('distinct');
@@ -194,12 +203,13 @@ final class SuQLObjectTest extends TestCase
 
     public function testStrictWhere(): void
     {
-        $sql =
-            'select '.
-                'users.id as uid, '.
-                'users.name as uname '.
-            'from users '.
-            'where users.id % 2 = 0';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id as uid,
+                users.name as uname
+            from users
+            where users.id % 2 = 0
+SQL);
 
         $this->osuql->addSelect('strict_where');
         $this->osuql->getQuery('strict_where')->addFrom('users');
@@ -214,13 +224,14 @@ final class SuQLObjectTest extends TestCase
 
     public function testExpressionWhere(): void
     {
-        $sql =
-            'select '.
-                '* '.
-            'from users '.
-            'where '.
-                'id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b '.
-            'and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+            where
+                id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
+            and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
+SQL);
 
         $this->osuql->addSelect('expression_where');
         $this->osuql->getQuery('expression_where')->addFrom('users');
@@ -242,16 +253,17 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectWhereSubQuery(): void
     {
-        $sql =
-            'select '.
-                'users.id as uid, '.
-                'users.name '.
-            'from users '.
-            'where users.id not in ('.
-                'select distinct '.
-                    'user_group.user_id '.
-                'from user_group'.
-            ')';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id as uid,
+                users.name
+            from users
+            where users.id not in (
+                select distinct
+                    user_group.user_id
+                from user_group
+            )
+SQL);
 
         $this->osuql->addSelect('main_query');
         $this->osuql->getQuery('main_query')->addFrom('users');
@@ -272,14 +284,15 @@ final class SuQLObjectTest extends TestCase
 
     public function testSimpleJoin(): void
     {
-        $sql =
-            'select ' .
-                'users.id, '.
-                'groups.id as gid, ' .
-                'groups.name as gname ' .
-            'from users ' .
-            'inner join user_group on users.id = user_group.user_id ' .
-            'inner join groups on user_group.group_id = groups.id';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id,
+                groups.id as gid,
+                groups.name as gname
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+SQL);
 
         $this->osuql->addSelect('simple_join');
         $this->osuql->getQuery('simple_join')->addFrom('users');
@@ -296,15 +309,16 @@ final class SuQLObjectTest extends TestCase
 
     public function testJoinWithWhere(): void
     {
-        $sql =
-            'select ' .
-                'users.id, ' .
-                'users.registration, ' .
-                'groups.name as group ' .
-            'from users ' .
-            'inner join user_group on users.id = user_group.user_id ' .
-            'inner join groups on user_group.group_id = groups.id ' .
-            "where groups.name = 'admin'";
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id,
+                users.registration,
+                groups.name as group
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+            where groups.name = 'admin'
+SQL);
 
         $this->osuql->addSelect('join_with_where');
         $this->osuql->getQuery('join_with_where')->addFrom('users');
@@ -322,15 +336,16 @@ final class SuQLObjectTest extends TestCase
 
     public function testJoinWithSubQuery(): void
     {
-        $sql =
-            'select ' .
-                'users.id ' .
-            'from users ' .
-            'inner join (' .
-                'select ' .
-                    'users.id ' .
-                'from users' .
-            ') sub_query on users.id = sub_query.id';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id
+            from users
+            inner join (
+                select
+                    users.id
+                from users
+            ) sub_query on users.id = sub_query.id
+SQL);
 
         $this->osuql->getScheme()->rel(['users' => 'u'], ['sub_query' => 'v'], 'u.id = v.id');
 
@@ -351,15 +366,16 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectGroup(): void
     {
-        $sql =
-            'select ' .
-                'groups.name as gname, ' .
-                'count(groups.name) as count ' .
-            'from users ' .
-            'inner join user_group on users.id = user_group.user_id ' .
-            'inner join groups on user_group.group_id = groups.id ' .
-            "where groups.name = 'admin' " .
-            'group by groups.name';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                groups.name as gname,
+                count(groups.name) as count
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+            where groups.name = 'admin'
+            group by groups.name
+SQL);
 
         $this->osuql->addSelect('select_group');
         $this->osuql->getQuery('select_group')->addFrom('users');
@@ -378,20 +394,21 @@ final class SuQLObjectTest extends TestCase
 
     public function testSubQueries(): void
     {
-        $sql =
-            'select ' .
-                'allGroupCount.gname, ' .
-                'allGroupCount.count ' .
-            'from (' .
-                'select ' .
-                    'groups.name as gname, ' .
-                    'count(groups.name) as count ' .
-                'from users ' .
-                'inner join user_group on users.id = user_group.user_id ' .
-                'inner join groups on user_group.group_id = groups.id ' .
-                'group by groups.name' .
-            ') allGroupCount ' .
-            "where gname = 'admin'";
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                allGroupCount.gname,
+                allGroupCount.count
+            from (
+                select
+                    groups.name as gname,
+                    count(groups.name) as count
+                from users
+                inner join user_group on users.id = user_group.user_id
+                inner join groups on user_group.group_id = groups.id
+                group by groups.name
+            ) allGroupCount
+            where gname = 'admin'
+SQL);
 
         $this->osuql->addSelect('main_query');
         $this->osuql->getQuery('main_query')->addFrom('allGroupCount');
@@ -416,15 +433,16 @@ final class SuQLObjectTest extends TestCase
 
     public function testSelectOrder(): void
     {
-        $sql =
-            'select ' .
-                'groups.name as gname, ' .
-                'count(groups.name) as count ' .
-            'from users ' .
-            'inner join user_group on users.id = user_group.user_id ' .
-            'inner join groups on user_group.group_id = groups.id ' .
-            'group by groups.name ' .
-            'order by count asc';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                groups.name as gname,
+                count(groups.name) as count
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+            group by groups.name
+            order by count asc
+SQL);
 
         $this->osuql->addSelect('select_order');
         $this->osuql->getQuery('select_order')->addFrom('users');
@@ -443,10 +461,11 @@ final class SuQLObjectTest extends TestCase
 
     public function testUnion(): void
     {
-        $sql =
-            '(select min(users.registration) as reg_interval from users) ' .
-                'union ' .
-            '(select max(users.registration) as reg_interval from users)';
+        $sql = StringHelper::trimSql(<<<SQL
+            (select min(users.registration) as reg_interval from users)
+                union
+            (select max(users.registration) as reg_interval from users)
+SQL);
 
         $this->osuql->addSelect('firstRegisration');
         $this->osuql->getQuery('firstRegisration')->addFrom('users');
@@ -467,11 +486,12 @@ final class SuQLObjectTest extends TestCase
 
     public function testCallbackModifier(): void
     {
-        $sql =
-            'select '.
-                'users.id '.
-            'from users '.
-            'where users.id > 3';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id
+            from users
+            where users.id > 3
+SQL);
 
         $this->osuql->addSelect('callback_modifier');
         $this->osuql->getQuery('callback_modifier')->addFrom('users');
@@ -487,10 +507,11 @@ final class SuQLObjectTest extends TestCase
 
     public function testFilterEmpty(): void
     {
-        $sql =
-            'select '.
-                'users.id as uid '.
-            'from users';
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id as uid
+            from users
+SQL);
 
         $this->osuql->addSelect('empty_filter');
         $this->osuql->getQuery('empty_filter')->addFrom('users');
@@ -502,38 +523,12 @@ final class SuQLObjectTest extends TestCase
         $this->assertEquals($sql, $suql);
         $this->assertNull($this->osuql->getSQL(['empty_filter']));
     }
-/*
-    public function testFilterNotEmpty(): void
-    {
-        $sql =
-            'select '.
-                'users.id as uid '.
-            'from users '.
-            "where users.id > {{placeholder}}";
 
-        $this->osuql->addSelect('not_empty_filter');
-        $this->osuql->getQuery('not_empty_filter')->addFrom('users');
-        $this->osuql->getQuery('not_empty_filter')->addField('users', ['id' => 'uid']);
-
-        $param = new SuQLSimpleParam(new SuQLFieldName('users', ['id' => 'uid']), [5]);
-        $placeholder = $param->getPlaceholder();
-
-        $this->osuql->getQuery('not_empty_filter')->addFilterWhere($placeholder, "uid > $placeholder");
-        $this->osuql->setParam($placeholder, $param);
-        $suql = $this->osuql->getSQL(['not_empty_filter']);
-        $sql = str_replace('{{placeholder}}', $placeholder, $sql);
-
-        $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['not_empty_filter']));
-
-        $this->assertEquals($this->osuql->getParamList(), [
-            ':ph0_0f72a972e7f619703055fa27830b62d7' => 5,
-        ]);
-    }
-*/
     public function testInsert(): void
     {
-        $sql = "insert into users (id,name) values (1,'Yuriy')";
+        $sql = StringHelper::trimSql(<<<SQL
+            insert into users (id,name) values (1,'Yuriy')
+SQL);
 
         $this->osuql->addInsert('main');
         $this->osuql->getQuery('main')->addInto('users');
@@ -547,7 +542,9 @@ final class SuQLObjectTest extends TestCase
 
     public function testInsertWithPlaceholder(): void
     {
-        $sql = 'insert into users (id,name) values (:id,:name)';
+        $sql = StringHelper::trimSQL(<<<SQL
+            insert into users (id,name) values (:id,:name)
+SQL);
 
         $this->osuql->addInsert('main');
         $this->osuql->getQuery('main')->addInto('users');
