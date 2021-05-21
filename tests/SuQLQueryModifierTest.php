@@ -8,7 +8,7 @@ use suql\builder\SQLDriver;
 use suql\core\SuQLObject;
 use suql\core\SuQLScheme;
 
-final class SuQLQueryModifier extends TestCase
+final class SuQLQueryModifierTest extends TestCase
 {
     private $osuql;
 
