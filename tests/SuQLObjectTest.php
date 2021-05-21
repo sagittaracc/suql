@@ -33,24 +33,6 @@ final class SuQLObjectTest extends TestCase
         $this->osuql = null;
     }
 
-    public function testSelectDistinct(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select distinct
-                users.name
-            from users
-SQL);
-
-        $this->osuql->addSelect('select_distinct');
-        $this->osuql->getQuery('select_distinct')->addModifier('distinct');
-        $this->osuql->getQuery('select_distinct')->addField('users', 'name');
-        $this->osuql->getQuery('select_distinct')->addFrom('users');
-        $suql = $this->osuql->getSQL(['select_distinct']);
-
-        $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['select_distinct']));
-    }
-
     public function testStoredFunction(): void
     {
         $sql = "select some_func(1,false,'Yuriy',NULL)";
