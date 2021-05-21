@@ -263,34 +263,6 @@ SQL);
         $this->assertNull($this->osuql->getSQL(['main_query']));
     }
 
-    public function testSelectOrder(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                groups.name as gname,
-                count(groups.name) as count
-            from users
-            inner join user_group on users.id = user_group.user_id
-            inner join groups on user_group.group_id = groups.id
-            group by groups.name
-            order by count asc
-SQL);
-
-        $this->osuql->addSelect('select_order');
-        $this->osuql->getQuery('select_order')->addFrom('users');
-        $this->osuql->getQuery('select_order')->addJoin('inner', 'user_group');
-        $this->osuql->getQuery('select_order')->addJoin('inner', 'groups');
-        $this->osuql->getQuery('select_order')->addField('groups', 'name@gname');
-        $this->osuql->getQuery('select_order')->addField('groups', 'name@count');
-        $this->osuql->getQuery('select_order')->getField('groups', 'name@count')->addModifier('group');
-        $this->osuql->getQuery('select_order')->getField('groups', 'name@count')->addModifier('count');
-        $this->osuql->getQuery('select_order')->getField('groups', 'name@count')->addModifier('asc');
-        $suql = $this->osuql->getSQL(['select_order']);
-
-        $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['select_order']));
-    }
-
     public function testCallbackModifier(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
