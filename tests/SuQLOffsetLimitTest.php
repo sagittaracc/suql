@@ -2,28 +2,10 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\builder\SQLDriver;
-use suql\core\SuQLObject;
-use suql\core\SuQLScheme;
 
-final class SuQLOffsetLimitTest extends TestCase
+final class SuQLOffsetLimitTest extends SuQLMock
 {
-    private $osuql;
-
-    protected function setUp(): void
-    {
-        $scheme = new SuQLScheme();
-        $driver = new SQLDriver('mysql');
-        
-        $this->osuql = new SuQLObject($scheme, $driver);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->osuql = null;
-    }
     /**
      * SELECT ... FROM <table> LIMIT <limit>
      */
