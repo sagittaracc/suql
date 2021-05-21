@@ -22,7 +22,7 @@ final class SuQLOrderTest extends SuQLMock
                 *
             from users
             order by users.name desc, users.id asc
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_order');
         $this->osuql->getQuery('select_order')->addFrom('users');

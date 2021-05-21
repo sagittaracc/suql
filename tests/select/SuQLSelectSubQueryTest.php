@@ -32,7 +32,7 @@ final class SuQLSelectSubQueryTest extends SuQLMock
                 group by groups.name
             ) allGroupCount
             where gname = 'admin'
-        SQL);
+SQL);
 
         $this->osuql->addSelect('main_query');
         $this->osuql->getQuery('main_query')->addFrom('allGroupCount');

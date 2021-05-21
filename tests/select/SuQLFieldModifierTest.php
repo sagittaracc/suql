@@ -13,7 +13,7 @@ final class SuQLFieldModifierTest extends SuQLMock
                 users.id
             from users
             where users.id > 3
-        SQL);
+SQL);
 
         $this->osuql->addSelect('callback_modifier');
         $this->osuql->getQuery('callback_modifier')->addFrom('users');

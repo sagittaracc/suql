@@ -15,7 +15,7 @@ final class SuQLQueryModifierTest extends SuQLMock
             select distinct
                 users.name
             from users
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_distinct');
         $this->osuql->getQuery('select_distinct')->addModifier('distinct');

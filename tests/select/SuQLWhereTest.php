@@ -18,7 +18,7 @@ final class SuQLWhereTest extends SuQLMock
                 users.name as uname
             from users
             where users.id % 2 = 0
-        SQL);
+SQL);
 
         $this->osuql->addSelect('strict_where');
         $this->osuql->getQuery('strict_where')->addFrom('users');
@@ -40,7 +40,7 @@ final class SuQLWhereTest extends SuQLMock
             where
                 id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
             and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
-        SQL);
+SQL);
 
         $this->osuql->addSelect('expression_where');
         $this->osuql->getQuery('expression_where')->addFrom('users');
@@ -72,7 +72,7 @@ final class SuQLWhereTest extends SuQLMock
                     user_group.user_id
                 from user_group
             )
-        SQL);
+SQL);
 
         $this->osuql->addSelect('main_query');
         $this->osuql->getQuery('main_query')->addFrom('users');
@@ -97,7 +97,7 @@ final class SuQLWhereTest extends SuQLMock
             select
                 users.id as uid
             from users
-        SQL);
+SQL);
 
         $this->osuql->addSelect('empty_filter');
         $this->osuql->getQuery('empty_filter')->addFrom('users');
@@ -117,7 +117,7 @@ final class SuQLWhereTest extends SuQLMock
                 users.id as uid
             from users
             where users.id > :id
-        SQL);
+SQL);
 
         $filter = new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [3]);
 

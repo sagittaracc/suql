@@ -24,7 +24,7 @@ final class SuQLJoinTest extends SuQLMock
             from users
             inner join user_group on users.id = user_group.user_id
             inner join groups on user_group.group_id = groups.id
-        SQL);
+SQL);
 
         $this->osuql->addSelect('simple_join');
         $this->osuql->getQuery('simple_join')->addFrom('users');
@@ -57,7 +57,7 @@ final class SuQLJoinTest extends SuQLMock
                     max(users.registration) as lastRegistration
                 from users
             ) t1 on users.registration = t1.lastRegistration
-        SQL);
+SQL);
 
         $this->osuql->getScheme()->rel('users', 't1', 'users.registration = t1.lastRegistration');
 

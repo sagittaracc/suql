@@ -13,7 +13,7 @@ final class SuQLInsertTest extends SuQLMock
     {
         $sql = StringHelper::trimSql(<<<SQL
             insert into users (id,name) values (1,'Yuriy')
-        SQL);
+SQL);
 
         $this->osuql->addInsert('main');
         $this->osuql->getQuery('main')->addInto('users');
@@ -31,7 +31,7 @@ final class SuQLInsertTest extends SuQLMock
     {
         $sql = StringHelper::trimSQL(<<<SQL
             insert into users (id,name) values (:id,:name)
-        SQL);
+SQL);
 
         $this->osuql->addInsert('main');
         $this->osuql->getQuery('main')->addInto('users');

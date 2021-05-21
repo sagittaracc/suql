@@ -17,7 +17,7 @@ final class SuQLUnionTest extends SuQLMock
             (select min(users.registration) as reg_interval from users)
                 union
             (select max(users.registration) as reg_interval from users)
-        SQL);
+SQL);
 
         $this->osuql->addSelect('firstRegisration');
         $this->osuql->getQuery('firstRegisration')->addFrom('users');

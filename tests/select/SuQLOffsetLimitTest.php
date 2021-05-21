@@ -16,7 +16,7 @@ final class SuQLOffsetLimitTest extends SuQLMock
                 users.*
             from users
             limit 3
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_limit');
         $this->osuql->getQuery('select_limit')->addFrom('users');
@@ -38,7 +38,7 @@ final class SuQLOffsetLimitTest extends SuQLMock
                 users.*
             from users
             limit 3, 3
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_offset_limit');
         $this->osuql->getQuery('select_offset_limit')->addFrom('users');

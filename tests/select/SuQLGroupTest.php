@@ -29,7 +29,7 @@ final class SuQLGroupTest extends SuQLMock
             inner join groups on user_group.group_id = groups.id
             where groups.name = 'admin'
             group by groups.name
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_group');
         $this->osuql->getQuery('select_group')->addFrom('users');

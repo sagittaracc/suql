@@ -15,7 +15,7 @@ final class SuQLSelectTest extends SuQLMock
             select
                 *
             from users
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_all');
         $this->osuql->getQuery('select_all')->addFrom('users');
@@ -33,7 +33,7 @@ final class SuQLSelectTest extends SuQLMock
             select
                 users.*
             from users
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_all_with_table_name');
         $this->osuql->getQuery('select_all_with_table_name')->addFrom('users');
@@ -56,7 +56,7 @@ final class SuQLSelectTest extends SuQLMock
                 users.id,
                 users.name
             from users
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_field_list');
         $this->osuql->getQuery('select_field_list')->addFrom('users');
@@ -80,7 +80,7 @@ final class SuQLSelectTest extends SuQLMock
                 users.id as uid,
                 users.name as uname
             from users
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_using_aliases');
         $this->osuql->getQuery('select_using_aliases')->addFrom('users');
@@ -98,7 +98,7 @@ final class SuQLSelectTest extends SuQLMock
     {
         $sql = StringHelper::trimSql(<<<SQL
             select 2 * 2, 'Yuriy' as author
-        SQL);
+SQL);
 
         $this->osuql->addSelect('select_raw');
         $this->osuql->getQuery('select_raw')->addField(null, "2 * 2");
