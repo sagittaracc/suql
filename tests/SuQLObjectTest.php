@@ -53,23 +53,4 @@ SQL);
         $this->assertEquals($sql, $suql);
         $this->assertNull($this->osuql->getSQL(['callback_modifier']));
     }
-
-    public function testFilterEmpty(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid
-            from users
-SQL);
-
-        $this->osuql->addSelect('empty_filter');
-        $this->osuql->getQuery('empty_filter')->addFrom('users');
-        $this->osuql->getQuery('empty_filter')->addField('users', ['id' => 'uid']);
-        $this->osuql->getQuery('empty_filter')->addFilterWhere(':id', 'uid > :id');
-        $this->osuql->setParam(':id', null);
-        $suql = $this->osuql->getSQL(['empty_filter']);
-
-        $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['empty_filter']));
-    }
 }
