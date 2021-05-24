@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use app\models\User;
+use app\models\ActiveGroups;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\core\Modifier;
 
 final class GroupTest extends TestCase
 {
@@ -33,15 +32,7 @@ final class GroupTest extends TestCase
             group by groups.name
 SQL);
 
-        $query =
-            User::all()
-                ->join('user_group')
-                ->join('groups')
-                    ->select([
-                        'name',
-                        (new Modifier('count'))->applyTo(['name' => 'count']),
-                    ])
-                ->group('name');
+        $query = ActiveGroups::all();
         
         $this->assertEquals($sql, $query->getRawSql());
     }
