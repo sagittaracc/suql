@@ -45,8 +45,19 @@ abstract class SuQL extends Obj implements QueryObject
 
         $instance = new static($scheme, $driver);
         $instance->addSelect($instance->query());
-        $instance->getQuery($instance->query())->addFrom($instance->table());
-        $instance->currentTable = $instance->table();
+
+        $option = $instance->table();
+        if (is_string($option)) {
+            $table = $option;
+            $instance->getQuery($instance->query())->addFrom($table);
+            $instance->currentTable = $table;
+        }
+        else if ($option instanceof SuQL) {
+            $subquery = $option;
+            $instance->getQuery($instance->query())->addFrom($subquery->query());
+            $instance->extend($subquery->getQueries());
+            $instance->currentTable = $subquery->query();
+        }
 
         return $instance;
     }
