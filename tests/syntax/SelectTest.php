@@ -9,6 +9,36 @@ use sagittaracc\StringHelper;
 final class SelectTest extends TestCase
 {
     /**
+     * SELECT * FROM <table>
+     */
+    public function testSelectAll(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+SQL);
+
+        $query = User::all();
+
+        $this->assertEquals($sql, $query->getRawSql());
+    }
+    /**
+     * SELECT <table>.* FROM <table>
+     */
+    public function testSelectAllWithTableName(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.*
+            from users
+SQL);
+
+        $query = User::all()->select(['*']);
+
+        $this->assertEquals($sql, $query->getRawSql());
+    }
+    /**
      * SELECT
      *   <table>.<field-1>,
      *   <table>.<field-2>
