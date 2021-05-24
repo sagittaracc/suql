@@ -8,7 +8,7 @@ class User extends SuQL
 {
     public function query()
     {
-        return 'all_user_list';
+        return 'app_models_User';
     }
 
     public function table()
