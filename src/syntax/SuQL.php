@@ -128,6 +128,17 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * Группировка
+     * @return self
+     */
+    public function group($field)
+    {
+        $this->getQuery($this->query())->addField($this->currentTable, $field, false);
+        $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('group');
+
+        return $this;
+    }
+    /**
      * Возвращает sql
      * @return string
      */
