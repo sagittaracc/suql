@@ -20,7 +20,9 @@ final class JoinTest extends TestCase
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                users.id
+                users.id,
+                groups.id as gid,
+                groups.name as gname
             from users
             inner join user_group on users.id = user_group.user_id
             inner join groups on user_group.group_id = groups.id

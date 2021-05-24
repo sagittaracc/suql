@@ -26,6 +26,10 @@ class UserFullInfo extends SuQL
                 'id',
             ])
             ->join('user_group')
-            ->join('groups');
+            ->join('groups')
+                ->select([
+                    'id' => 'gid',
+                    'name' => 'gname',
+                ]);
     }
 }

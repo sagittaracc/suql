@@ -24,6 +24,10 @@ abstract class SuQL extends Obj implements QueryObject
      */
     protected static $sqlDriver = null;
     /**
+     * @var string текущая таблица в цепочке вызовов
+     */
+    private $currentTable = null;
+    /**
      * Получает экземпляр модели
      * @return self
      */
@@ -41,6 +45,7 @@ abstract class SuQL extends Obj implements QueryObject
         $instance = new static($scheme, $driver);
         $instance->addSelect($instance->query());
         $instance->getQuery($instance->query())->addFrom($instance->table());
+        $instance->currentTable = $instance->table();
 
         return $instance;
     }
@@ -60,12 +65,12 @@ abstract class SuQL extends Obj implements QueryObject
     {
         if (ArrayHelper::isSequential($fieldList)) {
             foreach ($fieldList as $field) {
-                $this->getQuery($this->query())->addField($this->table(), $field);
+                $this->getQuery($this->query())->addField($this->currentTable, $field);
             }
         }
         else {
             foreach ($fieldList as $field => $alias) {
-                $this->getQuery($this->query())->addField($this->table(), [$field => $alias]);
+                $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
             }
         }
 
@@ -78,6 +83,7 @@ abstract class SuQL extends Obj implements QueryObject
     public function join($table)
     {
         $this->getQuery($this->query())->addJoin('inner', $table);
+        $this->currentTable = $table;
 
         return $this;
     }
@@ -88,8 +94,8 @@ abstract class SuQL extends Obj implements QueryObject
     public function order($order)
     {
         foreach ($order as $field => $direction) {
-            $this->getQuery($this->query())->addField($this->table(), $field, false);
-            $this->getQuery($this->query())->getField($this->table(), $field)->addModifier($direction);
+            $this->getQuery($this->query())->addField($this->currentTable, $field, false);
+            $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier($direction);
         }
 
         return $this;
