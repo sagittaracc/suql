@@ -7,7 +7,7 @@ namespace suql\core;
  * Более читабельный способ применения модификатора к полю в выборке
  * 
  * Например:
- * User::find()
+ * User::all()
  *         ->select([
  *             'name',
  *             (new suql\core\Modifier('max'))->applyTo(['id' => 'max'])
