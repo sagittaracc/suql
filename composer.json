@@ -12,7 +12,8 @@
     "autoload": {
       "classmap": [
         "src/",
-        "tests/mocks/"
+        "tests/mocks/",
+        "tests/models/"
       ]
     },
     "require": {
