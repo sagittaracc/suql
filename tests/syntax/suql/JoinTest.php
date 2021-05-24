@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use app\models\LastRegistration;
+use app\models\User;
 use app\models\UserFullInfo;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
@@ -51,10 +52,11 @@ SQL);
                 select
                     max(users.registration) as lastRegistration
                 from users
-            ) t1 on users.registration = t1.lastRegistration
+            ) last_registration on users.registration = last_registration.lastRegistration
 SQL);
         
-        $query = LastRegistration::all();
-        $this->assertEquals('select max(users.registration) as lastRegistration from users', $query->getRawSql());
+        $query = User::all()->join(LastRegistration::all());
+
+        $this->assertEquals($sql, $query->getRawSql());
     }
 }
