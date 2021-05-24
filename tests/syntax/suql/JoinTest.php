@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use app\models\LastRegistration;
 use app\models\UserFullInfo;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
@@ -31,5 +32,29 @@ SQL);
         $query = UserFullInfo::all();
         
         $this->assertEquals($sql, $query->getRawSql());
+    }
+    /**
+     * SELECT
+     *   ...
+     * FROM <table>
+     * [INNER|LEFT|RIGHT] JOIN (
+     *   SELECT ... FROM ...
+     * ) <table-alias> ON <join>
+     */
+    public function testJoinWithSubQuery(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+            inner join (
+                select
+                    max(users.registration) as lastRegistration
+                from users
+            ) t1 on users.registration = t1.lastRegistration
+SQL);
+        
+        $query = LastRegistration::all();
+        $this->assertEquals('select max(users.registration) as lastRegistration from users', $query->getRawSql());
     }
 }

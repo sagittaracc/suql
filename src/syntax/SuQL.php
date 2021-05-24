@@ -5,6 +5,7 @@ namespace suql\syntax;
 use suql\core\Obj;
 use sagittaracc\ArrayHelper;
 use suql\builder\SQLDriver;
+use suql\core\Modifier;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\SqlDriverNotDefined;
 
@@ -61,16 +62,32 @@ abstract class SuQL extends Obj implements QueryObject
      * Выборка определенных полей модели
      * @return self
      */
-    public function select($fieldList)
+    public function select($options)
     {
-        if (ArrayHelper::isSequential($fieldList)) {
-            foreach ($fieldList as $field) {
-                $this->getQuery($this->query())->addField($this->currentTable, $field);
+        if (ArrayHelper::isSequential($options)) {
+            foreach ($options as $option) {
+                if ($option instanceof Modifier) {
+                    $modifier = $option;
+                    $this->getQuery($this->query())->addField($this->currentTable, $modifier->getField());
+                    $this->getQuery($this->query())->getField($this->currentTable, $modifier->getField())->addModifier($modifier->getModifier(), $modifier->getParams());
+                }
+                else {
+                    $field = $option;
+                    $this->getQuery($this->query())->addField($this->currentTable, $field);
+                }
             }
         }
         else {
-            foreach ($fieldList as $field => $alias) {
-                $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
+            foreach ($options as $field => $option) {
+                if ($option instanceof Modifier) {
+                    $modifier = $option;
+                    $this->getQuery($this->query())->addField($this->currentTable, $modifier->getField());
+                    $this->getQuery($this->query())->getField($this->currentTable, $modifier->getField())->addModifier($modifier->getModifier(), $modifier->getParams());
+                }
+                else {
+                    $alias = $option;
+                    $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
+                }
             }
         }
 
