@@ -13,7 +13,7 @@
       "classmap": [
         "src/",
         "tests/mocks/",
-        "tests/models/"
+        "tests/syntax/"
       ]
     },
     "require": {
