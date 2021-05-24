@@ -46,6 +46,19 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * Сортировка
+     * @return self
+     */
+    public function order($order)
+    {
+        foreach ($order as $field => $direction) {
+            $this->getQuery($this->query())->addField($this->table(), $field, false);
+            $this->getQuery($this->query())->getField($this->table(), $field)->addModifier($direction);
+        }
+
+        return $this;
+    }
+    /**
      * Возвращает sql
      * @return string
      */
