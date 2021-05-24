@@ -7,10 +7,10 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-abstract class SuQLParam
+abstract class Param
 {
     /**
-     * @var suql\core\SuQLFieldName поле для которого применяются параметры
+     * @var suql\core\FieldName поле для которого применяются параметры
      */
     protected $field;
     /**
@@ -19,7 +19,7 @@ abstract class SuQLParam
     protected $params;
     /**
      * Constructor
-     * @param suql\core\SuQLFieldName $field поле для которого применяются параметры
+     * @param suql\core\FieldName $field поле для которого применяются параметры
      * @param array $params параметры применения
      */
     function __construct($field, $params)
@@ -38,7 +38,7 @@ abstract class SuQLParam
     }
     /**
      * Получить поле
-     * @return suql\core\SuQLFieldName
+     * @return suql\core\FieldName
      */
     public function getField()
     {
@@ -78,7 +78,7 @@ abstract class SuQLParam
 
         foreach ($this->params as $index => $param)
         {
-            $placeholderList[] = $param instanceof SuQLPlaceholder ? $param->getPlaceholder() : ":ph{$index}_{$this->getFieldHash($param)}";
+            $placeholderList[] = $param instanceof Placeholder ? $param->getPlaceholder() : ":ph{$index}_{$this->getFieldHash($param)}";
         }
 
         return $placeholderList;

@@ -7,10 +7,10 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLField
+class Field
 {
     /**
-     * @var siql\core\SuQLSelect Ссылка на основной объект выборки
+     * @var siql\core\Select Ссылка на основной объект выборки
      */
     private $oselect = null;
     /**
@@ -37,9 +37,9 @@ class SuQLField
     private $modifier = [];
     /**
      * Constructor
-     * @param suql\core\SuQLSelect ссылка на основной объект выборки
+     * @param suql\core\Select ссылка на основной объект выборки
      * @param string $table название таблицы
-     * @param suql\core\SuQLFieldName $field объект с параметрами поля
+     * @param suql\core\FieldName $field объект с параметрами поля
      * @param string $alias алиас поля
      * @param boolean $visible добавить поле в выборку или нет
      */
@@ -53,7 +53,7 @@ class SuQLField
     }
     /**
      * Вернуть ссылку на основной объект выборки
-     * @return suql\core\SuQLSelect
+     * @return suql\core\Select
      */
     public function getOSelect()
     {

@@ -10,12 +10,12 @@ namespace suql\core;
  * User::find()
  *         ->select([
  *             'name',
- *             (new suql\core\SuQLModifier('max'))->applyTo(['id' => 'max'])
+ *             (new suql\core\Modifier('max'))->applyTo(['id' => 'max'])
  *         ]),
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLModifier
+class Modifier
 {
     /**
      * @var string название модификатора

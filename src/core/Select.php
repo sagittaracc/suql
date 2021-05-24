@@ -9,10 +9,10 @@ use suql\core\SelectQueryInterface;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLSelect extends SuQLQuery implements SelectQueryInterface
+class Select extends Query implements SelectQueryInterface
 {
     /**
-     * @var array перечень suql\core\SuQLField полей учавствующих в выборке
+     * @var array перечень suql\core\Field полей учавствующих в выборке
      */
     private $select = [];
     /**
@@ -32,7 +32,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      */
     private $having = [];
     /**
-     * @var array список suql\core\SuQLJoin объектов описывающих соединение таблиц
+     * @var array список suql\core\Join объектов описывающих соединение таблиц
      */
     private $join = [];
     /**
@@ -60,7 +60,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      */
     private $table_list  = [];
     /**
-     * Получить перечень suql\core\SuQLField учавствующий в запросе.
+     * Получить перечень suql\core\Field учавствующий в запросе.
      * @return array
      */
     public function getSelect()
@@ -76,13 +76,13 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      *   3. <field>@<alias> - строка с полем и его алиасом
      * @param boolean $visible некоторые поля нужны просто чтобы применить к ним модификатор
      * например поля сортировки или группировки или фильтрации но их не нужно выводить в результат
-     * @return suql\core\SuQLFieldName
+     * @return suql\core\FieldName
      */
     public function addField($table, $name, $visible = true)
     {
-        $field = new SuQLFieldName($table, $name);
+        $field = new FieldName($table, $name);
 
-        $this->select[] = new SuQLField(
+        $this->select[] = new Field(
             $this,
             $table,
             $field,
@@ -96,11 +96,11 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      * Проверяет есть ли поле в текущей выборке
      * @param string $table имя таблицы
      * @param string|array имя поля в трех возможных форматах описанных ранее
-     * @return suql\core\SuQLField|false возвращает объект поля если найдено
+     * @return suql\core\Field|false возвращает объект поля если найдено
      */
     public function hasField($table, $name)
     {
-        $field = new SuQLFieldName($table, $name);
+        $field = new FieldName($table, $name);
 
         foreach ($this->select as $ofield) {
             if ($ofield->getField() === $field->format('%t.%n')
@@ -116,7 +116,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      * Возвращает поле по имени таблицы и имени поля
      * @param string $table имя таблицы
      * @param string|array $name имя поля в трех возможных форматах описанных ранее
-     * @return suql\core\SuQLField|null возвращает null если не найдено
+     * @return suql\core\Field|null возвращает null если не найдено
      */
     public function getField($table, $name)
     {
@@ -175,7 +175,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
         {
             $this->addStringWhere($where);
         }
-        else if ($where instanceof SuQLExpression)
+        else if ($where instanceof Expression)
         {
             $this->addExpressionWhere($where);
         }
@@ -190,7 +190,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
     }
     /**
      * Добавляет условие where из expression
-     * @param suql\core\SuQLExpression
+     * @param suql\core\Expression
      */
     private function addExpressionWhere($where)
     {
@@ -253,7 +253,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      */
     public function addJoin($type, $table)
     {
-        $this->join[] = new SuQLJoin($this, $table, $type);
+        $this->join[] = new Join($this, $table, $type);
         $this->table_list[] = $table;
     }
     /**
@@ -287,7 +287,7 @@ class SuQLSelect extends SuQLQuery implements SelectQueryInterface
      */
     public function addOrder($field, $direction = 'asc')
     {
-        $this->order[] = new SuQLOrder($field, $direction);
+        $this->order[] = new Order($field, $direction);
     }
     /**
      * Получить перечень полей в сортировке

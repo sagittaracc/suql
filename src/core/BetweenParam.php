@@ -7,7 +7,7 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLBetweenParam extends SuQLParam
+class BetweenParam extends Param
 {
     /**
      * {@inheritdoc}

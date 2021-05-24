@@ -3,18 +3,18 @@
 namespace suql\core;
 
 /**
- * Выражения с suql\core\SuQLCondition
+ * Выражения с suql\core\Condition
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLExpression
+class Expression
 {
     /**
      * @var string строка выражения
      */
     private $expression;
     /**
-     * @var array набор suql\core\SuQLCondition
+     * @var array набор suql\core\Condition
      */
     private $conditions;
     /**

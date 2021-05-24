@@ -8,7 +8,7 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLFieldName extends SuQLName
+class FieldName extends Name
 {
     /**
      * @var string имя таблицы

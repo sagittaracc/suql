@@ -9,7 +9,7 @@ use suql\core\UnionQueryInterface;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLUnion extends SuQLQuery implements UnionQueryInterface
+class Union extends Query implements UnionQueryInterface
 {
     /**
      * @var string $suql строковое представление union запроса @query1 union [all] @query2 union ...
@@ -17,7 +17,7 @@ class SuQLUnion extends SuQLQuery implements UnionQueryInterface
     private $suql = '';
     /**
      * Constructor
-     * @param suql\core\SuQLObject $osuql ссылка на основной объект OSuQL
+     * @param suql\core\Object $osuql ссылка на основной объект OSuQL
      * @param string $suql строковое представление union запроса @query1 union [all] @query2 union ...
      */
     function __construct($osuql, $suql)

@@ -12,7 +12,7 @@ class SQLFunctionModifier
     /**
      * Основной обработчик функций
      * @param string $func название функции
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     private static function func($func, $ofield, $params)
@@ -23,7 +23,7 @@ class SQLFunctionModifier
     }
     /**
      * Модуль
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_abs($ofield, $params)
@@ -32,7 +32,7 @@ class SQLFunctionModifier
     }
     /**
      * Количество записей
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_count($ofield, $params)
@@ -41,7 +41,7 @@ class SQLFunctionModifier
     }
     /**
      * Минимальный
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_min($ofield, $params)
@@ -50,7 +50,7 @@ class SQLFunctionModifier
     }
     /**
      * Максимальный
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_max($ofield, $params)
@@ -59,7 +59,7 @@ class SQLFunctionModifier
     }
     /**
      * Сумма
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_sum($ofield, $params)
@@ -68,7 +68,7 @@ class SQLFunctionModifier
     }
     /**
      * Округление чисел
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_round($ofield, $params)
@@ -77,7 +77,7 @@ class SQLFunctionModifier
     }
     /**
      * Group concat
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_implode($ofield, $params)
@@ -86,7 +86,7 @@ class SQLFunctionModifier
     }
     /**
      * Промежуток времени до текущего момента
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_datediffnow($ofield, $params)
@@ -96,7 +96,7 @@ class SQLFunctionModifier
     }
     /**
      * Остаток от деления
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_mod($ofield, $params)
@@ -105,7 +105,7 @@ class SQLFunctionModifier
     }
     /**
      * Форматирование даты
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_date_format($ofield, $params)
@@ -114,7 +114,7 @@ class SQLFunctionModifier
     }
     /**
      * Знак
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_sign($ofield, $params)

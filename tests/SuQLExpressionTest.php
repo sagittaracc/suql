@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\core\SuQLBetweenParam;
-use suql\core\SuQLCondition;
-use suql\core\SuQLExpression;
-use suql\core\SuQLFieldName;
-use suql\core\SuQLInParam;
-use suql\core\SuQLLikeParam;
-use suql\core\SuQLSimpleParam;
+use suql\core\BetweenParam;
+use suql\core\Condition;
+use suql\core\Expression;
+use suql\core\FieldName;
+use suql\core\InParam;
+use suql\core\LikeParam;
+use suql\core\SimpleParam;
 
 final class SuQLExpressionTest extends TestCase
 {
@@ -19,8 +19,8 @@ final class SuQLExpressionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fieldUserId = new SuQLFieldName('users', 'id');
-        $this->fieldUserName = new SuQLFieldName('users', 'name');
+        $this->fieldUserId = new FieldName('users', 'id');
+        $this->fieldUserName = new FieldName('users', 'name');
     }
 
     protected function tearDown(): void
@@ -50,17 +50,17 @@ SQL);
             ':ph0_c52e9ca1ce023b250556fab760727d9e' => '%sagittaracc%',
         ];
 
-        $simpleParam = new SuQLSimpleParam($this->fieldUserId, [1]);
-        $betweenParam = new SuQLBetweenParam($this->fieldUserId, [3, 6]);
-        $inParam = new SuQLInParam($this->fieldUserId, [10, 20, 30]);
-        $likeParam = new SuQLLikeParam($this->fieldUserName, ['sagittaracc']);
+        $simpleParam = new SimpleParam($this->fieldUserId, [1]);
+        $betweenParam = new BetweenParam($this->fieldUserId, [3, 6]);
+        $inParam = new InParam($this->fieldUserId, [10, 20, 30]);
+        $likeParam = new LikeParam($this->fieldUserName, ['sagittaracc']);
 
-        $conditionOne = new SuQLCondition($simpleParam, '$ > ?');
-        $conditionTwo = new SuQLCondition($betweenParam, '$ between ?');
-        $conditionThree = new SuQLCondition($inParam, '$ in ?');
-        $conditionFour = new SuQLCondition($likeParam, '$ like ?');
+        $conditionOne = new Condition($simpleParam, '$ > ?');
+        $conditionTwo = new Condition($betweenParam, '$ between ?');
+        $conditionThree = new Condition($inParam, '$ in ?');
+        $conditionFour = new Condition($likeParam, '$ like ?');
 
-        $actualExpression = new SuQLExpression(
+        $actualExpression = new Expression(
             '($1 or $2) and $3 and $4',
             [$conditionOne, $conditionTwo, $conditionThree, $conditionFour]
         );

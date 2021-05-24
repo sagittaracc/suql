@@ -12,6 +12,6 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLTableName extends SuQLName
+class TableName extends Name
 {
 }

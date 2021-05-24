@@ -4,9 +4,9 @@ namespace suql\modifier\field;
 
 use ReflectionClass;
 use sagittaracc\PlaceholderHelper;
-use suql\core\SuQLCondition;
-use suql\core\SuQLExpression;
-use suql\core\SuQLFieldName;
+use suql\core\Condition;
+use suql\core\Expression;
+use suql\core\FieldName;
 
 /**
  * Модификатор case when
@@ -18,7 +18,7 @@ class SQLCaseModifier
     /**
      * Основной обработчик перечня case условий
      * @param array $options перечень case условий
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params не используется в данном модификаторе
      */
     private static function case($options, $ofield, $params)
@@ -35,7 +35,7 @@ class SQLCaseModifier
             {
                 $caseList[] = "else $then";
             }
-            else if ($when instanceof SuQLExpression || $when instanceof SuQLCondition)
+            else if ($when instanceof Expression || $when instanceof Condition)
             {
                 $caseList[] = "when $when then $then";
             }
@@ -48,10 +48,10 @@ class SQLCaseModifier
      * @param array $case настройки case условия
      * Формат данного условия следующий (пример):
      * [
-     *     [<suql\core\SuQLFieldName>, '$ = 1'],
+     *     [<suql\core\FieldName>, '$ = 1'],
      *     <then>,
      * ]
-     * @return array из одного элемента класса suql\core\SuQLCondition
+     * @return array из одного элемента класса suql\core\Condition
      */
     private static function condition($case)
     {
@@ -61,7 +61,7 @@ class SQLCaseModifier
         $field = $when[0];
         $condition = $when[1];
 
-        return [new SuQLCondition($field, $condition), $then];
+        return [new Condition($field, $condition), $then];
     }
     /**
      * Составное условие в case
@@ -69,12 +69,12 @@ class SQLCaseModifier
      * Формат данного условия следующий (пример):
      * [
      *     '$1 and $2' => [
-     *         [<suql\core\SuQLFieldName>, '$ > 1'],
-     *         [<suql\core\SuQLFieldName>, '$ < 3', '%t.%n']
+     *         [<suql\core\FieldName>, '$ > 1'],
+     *         [<suql\core\FieldName>, '$ < 3', '%t.%n']
      *     ],
      *     <then>
      * ]
-     * @return array из одного элемента класса suql\core\SuQLExpression
+     * @return array из одного элемента класса suql\core\Expression
      */
     private static function expression($case)
     {
@@ -91,13 +91,13 @@ class SQLCaseModifier
                 $expression = $key;
                 foreach ($value as $condition)
                 {
-                    $reflector = new ReflectionClass(SuQLCondition::class);
+                    $reflector = new ReflectionClass(Condition::class);
                     $conditionList[] = $reflector->newInstanceArgs($condition);
                 }
             }
         }
 
-        return [new SuQLExpression($expression, $conditionList), $then];
+        return [new Expression($expression, $conditionList), $then];
     }
     /**
      * Парсер case условий
@@ -106,14 +106,14 @@ class SQLCaseModifier
      * [
      *     // Пример простого условия
      *     [
-     *         [<suql\core\SuQLFieldName>, '$ = 1'],
+     *         [<suql\core\FieldName>, '$ = 1'],
      *         <then>,
      *     ],
      *     // Пример составного условия
      *     [
      *         '$1 and $2' => [
-     *             [<suql\core\SuQLFieldName>, '$ > 1'],
-     *             [<suql\core\SuQLFieldName>, '$ < 3', '%t.%n']
+     *             [<suql\core\FieldName>, '$ > 1'],
+     *             [<suql\core\FieldName>, '$ < 3', '%t.%n']
      *         ],
      *         <then>
      *     ],
@@ -121,7 +121,7 @@ class SQLCaseModifier
      *         <default>
      *     ]
      * ]
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function parse($options, $ofield, $params)
@@ -156,8 +156,8 @@ class SQLCaseModifier
     {
         $table = $ofield->getTable();
         $field = $ofield->getField();
-        $fieldName = new SuQLFieldName($table, $field);
-        $anotherFieldName = new SuQLFieldName('groups', 'id');
+        $fieldName = new FieldName($table, $field);
+        $anotherFieldName = new FieldName('groups', 'id');
         
         self::parse([
             [

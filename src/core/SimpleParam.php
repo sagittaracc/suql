@@ -7,7 +7,7 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLSimpleParam extends SuQLParam
+class SimpleParam extends Param
 {
     /**
      * Получить только первый параметр фильтрации

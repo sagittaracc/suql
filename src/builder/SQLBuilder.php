@@ -2,13 +2,12 @@
 
 namespace suql\builder;
 
-use suql\core\SuQLName;
 use sagittaracc\ArrayHelper;
 use suql\core\FunctionQueryInterface;
 use suql\core\InsertQueryInterface;
+use suql\core\Name;
 use suql\core\ProcedureQueryInterface;
 use suql\core\SelectQueryInterface;
-use suql\core\SuQLCallInterface;
 use suql\core\UnionQueryInterface;
 
 /**
@@ -229,7 +228,7 @@ class SQLBuilder
         $selectList = [];
         foreach ($oselect->getSelect() as $field => $ofield) {
             if ($ofield->visible()) {
-                $fieldName = new SuQLName($ofield->getField(), $ofield->getAlias());
+                $fieldName = new Name($ofield->getField(), $ofield->getAlias());
                 $selectList[] = $fieldName->format('%n as %a');
             }
         }

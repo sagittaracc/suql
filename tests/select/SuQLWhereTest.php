@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use sagittaracc\StringHelper;
-use suql\core\SuQLCondition;
-use suql\core\SuQLExpression;
-use suql\core\SuQLFieldName;
-use suql\core\SuQLPlaceholder;
-use suql\core\SuQLSimpleParam;
+use suql\core\Condition;
+use suql\core\Expression;
+use suql\core\FieldName;
+use suql\core\Placeholder;
+use suql\core\SimpleParam;
 
 final class SuQLWhereTest extends SuQLMock
 {
@@ -46,9 +46,9 @@ SQL);
         $this->osuql->addSelect('expression_where');
         $this->osuql->getQuery('expression_where')->addFrom('users');
         $this->osuql->getQuery('expression_where')->addWhere(
-            new SuQLExpression('$1 and $2', [
-                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [1]), '$ > ?'),
-                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [3]), '$ < ?')
+            new Expression('$1 and $2', [
+                new Condition(new SimpleParam(new FieldName('users', 'id'), [1]), '$ > ?'),
+                new Condition(new SimpleParam(new FieldName('users', 'id'), [3]), '$ < ?')
             ])
         );
         $suql = $this->osuql->getSQL(['expression_where']);
@@ -75,9 +75,9 @@ SQL);
         $this->osuql->addSelect('placeholder_expression_where');
         $this->osuql->getQuery('placeholder_expression_where')->addFrom('users');
         $this->osuql->getQuery('placeholder_expression_where')->addWhere(
-            new SuQLExpression('$1 and $2', [
-                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [new SuQLPlaceholder('id1')]), '$ > ?'),
-                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [new SuQLPlaceholder('id2')]), '$ < ?'),
+            new Expression('$1 and $2', [
+                new Condition(new SimpleParam(new FieldName('users', 'id'), [new Placeholder('id1')]), '$ > ?'),
+                new Condition(new SimpleParam(new FieldName('users', 'id'), [new Placeholder('id2')]), '$ < ?'),
             ])
         );
         $suql = $this->osuql->getSQL(['placeholder_expression_where']);
@@ -146,7 +146,7 @@ SQL);
             where users.id > :id
 SQL);
 
-        $filter = new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [3]);
+        $filter = new SimpleParam(new FieldName('users', 'id'), [3]);
 
         $this->osuql->addSelect('not_empty_filter');
         $this->osuql->getQuery('not_empty_filter')->addFrom('users');

@@ -7,10 +7,10 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLJoin
+class Join
 {
     /**
-     * @var suql\core\SuQLSelect
+     * @var suql\core\Select
      */
     private $oselect = null;
     /**
@@ -27,7 +27,7 @@ class SuQLJoin
     private $on;
     /**
      * Constructor
-     * @param suql\core\SuQLSelect
+     * @param suql\core\Select
      * @param string $table название таблицы
      * @param string $type тип join
      */

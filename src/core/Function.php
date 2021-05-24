@@ -9,7 +9,7 @@ use sagittaracc\PlaceholderHelper;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLFunction extends SuQLQuery implements FunctionQueryInterface
+class Func extends Query implements FunctionQueryInterface
 {
     /**
      * @var string название хранимой функции
@@ -21,7 +21,7 @@ class SuQLFunction extends SuQLQuery implements FunctionQueryInterface
     private $params;
     /**
      * Constructor
-     * @param suql\core\SuQLObject $osuql ссылка на основной объект структуры запроса
+     * @param suql\core\Object $osuql ссылка на основной объект структуры запроса
      * @param string $name название хранимой процедуры
      */
     function __construct($osuql, $name)
@@ -37,7 +37,7 @@ class SuQLFunction extends SuQLQuery implements FunctionQueryInterface
     {
         foreach ($params as $param)
         {
-            if ($param instanceof SuQLPlaceholder)
+            if ($param instanceof Placeholder)
             {
                 $this->params[] = $param->getPlaceholder();
             }

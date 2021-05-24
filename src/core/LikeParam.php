@@ -7,7 +7,7 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLLikeParam extends SuQLSimpleParam
+class LikeParam extends SimpleParam
 {
     /**
      * {@inheritdoc}

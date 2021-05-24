@@ -4,13 +4,13 @@ namespace suql\core;
 
 /**
  * Обработка имени с заданием алиаса в трех возможных форматах:
- *   Separated new SuQLName(<name>, <alias>)
- *   Array     new SuQLName([<name> => <alias>])
- *   String    new SuQLName('<name>@<alias>')
+ *   Separated new Name(<name>, <alias>)
+ *   Array     new Name([<name> => <alias>])
+ *   String    new Name('<name>@<alias>')
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLName
+class Name
 {
     /**
      * @var string имя

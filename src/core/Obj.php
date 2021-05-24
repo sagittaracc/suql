@@ -2,7 +2,6 @@
 
 namespace suql\core;
 
-use suql\exception\SqlDriverNotSupportedException;
 use suql\modifier\field\SQLCaseModifier;
 use suql\modifier\field\SQLFilterModifier;
 use suql\modifier\field\SQLFunctionModifier;
@@ -15,14 +14,14 @@ use suql\modifier\field\SQLWhereModifier;
  * 
  * @author: sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLObject
+class Obj
 {
     /**
      * @var array перечень конфигураций запросов индексированных их именами в качестве ключей
      */
     private $queries = [];
     /**
-     * @var suql\core\SuQLScheme связи между таблицами и вьюхами
+     * @var suql\core\Scheme связи между таблицами и вьюхами
      */
     protected $scheme;
     /**
@@ -35,7 +34,7 @@ class SuQLObject
     protected $params = [];
     /**
      * Constructor
-     * @param suql\core\SuQLScheme $scheme экземпляр схемы
+     * @param suql\core\Scheme $scheme экземпляр схемы
      * @param suql\builder\SQLDriver $driver экземляр драйвера
      */
     function __construct($scheme, $driver)
@@ -45,7 +44,7 @@ class SuQLObject
     }
     /**
      * Получить схему
-     * @return suql\core\SuQLScheme
+     * @return suql\core\Scheme
      */
     public function getScheme()
     {
@@ -144,7 +143,7 @@ class SuQLObject
      */
     public function addSelect($name)
     {
-        $this->queries[$name] = new SuQLSelect($this);
+        $this->queries[$name] = new Select($this);
     }
     /**
      * Добавляет call запрос вызова хранимой процедуры
@@ -153,7 +152,7 @@ class SuQLObject
      */
     public function addProcedure($name, $procName)
     {
-        $this->queries[$name] = new SuQLProcedure($this, $procName);
+        $this->queries[$name] = new Proc($this, $procName);
     }
     /**
      * Добавляет функцию хранимой процедуры
@@ -162,7 +161,7 @@ class SuQLObject
      */
     public function addFunction($name, $funcName)
     {
-        $this->queries[$name] = new SuQLFunction($this, $funcName);
+        $this->queries[$name] = new Func($this, $funcName);
     }
     /**
      * Добавляет insert запрос по названию
@@ -170,7 +169,7 @@ class SuQLObject
      */
     public function addInsert($name)
     {
-        $this->queries[$name] = new SuQLInsert($this);
+        $this->queries[$name] = new Insert($this);
     }
     /**
      * Добавляет union запрос по названию
@@ -179,7 +178,7 @@ class SuQLObject
      */
     public function addUnion($name, $query)
     {
-        $this->queries[$name] = new SuQLUnion($this, $query);
+        $this->queries[$name] = new Union($this, $query);
     }
     /**
      * Добавляет таблицу к union запросу по названию
@@ -190,14 +189,14 @@ class SuQLObject
     public function addUnionTable($name, $unionType, $table)
     {
         if (!isset($this->queries[$name]))
-            $this->queries[$name] = new SuQLUnion($this, $table);
+            $this->queries[$name] = new Union($this, $table);
         else
             $this->queries[$name]->addUnionTable($unionType, $table);
     }
     /**
      * Получить объект запроса по имени
      * @param string $name
-     * @return suql\core\SuQLSelect
+     * @return suql\core\Select
      */
     public function getQuery($name)
     {
@@ -251,7 +250,7 @@ class SuQLObject
     /**
      * Получает параметр по имени
      * @param string $param
-     * @return suql\core\SuQLParam
+     * @return suql\core\Param
      */
     public function getParam($param)
     {
@@ -260,7 +259,7 @@ class SuQLObject
     /**
      * Устанавливает параметр запроса
      * @param string $param название параметра
-     * @param suql\core\SuQLParam $suqlParam класс параметра
+     * @param suql\core\Param $suqlParam класс параметра
      */
     public function setParam($param, $suqlParam)
     {
@@ -276,7 +275,7 @@ class SuQLObject
 
         foreach ($this->params as $placeholder => $param)
         {
-            if ($param instanceof SuQLPlaceholder) continue;
+            if ($param instanceof Placeholder) continue;
             $paramList[$placeholder] = $param;
         }
 

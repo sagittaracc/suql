@@ -7,7 +7,7 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLOrder
+class Order
 {
     /**
      * @var string $field название поля

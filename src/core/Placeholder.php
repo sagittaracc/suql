@@ -7,7 +7,7 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLPlaceholder
+class Placeholder
 {
     /**
      * @var string $placeholder название плейсхолдера

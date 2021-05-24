@@ -9,7 +9,7 @@ use suql\core\SchemeInterface;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLScheme implements SchemeInterface
+class Scheme implements SchemeInterface
 {
     /**
      * Постоянные связи между таблицами
@@ -61,8 +61,8 @@ class SuQLScheme implements SchemeInterface
      */
     public function rel($leftTable, $rightTable, $on, $temporary = false)
     {
-        $leftTable = new SuQLTableName($leftTable);
-        $rightTable = new SuQLTableName($rightTable);
+        $leftTable = new TableName($leftTable);
+        $rightTable = new TableName($rightTable);
 
         if ($leftTable->alias)
             $on = str_replace($leftTable->format("%a."), $leftTable->format("%n."), $on);

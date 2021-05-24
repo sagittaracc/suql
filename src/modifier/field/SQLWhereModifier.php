@@ -2,12 +2,12 @@
 
 namespace suql\modifier\field;
 
-use suql\core\SuQLLikeParam;
-use suql\core\SuQLBetweenParam;
-use suql\core\SuQLCondition;
-use suql\core\SuQLFieldName;
-use suql\core\SuQLInParam;
-use suql\core\SuQLSimpleParam;
+use suql\core\LikeParam;
+use suql\core\BetweenParam;
+use suql\core\Condition;
+use suql\core\FieldName;
+use suql\core\InParam;
+use suql\core\SimpleParam;
 
 /**
  * Where Clause
@@ -19,7 +19,7 @@ class SQLWhereModifier
     /**
      * Основной обработчик параметризованного where запроса
      * @param string $compare условие сравнения
-     * @param suql\core\SuQLParam $suqlParam объект описания параметра запроса where
+     * @param suql\core\Param $suqlParam объект описания параметра запроса where
      * @param boolean $isFilter фильтровое сравнение или нет. При фильтровом не применяется при пустом $suqlParam
      * Пустота $suqlParam определяется для каждого типа параметра отдельно
      */
@@ -29,8 +29,8 @@ class SQLWhereModifier
         $placeholder = $suqlParam->getPlaceholder();
         $paramKey = $suqlParam->getParamKey();
 
-        $fieldName = new SuQLFieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
-        $condition = new SuQLCondition($fieldName, "$ $compare $placeholder");
+        $fieldName = new FieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
+        $condition = new Condition($fieldName, "$ $compare $placeholder");
 
         if (!$ofield->getOSelect()->getOSuQL()->hasParam($paramKey))
         {
@@ -55,103 +55,103 @@ class SQLWhereModifier
     }
     /**
      * Модификатор '>'
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_greater($ofield, $params, $isFilter = false)
     {
-        self::where('>', new SuQLSimpleParam($ofield, $params), $isFilter);
+        self::where('>', new SimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '>='
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_greaterOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('>=', new SuQLSimpleParam($ofield, $params), $isFilter);
+        self::where('>=', new SimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '<'
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_less($ofield, $params, $isFilter = false)
     {
-        self::where('<', new SuQLSimpleParam($ofield, $params), $isFilter);
+        self::where('<', new SimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '<='
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_lessOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<=', new SuQLSimpleParam($ofield, $params), $isFilter);
+        self::where('<=', new SimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '='
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_equal($ofield, $params, $isFilter = false)
     {
-        self::where('=', new SuQLSimpleParam($ofield, $params), $isFilter);
+        self::where('=', new SimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор '<>'
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_notEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<>', new SuQLSimpleParam($ofield, $params), $isFilter);
+        self::where('<>', new SimpleParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор like
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_like($ofield, $params, $isFilter = false)
     {
-        self::where('like', new SuQLLikeParam($ofield, $params), $isFilter);
+        self::where('like', new LikeParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор between
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_between($ofield, $params, $isFilter = false)
     {
-        self::where('between', new SuQLBetweenParam($ofield, $params), $isFilter);
+        self::where('between', new BetweenParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор in
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
     public static function mod_in($ofield, $params, $isFilter = false)
     {
-        self::where('in', new SuQLInParam($ofield, $params), $isFilter);
+        self::where('in', new InParam($ofield, $params), $isFilter);
     }
     /**
      * Модификатор where
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_where($ofield, $params)
     {
-        $fieldName = new SuQLFieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
-        $condition = new SuQLCondition($fieldName, $params[0]);
+        $fieldName = new FieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
+        $condition = new Condition($fieldName, $params[0]);
 
         if ($ofield->hasAlias()) {
             $ofield->getOSelect()->addHaving($condition->setFormat('%a'));
@@ -161,13 +161,13 @@ class SQLWhereModifier
     }
     /**
      * Модификатор having
-     * @param suql\core\SuQLField $ofield объект поля к которому применяется модификатор
+     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_having($ofield, $params)
     {
-        $fieldName = new SuQLFieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
-        $condition = new SuQLCondition($fieldName, $params[0], '%a');
+        $fieldName = new FieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
+        $condition = new Condition($fieldName, $params[0], '%a');
 
         $ofield->getOSelect()->addHaving($condition);
     }

@@ -7,10 +7,10 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLCondition
+class Condition
 {
     /**
-     * @var suql\core\SuQLParam
+     * @var suql\core\Param
      */
     private $param;
     /**
@@ -23,7 +23,7 @@ class SuQLCondition
     private $format;
     /**
      * Constructor
-     * @param suql\core\SuQLParam $param
+     * @param suql\core\Param $param
      * @param string $condition условное выражение
      * @param string $format формат вывода поля
      */

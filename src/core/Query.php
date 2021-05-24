@@ -3,20 +3,20 @@
 namespace suql\core;
 
 /**
- * Объект простого запроса хранящий ссылку на основной объект core\suql\SuQLObject
+ * Объект простого запроса хранящий ссылку на основной объект core\suql\Object
  * Связующее звено конкретных реализаций запросов с основным объектом.
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-abstract class SuQLQuery
+abstract class Query
 {
     /**
-     * @var suql\core\SuQLObject ссылка на основной объект
+     * @var suql\core\Object ссылка на основной объект
      */
     protected $osuql = null;
     /**
      * Constructor
-     * @param suql\core\SuQLObject $osuql ссылка на основной объект
+     * @param suql\core\Object $osuql ссылка на основной объект
      */
     function __construct($osuql)
     {
@@ -24,7 +24,7 @@ abstract class SuQLQuery
     }
     /**
      * Получает ссылку на основной объект
-     * @return suql\core\SuQLObject
+     * @return suql\core\Object
      */
     public function getOSuQL()
     {

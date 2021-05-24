@@ -7,7 +7,7 @@ namespace suql\core;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLInParam extends SuQLParam
+class InParam extends Param
 {
     /**
      * {@inheritdoc}

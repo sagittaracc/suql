@@ -10,7 +10,7 @@ use suql\core\InsertQueryInterface;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SuQLInsert extends SuQLQuery implements InsertQueryInterface
+class Insert extends Query implements InsertQueryInterface
 {
     /**
      * @var string таблица в которую осуществляется добавление записей

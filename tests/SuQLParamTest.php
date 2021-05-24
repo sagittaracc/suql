@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use suql\core\SuQLBetweenParam;
-use suql\core\SuQLFieldName;
-use suql\core\SuQLInParam;
-use suql\core\SuQLLikeParam;
-use suql\core\SuQLPlaceholder;
-use suql\core\SuQLSimpleParam;
+use suql\core\BetweenParam;
+use suql\core\FieldName;
+use suql\core\InParam;
+use suql\core\LikeParam;
+use suql\core\Placeholder;
+use suql\core\SimpleParam;
 
 /**
  * TODO: Запутано формирование параметров (упростить)
@@ -20,8 +20,8 @@ class SuQLParamTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fieldUserId = new SuQLFieldName('users', ['id' => 'uid']);
-        $this->fieldUserName = new SuQLFieldName('users', ['name' => 'uname']);
+        $this->fieldUserId = new FieldName('users', ['id' => 'uid']);
+        $this->fieldUserName = new FieldName('users', ['name' => 'uname']);
     }
 
     protected function tearDown(): void
@@ -32,7 +32,7 @@ class SuQLParamTest extends TestCase
 
     public function testSimpleParam(): void
     {
-        $simpleParam = new SuQLSimpleParam($this->fieldUserId, [1]);
+        $simpleParam = new SimpleParam($this->fieldUserId, [1]);
 
         $this->assertEquals([1], $simpleParam->getParams());
         $this->assertEquals('pk_' . md5('users.id:0'), $simpleParam->getParamKey());
@@ -44,7 +44,7 @@ class SuQLParamTest extends TestCase
 
     public function testBetweenParam(): void
     {
-        $betweenParam = new SuQLBetweenParam($this->fieldUserId, [1, 3]);
+        $betweenParam = new BetweenParam($this->fieldUserId, [1, 3]);
 
         $this->assertEquals([1, 3], $betweenParam->getParams());
         $this->assertEquals('pk_' . md5('users.id:0'), $betweenParam->getParamKey());
@@ -57,7 +57,7 @@ class SuQLParamTest extends TestCase
 
     public function testInParam(): void
     {
-        $inParam = new SuQLInParam($this->fieldUserId, [1, 2, 3]);
+        $inParam = new InParam($this->fieldUserId, [1, 2, 3]);
 
         $this->assertEquals([1, 2, 3], $inParam->getParams());
         $this->assertEquals('pk_' . md5('users.id:0'), $inParam->getParamKey());
@@ -71,7 +71,7 @@ class SuQLParamTest extends TestCase
 
     public function testLikeParam(): void
     {
-        $likeParam = new SuQLLikeParam($this->fieldUserName, ['sagittaracc']);
+        $likeParam = new LikeParam($this->fieldUserName, ['sagittaracc']);
 
         $this->assertEquals(['sagittaracc'], $likeParam->getParams());
         $this->assertEquals('pk_' . md5('users.name:0'), $likeParam->getParamKey());
@@ -83,10 +83,10 @@ class SuQLParamTest extends TestCase
 
     public function testNotValuableParam(): void
     {
-        $simpleParam = new SuQLSimpleParam($this->fieldUserId, [null]);
-        $betweenParam = new SuQLBetweenParam($this->fieldUserId, [1, null]);
-        $inParam = new SuQLInParam($this->fieldUserId, [1, null, null]);
-        $likeParam = new SuQLLikeParam($this->fieldUserName, [null]);
+        $simpleParam = new SimpleParam($this->fieldUserId, [null]);
+        $betweenParam = new BetweenParam($this->fieldUserId, [1, null]);
+        $inParam = new InParam($this->fieldUserId, [1, null, null]);
+        $likeParam = new LikeParam($this->fieldUserName, [null]);
 
         $this->assertFalse($simpleParam->isValuable());
         $this->assertFalse($betweenParam->isValuable());
@@ -96,10 +96,10 @@ class SuQLParamTest extends TestCase
 
     public function testPlaceholderParam(): void
     {
-        $placeholderParam = new SuQLSimpleParam($this->fieldUserId, [new SuQLPlaceholder('id')]);
+        $placeholderParam = new SimpleParam($this->fieldUserId, [new Placeholder('id')]);
 
         $this->assertArrayHasKey(':id', $placeholderParam->getParamList());
         $this->assertCount(1, $placeholderParam->getParamList());
-        $this->assertInstanceOf(SuQLPlaceholder::class, $placeholderParam->getParamList()[':id']);
+        $this->assertInstanceOf(Placeholder::class, $placeholderParam->getParamList()[':id']);
     }
 }
