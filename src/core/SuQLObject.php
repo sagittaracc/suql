@@ -272,18 +272,14 @@ class SuQLObject
      */
     public function getParamList()
     {
-        return $this->params;
-        // $paramList = [];
+        $paramList = [];
 
-        // foreach ($this->params as $param)
-        // {
-        //     foreach ($param->getParamList() as $placeholder => $value)
-        //     {
-        //         if ($value instanceof SuQLPlaceholder) continue;
-        //         $paramList[$placeholder] = $value;
-        //     }
-        // }
+        foreach ($this->params as $placeholder => $param)
+        {
+            if ($param instanceof SuQLPlaceholder) continue;
+            $paramList[$placeholder] = $param;
+        }
 
-        // return $paramList;
+        return $paramList;
     }
 }

@@ -6,6 +6,7 @@ use sagittaracc\StringHelper;
 use suql\core\SuQLCondition;
 use suql\core\SuQLExpression;
 use suql\core\SuQLFieldName;
+use suql\core\SuQLPlaceholder;
 use suql\core\SuQLSimpleParam;
 
 final class SuQLWhereTest extends SuQLMock
@@ -58,6 +59,32 @@ SQL);
             ':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3,
         ], $this->osuql->getParamList());
         $this->assertNull($this->osuql->getSQL(['expression_where']));
+    }
+
+    public function testPlaceholderExpressionWhere(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+            where
+                id > :id1
+            and id < :id2
+SQL);
+
+        $this->osuql->addSelect('placeholder_expression_where');
+        $this->osuql->getQuery('placeholder_expression_where')->addFrom('users');
+        $this->osuql->getQuery('placeholder_expression_where')->addWhere(
+            new SuQLExpression('$1 and $2', [
+                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [new SuQLPlaceholder('id1')]), '$ > ?'),
+                new SuQLCondition(new SuQLSimpleParam(new SuQLFieldName('users', 'id'), [new SuQLPlaceholder('id2')]), '$ < ?'),
+            ])
+        );
+        $suql = $this->osuql->getSQL(['placeholder_expression_where']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertEquals([], $this->osuql->getParamList());
+        $this->assertNull($this->osuql->getSQL(['placeholder_expression_where']));
     }
 
     public function testSelectWhereSubQuery(): void
