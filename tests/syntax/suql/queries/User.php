@@ -15,4 +15,9 @@ class User extends SuQL
     {
         return 'users';
     }
+
+    public function view()
+    {
+        return $this;
+    }
 }

@@ -2,9 +2,9 @@
 
 namespace suql\syntax;
 
+use app\schema\AppScheme;
 use suql\builder\SQLDriver;
 use suql\core\Obj;
-use suql\core\Scheme;
 use sagittaracc\ArrayHelper;
 
 /**
@@ -20,11 +20,12 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public static function all()
     {
-        $instance = new static(new Scheme(), new SQLDriver('mysql'));
+        // TODO: AppScheme должна прописываться как то через конфиг
+        $instance = new static(new AppScheme(), new SQLDriver('mysql'));
         $instance->addSelect($instance->query());
         $instance->getQuery($instance->query())->addFrom($instance->table());
 
-        return $instance;
+        return $instance->view();
     }
     /**
      * Выборка определенных полей модели
@@ -42,6 +43,16 @@ abstract class SuQL extends Obj implements QueryObject
                 $this->getQuery($this->query())->addField($this->table(), [$field => $alias]);
             }
         }
+
+        return $this;
+    }
+    /**
+     * Сцепление таблиц
+     * @return self
+     */
+    public function join($table)
+    {
+        $this->getQuery($this->query())->addJoin('inner', $table);
 
         return $this;
     }

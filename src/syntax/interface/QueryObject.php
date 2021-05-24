@@ -19,4 +19,9 @@ interface QueryObject
      * @return string
      */
     public function table();
+    /**
+     * Описание запроса
+     * @return self
+     */
+    public function view();
 }
