@@ -5,13 +5,14 @@ namespace suql\syntax;
 use suql\builder\SQLDriver;
 use suql\core\Obj;
 use suql\core\Scheme;
+use sagittaracc\ArrayHelper;
 
 /**
- * Синтаксический сахар для query builder
+ * SuQL синтаксис
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-abstract class SuQL extends Obj implements Model
+abstract class SuQL extends Obj implements QueryObject
 {
     /**
      * Выборка всех данных из модели
@@ -31,8 +32,15 @@ abstract class SuQL extends Obj implements Model
      */
     public function select($fieldList)
     {
-        foreach ($fieldList as $field => $alias) {
-            $this->getQuery($this->query())->addField($this->table(), [$field => $alias]);
+        if (ArrayHelper::isSequential($fieldList)) {
+            foreach ($fieldList as $field) {
+                $this->getQuery($this->query())->addField($this->table(), $field);
+            }
+        }
+        else {
+            foreach ($fieldList as $field => $alias) {
+                $this->getQuery($this->query())->addField($this->table(), [$field => $alias]);
+            }
         }
 
         return $this;
