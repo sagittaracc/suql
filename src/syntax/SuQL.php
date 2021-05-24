@@ -2,10 +2,11 @@
 
 namespace suql\syntax;
 
-use app\schema\AppScheme;
-use suql\builder\SQLDriver;
 use suql\core\Obj;
 use sagittaracc\ArrayHelper;
+use suql\builder\SQLDriver;
+use suql\syntax\exception\SchemeNotDefined;
+use suql\syntax\exception\SqlDriverNotDefined;
 
 /**
  * SuQL синтаксис
@@ -15,17 +16,41 @@ use sagittaracc\ArrayHelper;
 abstract class SuQL extends Obj implements QueryObject
 {
     /**
+     * @var string класс реализующий схему
+     */
+    protected static $schemeClass = null;
+    /**
+     * @var string используемый драйвер
+     */
+    protected static $sqlDriver = null;
+    /**
+     * Получает экземпляр модели
+     * @return self
+     */
+    private static function getInstance()
+    {
+        if (!static::$schemeClass)
+            throw new SchemeNotDefined;
+
+        if (!static::$sqlDriver)
+            throw new SqlDriverNotDefined;
+
+        $scheme = new static::$schemeClass;
+        $driver = new SQLDriver(static::$sqlDriver);
+
+        $instance = new static($scheme, $driver);
+        $instance->addSelect($instance->query());
+        $instance->getQuery($instance->query())->addFrom($instance->table());
+
+        return $instance;
+    }
+    /**
      * Выборка всех данных из модели
      * @return self
      */
     public static function all()
     {
-        // TODO: AppScheme должна прописываться как то через конфиг
-        $instance = new static(new AppScheme(), new SQLDriver('mysql'));
-        $instance->addSelect($instance->query());
-        $instance->getQuery($instance->query())->addFrom($instance->table());
-
-        return $instance->view();
+        return static::getInstance()->view();
     }
     /**
      * Выборка определенных полей модели

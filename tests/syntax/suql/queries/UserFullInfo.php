@@ -6,6 +6,9 @@ use suql\syntax\SuQL;
 
 class UserFullInfo extends SuQL
 {
+    protected static $schemeClass = 'app\\schema\\AppScheme';
+    protected static $sqlDriver = 'mysql';
+
     public function query()
     {
         return 'user_full_info';

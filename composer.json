@@ -12,7 +12,7 @@
     "autoload": {
       "classmap": [
         "src/",
-        "tests/mocks/",
+        "tests/mock/",
         "tests/syntax/"
       ]
     },
