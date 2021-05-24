@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use app\models\LastRegistration;
 use app\models\User;
-use app\models\UserFullInfo;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 
@@ -30,7 +29,17 @@ final class JoinTest extends TestCase
             inner join groups on user_group.group_id = groups.id
 SQL);
 
-        $query = UserFullInfo::all();
+        $query =
+            User::all()
+                ->select([
+                    'id',
+                ])
+                ->join('user_group')
+                ->join('groups')
+                    ->select([
+                        'id' => 'gid',
+                        'name' => 'gname',
+                    ]);
         
         $this->assertEquals($sql, $query->getRawSql());
     }
