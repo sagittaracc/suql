@@ -11,12 +11,12 @@ namespace suql\core;
 abstract class Query
 {
     /**
-     * @var suql\core\Object ссылка на основной объект
+     * @var suql\core\Obj ссылка на основной объект
      */
     protected $osuql = null;
     /**
      * Constructor
-     * @param suql\core\Object $osuql ссылка на основной объект
+     * @param suql\core\Obj $osuql ссылка на основной объект
      */
     function __construct($osuql)
     {
@@ -24,7 +24,7 @@ abstract class Query
     }
     /**
      * Получает ссылку на основной объект
-     * @return suql\core\Object
+     * @return suql\core\Obj
      */
     public function getOSuQL()
     {

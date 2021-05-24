@@ -17,7 +17,7 @@ class Union extends Query implements UnionQueryInterface
     private $suql = '';
     /**
      * Constructor
-     * @param suql\core\Object $osuql ссылка на основной объект OSuQL
+     * @param suql\core\Obj $osuql ссылка на основной объект OSuQL
      * @param string $suql строковое представление union запроса @query1 union [all] @query2 union ...
      */
     function __construct($osuql, $suql)
