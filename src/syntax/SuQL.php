@@ -5,6 +5,7 @@ namespace suql\syntax;
 use suql\core\Obj;
 use sagittaracc\ArrayHelper;
 use suql\builder\SQLDriver;
+use suql\core\Expression;
 use suql\core\Modifier;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\SqlDriverNotDefined;
@@ -130,6 +131,16 @@ abstract class SuQL extends Obj implements QueryObject
             $this->getQuery($this->query())->addJoin('inner', $subquery->query());
             $this->extend($subquery->getQueries());
         }
+
+        return $this;
+    }
+    /**
+     * Where фильтрация
+     * @return self
+     */
+    public function where($where)
+    {
+        $this->getQuery($this->query())->addWhere($where);
 
         return $this;
     }
