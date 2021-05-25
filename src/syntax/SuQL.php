@@ -77,7 +77,11 @@ abstract class SuQL extends Obj implements QueryObject
     {
         if (ArrayHelper::isSequential($options)) {
             foreach ($options as $option) {
-                if ($option instanceof Modifier) {
+                if ($option instanceof Raw) {
+                    $expression = $option;
+                    $this->getQuery($this->query())->addRaw($expression->getExpression());
+                }
+                else if ($option instanceof Modifier) {
                     $modifier = $option;
                     $this->getQuery($this->query())->addField($this->currentTable, $modifier->getField());
                     $this->getQuery($this->query())->getField($this->currentTable, $modifier->getField())->addModifier($modifier->getModifier(), $modifier->getParams());
@@ -90,7 +94,11 @@ abstract class SuQL extends Obj implements QueryObject
         }
         else {
             foreach ($options as $field => $option) {
-                if ($option instanceof Modifier) {
+                if ($option instanceof Raw) {
+                    $expression = $option;
+                    $this->getQuery($this->query())->addRaw($expression->getExpression());
+                }
+                else if ($option instanceof Modifier) {
                     $modifier = $option;
                     $this->getQuery($this->query())->addField($this->currentTable, $modifier->getField());
                     $this->getQuery($this->query())->getField($this->currentTable, $modifier->getField())->addModifier($modifier->getModifier(), $modifier->getParams());

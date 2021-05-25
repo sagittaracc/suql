@@ -108,4 +108,29 @@ SQL);
         $this->assertEquals($sql, $suql);
         $this->assertNull($this->osuql->getSQL(['select_raw']));
     }
+    /**
+     * SELECT
+     *   <table>.<field>,
+     *   ...,
+     *   <raw sql expression>
+     * FROM <table>
+     */
+    public function testSelectWithRaw(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.*,
+                'Yuriy' as author
+            from users
+SQL);
+
+        $this->osuql->addSelect('select_with_raw');
+        $this->osuql->getQuery('select_with_raw')->addFrom('users');
+        $this->osuql->getQuery('select_with_raw')->addField('users', '*');
+        $this->osuql->getQuery('select_with_raw')->addRaw("'Yuriy' as author");
+        $suql = $this->osuql->getSQL(['select_with_raw']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_with_raw']));
+    }
 }
