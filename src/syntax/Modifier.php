@@ -1,6 +1,6 @@
 <?php
 
-namespace suql\core;
+namespace suql\syntax;
 
 /**
  * Объект модификатор

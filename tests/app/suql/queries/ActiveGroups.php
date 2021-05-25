@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use suql\core\Modifier;
+use suql\syntax\Modifier;
 use suql\syntax\SuQL;
 
 class ActiveGroups extends SuQL
