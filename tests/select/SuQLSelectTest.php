@@ -101,8 +101,8 @@ SQL);
 SQL);
 
         $this->osuql->addSelect('select_raw');
-        $this->osuql->getQuery('select_raw')->addField(null, "2 * 2");
-        $this->osuql->getQuery('select_raw')->addField(null, "'Yuriy' as author");
+        $this->osuql->getQuery('select_raw')->addRaw("2 * 2");
+        $this->osuql->getQuery('select_raw')->addRaw("'Yuriy' as author");
         $suql = $this->osuql->getSQL(['select_raw']);
 
         $this->assertEquals($sql, $suql);

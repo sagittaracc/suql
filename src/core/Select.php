@@ -93,6 +93,15 @@ class Select extends Query implements SelectQueryInterface
         return $field;
     }
     /**
+     * Добавить сырое выражение
+     * @param string $expression
+     * @param boolean $visible
+     */
+    public function addRaw($expression, $visible = true)
+    {
+        $this->addField(null, $expression, $visible);
+    }
+    /**
      * Проверяет есть ли поле в текущей выборке
      * @param string $table имя таблицы
      * @param string|array имя поля в трех возможных форматах описанных ранее
