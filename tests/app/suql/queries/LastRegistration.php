@@ -23,7 +23,9 @@ class LastRegistration extends SuQL
     public function view()
     {
         return $this->select([
-            (new Modifier('max'))->applyTo(['registration' => 'lastRegistration']),
+            new \suql\syntax\Field(['registration' => 'lastRegistration'], [
+                'max' => [],
+            ])
         ]);
     }
 }

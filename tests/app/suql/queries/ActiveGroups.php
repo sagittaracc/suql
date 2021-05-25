@@ -27,7 +27,9 @@ class ActiveGroups extends SuQL
                 ->join('groups')
                     ->select([
                         'name',
-                        (new Modifier('count'))->applyTo(['name' => 'count']),
+                        new \suql\syntax\Field(['name' => 'count'], [
+                            'count' => [],
+                        ])
                     ])
                 ->group('name');
     }

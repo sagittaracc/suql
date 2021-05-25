@@ -91,10 +91,12 @@ abstract class SuQL extends Obj implements QueryObject
                     $expression = $option;
                     $this->getQuery($this->query())->addRaw($expression->getExpression());
                 }
-                else if ($option instanceof Modifier) {
-                    $modifier = $option;
-                    $this->getQuery($this->query())->addField($this->currentTable, $modifier->getField());
-                    $this->getQuery($this->query())->getField($this->currentTable, $modifier->getField())->addModifier($modifier->getModifier(), $modifier->getParams());
+                else if ($option instanceof Field) {
+                    $field = $option;
+                    $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
+                    foreach ($field->getModifiers() as $modifier => $params) {
+                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                    }
                 }
                 else {
                     $field = $option;
@@ -108,10 +110,12 @@ abstract class SuQL extends Obj implements QueryObject
                     $expression = $option;
                     $this->getQuery($this->query())->addRaw($expression->getExpression());
                 }
-                else if ($option instanceof Modifier) {
-                    $modifier = $option;
-                    $this->getQuery($this->query())->addField($this->currentTable, $modifier->getField());
-                    $this->getQuery($this->query())->getField($this->currentTable, $modifier->getField())->addModifier($modifier->getModifier(), $modifier->getParams());
+                else if ($option instanceof Field) {
+                    $field = $option;
+                    $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
+                    foreach ($field->getModifiers() as $modifier => $params) {
+                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                    }
                 }
                 else {
                     $alias = $option;
