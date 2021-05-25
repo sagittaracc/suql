@@ -10,10 +10,13 @@ use suql\core\FieldName;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Expression
+abstract class Expression implements ExpressionObject
 {
-    public static function create($expr, $cond)
+    public static function create()
     {
+        $expr = static::expression();
+        $cond = static::conditions();
+
         $conditionList = [];
 
         foreach ($cond as $options) {
