@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use app\models\User;
+use app\models\UserGroup;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\core\SimpleParam;
@@ -49,5 +50,27 @@ SQL);
             ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
             ':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3,
         ], $query->getParamList());
+    }
+
+    public function testSelectWhereSubQuery(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id as uid,
+                users.name as uname
+            from users
+            where users.id not in (
+                select distinct
+                    user_group.user_id
+                from user_group
+            )
+SQL);
+
+        $query = User::all()->select([
+            'id' => 'uid',
+            'name' => 'uname',
+        ])->where('users.id not in ?', [UserGroup::distinct()->select(['user_id'])]);
+
+        $this->assertEquals($sql, $query->getRawSql());
     }
 }

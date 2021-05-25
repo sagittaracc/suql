@@ -71,6 +71,17 @@ abstract class SuQL extends Obj implements QueryObject
         return static::getInstance()->view();
     }
     /**
+     * Distinct
+     * @return self
+     */
+    public static function distinct()
+    {
+        $instance = static::getInstance();
+        $instance->getQuery($instance->query())->addModifier('distinct');
+
+        return $instance->view();
+    }
+    /**
      * Выборка определенных полей модели
      * @return self
      */
@@ -154,8 +165,14 @@ abstract class SuQL extends Obj implements QueryObject
      * Where фильтрация
      * @return self
      */
-    public function where($where)
+    public function where($where, $subqueries = [])
     {
+        foreach ($subqueries as $index => $subquery) {
+            $this->extend($subquery->getQueries());
+            $query = $subquery->query();
+            $where = str_replace('?', "@$query", $where);
+        }
+
         $this->getQuery($this->query())->addWhere($where);
 
         return $this;
