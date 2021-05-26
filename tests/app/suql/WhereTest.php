@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 use app\models\User;
 use app\models\UserGroup;
-use app\suql\expressions\OneToThreeExpression;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use suql\core\SimpleParam;
+use suql\syntax\Expression;
 
 final class WhereTest extends TestCase
 {
@@ -39,7 +40,12 @@ SQL);
             and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
 SQL);
 
-        $query = User::all()->where(OneToThreeExpression::create());
+        $query = User::all()->where(Expression::create(
+            '$1 and $2', [
+                [SimpleParam::class, ['users', 'id'], '$ > ?', [1]],
+                [SimpleParam::class, ['users', 'id'], '$ < ?', [3]],
+            ]
+        ));
 
         $this->assertEquals($sql, $query->getRawSql());
         $this->assertEquals([
