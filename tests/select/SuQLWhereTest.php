@@ -126,6 +126,8 @@ SQL);
             from users
 SQL);
 
+        $filter = new SimpleParam(new FieldName('users', 'id'), [null]);
+
         $this->osuql->addSelect('empty_filter');
         $this->osuql->getQuery('empty_filter')->addFrom('users');
         $this->osuql->getQuery('empty_filter')->addField('users', ['id' => 'uid']);

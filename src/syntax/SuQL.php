@@ -5,6 +5,8 @@ namespace suql\syntax;
 use suql\core\Obj;
 use sagittaracc\ArrayHelper;
 use suql\builder\SQLDriver;
+use suql\core\FieldName;
+use suql\core\SimpleParam;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\SqlDriverNotDefined;
 
@@ -212,6 +214,23 @@ abstract class SuQL extends Obj implements QueryObject
         }
 
         $this->getQuery($this->query())->addWhere($where);
+
+        return $this;
+    }
+    /**
+     * Непустая фильтрация
+     * @param array $filter
+     * @return self
+     */
+    public function filter($filter)
+    {
+        foreach ($filter as $field => $value) {
+            $filter = new SimpleParam(new FieldName($this->currentTable, $field), [$value]);
+            $placeholder = $filter->getPlaceholder();
+
+            $this->getQuery($this->query())->addFilterWhere($placeholder, "$field = $placeholder");
+            $this->setParam($placeholder, $filter);
+        }
 
         return $this;
     }
