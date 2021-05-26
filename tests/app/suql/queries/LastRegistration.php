@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use suql\syntax\Field;
 use suql\syntax\SuQL;
 
 class LastRegistration extends SuQL
@@ -22,7 +23,7 @@ class LastRegistration extends SuQL
     public function view()
     {
         return $this->select([
-            new \suql\syntax\Field(['registration' => 'lastRegistration'], [
+            new Field(['registration' => 'lastRegistration'], [
                 'max',
             ])
         ]);

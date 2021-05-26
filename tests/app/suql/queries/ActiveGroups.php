@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use suql\syntax\Field;
 use suql\syntax\SuQL;
 
 class ActiveGroups extends SuQL
@@ -26,7 +27,7 @@ class ActiveGroups extends SuQL
                 ->join('groups')
                     ->select([
                         'name',
-                        new \suql\syntax\Field(['name' => 'count'], [
+                        new Field(['name' => 'count'], [
                             'count',
                         ])
                     ])

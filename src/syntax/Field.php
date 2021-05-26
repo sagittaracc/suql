@@ -9,8 +9,10 @@ namespace suql\syntax;
  * User::all()
  *         ->select([
  *             ...,
- *             new Field([<field> => <alias>], [
- *                 <modifier> => <params>
+ *             new suql\syntax\Field([<field> => <alias>], [
+ *                 <modifier-1>,
+ *                 <modifier-2> => <params>,
+ *                 ...
  *             ]),
  *             ...
  *         ]),
