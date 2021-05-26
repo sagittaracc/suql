@@ -141,6 +141,28 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * OFFSET
+     * @param int $offset
+     * @return self
+     */
+    public function offset($offset)
+    {
+        $this->getQuery($this->query())->addOffset($offset);
+
+        return $this;
+    }
+    /**
+     * LIMIT
+     * @param int $limit
+     * @return self
+     */
+    public function limit($limit)
+    {
+        $this->getQuery($this->query())->addLimit($limit);
+
+        return $this;
+    }
+    /**
      * Сцепление таблиц
      * @return self
      */
