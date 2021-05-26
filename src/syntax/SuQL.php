@@ -6,8 +6,6 @@ use Closure;
 use suql\core\Obj;
 use sagittaracc\ArrayHelper;
 use suql\builder\SQLDriver;
-use suql\core\FieldName;
-use suql\core\SimpleParam;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\SqlDriverNotDefined;
 
