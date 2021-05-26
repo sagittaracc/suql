@@ -64,7 +64,6 @@ class Obj
     {
         return [
             SQLWhereModifier::class,
-            SQLFilterModifier::class,
             SQLOrderModifier::class,
             SQLGroupModifier::class,
             SQLFunctionModifier::class,
@@ -226,31 +225,9 @@ class Obj
         return null;
     }
     /**
-     * Проверяет есть ли запрошенный параметр запроса
-     * @param string $param
-     * @return boolean
-     */
-    public function hasParam($param)
-    {
-        return array_key_exists($param, $this->params);
-    }
-    /**
-     * Проверяет если этот параметр не пустой
-     * Пустота параметра определяется отдельно
-     * в классе обработчика параметра
-     * @param string $param
-     * @return boolean
-     */
-    public function hasValuableParam($param)
-    {
-        return $this->hasParam($param)
-            && !is_null($this->params[$param])
-            && $this->params[$param]->isValuable();
-    }
-    /**
      * Получает параметр по имени
      * @param string $param
-     * @return suql\core\Param
+     * @return mixed
      */
     public function getParam($param)
     {
@@ -259,11 +236,11 @@ class Obj
     /**
      * Устанавливает параметр запроса
      * @param string $param название параметра
-     * @param suql\core\Param $suqlParam класс параметра
+     * @param mixed $value значение параметра
      */
-    public function setParam($param, $suqlParam)
+    public function setParam($param, $value)
     {
-        $this->params[$param] = $suqlParam;
+        $this->params[$param] = $value;
     }
     /**
      * Получает список автосгенерированных параметров по плейсхолдерам
@@ -276,26 +253,8 @@ class Obj
         foreach ($this->params as $placeholder => $param)
         {
             if ($param instanceof Placeholder) continue;
+
             $paramList[$placeholder] = $param;
-        }
-
-        return $paramList;
-    }
-    /**
-     * Получает список фильтр параметров
-     * @return array
-     */
-    public function getFilterParamList()
-    {
-        $paramList = [];
-
-        foreach ($this->params as $placeholder => $param)
-        {
-            if ($param instanceof Placeholder) continue;
-            $paramList = array_merge(
-                $paramList,
-                array_combine([$placeholder], $param->getParams())
-            );
         }
 
         return $paramList;

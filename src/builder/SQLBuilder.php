@@ -308,9 +308,8 @@ class SQLBuilder
     protected function buildWhere($query)
     {
         $whereList = $this->osuql->getQuery($query)->getWhere();
-        $filterWhereList = $this->osuql->getQuery($query)->getFilterWhere();
 
-        if (empty($whereList) && empty($filterWhereList))
+        if (empty($whereList))
             return '';
 
         $fieldList = $this->osuql->getQuery($query)->getFieldList();
@@ -322,17 +321,7 @@ class SQLBuilder
         }
         unset($where);
 
-        foreach ($filterWhereList as $paramKey => &$filterWhere) {
-            if (!$this->osuql->hasValuableParam($paramKey)) {
-                unset($filterWhereList[$paramKey]);
-                continue;
-            }
-
-            $filterWhere = str_replace($aliases, $fields, $filterWhere);
-        }
-        unset($filterWhere);
-
-        $fullWhereList = array_merge($whereList, $filterWhereList);
+        $fullWhereList = array_merge($whereList, []);
         if (empty($fullWhereList))
             return '';
 

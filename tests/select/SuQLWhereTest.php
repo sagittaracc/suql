@@ -117,48 +117,4 @@ SQL);
         $this->assertEquals($sql, $suql);
         $this->assertNull($this->osuql->getSQL(['main_query']));
     }
-
-    public function testFilterEmpty(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid
-            from users
-SQL);
-
-        $filter = new SimpleParam(new FieldName('users', 'id'), [null]);
-
-        $this->osuql->addSelect('empty_filter');
-        $this->osuql->getQuery('empty_filter')->addFrom('users');
-        $this->osuql->getQuery('empty_filter')->addField('users', ['id' => 'uid']);
-        $this->osuql->getQuery('empty_filter')->addFilterWhere(':id', 'uid > :id');
-        $this->osuql->setParam(':id', $filter);
-        $suql = $this->osuql->getSQL(['empty_filter']);
-
-        $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['empty_filter']));
-    }
-
-    public function testFilterNotEmpty(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid
-            from users
-            where users.id > :id
-SQL);
-
-        $filter = new SimpleParam(new FieldName('users', 'id'), [3]);
-
-        $this->osuql->addSelect('not_empty_filter');
-        $this->osuql->getQuery('not_empty_filter')->addFrom('users');
-        $this->osuql->getQuery('not_empty_filter')->addField('users', ['id' => 'uid']);
-        $this->osuql->getQuery('not_empty_filter')->addFilterWhere(':id', 'uid > :id');
-        $this->osuql->setParam(':id', $filter);
-        $suql = $this->osuql->getSQL(['not_empty_filter']);
-
-        $this->assertEquals($sql, $suql);
-        $this->assertEquals([':id' => 3], $this->osuql->getFilterParamList());
-        $this->assertNull($this->osuql->getSQL(['not_empty_filter']));
-    }
 }

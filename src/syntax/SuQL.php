@@ -218,23 +218,6 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
-     * Непустая фильтрация
-     * @param array $filter
-     * @return self
-     */
-    public function filter($filter)
-    {
-        foreach ($filter as $field => $value) {
-            $filter = new SimpleParam(new FieldName($this->currentTable, $field), [$value]);
-            $placeholder = $filter->getPlaceholder();
-
-            $this->getQuery($this->query())->addFilterWhere($placeholder, "$field = $placeholder");
-            $this->setParam($placeholder, $filter);
-        }
-
-        return $this;
-    }
-    /**
      * Сортировка
      * @return self
      */

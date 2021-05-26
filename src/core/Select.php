@@ -176,42 +176,39 @@ class Select extends Query implements SelectQueryInterface
      * Добавляет выражение
      * @param string|Expression $expression
      * @param array $stack
-     * @param string $key
      */
-    private function addExpression($expression, &$stack, $key = null, $isFilter = false)
+    private function addExpression($expression, &$stack)
     {
         if (!$expression) return;
 
         if (is_string($expression))
         {
-            $this->addStringWhere($expression, $stack, $key);
+            $this->addStringWhere($expression, $stack);
         }
         else if ($expression instanceof Expression)
         {
-            $this->addExpressionWhere($expression, $stack, $key, $isFilter);
+            $this->addExpressionWhere($expression, $stack);
         }
     }
     /**
      * Добавляет условие where из строки
      * @param string $expression
      * @param array $stack
-     * @param string $key
      */
-    private function addStringWhere($expression, &$stack, $key)
+    private function addStringWhere($expression, &$stack)
     {
-        $stack[!$key?:$key] = $expression;
+        $stack[] = $expression;
     }
     /**
      * Добавляет условие where из expression
      * @param suql\core\Expression $expression
      * @param array $stack
-     * @param string $key
      */
-    private function addExpressionWhere($expression, &$stack, $key, $isFilter)
+    private function addExpressionWhere($expression, &$stack)
     {
-        $stack[!$key?:$key] = $expression->getExpression();
+        $stack[] = $expression->getExpression();
 
-        foreach ($expression->getParams($isFilter) as $param => $value)
+        foreach ($expression->getParams() as $param => $value)
         {
             $this->getOSuQL()->setParam($param, $value);
         }
@@ -231,24 +228,6 @@ class Select extends Query implements SelectQueryInterface
     public function getWhere()
     {
         return $this->where;
-    }
-    /**
-     * Добавляет фильтровое условие where. Не применяется если фильтр пустой.
-     * Пустота фильтра определяется для каждого типа фильтра отдельно.
-     * @param string $filter название фильтра
-     * @param string $where условие where
-     */
-    public function addFilterWhere($filter, $where)
-    {
-        $this->addExpression($where, $this->filterWhere, $filter, true);
-    }
-    /**
-     * Получить перечень фильтровых условий where
-     * @return array
-     */
-    public function getFilterWhere()
-    {
-        return $this->filterWhere;
     }
     /**
      * Добавляет условие having

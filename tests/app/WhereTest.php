@@ -75,48 +75,4 @@ SQL);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
-
-    public function testFilterEmpty(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid
-            from users
-SQL);
-
-        $query =
-            User::all()
-                ->select([
-                    'id' => 'uid'
-                ])
-                ->filter([
-                    'uid' => null
-                ]);
-
-        $this->assertEquals($sql, $query->getRawSql());
-    }
-
-    public function testFilterNotEmpty(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid
-            from users
-            where users.id = :ph0_44c01778c909b7217e6c6016fe08a85c
-SQL);
-
-        $query =
-            User::all()
-                ->select([
-                    'id' => 'uid'
-                ])
-                ->filter([
-                    'uid' => 3
-                ]);
-
-        $this->assertEquals($sql, $query->getRawSql());
-        $this->assertEquals([
-            ':ph0_44c01778c909b7217e6c6016fe08a85c' => 3,
-        ], $query->getFilterParamList());
-    }
 }
