@@ -9,10 +9,11 @@ use suql\core\Name;
 use suql\core\ProcedureQueryInterface;
 use suql\core\SelectQueryInterface;
 use suql\core\UnionQueryInterface;
+use suql\modifier\field\SQLFunctionModifier;
 
 /**
  * Построитель запросов
- * 
+ *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
 class SQLBuilder
@@ -210,6 +211,9 @@ class SQLBuilder
                         $modifierClass = $this->osuql->getModifierClass($modifierHandler);
                         if ($modifierClass) {
                             $modifierClass::$modifierHandler($ofield, $params);
+                        }
+                        else {
+                            SQLFunctionModifier::func($name, $ofield, $params);
                         }
                     }
                 }
