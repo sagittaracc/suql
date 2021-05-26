@@ -158,6 +158,7 @@ SQL);
         $suql = $this->osuql->getSQL(['not_empty_filter']);
 
         $this->assertEquals($sql, $suql);
+        $this->assertEquals([':id' => 3], $this->osuql->getFilterParamList());
         $this->assertNull($this->osuql->getSQL(['not_empty_filter']));
     }
 }

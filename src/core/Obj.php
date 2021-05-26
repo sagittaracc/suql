@@ -289,12 +289,12 @@ class Obj
     {
         $paramList = [];
 
-        foreach ($this->params as $param)
+        foreach ($this->params as $placeholder => $param)
         {
             if ($param instanceof Placeholder) continue;
             $paramList = array_merge(
                 $paramList,
-                array_combine($param->getPlaceholderList(), $param->getParams())
+                array_combine([$placeholder], $param->getParams())
             );
         }
 
