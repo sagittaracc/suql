@@ -178,7 +178,7 @@ class Select extends Query implements SelectQueryInterface
      * @param array $stack
      * @param string $key
      */
-    private function addExpression($expression, &$stack, $key = null)
+    private function addExpression($expression, &$stack, $key = null, $isFilter = false)
     {
         if (!$expression) return;
 
@@ -188,7 +188,7 @@ class Select extends Query implements SelectQueryInterface
         }
         else if ($expression instanceof Expression)
         {
-            $this->addExpressionWhere($expression, $stack, $key);
+            $this->addExpressionWhere($expression, $stack, $key, $isFilter);
         }
     }
     /**
@@ -207,11 +207,11 @@ class Select extends Query implements SelectQueryInterface
      * @param array $stack
      * @param string $key
      */
-    private function addExpressionWhere($expression, &$stack, $key)
+    private function addExpressionWhere($expression, &$stack, $key, $isFilter)
     {
         $stack[!$key?:$key] = $expression->getExpression();
 
-        foreach ($expression->getParams() as $param => $value)
+        foreach ($expression->getParams($isFilter) as $param => $value)
         {
             $this->getOSuQL()->setParam($param, $value);
         }
@@ -240,7 +240,7 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addFilterWhere($filter, $where)
     {
-        $this->addExpression($where, $this->filterWhere, $filter);
+        $this->addExpression($where, $this->filterWhere, $filter, true);
     }
     /**
      * Получить перечень фильтровых условий where

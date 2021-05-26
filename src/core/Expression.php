@@ -46,12 +46,14 @@ class Expression
      * Возвращает перечень параметров
      * @return array
      */
-    public function getParams()
+    public function getParams($onlyValuable = false)
     {
         $paramList = [];
 
         foreach ($this->conditions as $condition)
         {
+            if ($onlyValuable && !$condition->isValuable()) continue;
+
             $paramList = array_merge($paramList, $condition->getParams());
         }
 

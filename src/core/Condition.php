@@ -68,4 +68,12 @@ class Condition
     {
         return $this->param->getParamList();
     }
+    /**
+     * Valuable condition
+     * @return boolean
+     */
+    public function isValuable()
+    {
+        return $this->param->isValuable();
+    }
 }
