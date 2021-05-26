@@ -94,8 +94,15 @@ abstract class SuQL extends Obj implements QueryObject
                 else if ($option instanceof Field) {
                     $field = $option;
                     $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
-                    foreach ($field->getModifiers() as $modifier => $params) {
-                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                    foreach ($field->getModifiers() as $modifier => $options) {
+                        if (is_string($modifier)) {
+                            $params = $options;
+                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                        }
+                        else if (is_string($options)) {
+                            $modifier = $options;
+                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
+                        }
                     }
                 }
                 else {
@@ -113,8 +120,15 @@ abstract class SuQL extends Obj implements QueryObject
                 else if ($option instanceof Field) {
                     $field = $option;
                     $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
-                    foreach ($field->getModifiers() as $modifier => $params) {
-                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                    foreach ($field->getModifiers() as $modifier => $options) {
+                        if (is_string($modifier)) {
+                            $params = $options;
+                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                        }
+                        else if (is_string($options)) {
+                            $modifier = $options;
+                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
+                        }
                     }
                 }
                 else {

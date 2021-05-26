@@ -24,7 +24,7 @@ class LastRegistration extends SuQL
     {
         return $this->select([
             new \suql\syntax\Field(['registration' => 'lastRegistration'], [
-                'max' => [],
+                'max',
             ])
         ]);
     }
