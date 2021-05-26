@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use sagittaracc\StringHelper;
+use suql\core\SimpleParam;
+use suql\syntax\Expression;
 
 final class SuQLFieldModifierTest extends SuQLMock
 {
@@ -12,18 +14,28 @@ final class SuQLFieldModifierTest extends SuQLMock
             select
                 users.id
             from users
-            where users.id > 3
+            where users.id % 2 = 0
+              and users.id > :ph0_e94ad661a4b7e2049ba318ed9e117616
 SQL);
 
         $this->osuql->addSelect('callback_modifier');
         $this->osuql->getQuery('callback_modifier')->addFrom('users');
         $this->osuql->getQuery('callback_modifier')->addField('users', 'id');
         $this->osuql->getQuery('callback_modifier')->getField('users', 'id')->addCallbackModifier(function ($ofield) {
-            $ofield->getOSelect()->addWhere("{$ofield->getField()} > 3");
+            $ofield->getOSelect()->addWhere('users.id % 2 = 0');
+
+            $ofield->getOSelect()->addWhere(
+                Expression::create('$1', [
+                    [SimpleParam::class, [$ofield->getTable(), $ofield->getField()], '$ > ?', [3]],
+                ])
+            );
         });
         $suql = $this->osuql->getSQL(['callback_modifier']);
 
         $this->assertEquals($sql, $suql);
+        $this->assertEquals([
+            ':ph0_e94ad661a4b7e2049ba318ed9e117616' => 3
+        ], $this->osuql->getParamList());
         $this->assertNull($this->osuql->getSQL(['callback_modifier']));
     }
 }
