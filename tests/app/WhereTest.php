@@ -115,5 +115,8 @@ SQL);
                 ]);
 
         $this->assertEquals($sql, $query->getRawSql());
+        $this->assertEquals([
+            ':ph0_44c01778c909b7217e6c6016fe08a85c' => 3,
+        ], $query->getFilterParamList());
     }
 }

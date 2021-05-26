@@ -281,4 +281,23 @@ class Obj
 
         return $paramList;
     }
+    /**
+     * Получает список фильтр параметров
+     * @return array
+     */
+    public function getFilterParamList()
+    {
+        $paramList = [];
+
+        foreach ($this->params as $param)
+        {
+            if ($param instanceof Placeholder) continue;
+            $paramList = array_merge(
+                $paramList,
+                array_combine($param->getPlaceholderList(), $param->getParams())
+            );
+        }
+
+        return $paramList;
+    }
 }
