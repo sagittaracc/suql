@@ -132,7 +132,7 @@ SQL);
         $this->osuql->getQuery('empty_filter')->addFrom('users');
         $this->osuql->getQuery('empty_filter')->addField('users', ['id' => 'uid']);
         $this->osuql->getQuery('empty_filter')->addFilterWhere(':id', 'uid > :id');
-        $this->osuql->setParam(':id', null);
+        $this->osuql->setParam(':id', $filter);
         $suql = $this->osuql->getSQL(['empty_filter']);
 
         $this->assertEquals($sql, $suql);
