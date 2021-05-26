@@ -2,6 +2,7 @@
 
 namespace suql\syntax;
 
+use Closure;
 use suql\core\Obj;
 use sagittaracc\ArrayHelper;
 use suql\builder\SQLDriver;
@@ -105,6 +106,10 @@ abstract class SuQL extends Obj implements QueryObject
                             $modifier = $options;
                             $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
                         }
+                        else if ($options instanceof Closure) {
+                            $callbackModifier = $options;
+                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addCallbackModifier($callbackModifier);
+                        }
                     }
                 }
                 else {
@@ -130,6 +135,10 @@ abstract class SuQL extends Obj implements QueryObject
                         else if (is_string($options)) {
                             $modifier = $options;
                             $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
+                        }
+                        else if ($options instanceof Closure) {
+                            $callbackModifier = $options;
+                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addCallbackModifier($callbackModifier);
                         }
                     }
                 }
