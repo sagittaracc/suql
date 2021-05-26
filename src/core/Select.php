@@ -173,42 +173,56 @@ class Select extends Query implements SelectQueryInterface
         return $this->from;
     }
     /**
+     * Добавляет выражение
+     * @param string|Expression $expression
+     * @param array $stack
+     * @param string $key
+     */
+    private function addExpression($expression, &$stack, $key = null)
+    {
+        if (!$expression) return;
+
+        if (is_string($expression))
+        {
+            $this->addStringWhere($expression, $stack, $key);
+        }
+        else if ($expression instanceof Expression)
+        {
+            $this->addExpressionWhere($expression, $stack, $key);
+        }
+    }
+    /**
+     * Добавляет условие where из строки
+     * @param string $expression
+     * @param array $stack
+     * @param string $key
+     */
+    private function addStringWhere($expression, &$stack, $key)
+    {
+        $stack[!$key?:$key] = $expression;
+    }
+    /**
+     * Добавляет условие where из expression
+     * @param suql\core\Expression $expression
+     * @param array $stack
+     * @param string $key
+     */
+    private function addExpressionWhere($expression, &$stack, $key)
+    {
+        $stack[!$key?:$key] = $expression->getExpression();
+
+        foreach ($expression->getParams() as $param => $value)
+        {
+            $this->getOSuQL()->setParam($param, $value);
+        }
+    }
+    /**
      * Добавляет условие where
      * @param string $where
      */
     public function addWhere($where)
     {
-        if (!$where) return;
-
-        if (is_string($where))
-        {
-            $this->addStringWhere($where);
-        }
-        else if ($where instanceof Expression)
-        {
-            $this->addExpressionWhere($where);
-        }
-    }
-    /**
-     * Добавляет условие where из строки
-     * @param string $where
-     */
-    private function addStringWhere($where)
-    {
-        $this->where[] = $where;
-    }
-    /**
-     * Добавляет условие where из expression
-     * @param suql\core\Expression
-     */
-    private function addExpressionWhere($where)
-    {
-        $this->where[] = $where->getExpression();
-
-        foreach ($where->getParams() as $param => $value)
-        {
-            $this->getOSuQL()->setParam($param, $value);
-        }
+        $this->addExpression($where, $this->where);
     }
     /**
      * Возвращает текущий список всех where условий
@@ -226,7 +240,7 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addFilterWhere($filter, $where)
     {
-        $this->filterWhere[$filter] = $where;
+        $this->addExpression($where, $this->filterWhere, $filter);
     }
     /**
      * Получить перечень фильтровых условий where
