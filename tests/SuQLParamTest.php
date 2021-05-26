@@ -10,9 +10,6 @@ use suql\core\LikeParam;
 use suql\core\Placeholder;
 use suql\core\SimpleParam;
 
-/**
- * TODO: Запутано формирование параметров (упростить)
- */
 class SuQLParamTest extends TestCase
 {
     private $fieldUserId;
