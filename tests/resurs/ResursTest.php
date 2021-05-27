@@ -64,12 +64,16 @@ SQL);
         $query = VtLastData::all();
 
         $this->assertEquals($sql, $query->getRawSql());
-/*
+
         $sql = StringHelper::trimSql(<<<SQL
             select
                 c2000vt.Obj_Id_Device as id,
                 c2000vt.Type,
                 c2000vt.Obj_Id_User as user_id,
+                case
+                    when c2000vt.Type = 'Temperature' then 'C'
+                    when c2000vt.Type = 'Humidity' then '%'
+                end as Unit,
                 date_format(c2000vt_values.UpdateTime, '%d %M %H:%i') as Time,
                 date_format(c2000vt_values.UpdateTime, '%d.%m.%Y') as fTime,
                 c2000vt_values.UpdateTime,
@@ -82,6 +86,5 @@ SQL);
         $query = VtView::all();
 
         $this->assertEquals($sql, $query->getRawSql());
-*/
     }
 }
