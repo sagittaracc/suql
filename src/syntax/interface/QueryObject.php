@@ -24,4 +24,9 @@ interface QueryObject
      * @return self
      */
     public function view();
+    /**
+     * Ссылка на объект PDO
+     * @return \PDO
+     */
+    public function getDb();
 }

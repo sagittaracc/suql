@@ -3,6 +3,7 @@
 namespace suql\syntax;
 
 use Closure;
+use PDO;
 use suql\core\Obj;
 use sagittaracc\ArrayHelper;
 use suql\builder\SQLDriver;
@@ -247,6 +248,22 @@ abstract class SuQL extends Obj implements QueryObject
     public function getRawSql()
     {
         return $this->getSQL([$this->query()]);
+    }
+    /**
+     * Получение всех данных запроса
+     * @return mixed
+     */
+    public function fetchAll()
+    {
+        $sth = $this->getDb()->prepare($this->getRawSql());
+
+        foreach ($this->getParamList() as $param => $value) {
+            $sth->bindParam($param, $value);
+        }
+
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
     /**
      * Query

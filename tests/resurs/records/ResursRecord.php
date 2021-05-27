@@ -2,6 +2,7 @@
 
 namespace resurs\records;
 
+use PDO;
 use resurs\modifiers\ResursModifier;
 use suql\syntax\SuQL;
 
@@ -18,5 +19,10 @@ abstract class ResursRecord extends SuQL
                 ResursModifier::class,
             ]
         );
+    }
+
+    public function getDb()
+    {
+        return new PDO('mysql:host=localhost;dbname=resurs', 'root', '');
     }
 }

@@ -128,5 +128,18 @@ SQL);
         $query = ArchiveView::all();
 
         $this->assertEquals($sql, $query->getRawSql());
+
+        $this->assertEquals([
+            0 => [
+                'tarif_id' => null,
+                'counter_id' => '3',
+                'user_id' => '6',
+            ],
+            1 => [
+                'tarif_id' => null,
+                'counter_id' => '7',
+                'user_id' => null,
+            ]
+        ], TariffUsedByUsers::all()->fetchAll());
     }
 }
