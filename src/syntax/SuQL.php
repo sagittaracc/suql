@@ -256,4 +256,20 @@ abstract class SuQL extends Obj implements QueryObject
     {
         return $this->getSQL([$this->query()]);
     }
+    /**
+     * Query
+     * @return string
+     */
+    public function query()
+    {
+        return str_replace('\\', '_', static::class);
+    }
+    /**
+     * View
+     * @return self
+     */
+    public function view()
+    {
+        return $this;
+    }
 }

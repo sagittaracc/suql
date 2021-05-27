@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use resurs\models\VtDateOfLastData;
+use resurs\models\VtValues;
 use sagittaracc\StringHelper;
 
 class ResursTest extends TestCase
@@ -20,6 +21,16 @@ class ResursTest extends TestCase
 SQL);
 
         $query = VtDateOfLastData::all();
+
+        $this->assertEquals($sql, $query->getRawSql());
+
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from c2000vt_values
+SQL);
+
+        $query = VtValues::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }
