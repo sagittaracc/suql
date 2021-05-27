@@ -97,8 +97,10 @@ class SQLCaseModifier
                 $expression = $key;
                 foreach ($value as $condition)
                 {
+                    $field = $condition[0];
+                    $condition[0] = new SimpleParam($field);
+
                     $reflector = new ReflectionClass(Condition::class);
-                    $condition[0] = new SimpleParam($condition[0]);
                     $conditionList[] = $reflector->newInstanceArgs($condition);
                 }
             }
