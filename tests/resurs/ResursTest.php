@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use resurs\models\ArchiveView;
 use resurs\models\TariffUsedByUsers;
 use resurs\models\VtDateOfLastData;
 use resurs\models\VtLastData;
@@ -98,6 +99,33 @@ SQL);
 SQL);
 
         $query = TariffUsedByUsers::all();
+
+        $this->assertEquals($sql, $query->getRawSql());
+
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                consumption.UpdateTime,
+                consumption.ConsumptionDelta,
+                consumption.MoneyNotPaidDelta,
+                date_format(consumption.UpdateTime, '%d %M %Y') as date,
+                counter.Obj_Id_Counter as id,
+                counter.Obj_Id_User,
+                CONCAT(counter.Name, IF(counter.SerialNumber <> '' AND counter.SerialNumber IS NOT NULL, CONCAT(counter.SerialNumber, ' (', consumption.NumberTarif + 1,')'), '')) AS SerialNumber,
+                resurs.Name_Resurs,
+                resurs.Unit as units,
+                resurs.id_Resurs,
+                users.FIO,
+                users.Address,
+                CONCAT(tarif.Name, ' (', FORMAT(tarif.Price, 0), ' р.)') AS tarif
+            from consumption
+            inner join counter on consumption.Obj_Id_Counter = counter.Obj_Id_Counter
+            inner join resurs on counter.Id_Resurs = resurs.id_Resurs
+            inner join users on counter.Obj_Id_User = users.Obj_Id_User
+            left join tarif on consumption.AI_Tarif = tarif.AI_Tarif
+            order by consumption.UpdateTime desc, consumption.Obj_Id_Counter asc
+SQL);
+
+        $query = ArchiveView::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }

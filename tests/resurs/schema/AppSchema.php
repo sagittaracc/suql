@@ -25,5 +25,23 @@ class AppSchema extends Scheme
             ['counter' => 't2'],
             't1.Obj_Id_Counter = t2.Obj_Id_Counter'
         );
+
+        $this->rel(
+            ['counter' => 't1'],
+            ['resurs' => 't2'],
+            't1.Id_Resurs = t2.id_Resurs'
+        );
+
+        $this->rel(
+            ['counter' => 't1'],
+            ['users' => 't2'],
+            't1.Obj_Id_User = t2.Obj_Id_User'
+        );
+
+        $this->rel(
+            ['consumption' => 't1'],
+            ['tarif' => 't2'],
+            't1.AI_Tarif = t2.AI_Tarif'
+        );
     }
 }
