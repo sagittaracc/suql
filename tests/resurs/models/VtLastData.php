@@ -27,7 +27,7 @@ class VtLastData extends ResursRecord
                 ])
                 ->join(VtDateOfLastData::all())
                     ->select([
-                        'id' => 'id',
+                        'id',
                     ])
                 ->join('c2000vt')
                     ->select([

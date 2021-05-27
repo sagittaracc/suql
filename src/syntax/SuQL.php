@@ -141,8 +141,14 @@ abstract class SuQL extends Obj implements QueryObject
                     }
                 }
                 else {
-                    $alias = $option;
-                    $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
+                    if (is_integer($field)) {
+                        $field = $option;
+                        $this->getQuery($this->query())->addField($this->currentTable, $field);
+                    }
+                    else {
+                        $alias = $option;
+                        $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
+                    }
                 }
             }
         }

@@ -40,7 +40,7 @@ SQL);
                 c2000vt_values.Obj_Id_Device as device_id,
                 c2000vt_values.Value as value,
                 c2000vt_values.UpdateTime as time,
-                vt_date_of_last_data.id as id,
+                vt_date_of_last_data.id,
                 c2000vt.Type as type,
                 c2000vt.Obj_Id_User as user_id,
                 c2000vt.Obj_Id_Home as home_id,

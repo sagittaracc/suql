@@ -59,7 +59,7 @@ SQL);
         $sql = StringHelper::trimSql(<<<SQL
             select
                 users.id as uid,
-                users.name as uname
+                users.name
             from users
             where users.id not in (
                 select distinct
@@ -70,7 +70,7 @@ SQL);
 
         $query = User::all()->select([
             'id' => 'uid',
-            'name' => 'uname',
+            'name',
         ])->where('users.id not in ?', [UserGroup::distinct()->select(['user_id'])]);
 
         $this->assertEquals($sql, $query->getRawSql());
