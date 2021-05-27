@@ -2,7 +2,7 @@
 
 namespace resurs\records;
 
-use DbContainer;
+use suql\db\Container;
 use resurs\modifiers\ResursModifier;
 use suql\syntax\SuQL;
 
@@ -23,6 +23,6 @@ abstract class ResursRecord extends SuQL
 
     public function getDb()
     {
-        return DbContainer::get('ResursDb');
+        return Container::get('ResursDb');
     }
 }
