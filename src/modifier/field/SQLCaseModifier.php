@@ -7,6 +7,7 @@ use sagittaracc\PlaceholderHelper;
 use suql\core\Condition;
 use suql\core\Expression;
 use suql\core\FieldName;
+use suql\core\SimpleParam;
 
 /**
  * Модификатор case when
@@ -31,13 +32,18 @@ class SQLCaseModifier
 
             $then = (new PlaceholderHelper("?"))->bind($then);
 
-            if ($when === 'default')
-            {
+            if ($when === 'default') {
                 $caseList[] = "else $then";
             }
-            else if ($when instanceof Expression || $when instanceof Condition)
-            {
-                $caseList[] = "when $when then $then";
+            else {
+                if ($when instanceof Condition) {
+                    $stringWhen = $when->getCondition();
+                }
+                else if ($when instanceof Expression) {
+                    $stringWhen = $when->getExpression();
+                }
+
+                $caseList[] = "when $stringWhen then $then";
             }
         }
 
@@ -61,7 +67,7 @@ class SQLCaseModifier
         $field = $when[0];
         $condition = $when[1];
 
-        return [new Condition($field, $condition), $then];
+        return [new Condition(new SimpleParam($field, [0]), $condition), $then];
     }
     /**
      * Составное условие в case
@@ -92,6 +98,7 @@ class SQLCaseModifier
                 foreach ($value as $condition)
                 {
                     $reflector = new ReflectionClass(Condition::class);
+                    $condition[0] = new SimpleParam($condition[0], [0]);
                     $conditionList[] = $reflector->newInstanceArgs($condition);
                 }
             }
