@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use resurs\models\ArchiveView;
+use resurs\models\Auth;
 use resurs\models\TariffUsedByUsers;
 use resurs\models\VtDateOfLastData;
 use resurs\models\VtLastData;
 use resurs\models\VtValues;
 use resurs\models\VtView;
 use sagittaracc\StringHelper;
+use suql\core\SimpleParam;
+use suql\syntax\Expression;
 
 class ResursTest extends TestCase
 {
@@ -130,16 +133,22 @@ SQL);
         $this->assertEquals($sql, $query->getRawSql());
 
         $this->assertEquals([
-            0 => [
-                'tarif_id' => null,
-                'counter_id' => '3',
-                'user_id' => '6',
-            ],
-            1 => [
-                'tarif_id' => null,
-                'counter_id' => '7',
-                'user_id' => null,
-            ]
-        ], TariffUsedByUsers::all()->fetchAll());
+            0 => ['id' => '6'],
+        ], Auth::all()->select(['Obj_Id_Operator' => 'id'])->where('id = 6')->fetchAll());
+
+        $query =
+            Auth::all()
+                ->select(['Obj_Id_Operator' => 'id'])
+                ->where(
+                    Expression::create(
+                        '$1', [
+                            [SimpleParam::class, ['auth', 'id'], '$ = ?', [6]],
+                        ]
+                    )
+                );
+
+        $this->assertEquals([
+            0 => ['id' => '6'],
+        ], $query->fetchAll());
     }
 }

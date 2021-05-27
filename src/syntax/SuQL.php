@@ -266,7 +266,7 @@ abstract class SuQL extends Obj implements QueryObject
         $sth = $this->getDb()->prepare($this->getRawSql());
 
         foreach ($this->getParamList() as $param => $value) {
-            if (isset($arr[gettype($value)])) {
+            if (isset($pdoTypes[gettype($value)])) {
                 $sth->bindParam($param, $value, $pdoTypes[gettype($value)]);
             }
         }
