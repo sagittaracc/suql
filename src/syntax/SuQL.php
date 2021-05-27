@@ -249,35 +249,26 @@ abstract class SuQL extends Obj implements QueryObject
     {
         return $this->getSQL([$this->query()]);
     }
-    private function getParamPDOType($value)
-    {
-        switch (gettype($value)) {
-            case "integer":
-                return PDO::PARAM_INT;
-            case "boolean":
-                return PDO::PARAM_BOOL;
-            case "NULL":
-                return PDO::PARAM_NULL;
-            case "double":
-            case "string":
-            case "array":
-            case "object":
-            case "resource":
-                return PDO::PARAM_STR;
-            default:
-                return PDO::PARAM_STR;
-        }
-    }
     /**
      * Получение всех данных запроса
      * @return mixed
      */
     public function fetchAll()
     {
+        $pdoTypes = [
+            'integer' => PDO::PARAM_INT,
+            'boolean' => PDO::PARAM_BOOL,
+            'NULL'    => PDO::PARAM_NULL,
+            'double'  => PDO::PARAM_STR,
+            'string'  => PDO::PARAM_STR,
+        ];
+
         $sth = $this->getDb()->prepare($this->getRawSql());
 
         foreach ($this->getParamList() as $param => $value) {
-            $sth->bindParam($param, $value, $this->getParamPDOType($value));
+            if (isset($arr[gettype($value)])) {
+                $sth->bindParam($param, $value, $pdoTypes[gettype($value)]);
+            }
         }
 
         $sth->execute();
