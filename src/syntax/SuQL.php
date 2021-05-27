@@ -89,7 +89,9 @@ abstract class SuQL extends Obj implements QueryObject
             foreach ($options as $option) {
                 if ($option instanceof Raw) {
                     $expression = $option;
-                    $this->getQuery($this->query())->addRaw($expression->getExpression());
+                    $this->getQuery($this->query())->addRaw(
+                        str_replace('@', "{$this->currentTable}.", $expression->getExpression())
+                    );
                 }
                 else if ($option instanceof Field) {
                     $field = $option;
@@ -119,7 +121,9 @@ abstract class SuQL extends Obj implements QueryObject
             foreach ($options as $field => $option) {
                 if ($option instanceof Raw) {
                     $expression = $option;
-                    $this->getQuery($this->query())->addRaw($expression->getExpression());
+                    $this->getQuery($this->query())->addRaw(
+                        str_replace('@', "{$this->currentTable}.", $expression->getExpression())
+                    );
                 }
                 else if ($option instanceof Field) {
                     $field = $option;

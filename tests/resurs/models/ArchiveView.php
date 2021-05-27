@@ -38,7 +38,7 @@ class ArchiveView extends ResursRecord
                     ->select([
                         'Obj_Id_Counter' => 'id',
                         'Obj_Id_User',
-                        Raw::expression("CONCAT(counter.Name, IF(counter.SerialNumber <> '' AND counter.SerialNumber IS NOT NULL, CONCAT(counter.SerialNumber, ' (', consumption.NumberTarif + 1,')'), '')) AS SerialNumber"),
+                        Raw::expression("CONCAT(@Name, IF(@SerialNumber <> '' AND @SerialNumber IS NOT NULL, CONCAT(@SerialNumber, ' (', consumption.NumberTarif + 1,')'), '')) AS SerialNumber"),
                     ])
                 ->join('resurs')
                     ->select([
@@ -53,7 +53,7 @@ class ArchiveView extends ResursRecord
                     ])
                 ->leftJoin('tarif')
                     ->select([
-                        Raw::expression("CONCAT(tarif.Name, ' (', FORMAT(tarif.Price, 0), ' р.)') AS tarif")
+                        Raw::expression("CONCAT(@Name, ' (', FORMAT(@Price, 0), ' р.)') AS tarif")
                     ]);
     }
 }
