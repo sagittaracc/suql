@@ -25,6 +25,9 @@ class VtView extends ResursRecord
                     'Obj_Id_Device' => 'id',
                     'Type',
                     'Obj_Id_User' => 'user_id',
+                    new Field(['Type' => 'Unit'], [
+                        'vt_unit',
+                    ]),
                 ])
                 ->get('c2000vt_values')
                     ->select([
