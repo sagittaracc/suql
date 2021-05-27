@@ -67,7 +67,7 @@ class SQLCaseModifier
         $field = $when[0];
         $condition = $when[1];
 
-        return [new Condition(new SimpleParam($field, [0]), $condition), $then];
+        return [new Condition(new SimpleParam($field), $condition), $then];
     }
     /**
      * Составное условие в case
@@ -98,7 +98,7 @@ class SQLCaseModifier
                 foreach ($value as $condition)
                 {
                     $reflector = new ReflectionClass(Condition::class);
-                    $condition[0] = new SimpleParam($condition[0], [0]);
+                    $condition[0] = new SimpleParam($condition[0]);
                     $conditionList[] = $reflector->newInstanceArgs($condition);
                 }
             }

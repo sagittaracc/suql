@@ -15,6 +15,11 @@ class SimpleParam extends Param
      */
     public function getPlaceholder()
     {
-        return $this->getPlaceholderList()[0];
+        $placeholderList = $this->getPlaceholderList();
+
+        return
+            isset($placeholderList[0])
+                ? $placeholderList[0]
+                : '';
     }
 }

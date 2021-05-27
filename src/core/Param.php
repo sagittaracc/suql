@@ -22,7 +22,7 @@ abstract class Param
      * @param suql\core\FieldName $field поле для которого применяются параметры
      * @param array $params параметры применения
      */
-    function __construct($field, $params)
+    function __construct($field, $params = [])
     {
         $this->field = $field;
         $this->params = $params;

@@ -14,6 +14,11 @@ class InParam extends Param
      */
     public function getPlaceholder()
     {
-        return '(' . implode(',', $this->getPlaceholderList()) . ')';
+        $placeholderList = $this->getPlaceholderList();
+
+        return
+            !empty($placeholderList)
+                ? '(' . implode(',', $placeholderList) . ')'
+                : '';
     }
 }
