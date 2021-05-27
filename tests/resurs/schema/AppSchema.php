@@ -15,8 +15,8 @@ class AppSchema extends Scheme
         );
 
         $this->rel(
-            ['c2000vt_values' => 't1'],
-            ['c2000vt' => 't2'],
+            ['c2000vt' => 't1'],
+            ['c2000vt_values' => 't2'],
             't1.Obj_Id_Device = t2.Obj_Id_Device'
         );
     }
