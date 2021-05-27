@@ -19,5 +19,11 @@ class AppSchema extends Scheme
             ['c2000vt_values' => 't2'],
             't1.Obj_Id_Device = t2.Obj_Id_Device'
         );
+
+        $this->rel(
+            ['consumption' => 't1'],
+            ['counter' => 't2'],
+            't1.Obj_Id_Counter = t2.Obj_Id_Counter'
+        );
     }
 }

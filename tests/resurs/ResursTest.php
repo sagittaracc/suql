@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use resurs\models\TariffUsedByUsers;
 use resurs\models\VtDateOfLastData;
 use resurs\models\VtLastData;
 use resurs\models\VtValues;
@@ -84,6 +85,19 @@ SQL);
 SQL);
 
         $query = VtView::all();
+
+        $this->assertEquals($sql, $query->getRawSql());
+
+        $sql = StringHelper::trimSql(<<<SQL
+            select distinct
+                consumption.AI_Tarif as tarif_id,
+                counter.Obj_Id_Counter as counter_id,
+                counter.Obj_Id_User as user_id
+            from consumption
+            inner join counter on consumption.Obj_Id_Counter = counter.Obj_Id_Counter
+SQL);
+
+        $query = TariffUsedByUsers::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }

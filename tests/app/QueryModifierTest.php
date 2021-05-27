@@ -19,7 +19,7 @@ final class QueryModifierTest extends TestCase
             from users
 SQL);
 
-        $query = User::distinct()->select(['name']);
+        $query = User::all()->distinct()->select(['name']);
 
         $this->assertEquals($sql, $query->getRawSql());
     }

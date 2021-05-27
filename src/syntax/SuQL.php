@@ -73,12 +73,11 @@ abstract class SuQL extends Obj implements QueryObject
      * Distinct
      * @return self
      */
-    public static function distinct()
+    public function distinct()
     {
-        $instance = static::getInstance();
-        $instance->getQuery($instance->query())->addModifier('distinct');
+        $this->getQuery($this->query())->addModifier('distinct');
 
-        return $instance->view();
+        return $this;
     }
     /**
      * Выборка определенных полей модели

@@ -71,7 +71,7 @@ SQL);
         $query = User::all()->select([
             'id' => 'uid',
             'name',
-        ])->where('users.id not in ?', [UserGroup::distinct()->select(['user_id'])]);
+        ])->where('users.id not in ?', [UserGroup::all()->distinct()->select(['user_id'])]);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
