@@ -55,8 +55,8 @@ SQL);
                 from c2000vt_values
                 group by c2000vt_values.Obj_Id_Device
             ) vt_date_of_last_data
-                on c2000vt_values.Obj_Id_Device = vt_date_of_last_data.Obj_Id_Device
-               and c2000vt_values.UpdateTime = vt_date_of_last_data.UpdateTime
+                on c2000vt_values.Obj_Id_Device = vt_date_of_last_data.device_id
+               and c2000vt_values.UpdateTime = vt_date_of_last_data.lastUpdateTime
             inner join c2000vt on c2000vt_values.Obj_Id_Device = c2000vt.Obj_Id_Device
 SQL);
 
