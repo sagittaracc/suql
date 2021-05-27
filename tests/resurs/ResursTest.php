@@ -131,24 +131,5 @@ SQL);
         $query = ArchiveView::all();
 
         $this->assertEquals($sql, $query->getRawSql());
-
-        $this->assertEquals([
-            0 => ['id' => '6'],
-        ], Auth::all()->select(['Obj_Id_Operator' => 'id'])->where('id = 6')->fetchAll());
-
-        $query =
-            Auth::all()
-                ->select(['Obj_Id_Operator' => 'id'])
-                ->where(
-                    Expression::create(
-                        '$1', [
-                            [SimpleParam::class, ['auth', 'id'], '$ = ?', [6]],
-                        ]
-                    )
-                );
-
-        $this->assertEquals([
-            0 => ['id' => '6'],
-        ], $query->fetchAll());
     }
 }

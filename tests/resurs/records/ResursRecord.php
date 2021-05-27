@@ -23,6 +23,6 @@ abstract class ResursRecord extends SuQL
 
     public function getDb()
     {
-        return new PDO('mysql:host=localhost;dbname=resurs', 'root', '');
+        return null;
     }
 }
