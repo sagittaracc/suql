@@ -2,13 +2,10 @@
 
 namespace app\models;
 
-use suql\syntax\SuQL;
+use app\records\ActiveRecord;
 
-class User extends SuQL
+class User extends ActiveRecord
 {
-    protected static $schemeClass = 'app\\schema\\AppScheme';
-    protected static $sqlDriver = 'mysql';
-
     public function table()
     {
         return 'users';

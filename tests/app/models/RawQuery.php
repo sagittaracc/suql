@@ -2,13 +2,10 @@
 
 namespace app\models;
 
-use suql\syntax\SuQL;
+use app\records\ActiveRecord;
 
-class RawQuery extends SuQL
+class RawQuery extends ActiveRecord
 {
-    protected static $schemeClass = 'app\\schema\\AppScheme';
-    protected static $sqlDriver = 'mysql';
-
     public function query()
     {
         return 'raw_query';

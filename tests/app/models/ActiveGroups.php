@@ -2,14 +2,11 @@
 
 namespace app\models;
 
+use app\records\ActiveRecord;
 use suql\syntax\Field;
-use suql\syntax\SuQL;
 
-class ActiveGroups extends SuQL
+class ActiveGroups extends ActiveRecord
 {
-    protected static $schemeClass = 'app\\schema\\AppScheme';
-    protected static $sqlDriver = 'mysql';
-
     public function query()
     {
         return 'active_groups';

@@ -2,13 +2,10 @@
 
 namespace app\models;
 
-use suql\syntax\SuQL;
+use app\records\ActiveRecord;
 
-class UserGroup extends SuQL
+class UserGroup extends ActiveRecord
 {
-    protected static $schemeClass = 'app\\schema\\AppScheme';
-    protected static $sqlDriver = 'mysql';
-
     public function table()
     {
         return 'user_group';

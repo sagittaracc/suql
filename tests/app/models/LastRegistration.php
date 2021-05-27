@@ -2,14 +2,11 @@
 
 namespace app\models;
 
+use app\records\ActiveRecord;
 use suql\syntax\Field;
-use suql\syntax\SuQL;
 
-class LastRegistration extends SuQL
+class LastRegistration extends ActiveRecord
 {
-    protected static $schemeClass = 'app\\schema\\AppScheme';
-    protected static $sqlDriver = 'mysql';
-
     public function query()
     {
         return 'last_registration';
