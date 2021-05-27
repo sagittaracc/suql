@@ -25,11 +25,11 @@ class VtLastData extends ResursRecord
                     'Value' => 'value',
                     'UpdateTime' => 'time',
                 ])
-                ->join(VtDateOfLastData::all())
+                ->get(VtDateOfLastData::all())
                     ->select([
                         'id',
                     ])
-                ->join('c2000vt')
+                ->get('c2000vt')
                     ->select([
                         'Type' => 'type',
                         'Obj_Id_User' => 'user_id',

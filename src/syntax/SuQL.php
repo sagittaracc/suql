@@ -200,6 +200,14 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * Алиас для join
+     * @return self
+     */
+    public function get($option)
+    {
+        return $this->join($option);
+    }
+    /**
      * LEFT JOIN
      * @return self
      */
