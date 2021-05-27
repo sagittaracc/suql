@@ -2,7 +2,7 @@
 
 namespace resurs\records;
 
-use PDO;
+use DbContainer;
 use resurs\modifiers\ResursModifier;
 use suql\syntax\SuQL;
 
@@ -23,6 +23,6 @@ abstract class ResursRecord extends SuQL
 
     public function getDb()
     {
-        return new PDO('mysql:host=localhost;dbname=resurs', 'root', '');
+        return DbContainer::get('ResursDb');
     }
 }
