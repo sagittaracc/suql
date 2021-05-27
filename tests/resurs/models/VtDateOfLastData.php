@@ -2,14 +2,11 @@
 
 namespace resurs\models;
 
-use suql\syntax\SuQL;
+use resurs\records\ResursRecord;
 use suql\syntax\Field;
 
-class VtDateOfLastData extends SuQL
+class VtDateOfLastData extends ResursRecord
 {
-    protected static $schemeClass = 'resurs\\schema\\AppSchema';
-    protected static $sqlDriver = 'mysql';
-
     public function query()
     {
         return 'vt_date_of_last_data';

@@ -2,13 +2,10 @@
 
 namespace resurs\models;
 
-use suql\syntax\SuQL;
+use resurs\records\ResursRecord;
 
-class VtValues extends SuQL
+class VtValues extends ResursRecord
 {
-    protected static $schemeClass = 'resurs\\schema\\AppSchema';
-    protected static $sqlDriver = 'mysql';
-
     public function table()
     {
         return 'c2000vt_values';
