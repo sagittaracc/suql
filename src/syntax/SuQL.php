@@ -188,6 +188,7 @@ abstract class SuQL extends Obj implements QueryObject
 
             $this->getQuery($this->query())->addJoin($type, $subquery->query());
             $this->extend($subquery->getQueries());
+            $this->currentTable = $subquery->query();
         }
 
         return $this;
