@@ -85,73 +85,39 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public function select($options)
     {
-        if (ArrayHelper::isSequential($options)) {
-            foreach ($options as $option) {
-                if ($option instanceof Raw) {
-                    $expression = $option;
-                    $this->getQuery($this->query())->addRaw(
-                        str_replace('@', "{$this->currentTable}.", $expression->getExpression())
-                    );
-                }
-                else if ($option instanceof Field) {
-                    $field = $option;
-                    $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
-                    foreach ($field->getModifiers() as $modifier => $options) {
-                        if (is_string($modifier)) {
-                            $params = $options;
-                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
-                        }
-                        else if (is_string($options)) {
-                            $modifier = $options;
-                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
-                        }
-                        else if ($options instanceof Closure) {
-                            $callbackModifier = $options;
-                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addCallbackModifier($callbackModifier);
-                        }
+        foreach ($options as $field => $option) {
+            if ($option instanceof Raw) {
+                $expression = $option;
+                $this->getQuery($this->query())->addRaw(
+                    str_replace('@', "{$this->currentTable}.", $expression->getExpression())
+                );
+            }
+            else if ($option instanceof Field) {
+                $field = $option;
+                $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
+                foreach ($field->getModifiers() as $modifier => $options) {
+                    if (is_string($modifier)) {
+                        $params = $options;
+                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                    }
+                    else if (is_string($options)) {
+                        $modifier = $options;
+                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
+                    }
+                    else if ($options instanceof Closure) {
+                        $callbackModifier = $options;
+                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addCallbackModifier($callbackModifier);
                     }
                 }
-                else {
+            }
+            else {
+                if (is_integer($field)) {
                     $field = $option;
                     $this->getQuery($this->query())->addField($this->currentTable, $field);
                 }
-            }
-        }
-        else {
-            foreach ($options as $field => $option) {
-                if ($option instanceof Raw) {
-                    $expression = $option;
-                    $this->getQuery($this->query())->addRaw(
-                        str_replace('@', "{$this->currentTable}.", $expression->getExpression())
-                    );
-                }
-                else if ($option instanceof Field) {
-                    $field = $option;
-                    $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
-                    foreach ($field->getModifiers() as $modifier => $options) {
-                        if (is_string($modifier)) {
-                            $params = $options;
-                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
-                        }
-                        else if (is_string($options)) {
-                            $modifier = $options;
-                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
-                        }
-                        else if ($options instanceof Closure) {
-                            $callbackModifier = $options;
-                            $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addCallbackModifier($callbackModifier);
-                        }
-                    }
-                }
                 else {
-                    if (is_integer($field)) {
-                        $field = $option;
-                        $this->getQuery($this->query())->addField($this->currentTable, $field);
-                    }
-                    else {
-                        $alias = $option;
-                        $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
-                    }
+                    $alias = $option;
+                    $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
                 }
             }
         }
