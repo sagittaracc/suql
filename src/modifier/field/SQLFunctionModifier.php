@@ -2,6 +2,8 @@
 
 namespace suql\modifier\field;
 
+use sagittaracc\PlaceholderHelper;
+
 /**
  * Модификатор Функция
  *
@@ -17,8 +19,13 @@ class SQLFunctionModifier
      */
     public static function func($func, $ofield, $params)
     {
+        $params = array_map(function($param) {
+            return (new PlaceholderHelper('?'))->bind($param);
+        }, $params);
+
         array_unshift($params, $ofield->getField());
         $params = implode(', ', $params);
+
         $ofield->setField("$func($params)");
     }
     /**

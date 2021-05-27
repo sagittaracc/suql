@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use resurs\models\VtDateOfLastData;
 use resurs\models\VtLastData;
 use resurs\models\VtValues;
+use resurs\models\VtView;
 use sagittaracc\StringHelper;
 
 class ResursTest extends TestCase
@@ -61,6 +62,24 @@ SQL);
 SQL);
 
         $query = VtLastData::all();
+
+        $this->assertEquals($sql, $query->getRawSql());
+
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                c2000vt.Obj_Id_Device as id,
+                c2000vt.Type,
+                c2000vt.Obj_Id_User as user_id,
+                date_format(c2000vt_values.UpdateTime, '%d %M %H:%i') as Time,
+                date_format(c2000vt_values.UpdateTime, '%d.%m.%Y') as fTime,
+                c2000vt_values.UpdateTime,
+                c2000vt_values.Value
+            from c2000vt
+            inner join c2000vt_values on c2000vt.Obj_Id_Device = c2000vt_values.Obj_Id_Device
+            order by c2000vt_values.Obj_Id_Device asc
+SQL);
+
+        $query = VtView::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }
