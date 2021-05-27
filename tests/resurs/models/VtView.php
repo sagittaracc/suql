@@ -37,8 +37,6 @@ class VtView extends ResursRecord
                         'UpdateTime',
                         'Value',
                     ])
-                ->order([
-                    'Obj_Id_Device' => 'asc',
-                ]);
+                ->order(['Obj_Id_Device']);
     }
 }

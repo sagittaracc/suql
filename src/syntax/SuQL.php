@@ -245,7 +245,15 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public function order($order)
     {
-        foreach ($order as $field => $direction) {
+        foreach ($order as $field => $options) {
+            if (is_integer($field)) {
+                $field = $options;
+                $direction = 'asc';
+            }
+            else {
+                $direction = $options;
+            }
+
             $this->getQuery($this->query())->addField($this->currentTable, $field, false);
             $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier($direction);
         }
