@@ -1,5 +1,11 @@
 # Change log
 
+## v7.0.0 - May 28, 2021
+
+- Add syntax sugar
+
+---
+
 ## v6.0.0 - May 5, 2021
 
 - Refactor
