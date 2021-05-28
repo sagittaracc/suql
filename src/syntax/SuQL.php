@@ -5,7 +5,6 @@ namespace suql\syntax;
 use Closure;
 use PDO;
 use suql\core\Obj;
-use sagittaracc\ArrayHelper;
 use suql\builder\SQLDriver;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\SqlDriverNotDefined;

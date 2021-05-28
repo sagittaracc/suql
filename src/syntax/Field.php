@@ -6,10 +6,10 @@ namespace suql\syntax;
  * Модификация поля
  * 
  * Например:
- * User::all()
+ * Model::all()
  *         ->select([
  *             ...,
- *             new suql\syntax\Field([<field> => <alias>], [
+ *             new Field([<field> => <alias>], [
  *                 <modifier-1>,
  *                 <modifier-2> => <params>,
  *                 ...

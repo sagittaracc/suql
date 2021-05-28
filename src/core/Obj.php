@@ -3,7 +3,6 @@
 namespace suql\core;
 
 use suql\modifier\field\SQLCaseModifier;
-use suql\modifier\field\SQLFilterModifier;
 use suql\modifier\field\SQLFunctionModifier;
 use suql\modifier\field\SQLGroupModifier;
 use suql\modifier\field\SQLOrderModifier;
