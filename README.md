@@ -4,7 +4,7 @@
 SuQL stands for Sugar SQL and this is just a query builder.
 
 ### Requirements
-The minimum requirement - PHP 5.6
+The minimum requirement - PHP 5.6. 
 
 ### Examples
 More examples in the ```tests``` directory
