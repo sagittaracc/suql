@@ -199,9 +199,9 @@ abstract class SuQL extends Obj implements QueryObject
      * Where фильтрация
      * @return self
      */
-    public function addWhere($where, $subqueries = [])
+    public function whereExpression($where, $subqueries = [])
     {
-        foreach ($subqueries as $index => $subquery) {
+        foreach ($subqueries as $subquery) {
             $this->extend($subquery->getQueries());
             $query = $subquery->query();
             $where = str_replace('?', "@$query", $where);
@@ -220,11 +220,11 @@ abstract class SuQL extends Obj implements QueryObject
         if (func_num_args() === 1) {
             $where = func_get_arg(0);
             if (is_string($where)) {
-                $this->addWhere($where);
+                $this->whereExpression($where);
             }
             else if (is_array($where)) {
                 foreach ($where as $field => $value) {
-                    $this->addWhere(
+                    $this->whereExpression(
                         new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ = ?")
                     );
                 }
@@ -233,13 +233,13 @@ abstract class SuQL extends Obj implements QueryObject
         else if (func_num_args() === 2) {
             $where = func_get_arg(0);
             $subqueries = func_get_arg(1);
-            $this->addWhere($where, $subqueries);
+            $this->whereExpression($where, $subqueries);
         }
         else if (func_num_args() === 3) {
             $field = func_get_arg(0);
             $compare = func_get_arg(1);
             $value = func_get_arg(2);
-            $this->addWhere(
+            $this->whereExpression(
                 new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ $compare ?")
             );
         }
