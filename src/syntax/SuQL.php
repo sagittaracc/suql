@@ -4,7 +4,11 @@ namespace suql\syntax;
 
 use Closure;
 use PDO;
+use suql\core\Condition;
+use suql\core\Expression;
+use suql\core\FieldName;
 use suql\core\Obj;
+use suql\core\SimpleParam;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\BuilderNotDefined;
 
@@ -195,7 +199,7 @@ abstract class SuQL extends Obj implements QueryObject
      * Where фильтрация
      * @return self
      */
-    public function where($where, $subqueries = [])
+    public function addWhere($where, $subqueries = [])
     {
         foreach ($subqueries as $index => $subquery) {
             $this->extend($subquery->getQueries());
@@ -205,6 +209,54 @@ abstract class SuQL extends Obj implements QueryObject
 
         $this->getQuery($this->query())->addWhere($where);
 
+        return $this;
+    }
+    /**
+     * Where фильтрация
+     * @return self
+     */
+    public function where()
+    {
+        if (func_num_args() === 1) {
+            $where = func_get_arg(0);
+            if (is_string($where)) {
+                $this->addWhere($where);
+            }
+            else if (is_array($where)) {
+                foreach ($where as $field => $value) {
+                    $this->addWhere(
+                        new Expression('$1', [
+                            new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ = ?"),
+                        ])
+                    );
+                }
+            }
+        }
+        else if (func_num_args() === 2) {
+            $where = func_get_arg(0);
+            $subqueries = func_get_arg(1);
+            $this->addWhere($where, $subqueries);
+        }
+        else if (func_num_args() === 3) {
+            $field = func_get_arg(0);
+            $compare = func_get_arg(1);
+            $value = func_get_arg(2);
+            $this->addWhere(
+                new Expression('$1', [
+                    new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ $compare ?"),
+                ])
+            );
+        }
+
+        return $this;
+    }
+    /**
+     * Алиас для функции where
+     * @return self
+     */
+    public function andWhere()
+    {
+        call_user_func_array(array($this, "where"), func_get_args());
         return $this;
     }
     /**

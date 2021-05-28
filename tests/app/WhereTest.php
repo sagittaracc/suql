@@ -31,6 +31,31 @@ SQL);
         $this->assertEquals($sql, $query->getRawSql());
     }
 
+    public function testExactExpressionWhere(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+            where
+                id = :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
+            and group_id = :ph0_8dcb248fff6e63eb07b5b1060a245442
+SQL);
+
+        $query =
+            User::all()
+                ->where([
+                    'id' => 1,
+                    'group_id' => 2,
+                ]);
+        
+        $this->assertEquals($sql, $query->getRawSql());
+        $this->assertEquals([
+            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
+            ':ph0_8dcb248fff6e63eb07b5b1060a245442' => 2,
+        ], $query->getParamList());
+    }
+
     public function testExpressionWhere(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
@@ -42,12 +67,10 @@ SQL);
             and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
 SQL);
 
-        $query = User::all()->where(
-            new Expression('$1 and $2', [
-                new Condition(new SimpleParam(new FieldName('users', 'id'), [1]), '$ > ?'),
-                new Condition(new SimpleParam(new FieldName('users', 'id'), [3]), '$ < ?'),
-            ])
-        );
+        $query =
+            User::all()
+                ->where('id', '>', 1)
+                ->andWhere('id', '<', 3);
 
         $this->assertEquals($sql, $query->getRawSql());
         $this->assertEquals([
