@@ -6,8 +6,10 @@ use app\models\User;
 use app\models\UserGroup;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use suql\core\Condition;
+use suql\core\Expression;
+use suql\core\FieldName;
 use suql\core\SimpleParam;
-use suql\syntax\Expression;
 
 final class WhereTest extends TestCase
 {
@@ -40,12 +42,12 @@ SQL);
             and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
 SQL);
 
-        $query = User::all()->where(Expression::create(
-            '$1 and $2', [
-                [SimpleParam::class, ['users', 'id'], '$ > ?', [1]],
-                [SimpleParam::class, ['users', 'id'], '$ < ?', [3]],
-            ]
-        ));
+        $query = User::all()->where(
+            new Expression('$1 and $2', [
+                new Condition(new SimpleParam(new FieldName('users', 'id'), [1]), '$ > ?'),
+                new Condition(new SimpleParam(new FieldName('users', 'id'), [3]), '$ < ?'),
+            ])
+        );
 
         $this->assertEquals($sql, $query->getRawSql());
         $this->assertEquals([

@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use sagittaracc\StringHelper;
+use suql\core\Condition;
+use suql\core\FieldName;
 use suql\core\SimpleParam;
-use suql\syntax\Expression;
+use suql\core\Expression;
 
 final class SuQLFieldModifierTest extends SuQLMock
 {
@@ -25,8 +27,8 @@ SQL);
             $ofield->getOSelect()->addWhere('users.id % 2 = 0');
 
             $ofield->getOSelect()->addWhere(
-                Expression::create('$1', [
-                    [SimpleParam::class, [$ofield->getTable(), $ofield->getField()], '$ > ?', [3]],
+                new Expression('$1', [
+                    new Condition(new SimpleParam(new FieldName($ofield->getTable(), $ofield->getField()), [3]), '$ > ?'),
                 ])
             );
         });
