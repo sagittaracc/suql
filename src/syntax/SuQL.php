@@ -5,7 +5,6 @@ namespace suql\syntax;
 use Closure;
 use PDO;
 use suql\core\Condition;
-use suql\core\Expression;
 use suql\core\FieldName;
 use suql\core\Obj;
 use suql\core\SimpleParam;
