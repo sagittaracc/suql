@@ -6,10 +6,8 @@ use app\models\User;
 use app\models\UserGroup;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\core\Condition;
-use suql\core\Expression;
-use suql\core\FieldName;
 use suql\core\SimpleParam;
+use suql\syntax\Expression;
 
 final class WhereTest extends TestCase
 {
@@ -71,6 +69,33 @@ SQL);
             User::all()
                 ->where('id', '>', 1)
                 ->andWhere('id', '<', 3);
+
+        $this->assertEquals($sql, $query->getRawSql());
+        $this->assertEquals([
+            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
+            ':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3,
+        ], $query->getParamList());
+    }
+
+    public function testComplexExpression(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+            where
+                id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
+            and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
+SQL);
+
+        $query = User::all()->whereExpression(
+            Expression::create(
+                '$1 and $2', [
+                    [SimpleParam::class, ['users', 'id'], '$ > ?', [1]],
+                    [SimpleParam::class, ['users', 'id'], '$ < ?', [3]],
+                ]
+            )
+        );
 
         $this->assertEquals($sql, $query->getRawSql());
         $this->assertEquals([
