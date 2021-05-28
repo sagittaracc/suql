@@ -4,9 +4,8 @@ return [
     'ResursDb' => [
         'driver' => 'mysql',
         'host' => 'localhost',
-        'dbname' => 'test',
+        'dbname' => 'resurs',
         'user' => 'root',
         'pass' => '',
     ],
-    // ... another db connection
 ];
