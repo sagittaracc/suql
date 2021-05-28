@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use app\models\ActiveGroups;
+use test\suql\models\ActiveGroups;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 

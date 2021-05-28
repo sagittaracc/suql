@@ -1,8 +1,8 @@
 <?php
 
-namespace app\models;
+namespace test\suql\models;
 
-use app\records\ActiveRecord;
+use test\suql\records\ActiveRecord;
 use suql\syntax\Field;
 
 class LastRegistration extends ActiveRecord

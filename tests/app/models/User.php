@@ -1,8 +1,8 @@
 <?php
 
-namespace app\models;
+namespace test\suql\models;
 
-use app\records\ActiveRecord;
+use test\suql\records\ActiveRecord;
 
 class User extends ActiveRecord
 {

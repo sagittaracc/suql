@@ -1,13 +1,13 @@
 <?php
 
-namespace app\records;
+namespace test\suql\records;
 
 use suql\syntax\SuQL;
-use resurs\modifiers\CustomModifier;
+use test\suql\modifiers\CustomModifier;
 
 abstract class ActiveRecord extends SuQL
 {
-    protected static $schemeClass = 'app\\schema\\AppScheme';
+    protected static $schemeClass = 'test\suql\\schema\\AppScheme';
     protected static $builderClass = 'suql\\builder\\MySQLBuilder';
 
     protected function modifierList()

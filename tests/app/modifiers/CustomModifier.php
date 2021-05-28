@@ -1,6 +1,6 @@
 <?php
 
-namespace resurs\modifiers;
+namespace test\suql\modifiers;
 
 use suql\modifier\field\SQLCaseModifier;
 

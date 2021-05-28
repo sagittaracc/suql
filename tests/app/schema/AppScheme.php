@@ -1,6 +1,6 @@
 <?php
 
-namespace app\schema;
+namespace test\suql\schema;
 
 use suql\core\Scheme;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use app\models\User;
+use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 
