@@ -265,7 +265,7 @@ abstract class SuQL extends Obj implements QueryObject
 
         foreach ($this->getParamList() as $param => $value) {
             if (isset($pdoTypes[gettype($value)])) {
-                $sth->bindParam($param, $value, $pdoTypes[gettype($value)]);
+                $sth->bindValue($param, $value, $pdoTypes[gettype($value)]);
             }
         }
 
