@@ -9,5 +9,4 @@ namespace suql\builder;
  */
 final class MySQLBuilder extends SQLBuilder
 {
-    // Do some crazy shit that only MySQL can
 }
