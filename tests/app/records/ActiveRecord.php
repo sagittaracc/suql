@@ -4,7 +4,6 @@ namespace app\records;
 
 use suql\syntax\SuQL;
 use resurs\modifiers\CustomModifier;
-use suql\builder\MySQLBuilder;
 
 abstract class ActiveRecord extends SuQL
 {

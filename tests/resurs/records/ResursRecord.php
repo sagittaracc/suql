@@ -4,7 +4,6 @@ namespace resurs\records;
 
 use suql\db\Container;
 use resurs\modifiers\ResursModifier;
-use suql\builder\MySQLBuilder;
 use suql\syntax\SuQL;
 
 abstract class ResursRecord extends SuQL
