@@ -35,12 +35,19 @@ class SQLBuilder
      */
     const INSERT_TEMPLATE = "insert into {table} ({fields}) values ({values})";
     /**
-     * Constructor
+     * Привязать объект OSuQL
      * @param suql\core\SuQLObject $osuql основной объект хранящий всю структуру запроса переданный для преобразования в sql
      */
-    function __construct($osuql)
+    public function assign($osuql)
     {
         $this->osuql = $osuql;
+    }
+    /**
+     * Чистка сборщика
+     */
+    public function clear()
+    {
+        $this->sql = [];
     }
     /**
      * Возвращает уже преобразованные в sql запросы по именам

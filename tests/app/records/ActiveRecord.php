@@ -4,11 +4,12 @@ namespace app\records;
 
 use suql\syntax\SuQL;
 use resurs\modifiers\CustomModifier;
+use suql\builder\MySQLBuilder;
 
 abstract class ActiveRecord extends SuQL
 {
     protected static $schemeClass = 'app\\schema\\AppScheme';
-    protected static $sqlDriver = 'mysql';
+    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
 
     protected function modifierList()
     {

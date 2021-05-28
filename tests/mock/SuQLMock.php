@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use suql\builder\SQLDriver;
+use suql\builder\MySQLBuilder;
 use suql\core\Obj;
 use suql\core\Scheme;
 
@@ -17,9 +17,9 @@ class SuQLMock extends TestCase
         $scheme->rel('users', 'user_group', 'users.id = user_group.user_id');
         $scheme->rel('user_group', 'groups', 'user_group.group_id = groups.id');
 
-        $driver = new SQLDriver('mysql');
+        $builder = new MySQLBuilder();
 
-        $this->osuql = new Obj($scheme, $driver);
+        $this->osuql = new Obj($scheme, $builder);
     }
 
     protected function tearDown(): void

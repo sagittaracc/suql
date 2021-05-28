@@ -24,9 +24,9 @@ class Obj
      */
     protected $scheme;
     /**
-     * @var suql\builder\SQLDriver экземпляр драйвера базы данных
+     * @var suql\builder\SQLBuilder экземпляр билдера
      */
-    protected $driver;
+    protected $builder;
     /**
      * @var array параметры которые биндятся к параметризованному запросу
      */
@@ -34,12 +34,12 @@ class Obj
     /**
      * Constructor
      * @param suql\core\Scheme $scheme экземпляр схемы
-     * @param suql\builder\SQLDriver $driver экземляр драйвера
+     * @param suql\builder\SQLBuilder $driver экземляр драйвера
      */
-    function __construct($scheme, $driver)
+    function __construct($scheme, $builder)
     {
         $this->scheme = $scheme;
-        $this->driver = $driver;
+        $this->builder = $builder;
     }
     /**
      * Получить схему
@@ -75,6 +75,7 @@ class Obj
     public function clear()
     {
         $this->queries = [];
+        $this->builder->clear();
         $this->scheme->clear();
     }
     /**
@@ -82,9 +83,8 @@ class Obj
      */
     public function drop()
     {
-        $this->queries = [];
+        $this->clear();
         $this->scheme->drop();
-        $this->driver = null;
     }
     /**
      * Возвращает список запрошенных запросов или один основной
@@ -94,18 +94,14 @@ class Obj
      */
     public function getSQL($queryList)
     {
-        // if (!$this->driver->getBuilder())
-        //     throw new SqlDriverNotSupportedException();
-
         if ($queryList === 'all')
             $queryList = $this->getFullQueryList();
 
         if (!is_array($queryList)) return null;
 
-        $classBuilder = $this->driver->getBuilder();
-        $SQLBuilder = new $classBuilder($this);
-        $SQLBuilder->run($queryList);
-        $sqlList = $SQLBuilder->getSql($queryList);
+        $this->builder->assign($this);
+        $this->builder->run($queryList);
+        $sqlList = $this->builder->getSql($queryList);
 
         $this->clear();
 

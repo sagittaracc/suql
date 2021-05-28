@@ -5,9 +5,8 @@ namespace suql\syntax;
 use Closure;
 use PDO;
 use suql\core\Obj;
-use suql\builder\SQLDriver;
 use suql\syntax\exception\SchemeNotDefined;
-use suql\syntax\exception\SqlDriverNotDefined;
+use suql\syntax\exception\BuilderNotDefined;
 
 /**
  * SuQL синтаксис
@@ -21,9 +20,9 @@ abstract class SuQL extends Obj implements QueryObject
      */
     protected static $schemeClass = null;
     /**
-     * @var string используемый драйвер
+     * @var string используемый билдер
      */
-    protected static $sqlDriver = null;
+    protected static $builderClass = null;
     /**
      * @var string текущая таблица в цепочке вызовов
      */
@@ -36,14 +35,14 @@ abstract class SuQL extends Obj implements QueryObject
     {
         if (!static::$schemeClass)
             throw new SchemeNotDefined;
-
-        if (!static::$sqlDriver)
-            throw new SqlDriverNotDefined;
+        
+        if (!static::$builderClass)
+            throw new BuilderNotDefined();
 
         $scheme = new static::$schemeClass;
-        $driver = new SQLDriver(static::$sqlDriver);
+        $builder = new static::$builderClass;
 
-        $instance = new static($scheme, $driver);
+        $instance = new static($scheme, $builder);
         $instance->addSelect($instance->query());
 
         $option = $instance->table();
