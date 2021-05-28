@@ -1,3 +1,4 @@
 /vendor/
 
 /tests/resurs/DbResursTest.php
+/tests/resurs/config/db.php
