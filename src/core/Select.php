@@ -189,6 +189,10 @@ class Select extends Query implements SelectQueryInterface
         {
             $this->addExpressionWhere($expression, $stack);
         }
+        else if ($expression instanceof Condition)
+        {
+            $this->addConditionWhere($expression, $stack);
+        }
     }
     /**
      * Добавляет условие where из строки
@@ -207,6 +211,20 @@ class Select extends Query implements SelectQueryInterface
     private function addExpressionWhere($expression, &$stack)
     {
         $stack[] = $expression->getExpression();
+
+        foreach ($expression->getParams() as $param => $value)
+        {
+            $this->getOSuQL()->setParam($param, $value);
+        }
+    }
+    /**
+     * Добавляем простой condition
+     * @param suql\core\Condition $expression
+     * @param array $stack
+     */
+    private function addConditionWhere($expression, &$stack)
+    {
+        $stack[] = $expression->getCondition();
 
         foreach ($expression->getParams() as $param => $value)
         {

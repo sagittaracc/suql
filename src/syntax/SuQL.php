@@ -225,9 +225,7 @@ abstract class SuQL extends Obj implements QueryObject
             else if (is_array($where)) {
                 foreach ($where as $field => $value) {
                     $this->addWhere(
-                        new Expression('$1', [
-                            new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ = ?"),
-                        ])
+                        new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ = ?")
                     );
                 }
             }
@@ -242,9 +240,7 @@ abstract class SuQL extends Obj implements QueryObject
             $compare = func_get_arg(1);
             $value = func_get_arg(2);
             $this->addWhere(
-                new Expression('$1', [
-                    new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ $compare ?"),
-                ])
+                new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ $compare ?")
             );
         }
 
@@ -284,10 +280,16 @@ abstract class SuQL extends Obj implements QueryObject
      * Группировка
      * @return self
      */
-    public function group($field)
+    public function group($fields)
     {
-        $this->getQuery($this->query())->addField($this->currentTable, $field, false);
-        $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('group');
+        if (is_string($fields)) {
+            $fields = [$fields];
+        }
+
+        foreach ($fields as $field) {
+            $this->getQuery($this->query())->addField($this->currentTable, $field, false);
+            $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('group');
+        }
 
         return $this;
     }
