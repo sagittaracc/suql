@@ -1,7 +1,7 @@
 <h1 align="center">Sugar SQL</h1>
 
 ### SuQL
-SuQL stands for Sugar SQL and this is just a query builder.. 
+SuQL stands for Sugar SQL and this is just a query builder... 
 
 ### Requirements
 The minimum requirement - PHP 5.6. 
