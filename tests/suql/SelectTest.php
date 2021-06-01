@@ -79,4 +79,12 @@ SQL);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
+
+    public function testScratch(): void
+    {
+        $this->assertEquals(
+            User::all()->getUserGroup()->getGroup()->getRawSql(),
+            'select user_group.something, user_group.something_else, groups.name from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id'
+        );
+    }
 }

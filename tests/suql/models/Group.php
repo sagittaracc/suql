@@ -4,18 +4,17 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class UserGroup extends ActiveRecord
+class Group extends ActiveRecord
 {
     public function table()
     {
-        return 'user_group';
+        return 'groups';
     }
 
     public function fields()
     {
         return [
-            'something',
-            'something_else',
+            'name',
         ];
     }
 }
