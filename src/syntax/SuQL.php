@@ -344,6 +344,7 @@ abstract class SuQL extends Obj implements QueryObject
     }
     /**
      * Обработка ORM алиасов
+     * @return self
      */
     public function __call($name, $arguments)
     {
