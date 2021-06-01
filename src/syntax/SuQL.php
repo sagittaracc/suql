@@ -3,6 +3,7 @@
 namespace suql\syntax;
 
 use Closure;
+use Exception;
 use PDO;
 use suql\core\Condition;
 use suql\core\FieldName;
@@ -350,6 +351,11 @@ abstract class SuQL extends Obj implements QueryObject
     {
         $modelNamespace = (new \ReflectionClass(get_class($this)))->getNamespaceName();
         $model = $modelNamespace . '\\' . str_replace('get', '', $name);
+
+        if (!class_exists($model)) {
+            throw new Exception("Class $model not defined!");
+        }
+
         $instance = new $model(null, null);
         $table = $instance->table();
         $fields = $instance->fields();
