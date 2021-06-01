@@ -10,13 +10,4 @@ class User extends ActiveRecord
     {
         return 'users';
     }
-
-    public function fields()
-    {
-        return [
-            'UpdateTime',
-            'ConsumptionDelta',
-            'MoneyNotPaidDelta',
-        ];
-    }
 }

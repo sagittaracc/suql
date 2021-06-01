@@ -14,8 +14,7 @@ class UserGroup extends ActiveRecord
     public function fields()
     {
         return [
-            'something',
-            'something_else',
+            'group_id',
         ];
     }
 }

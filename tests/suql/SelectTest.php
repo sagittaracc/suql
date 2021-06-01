@@ -82,9 +82,21 @@ SQL);
 
     public function testScratch(): void
     {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id,
+                user_group.group_id,
+                groups.name
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+SQL);
+
+        $query = User::all()->select(['id']);
+
         $this->assertEquals(
-            User::all()->getUserGroup()->getGroup()->getRawSql(),
-            'select user_group.something, user_group.something_else, groups.name from users inner join user_group on users.id = user_group.user_id inner join groups on user_group.group_id = groups.id'
+            $sql,
+            $query->getUserGroup()->getGroup()->getRawSql()
         );
     }
 }
