@@ -347,17 +347,20 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public function __call($name, $arguments)
     {
-        $name = str_replace('get', '', $name);
-        $class = "test\suql\models\\$name";
-        $obj = new $class(null, null);
-        $table = $obj->table();
+        $modelNamespace = (new \ReflectionClass(get_class($this)))->getNamespaceName();
+        $model = $modelNamespace . '\\' . str_replace('get', '', $name);
+        $instance = new $model(null, null);
+        $table = $instance->table();
+        $fields = $instance->fields();
+
         $this->join($table);
-        $fields = $obj->fields();
+
         foreach ($fields as $field) {
             $this->select([
                 $field,
             ]);
         }
+
         return $this;
     }
 }
