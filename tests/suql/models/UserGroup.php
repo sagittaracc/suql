@@ -3,6 +3,7 @@
 namespace test\suql\models;
 
 use suql\syntax\Field;
+use suql\syntax\Raw;
 use test\suql\records\ActiveRecord;
 
 class UserGroup extends ActiveRecord
@@ -19,6 +20,7 @@ class UserGroup extends ActiveRecord
             new Field(['field' => 'alias'], [
                 'func' => [3],
             ]),
+            Raw::expression('CONCAT(shit)'),
         ];
     }
 }

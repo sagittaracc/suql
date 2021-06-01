@@ -87,6 +87,7 @@ SQL);
                 users.id,
                 user_group.group_id,
                 func(user_group.field, 3) as alias,
+                CONCAT(shit),
                 groups.name
             from users
             inner join user_group on users.id = user_group.user_id
