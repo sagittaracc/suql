@@ -80,7 +80,7 @@ SQL);
         $this->assertEquals($sql, $query->getRawSql());
     }
 
-    public function testScratch(): void
+    public function testOrmChain(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
