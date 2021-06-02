@@ -377,8 +377,11 @@ abstract class SuQL extends Obj implements QueryObject
         $instance = new $model(null, null);
         $table = $instance->table();
         $fields = $instance->fields();
+        
+        $type = isset($arguments[0]) ? $arguments[0] : 'inner';
+        $algorithm = isset($arguments[1]) ? $arguments[1] : 'smart';
 
-        $this->join($table, 'inner', 'smart');
+        $this->join($table, $type, $algorithm);
 
         foreach ($fields as $field) {
             $this->select([
