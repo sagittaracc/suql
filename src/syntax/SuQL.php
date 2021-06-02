@@ -74,7 +74,15 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public static function all()
     {
-        return static::getInstance()->view();
+        $instance = static::getInstance()->view();
+
+        foreach ($instance->fields() as $field) {
+            $instance->select([
+                $field
+            ]);
+        }
+
+        return $instance;
     }
     /**
      * Distinct
