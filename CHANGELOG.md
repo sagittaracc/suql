@@ -1,5 +1,11 @@
 # Change log
 
+## v7.0.1 - June 02, 2021
+
+- Add smart joins
+
+---
+
 ## v7.0.0 - May 28, 2021
 
 - Add syntax sugar

@@ -16,6 +16,11 @@ class RawQuery extends ActiveRecord
         return null;
     }
 
+    public function fields()
+    {
+        return [];
+    }
+
     public function view()
     {
         return $this->select([

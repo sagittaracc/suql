@@ -16,6 +16,11 @@ class NoName extends ActiveRecord
         return ActiveGroups::all();
     }
 
+    public function fields()
+    {
+        return [];
+    }
+
     public function view()
     {
         return $this->select([

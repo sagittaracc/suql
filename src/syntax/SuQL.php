@@ -32,6 +32,10 @@ abstract class SuQL extends Obj implements QueryObject
      */
     private $currentTable = null;
     /**
+     * Модель должна содержать перечень полей
+     */
+    abstract public function fields();
+    /**
      * Получает экземпляр модели
      * @return self
      */

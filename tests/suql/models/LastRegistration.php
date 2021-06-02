@@ -17,6 +17,11 @@ class LastRegistration extends ActiveRecord
         return 'users';
     }
 
+    public function fields()
+    {
+        return [];
+    }
+
     public function view()
     {
         return $this->select([
