@@ -17,7 +17,6 @@ More examples in the ```tests``` directory
 
 use app\models\Users;
 use suql\db\Container;
-use suql\syntax\Raw;
 
 require '../vendor/autoload.php';
 
