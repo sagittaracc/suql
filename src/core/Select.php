@@ -285,6 +285,22 @@ class Select extends Query implements SelectQueryInterface
         return $this->join;
     }
     /**
+     * Выполняет автоматическую цепочку join'ов от начальной таблицы до конечной
+     * @param string $fromTable начальная таблица
+     * @param string $toTable конечная таблица
+     * @param string $type тип join
+     */
+    public function addSmartJoin($fromTable, $toTable, $type = 'inner')
+    {
+        $smartJoin = new SmartJoin($this, $fromTable, $toTable, $type);
+        $joinChain = $smartJoin->getChain();
+        array_shift($joinChain);
+
+        foreach ($joinChain as $table) {
+            $this->addJoin($type, $table);
+        }
+    }
+    /**
      * Добавляет поле в группировку
      * @param string $field название поля
      */
