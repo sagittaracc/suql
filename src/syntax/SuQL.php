@@ -189,17 +189,17 @@ abstract class SuQL extends Obj implements QueryObject
      * LEFT JOIN
      * @return self
      */
-    public function leftJoin($option)
+    public function leftJoin($option, $algorithm = 'simple')
     {
-        return $this->join($option, 'left');
+        return $this->join($option, 'left', $algorithm);
     }
     /**
      * RIGHT JOIN
      * @return self
      */
-    public function rightJoin($option)
+    public function rightJoin($option, $algorithm = 'simple')
     {
-        return $this->join($option, 'right');
+        return $this->join($option, 'right', $algorithm);
     }
     /**
      * Where фильтрация
@@ -366,7 +366,7 @@ abstract class SuQL extends Obj implements QueryObject
         $table = $instance->table();
         $fields = $instance->fields();
 
-        $this->join($table);
+        $this->join($table, 'inner', 'smart');
 
         foreach ($fields as $field) {
             $this->select([
