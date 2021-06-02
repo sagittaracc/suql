@@ -297,6 +297,7 @@ class Select extends Query implements SelectQueryInterface
         array_shift($joinChain);
 
         foreach ($joinChain as $table) {
+            if (in_array($table, $this->table_list)) continue;
             $this->addJoin($type, $table);
         }
     }
