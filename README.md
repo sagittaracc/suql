@@ -27,10 +27,6 @@ Container::create(require __DIR__ . '/config/db.php');
 // Fetch data from the database
 $data =
     Users::all()
-        ->select([
-            'login',
-            'address',
-        ])
         ->getCounter()
         ->getConsumption()
             ->order([
@@ -38,10 +34,7 @@ $data =
                 'counter_id',
             ])
         ->getResurs()
-        ->leftJoin('tarif')
-            ->select([
-                Raw::expression("CONCAT(@name, ' (', FORMAT(@price, 0), ' р.)') AS tarif"),
-            ])
+        ->getTarif('left')
     ->fetchAll();
 
 echo "<pre>";
