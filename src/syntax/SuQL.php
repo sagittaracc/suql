@@ -153,13 +153,19 @@ abstract class SuQL extends Obj implements QueryObject
      * Сцепление таблиц
      * @return self
      */
-    public function join($option, $type = 'inner')
+    public function join($option, $type = 'inner', $algorithm = 'simple')
     {
         if (is_string($option)) {
             $table = $option;
 
-            $this->getQuery($this->query())->addJoin($type, $table);
-            $this->currentTable = $table;
+            if ($algorithm === 'simple') {
+                $this->getQuery($this->query())->addJoin($type, $table);
+                $this->currentTable = $table;
+            }
+            else if ($algorithm === 'smart') {
+                $this->getQuery($this->query())->addSmartJoin($this->currentTable, $table, $type);
+                $this->currentTable = $table;
+            }
         }
         else if ($option instanceof SuQL) {
             $subquery = $option;
