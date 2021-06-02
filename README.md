@@ -15,27 +15,38 @@ More examples in the ```tests``` directory
 ### Example with Database
 ```php
 
-use app\models\User;
+use app\models\Users;
 use suql\db\Container;
+use suql\syntax\Raw;
 
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
-Container::create(require __DIR__ . '/app/config/db.php');
+// Connect to the database
+Container::create(require __DIR__ . '/config/db.php');
 
-$users = User::all()->select(['login' => 'uname']);
-$groups = $users->getGroup()->fetchAll();
+// Fetch data from the database
+$data =
+    Users::all()
+        ->select([
+            'login',
+            'address',
+        ])
+        ->getCounter()
+        ->getConsumption()
+            ->order([
+                'time' => 'desc',
+                'counter_id',
+            ])
+        ->getResurs()
+        ->leftJoin('tarif')
+            ->select([
+                Raw::expression("CONCAT(@name, ' (', FORMAT(@price, 0), ' р.)') AS tarif"),
+            ])
+    ->fetchAll();
 
-print_r($groups);
-```
-
-In the ```ActiveRecord``` class
-```php
-...
-public function getDb()
-{
-    return Container::get('db');
-}
-...
+echo "<pre>";
+print_r($data);
+echo "</pre>";
 ```
 
 ## Conclusion
