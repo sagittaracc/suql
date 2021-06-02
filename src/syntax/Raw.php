@@ -4,6 +4,9 @@ namespace suql\syntax;
 
 /**
  * Сырые sql выражения
+ * Пример:
+ * Raw::expression("CONCAT(@Name, ' (', FORMAT(@Price, 0), ' р.)') AS tarif"),
+ * Символ @ - будет заменен при сборке запроса на текущую используемую таблицу
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
