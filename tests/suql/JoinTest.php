@@ -40,7 +40,7 @@ SQL);
                         'id' => 'gid',
                         'name' => 'gname',
                     ]);
-        
+
         $this->assertEquals($sql, $query->getRawSql());
     }
     /**
@@ -63,9 +63,19 @@ SQL);
                 from users
             ) last_registration on users.registration = last_registration.lastRegistration
 SQL);
-        
-        $query = User::all()->join(LastRegistration::all());
 
-        $this->assertEquals($sql, $query->getRawSql());
+        $this->assertEquals(
+            $sql,
+            User::all()
+                ->join(LastRegistration::all())
+                ->getRawSql()
+        );
+
+        $this->assertEquals(
+            $sql,
+            User::all()
+                ->getLastRegistration()
+                ->getRawSql()
+        );
     }
 }

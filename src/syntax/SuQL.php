@@ -11,10 +11,11 @@ use suql\core\Obj;
 use suql\core\SimpleParam;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\BuilderNotDefined;
+use \ReflectionMethod;
 
 /**
  * SuQL синтаксис
- * 
+ *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
 abstract class SuQL extends Obj implements QueryObject
@@ -43,14 +44,23 @@ abstract class SuQL extends Obj implements QueryObject
     {
         if (!static::$schemeClass)
             throw new SchemeNotDefined;
-        
+
         if (!static::$builderClass)
             throw new BuilderNotDefined();
 
         $scheme = new static::$schemeClass;
         $builder = new static::$builderClass;
 
-        $instance = new static($scheme, $builder);
+        return new static($scheme, $builder);
+    }
+    /**
+     * Выборка всех данных из модели
+     * @return self
+     */
+    public static function all()
+    {
+        $instance = static::getInstance();
+
         $instance->addSelect($instance->query());
 
         $option = $instance->table();
@@ -66,22 +76,7 @@ abstract class SuQL extends Obj implements QueryObject
             $instance->currentTable = $subquery->query();
         }
 
-        return $instance;
-    }
-    /**
-     * Выборка всех данных из модели
-     * @return self
-     */
-    public static function all()
-    {
-        $testInstance = static::getInstance();
-        $instanceIsView = $testInstance->view() !== null;
-        unset($testInstance);
-
-        $instance = static::getInstance();
-        if ($instanceIsView) {
-            $instance->view();
-        }
+        $instance->view();
 
         foreach ($instance->fields() as $field) {
             $instance->select([
@@ -366,7 +361,24 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public function view()
     {
-        return null;
+        return $this;
+    }
+    /**
+     * Проверяет если это вьюха
+     * @return boolean
+     */
+    private function isView()
+    {
+        return $this->viewHasBeenOverriden();
+    }
+    /**
+     * Проверяет если вьюха была переобъявлена
+     * @return boolean
+     */
+    private function viewHasBeenOverriden()
+    {
+    		$reflector = new ReflectionMethod($this, 'view');
+    		return $reflector->getDeclaringClass()->getName() === get_class($this);
     }
     /**
      * Обработка ORM алиасов
@@ -380,21 +392,21 @@ abstract class SuQL extends Obj implements QueryObject
         if (!class_exists($model)) {
             throw new Exception("Class $model not defined!");
         }
-        
+
         $type = isset($arguments[0]) && isset($arguments[0]['join']) ? $arguments[0]['join'] : 'inner';
         $algorithm = isset($arguments[0]) && isset($arguments[0]['algorithm']) ? $arguments[0]['algorithm'] : 'simple';
 
-        $instance = $model::all();
+        $instance = $model::getInstance();
 
-        if ($instance->view()) {
+        if ($instance->isView()) {
             $this->join($model::all(), $type, $algorithm);
         }
         else {
             $table = $instance->table();
             $fields = $instance->fields();
-    
+
             $this->join($table, $type, $algorithm);
-    
+
             foreach ($fields as $field) {
                 $this->select([
                     $field,
