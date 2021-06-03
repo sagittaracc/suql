@@ -380,21 +380,29 @@ abstract class SuQL extends Obj implements QueryObject
         if (!class_exists($model)) {
             throw new Exception("Class $model not defined!");
         }
-
-        $instance = new $model(null, null);
-        $table = $instance->table();
-        $fields = $instance->fields();
         
         $type = isset($arguments[0]) && isset($arguments[0]['join']) ? $arguments[0]['join'] : 'inner';
         $algorithm = isset($arguments[0]) && isset($arguments[0]['algorithm']) ? $arguments[0]['algorithm'] : 'simple';
 
-        $this->join($table, $type, $algorithm);
+        $instance = $model::all();
 
-        foreach ($fields as $field) {
-            $this->select([
-                $field,
-            ]);
+        if ($instance->view()) {
+            $this->join($model::all(), $type, $algorithm);
         }
+        else {
+            $table = $instance->table();
+            $fields = $instance->fields();
+    
+            $this->join($table, $type, $algorithm);
+    
+            foreach ($fields as $field) {
+                $this->select([
+                    $field,
+                ]);
+            }
+        }
+
+        unset($instance);
 
         return $this;
     }
