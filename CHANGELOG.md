@@ -1,5 +1,11 @@
 # Change log
 
+## v7.0.3 - June 03, 2021
+
+- Add more examples
+
+---
+
 ## v7.0.1 - June 02, 2021
 
 - Add smart joins
