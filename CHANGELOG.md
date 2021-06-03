@@ -1,5 +1,11 @@
 # Change log
 
+## v7.0.6 - June 03, 2021
+
+- Refactor
+
+---
+
 ## v7.0.5 - June 03, 2021
 
 - ORM chain with views
