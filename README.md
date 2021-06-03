@@ -33,7 +33,9 @@ $data =
                 'counter_id',
             ])
         ->getResurs()
-        ->getTarif('left')
+        ->getTarif([
+            'join' => 'left',
+        ])
     ->fetchAll();
 
 echo "<pre>";
