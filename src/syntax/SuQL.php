@@ -74,7 +74,14 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public static function all()
     {
-        $instance = static::getInstance()->view();
+        $testInstance = static::getInstance();
+        $instanceIsView = $testInstance->view() !== null;
+        unset($testInstance);
+
+        $instance = static::getInstance();
+        if ($instanceIsView) {
+            $instance->view();
+        }
 
         foreach ($instance->fields() as $field) {
             $instance->select([
@@ -359,7 +366,7 @@ abstract class SuQL extends Obj implements QueryObject
      */
     public function view()
     {
-        return $this;
+        return null;
     }
     /**
      * Обработка ORM алиасов
