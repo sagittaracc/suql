@@ -1,5 +1,11 @@
 # Change log
 
+## v7.0.4 - June 03, 2021
+
+- Null View
+
+---
+
 ## v7.0.3 - June 03, 2021
 
 - Add more examples
