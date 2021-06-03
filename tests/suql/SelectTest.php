@@ -95,7 +95,9 @@ SQL);
 
         $this->assertEquals(
             $sql,
-            $users->getGroup()->getRawSql()
+            $users->getGroup([
+                'algorithm' => 'smart'
+            ])->getRawSql()
         );
     }
 }
