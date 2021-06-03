@@ -91,13 +91,23 @@ SQL);
             inner join groups on user_group.group_id = groups.id
 SQL);
 
-        $users = User::all()->select(['id']);
-
+        // Simple join
         $this->assertEquals(
             $sql,
-            $users->getGroup([
-                'algorithm' => 'smart'
-            ])->getRawSql()
+            User::all()
+                ->select(['id'])
+                ->getUserGroup()
+                ->getGroup()
+                ->getRawSql()
+        );
+        // Smart join
+        $this->assertEquals(
+            $sql,
+            User::all()
+                ->select(['id'])
+                ->getGroup([
+                    'algorithm' => 'smart'
+                ])->getRawSql()
         );
     }
 }
