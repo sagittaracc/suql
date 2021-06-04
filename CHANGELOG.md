@@ -1,5 +1,13 @@
 # Change log
 
+## v7.0.7 - June 04, 2021
+
+- Smart join with tables & views
+- Refactor
+- Bug fixes
+
+---
+
 ## v7.0.6 - June 03, 2021
 
 - Refactor
