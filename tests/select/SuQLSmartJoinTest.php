@@ -7,7 +7,7 @@ use sagittaracc\StringHelper;
 
 final class SuQLSmartJoinTest extends SuQLMock
 {
-    public function testSmartJoin(): void
+    public function testSmartJoinWithTable(): void
     {
         /**
          * SELECT

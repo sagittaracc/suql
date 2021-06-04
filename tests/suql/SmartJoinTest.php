@@ -16,7 +16,7 @@ final class SmartJoinTest extends TestCase
      * [INNER|LEFT|RIGHT] JOIN <join-table-2> ON <join-2>
      * ...
      */
-    public function testSimpleJoin(): void
+    public function testSmartJoinWithTable(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
