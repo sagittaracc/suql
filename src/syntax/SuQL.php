@@ -37,6 +37,20 @@ abstract class SuQL extends Obj implements QueryObject
      */
     abstract public function fields();
     /**
+     * Получает тестовый экземпляр модели
+     * @return self
+     */
+    private static function getTempInstance()
+    {
+        if (!static::$schemeClass)
+            throw new SchemeNotDefined;
+
+        if (!static::$builderClass)
+            throw new BuilderNotDefined;
+
+        return new static(null, null);
+    }
+    /**
      * Получает экземпляр модели
      * @return self
      */
@@ -396,14 +410,14 @@ abstract class SuQL extends Obj implements QueryObject
         $type = isset($arguments[0]) && isset($arguments[0]['join']) ? $arguments[0]['join'] : 'inner';
         $algorithm = isset($arguments[0]) && isset($arguments[0]['algorithm']) ? $arguments[0]['algorithm'] : 'simple';
 
-        $instance = $model::getInstance();
+        $tempInstance = $model::getTempInstance();
 
-        if ($instance->isView()) {
+        if ($tempInstance->isView()) {
             $this->join($model::all(), $type, $algorithm);
         }
         else {
-            $table = $instance->table();
-            $fields = $instance->fields();
+            $table = $tempInstance->table();
+            $fields = $tempInstance->fields();
 
             $this->join($table, $type, $algorithm);
 
@@ -414,7 +428,7 @@ abstract class SuQL extends Obj implements QueryObject
             }
         }
 
-        unset($instance);
+        unset($tempInstance);
 
         return $this;
     }
