@@ -188,17 +188,23 @@ abstract class SuQL extends Obj implements QueryObject
 
             if ($algorithm === 'simple') {
                 $this->getQuery($this->query())->addJoin($type, $table);
-                $this->currentTable = $table;
             }
             else if ($algorithm === 'smart') {
                 $this->getQuery($this->query())->addSmartJoin($this->currentTable, $table, $type);
-                $this->currentTable = $table;
             }
+
+            $this->currentTable = $table;
         }
         else if ($option instanceof SuQL) {
             $subquery = $option;
 
-            $this->getQuery($this->query())->addJoin($type, $subquery->query());
+            if ($algorithm === 'simple') {
+                $this->getQuery($this->query())->addJoin($type, $subquery->query());
+            }
+            else if ($algorithm === 'smart') {
+                $this->getQuery($this->query())->addSmartJoin($this->currentTable, $subquery->query(), $type);
+            }
+
             $this->extend($subquery->getQueries());
             $this->currentTable = $subquery->query();
         }
