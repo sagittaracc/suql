@@ -377,8 +377,8 @@ abstract class SuQL extends Obj implements QueryObject
      */
     private function viewHasBeenOverriden()
     {
-    		$reflector = new ReflectionMethod($this, 'view');
-    		return $reflector->getDeclaringClass()->getName() === get_class($this);
+        $reflector = new ReflectionMethod($this, 'view');
+        return $reflector->getDeclaringClass()->getName() === get_class($this);
     }
     /**
      * Обработка ORM алиасов
