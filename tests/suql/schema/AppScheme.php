@@ -15,6 +15,8 @@ class AppScheme extends Scheme
         ]);
 
         // Связь между реальными таблицами в базе данных
+        $this->rel('{{u}}', '{{ug}}', '{{u}}.id = {{ug}}.user_id');
+        $this->rel('{{ug}}', '{{g}}', '{{ug}}.group_id = {{g}}.id');
         $this->rel('users', 'user_group', 'users.id = user_group.user_id');
         $this->rel('user_group', 'groups', 'user_group.group_id = groups.id');
 
