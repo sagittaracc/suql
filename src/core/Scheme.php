@@ -12,15 +12,57 @@ use suql\core\SchemeInterface;
 class Scheme implements SchemeInterface
 {
     /**
+     * @var array Перечень таблиц
+     */
+    private $tables = [];
+    /**
+     * @var array
      * Постоянные связи между таблицами
      * Хранятся постоянно на время работы с базой данных
      */
     private $rel = [];
     /**
+     * @var array
      * Временные связи между таблицами или/и вьюхами
      * Чистятся после каждого выполненного запроса
      */
     private $temp_rel = [];
+    /**
+     * Добавляет определение таблицы в базе данных
+     * Задает соответствие между таблицей в бд и названием в suql системе
+     * @param string $name название в бд
+     * $param string $alias название в suql системе
+     */
+    public function addTable($name, $alias = null)
+    {
+        if (!$alias) {
+            $alias = $name;
+        }
+
+        $this->tables[$alias] = $name;
+    }
+    /**
+     * Добавляет список таблиц
+     * @param array $tableList
+     */
+    public function addTableList($tableList)
+    {
+        foreach ($tableList as $name => $alias) {
+            if (!is_string($name)) {
+                $name = $alias;
+            }
+
+            $this->addTable($name, $alias);
+        }
+    }
+    /**
+     * Получает схему таблиц
+     * @return array
+     */
+    public function getTableList()
+    {
+        return $this->tables;
+    }
     /**
      * Получает список постоянных связей между таблицами
      * @return array список постоянных связей

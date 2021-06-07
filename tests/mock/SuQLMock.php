@@ -14,6 +14,13 @@ class SuQLMock extends TestCase
     protected function setUp(): void
     {
         $scheme = new Scheme();
+
+        $scheme->addTableList([
+            'users',
+            'user_group' => 'ug',
+            'groups',
+        ]);
+
         $scheme->rel('users', 'user_group', 'users.id = user_group.user_id');
         $scheme->rel('user_group', 'groups', 'user_group.group_id = groups.id');
 
