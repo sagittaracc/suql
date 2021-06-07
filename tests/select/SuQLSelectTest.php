@@ -133,4 +133,21 @@ SQL);
         $this->assertEquals($sql, $suql);
         $this->assertNull($this->osuql->getSQL(['select_with_raw']));
     }
+
+    public function testRenameQuery(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+SQL);
+
+        $this->osuql->addSelect('select_all');
+        $this->osuql->getQuery('select_all')->addFrom('users');
+        $this->osuql->renameQuery('select_all', 'new_select_all');
+        $suqlNew = $this->osuql->getSQL(['new_select_all']);
+
+        $this->assertEquals($sql, $suqlNew);
+        $this->assertNull($this->osuql->getSQL(['new_select_all']));
+    }
 }

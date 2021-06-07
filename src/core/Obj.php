@@ -2,6 +2,7 @@
 
 namespace suql\core;
 
+use Exception;
 use suql\modifier\field\SQLCaseModifier;
 use suql\modifier\field\SQLFunctionModifier;
 use suql\modifier\field\SQLGroupModifier;
@@ -190,11 +191,43 @@ class Obj
     /**
      * Получить объект запроса по имени
      * @param string $name
-     * @return suql\core\Select
+     * @return suql\core\Query
      */
     public function getQuery($name)
     {
         return $this->queries[$name];
+    }
+    /**
+     * Установить объект запроса по имени
+     * @param string $name
+     * @param suql\core\Query $query
+     */
+    public function setQuery($name, $query)
+    {
+        $this->queries[$name] = $query;
+    }
+    /**
+     * Удалить объект запроса по имени
+     * @param string $name
+     */
+    private function flushQuery($name)
+    {
+        unset($this->queries[$name]);
+    }
+    /**
+     * Переименовать запрос
+     * @param string $old
+     * @param string $new
+     */
+    public function renameQuery($old, $new)
+    {
+        if (!$this->getQuery($old)) {
+            throw new Exception("Query $old doesn't exist!");
+        }
+
+        $buf = $this->getQuery($old);
+        $this->flushQuery($old);
+        $this->setQuery($new, $buf);
     }
     /**
      * Проверяет есть ли запрос по имени
