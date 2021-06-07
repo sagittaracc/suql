@@ -37,7 +37,7 @@ SQL);
 
         $this->osuql->addSelect('select_all_with_table_name');
         $this->osuql->getQuery('select_all_with_table_name')->addFrom('{{u}}');
-        $this->osuql->getQuery('select_all_with_table_name')->addField('users', '*');
+        $this->osuql->getQuery('select_all_with_table_name')->addField('{{u}}', '*');
         $suql = $this->osuql->getSQL(['select_all_with_table_name']);
 
         $this->assertEquals($sql, $suql);
@@ -60,8 +60,8 @@ SQL);
 
         $this->osuql->addSelect('select_field_list');
         $this->osuql->getQuery('select_field_list')->addFrom('{{u}}');
-        $this->osuql->getQuery('select_field_list')->addField('users', 'id');
-        $this->osuql->getQuery('select_field_list')->addField('users', 'name');
+        $this->osuql->getQuery('select_field_list')->addField('{{u}}', 'id');
+        $this->osuql->getQuery('select_field_list')->addField('{{u}}', 'name');
         $suql = $this->osuql->getSQL(['select_field_list']);
 
         $this->assertEquals($sql, $suql);
@@ -84,8 +84,8 @@ SQL);
 
         $this->osuql->addSelect('select_using_aliases');
         $this->osuql->getQuery('select_using_aliases')->addFrom('{{u}}');
-        $this->osuql->getQuery('select_using_aliases')->addField('users', ['id' => 'uid']);
-        $this->osuql->getQuery('select_using_aliases')->addField('users', 'name@uname'); // just another way to set an alias
+        $this->osuql->getQuery('select_using_aliases')->addField('{{u}}', ['id' => 'uid']);
+        $this->osuql->getQuery('select_using_aliases')->addField('{{u}}', 'name@uname'); // just another way to set an alias
         $suql = $this->osuql->getSQL(['select_using_aliases']);
 
         $this->assertEquals($sql, $suql);
@@ -126,7 +126,7 @@ SQL);
 
         $this->osuql->addSelect('select_with_raw');
         $this->osuql->getQuery('select_with_raw')->addFrom('{{u}}');
-        $this->osuql->getQuery('select_with_raw')->addField('users', '*');
+        $this->osuql->getQuery('select_with_raw')->addField('{{u}}', '*');
         $this->osuql->getQuery('select_with_raw')->addRaw("'Yuriy' as author");
         $suql = $this->osuql->getSQL(['select_with_raw']);
 
