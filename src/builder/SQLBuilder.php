@@ -154,6 +154,7 @@ class SQLBuilder
         $selectTemplate = str_replace('{order}', $this->buildOrder($query),  $selectTemplate);
         $selectTemplate = str_replace('{limit}', $this->buildLimit($query),  $selectTemplate);
 
+        // TODO: Перенести на более высокий уровень так как замена алиасов нужна будет не только для select запросов
         return (new PlaceholderHelper($selectTemplate))->bindObject(Map::create($this->osuql->getScheme()->getTableList()));
     }
     /**
@@ -246,10 +247,7 @@ class SQLBuilder
             }
         }
 
-        $selectList =
-            empty($selectList)
-                ? '*'
-                : implode(', ', $selectList);
+        $selectList = empty($selectList) ? '*' : implode(', ', $selectList);
 
         return $oselect->hasModifier()
             ? "select {$oselect->getModifier()} $selectList"
