@@ -12,6 +12,7 @@ use suql\core\SimpleParam;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\BuilderNotDefined;
 use \ReflectionMethod;
+use sagittaracc\ArrayHelper;
 
 /**
  * SuQL синтаксис
@@ -32,6 +33,10 @@ abstract class SuQL extends Obj implements QueryObject
      * @var string текущая таблица в цепочке вызовов
      */
     private $currentTable = null;
+    /**
+     * @var string|array группировка или индексация данных
+     */
+    private $index = null;
     /**
      * Модель должна содержать перечень полей
      */
@@ -342,6 +347,14 @@ abstract class SuQL extends Obj implements QueryObject
         return $this->getSQL([$this->query()]);
     }
     /**
+     * Задает индексацию выбранных данных
+     * @param string|array $index
+     */
+    public function index($index)
+    {
+        $this->index = $index;
+    }
+    /**
      * Получение всех данных запроса
      * @return mixed
      */
@@ -365,7 +378,13 @@ abstract class SuQL extends Obj implements QueryObject
 
         $sth->execute();
 
-        return $sth->fetchAll(PDO::FETCH_ASSOC);
+        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($this->index) {
+            $data = ArrayHelper::group($this->index, $data);
+        }
+
+        return $data;
     }
     /**
      * Query
