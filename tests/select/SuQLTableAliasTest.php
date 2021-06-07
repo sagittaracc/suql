@@ -150,4 +150,86 @@ SQL);
         $this->assertEquals($sql, $suqlNew);
         $this->assertNull($this->osuql->getSQL(['new_select_all']));
     }
+    public function testSimpleJoin(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id,
+                groups.id as gid,
+                groups.name as gname
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+SQL);
+
+        $this->osuql->addSelect('simple_join');
+        $this->osuql->getQuery('simple_join')->addFrom('{{u}}');
+        $this->osuql->getQuery('simple_join')->addField('{{u}}', 'id');
+        $this->osuql->getQuery('simple_join')->addJoin('inner', '{{ug}}');
+        $this->osuql->getQuery('simple_join')->addJoin('inner', '{{g}}');
+        $this->osuql->getQuery('simple_join')->addField('{{g}}', 'id@gid');
+        $this->osuql->getQuery('simple_join')->addField('{{g}}', 'name@gname');
+        $suql = $this->osuql->getSQL(['simple_join']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['simple_join']));
+    }
+    
+    public function testJoinWithSubQuery(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+            inner join (
+                select
+                    max(users.registration) as lastRegistration
+                from users
+            ) t1 on users.registration = t1.lastRegistration
+SQL);
+
+        $this->osuql->getScheme()->rel('{{u}}', 't1', '{{u}}.registration = t1.lastRegistration');
+
+        $this->osuql->addSelect('main_query');
+        $this->osuql->getQuery('main_query')->addFrom('{{u}}');
+        $this->osuql->getQuery('main_query')->addJoin('inner', 't1');
+
+        $this->osuql->addSelect('t1');
+        $this->osuql->getQuery('t1')->addFrom('{{u}}');
+        $this->osuql->getQuery('t1')->addField('{{u}}', 'registration@lastRegistration');
+        $this->osuql->getQuery('t1')->getField('{{u}}', 'registration@lastRegistration')->addModifier('max');
+
+        $suql = $this->osuql->getSQL(['main_query']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['main_query']));
+    }
+
+    public function testSelectGroup(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                groups.name as gname,
+                count(groups.name) as count
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+            where groups.name = 'admin'
+            group by groups.name
+SQL);
+
+        $this->osuql->addSelect('select_group');
+        $this->osuql->getQuery('select_group')->addFrom('{{u}}');
+        $this->osuql->getQuery('select_group')->addJoin('inner', '{{ug}}');
+        $this->osuql->getQuery('select_group')->addJoin('inner', '{{g}}');
+        $this->osuql->getQuery('select_group')->addField('{{g}}', 'name@gname');
+        $this->osuql->getQuery('select_group')->addField('{{g}}', 'name@count');
+        $this->osuql->getQuery('select_group')->getField('{{g}}', 'name@count')->addModifier('group');
+        $this->osuql->getQuery('select_group')->getField('{{g}}', 'name@count')->addModifier('count');
+        $this->osuql->getQuery('select_group')->addWhere("{{g}}.name = 'admin'");
+        $suql = $this->osuql->getSQL(['select_group']);
+
+        $this->assertEquals($sql, $suql);
+        $this->assertNull($this->osuql->getSQL(['select_group']));
+    }
 }

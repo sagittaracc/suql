@@ -154,7 +154,7 @@ class SQLBuilder
         $selectTemplate = str_replace('{order}', $this->buildOrder($query),  $selectTemplate);
         $selectTemplate = str_replace('{limit}', $this->buildLimit($query),  $selectTemplate);
 
-        return $selectTemplate;
+        return (new PlaceholderHelper($selectTemplate))->bindObject(Map::create($this->osuql->getScheme()->getTableList()));
     }
     /**
      * Конвертирует union запрос
@@ -249,7 +249,7 @@ class SQLBuilder
         $selectList =
             empty($selectList)
                 ? '*'
-                : (new PlaceholderHelper(implode(', ', $selectList)))->bindObject(Map::create($this->osuql->getScheme()->getTableList()));
+                : implode(', ', $selectList);
 
         return $oselect->hasModifier()
             ? "select {$oselect->getModifier()} $selectList"
@@ -269,7 +269,7 @@ class SQLBuilder
 
         return $this->osuql->hasQuery($from)
             ? " from @$from $from"
-            : (new PlaceholderHelper(" from $from"))->bindObject(Map::create($this->osuql->getScheme()->getTableList()));
+            : " from $from";
     }
     /**
      * Строит секцию join
