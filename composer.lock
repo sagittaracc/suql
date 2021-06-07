@@ -38,16 +38,16 @@
         },
         {
             "name": "sagittaracc/placeholder",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sagittaracc/placeholder.git",
-                "reference": "8d5b010a000cd705659b21f421354b8d5cdef4c4"
+                "reference": "fec51963a9612ee66875b111808aadfa693b37b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sagittaracc/placeholder/zipball/8d5b010a000cd705659b21f421354b8d5cdef4c4",
-                "reference": "8d5b010a000cd705659b21f421354b8d5cdef4c4",
+                "url": "https://api.github.com/repos/sagittaracc/placeholder/zipball/fec51963a9612ee66875b111808aadfa693b37b1",
+                "reference": "fec51963a9612ee66875b111808aadfa693b37b1",
                 "shasum": ""
             },
             "require": {
@@ -65,9 +65,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "support": {
                 "issues": "https://github.com/sagittaracc/placeholder/issues",
-                "source": "https://github.com/sagittaracc/placeholder/tree/v0.1.1"
+                "source": "https://github.com/sagittaracc/placeholder/tree/v0.1.2"
             },
-            "time": "2021-04-27T14:49:19+00:00"
+            "time": "2021-06-07T14:06:49+00:00"
         },
         {
             "name": "sagittaracc/strings",
