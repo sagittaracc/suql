@@ -37,7 +37,8 @@ class Expression
 
         foreach ($this->conditions as $index => $condition)
         {
-            $expression = str_replace('$'.($index + 1), $condition->getCondition(), $expression);
+            $conditionIndex = $index + 1;
+            $expression = str_replace("$$conditionIndex", $condition->getCondition(), $expression);
         }
 
         return $expression;
