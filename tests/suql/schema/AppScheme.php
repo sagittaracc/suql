@@ -8,6 +8,12 @@ class AppScheme extends Scheme
 {
     function __construct()
     {
+        $this->addTableList([
+            'users' => 'u',
+            'user_group' => 'ug',
+            'groups' => 'g',
+        ]);
+
         // Связь между реальными таблицами в базе данных
         $this->rel('users', 'user_group', 'users.id = user_group.user_id');
         $this->rel('user_group', 'groups', 'user_group.group_id = groups.id');

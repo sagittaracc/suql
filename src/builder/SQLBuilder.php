@@ -246,7 +246,10 @@ class SQLBuilder
             }
         }
 
-        $selectList = empty($selectList) ? '*' : implode(', ', $selectList);
+        $selectList =
+            empty($selectList)
+                ? '*'
+                : (new PlaceholderHelper(implode(', ', $selectList)))->bindObject(Map::create($this->osuql->getScheme()->getTableList()));
 
         return $oselect->hasModifier()
             ? "select {$oselect->getModifier()} $selectList"
