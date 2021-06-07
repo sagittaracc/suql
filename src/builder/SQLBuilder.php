@@ -3,6 +3,8 @@
 namespace suql\builder;
 
 use sagittaracc\ArrayHelper;
+use sagittaracc\Map;
+use sagittaracc\PlaceholderHelper;
 use suql\core\FunctionQueryInterface;
 use suql\core\InsertQueryInterface;
 use suql\core\Name;
@@ -264,7 +266,7 @@ class SQLBuilder
 
         return $this->osuql->hasQuery($from)
             ? " from @$from $from"
-            : " from $from";
+            : (new PlaceholderHelper(" from $from"))->bindObject(Map::create($this->osuql->getScheme()->getTableList()));
     }
     /**
      * Строит секцию join

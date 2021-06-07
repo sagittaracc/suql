@@ -16,9 +16,9 @@ class SuQLMock extends TestCase
         $scheme = new Scheme();
 
         $scheme->addTableList([
-            'users',
+            'users' => 'u',
             'user_group' => 'ug',
-            'groups',
+            'groups' => 'g',
         ]);
 
         $scheme->rel('users', 'user_group', 'users.id = user_group.user_id');
