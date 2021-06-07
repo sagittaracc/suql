@@ -132,6 +132,7 @@ class Scheme implements SchemeInterface
      */
     public function getRels()
     {
+        // TODO: Здесь должна возвращаться схема с уже расшифрованными алиасами
         return array_merge($this->rel, $this->temp_rel);
     }
     /**
