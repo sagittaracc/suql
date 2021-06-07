@@ -241,6 +241,23 @@ abstract class SuQL extends Obj implements QueryObject
         return $this->join($option, 'right', $algorithm);
     }
     /**
+     * Union
+     * @return self
+     */
+    public function union($option)
+    {
+        $queryList = [];
+
+        foreach ($option as $subquery) {
+            $this->extend($subquery->getQueries());
+            $queryList[] = '@' . $subquery->query();
+        }
+
+        $this->addUnion($this->query(), implode(' union ', $queryList));
+
+        return $this;
+    }
+    /**
      * Where фильтрация
      * @return self
      */
