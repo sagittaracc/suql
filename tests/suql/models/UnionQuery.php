@@ -31,13 +31,15 @@ class UnionQuery extends ActiveRecord
                         new Field(['registration' => 'reg_interval'], [
                             'min'
                         ])
-                    ]),
+                    ])
+                    ->as('q1'),
                 User::all()
                     ->select([
                         new Field(['registration' => 'reg_interval'], [
                             'max'
                         ])
-                    ]),
+                    ])
+                    ->as('q2'),
             ]);
     }
 }

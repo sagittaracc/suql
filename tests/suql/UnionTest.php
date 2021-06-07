@@ -17,9 +17,8 @@ final class UnionTest extends TestCase
      */
     public function testUnion(): void
     {
-        // TODO: Это неправильно (сначала должно быть min потом max)
         $sql = StringHelper::trimSql(<<<SQL
-            (select max(users.registration) as reg_interval from users)
+            (select min(users.registration) as reg_interval from users)
                 union
             (select max(users.registration) as reg_interval from users)
 SQL);

@@ -30,6 +30,11 @@ abstract class SuQL extends Obj implements QueryObject
      */
     protected static $builderClass = null;
     /**
+     * Имя запроса
+     * @var string
+     */
+    protected $queryName = null;
+    /**
      * @var string текущая таблица в цепочке вызовов
      */
     private $currentTable = null;
@@ -244,13 +249,13 @@ abstract class SuQL extends Obj implements QueryObject
      * Union
      * @return self
      */
-    public function union($option)
+    public function union($queries)
     {
         $queryList = [];
 
-        foreach ($option as $subquery) {
-            $this->extend($subquery->getQueries());
-            $queryList[] = '@' . $subquery->query();
+        foreach ($queries as $query) {
+            $this->extend($query->getQueries());
+            $queryList[] = '@' . $query->query();
         }
 
         $this->addUnion($this->query(), implode(' union ', $queryList));
@@ -356,6 +361,17 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * Задать имя запросу
+     * @param string $name
+     */
+    public function as($name)
+    {
+        $this->renameQuery($this->query(), $name);
+        $this->queryName = $name;
+
+        return $this;
+    }
+    /**
      * Возвращает sql
      * @return string
      */
@@ -406,12 +422,14 @@ abstract class SuQL extends Obj implements QueryObject
         return $data;
     }
     /**
+     * TODO: Возможно лучше избавиться от этого метода
+     * Оставить только $queryName
      * Query
      * @return string
      */
     public function query()
     {
-        return str_replace('\\', '_', static::class);
+        return $this->queryName ? $this->queryName : str_replace('\\', '_', static::class);
     }
     /**
      * View
