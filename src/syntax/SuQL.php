@@ -353,6 +353,8 @@ abstract class SuQL extends Obj implements QueryObject
     public function index($index)
     {
         $this->index = $index;
+
+        return $this;
     }
     /**
      * Получение всех данных запроса
