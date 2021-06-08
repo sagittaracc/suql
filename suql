@@ -21,6 +21,174 @@ return [
 ];
 FILE;
 
+$activeGroupsFile = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+use suql\\syntax\\Field;
+
+class ActiveGroups extends ActiveRecord
+{
+    public function query()
+    {
+        return 'active_groups';
+    }
+
+    public function table()
+    {
+        return 'users';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+
+    public function view()
+    {
+        return
+            \$this->join('user_group')
+                ->join('groups')
+                    ->select([
+                        'name',
+                        new Field(['name' => 'count'], [
+                            'count',
+                        ])
+                    ])
+                ->group('name');
+    }
+}
+FILE;
+
+$firstGroupFile = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+
+class FirstGroup extends ActiveRecord
+{
+    public function query()
+    {
+        return 'first_group';
+    }
+
+    public function table()
+    {
+        return 'groups';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+
+    public function view()
+    {
+        return
+            \$this
+                ->select(['*'])
+                ->limit(1);
+    }
+}
+FILE;
+
+$groupFile = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+
+class Group extends ActiveRecord
+{
+    public function table()
+    {
+        return 'groups';
+    }
+
+    public function fields()
+    {
+        return [
+            'name',
+        ];
+    }
+}
+FILE;
+
+$lastRegistrationFile = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+use suql\\syntax\\Field;
+
+class LastRegistration extends ActiveRecord
+{
+    public function query()
+    {
+        return 'last_registration';
+    }
+
+    public function table()
+    {
+        return 'users';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+
+    public function view()
+    {
+        return \$this->select([
+            new Field(['registration' => 'lastRegistration'], [
+                'max',
+            ])
+        ]);
+    }
+}
+FILE;
+
+$noNameFile = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+
+class NoName extends ActiveRecord
+{
+    public function query()
+    {
+        return 'no_name';
+    }
+
+    public function table()
+    {
+        return ActiveGroups::all();
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+
+    public function view()
+    {
+        return \$this->select([
+            'name',
+            'count',
+        ]);
+    }
+}
+FILE;
+
 $rawQueryFile = <<<FILE
 <?php
 
@@ -55,28 +223,50 @@ class RawQuery extends ActiveRecord
 }
 FILE;
 
-$subQueryFile = <<<FILE
+$unionQueryFile = <<<FILE
 <?php
 
 namespace $projectName\\models;
 
+use suql\\syntax\\Field;
 use $projectName\\records\\ActiveRecord;
 
-class SubQuery extends ActiveRecord
+class UnionQuery extends ActiveRecord
 {
     public function query()
     {
-        return 'sub_query';
+        return 'union_query';
     }
 
     public function table()
     {
-        return User::all();
+        return null;
     }
 
     public function fields()
     {
         return [];
+    }
+
+    public function view()
+    {
+        return
+            \$this->union([
+                User::all()
+                    ->select([
+                        new Field(['registration' => 'reg_interval'], [
+                            'min'
+                        ])
+                    ])
+                    ->as('q1'),
+                User::all()
+                    ->select([
+                        new Field(['registration' => 'reg_interval'], [
+                            'max'
+                        ])
+                    ])
+                    ->as('q2'),
+            ]);
     }
 }
 FILE;
@@ -102,39 +292,46 @@ class User extends ActiveRecord
 }
 FILE;
 
-$userViewFile = <<<FILE
+$userGroupFile = <<<FILE
 <?php
 
 namespace $projectName\\models;
 
+use suql\\syntax\\Field;
+use suql\\syntax\\Raw;
 use $projectName\\records\\ActiveRecord;
 
-class UserView extends ActiveRecord
+class UserGroup extends ActiveRecord
 {
-    public function query()
-    {
-        return 'user_view';
-    }
-
     public function table()
     {
-        return 'users';
+        return 'user_group';
     }
 
     public function fields()
     {
         return [];
     }
+}
+FILE;
 
-    public function view()
+$userTableAliasFile = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+
+class UserTableAlias extends ActiveRecord
+{
+    public function table()
     {
-        return
-            \$this
-                ->join('user_group')
-                ->join('groups')
-                    ->select([
-                        'name',
-                    ]);
+        return '{{u}}';
+    }
+
+    public function fields()
+    {
+        return [];
     }
 }
 FILE;
@@ -144,7 +341,7 @@ $customModifierFile = <<<FILE
 
 namespace $projectName\\modifiers;
 
-use $projectName\\modifier\\field\\SQLCaseModifier;
+use suql\\modifier\\field\\SQLCaseModifier;
 
 class CustomModifier extends SQLCaseModifier
 {
@@ -197,7 +394,19 @@ class AppScheme extends Scheme
 {
     function __construct()
     {
-        // \$this->rel('users', 'user_group', 'users.id = user_group.user_id');
+        \$this->addTableList([
+            'users' => 'u',
+            'user_group' => 'ug',
+            'groups' => 'g',
+        ]);
+
+        // Связь между реальными таблицами в базе данных
+        \$this->rel('{{u}}', '{{ug}}', '{{u}}.id = {{ug}}.user_id');
+        \$this->rel('{{ug}}', '{{g}}', '{{ug}}.group_id = {{g}}.id');
+
+        // Связи с абстрактными вьюхами
+        \$this->rel('users', 'last_registration', 'users.registration = last_registration.lastRegistration');
+        \$this->rel('user_group', 'first_group', 'user_group.group_id = first_group.id');
     }
 }
 FILE;
@@ -208,10 +417,16 @@ mkdir("$projectName/config", 0700);
 file_put_contents("$projectName/config/db.php", $configFile);
 
 mkdir("$projectName/models", 0700);
+file_put_contents("$projectName/models/ActiveGroups.php", $activeGroupsFile);
+file_put_contents("$projectName/models/FirstGroup.php", $firstGroupFile);
+file_put_contents("$projectName/models/Group.php", $groupFile);
+file_put_contents("$projectName/models/LastRegistration.php", $lastRegistrationFile);
+file_put_contents("$projectName/models/NoName.php", $noNameFile);
 file_put_contents("$projectName/models/RawQuery.php", $rawQueryFile);
-file_put_contents("$projectName/models/SubQuery.php", $subQueryFile);
+file_put_contents("$projectName/models/UnionQuery.php", $unionQueryFile);
 file_put_contents("$projectName/models/User.php", $userFile);
-file_put_contents("$projectName/models/UserView.php", $userViewFile);
+file_put_contents("$projectName/models/UserGroup.php", $userGroupFile);
+file_put_contents("$projectName/models/UserTableAlias.php", $userTableAliasFile);
 
 mkdir("$projectName/modifiers", 0700);
 file_put_contents("$projectName/modifiers/CustomModifier.php", $customModifierFile);
