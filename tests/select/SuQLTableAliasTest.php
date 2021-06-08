@@ -92,23 +92,6 @@ SQL);
         $this->assertNull($this->osuql->getSQL(['select_using_aliases']));
     }
     /**
-     * SELECT <raw sql expressions>
-     */
-    public function testSelectRaw(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select 2 * 2, 'Yuriy' as author
-SQL);
-
-        $this->osuql->addSelect('select_raw');
-        $this->osuql->getQuery('select_raw')->addRaw("2 * 2");
-        $this->osuql->getQuery('select_raw')->addRaw("'Yuriy' as author");
-        $suql = $this->osuql->getSQL(['select_raw']);
-
-        $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['select_raw']));
-    }
-    /**
      * SELECT
      *   <table>.<field>,
      *   ...,
