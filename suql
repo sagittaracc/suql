@@ -4,6 +4,7 @@ $params = getopt('', [
     'help',
     'create-project',
     'create-model',
+    'create-entry-point',
     'name:',
     'type:',
 ]);
@@ -13,6 +14,9 @@ $isHelp = isset($params['help']);
 if ($isHelp) {
     echo "Create a project\n";
     echo "> php suql --create-project --name <project-name>\n\n";
+
+    echo "Create an entry point\n";
+    echo "> php suql --create-entry-point --name <entry-point-name> --model <project-name>\<model-name>\n\n";
 
     echo "Create a model\n";
     echo "> php suql --create-model --name <project-name>\<model-name> --type <model-type>\n\n";
@@ -28,6 +32,7 @@ if ($isHelp) {
 
 $createProject = isset($params['create-project']);
 $createModel = isset($params['create-model']);
+$createEntryPoint = isset($params['create-entry-point']);
 
 if ($createProject) {
     $projectName = $params['name'];
@@ -40,6 +45,12 @@ else if ($createModel) {
     $modelType = $params['type'];
 
     createModel($projectName, $modelName, $modelType);
+}
+else if (createEntryPoint) {
+    $entryName = $params['name'];
+    list($projectName, $modelName) = explode('\\', $params['model']);
+
+    createEntryPoint($projectName, $modelName, $entryName);
 }
 
 /**
@@ -360,4 +371,36 @@ FILE;
     
         file_put_contents("$projectName/models/$className.php", $file);
     }
+}
+
+/**
+ * ------------------------------------------------------------------
+ */
+function createEntryPoint($projectName, $modelName, $entryName)
+{
+    $className = implode('', array_map(
+        function($part) {
+            return ucfirst($part);
+        },
+        explode('_', $modelName)
+    ));
+
+    $file = <<<FILE
+<?php
+
+use $projectName\models\$className;
+use suql\db\Container;
+
+require 'vendor/autoload.php';
+
+// Connect to the database
+Container::create(require __DIR__ . '/$projectName/config/db.php');
+
+// Fetch data from the database
+$data = $className::all()->fetchAll();
+
+echo "<pre>";
+print_r($data);
+echo "</pre>";
+FILE;
 }
