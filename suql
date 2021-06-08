@@ -403,4 +403,6 @@ echo "<pre>";
 print_r($data);
 echo "</pre>";
 FILE;
+
+    file_put_contents("$entryName.php", $file);
 }
