@@ -24,9 +24,9 @@ FILE;
 $rawQueryFile = <<<FILE
 <?php
 
-namespace app\\models;
+namespace $projectName\\models;
 
-use app\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 
 class RawQuery extends ActiveRecord
 {
@@ -58,9 +58,9 @@ FILE;
 $subQueryFile = <<<FILE
 <?php
 
-namespace app\\models;
+namespace $projectName\\models;
 
-use app\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 
 class SubQuery extends ActiveRecord
 {
@@ -84,9 +84,9 @@ FILE;
 $userFile = <<<FILE
 <?php
 
-namespace app\\models;
+namespace $projectName\\models;
 
-use app\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 
 class User extends ActiveRecord
 {
@@ -105,9 +105,9 @@ FILE;
 $userViewFile = <<<FILE
 <?php
 
-namespace app\\models;
+namespace $projectName\\models;
 
-use app\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 
 class UserView extends ActiveRecord
 {
@@ -142,9 +142,9 @@ FILE;
 $customModifierFile = <<<FILE
 <?php
 
-namespace app\\modifiers;
+namespace $projectName\\modifiers;
 
-use suql\\modifier\\field\\SQLCaseModifier;
+use $projectName\\modifier\\field\\SQLCaseModifier;
 
 class CustomModifier extends SQLCaseModifier
 {
@@ -158,15 +158,15 @@ FILE;
 $activeRecordFile = <<<FILE
 <?php
 
-namespace app\\records;
+namespace $projectName\\records;
 
 use suql\\syntax\\SuQL;
-use app\\modifiers\\CustomModifier;
+use $projectName\\modifiers\\CustomModifier;
 use suql\\db\\Container;
 
 abstract class ActiveRecord extends SuQL
 {
-    protected static \$schemeClass = 'app\\\\schema\\\\AppScheme';
+    protected static \$schemeClass = '$projectName\\\\schema\\\\AppScheme';
     protected static \$builderClass = 'suql\\\\builder\\\\MySQLBuilder';
 
     protected function modifierList()
@@ -189,7 +189,7 @@ FILE;
 $appSchemeFile = <<<FILE
 <?php
 
-namespace app\\schema;
+namespace $projectName\\schema;
 
 use suql\\core\\Scheme;
 
@@ -202,22 +202,22 @@ class AppScheme extends Scheme
 }
 FILE;
 
-mkdir('app', 0700);
+mkdir($projectName, 0700);
 
-mkdir('app/config', 0700);
-file_put_contents('app/config/db.php', $configFile);
+mkdir("$projectName/config", 0700);
+file_put_contents("$projectName/config/db.php", $configFile);
 
-mkdir('app/models', 0700);
-file_put_contents('app/models/RawQuery.php', $rawQueryFile);
-file_put_contents('app/models/SubQuery.php', $subQueryFile);
-file_put_contents('app/models/User.php', $userFile);
-file_put_contents('app/models/UserView.php', $userViewFile);
+mkdir("$projectName/models", 0700);
+file_put_contents("$projectName/models/RawQuery.php", $rawQueryFile);
+file_put_contents("$projectName/models/SubQuery.php", $subQueryFile);
+file_put_contents("$projectName/models/User.php", $userFile);
+file_put_contents("$projectName/models/UserView.php", $userViewFile);
 
-mkdir('app/modifiers', 0700);
-file_put_contents('app/modifiers/CustomModifier.php', $customModifierFile);
+mkdir("$projectName/modifiers", 0700);
+file_put_contents("$projectName/modifiers/CustomModifier.php", $customModifierFile);
 
-mkdir('app/records', 0700);
-file_put_contents('app/records/ActiveRecord.php', $activeRecordFile);
+mkdir("$projectName/records", 0700);
+file_put_contents("$projectName/records/ActiveRecord.php", $activeRecordFile);
 
-mkdir('app/schema', 0700);
-file_put_contents('app/schema/AppScheme.php', $appSchemeFile);
+mkdir("$projectName/schema", 0700);
+file_put_contents("$projectName/schema/AppScheme.php", $appSchemeFile);
