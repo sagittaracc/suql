@@ -7,6 +7,7 @@ $params = getopt('', [
     'create-entry-point',
     'name:',
     'type:',
+    'model:',
 ]);
 
 $isHelp = isset($params['help']);
@@ -46,7 +47,7 @@ else if ($createModel) {
 
     createModel($projectName, $modelName, $modelType);
 }
-else if (createEntryPoint) {
+else if ($createEntryPoint) {
     $entryName = $params['name'];
     list($projectName, $modelName) = explode('\\', $params['model']);
 
