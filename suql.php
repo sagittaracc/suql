@@ -389,8 +389,8 @@ function createEntryPoint($projectName, $modelName, $entryName)
     $file = <<<FILE
 <?php
 
-use $projectName\models\$className;
-use suql\db\Container;
+use $projectName\\models\\$className;
+use suql\\db\\Container;
 
 require 'vendor/autoload.php';
 
@@ -398,10 +398,10 @@ require 'vendor/autoload.php';
 Container::create(require __DIR__ . '/$projectName/config/db.php');
 
 // Fetch data from the database
-$data = $className::all()->fetchAll();
+\$data = $className::all()->fetchAll();
 
 echo "<pre>";
-print_r($data);
+print_r(\$data);
 echo "</pre>";
 FILE;
 
