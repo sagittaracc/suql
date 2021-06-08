@@ -1,12 +1,19 @@
 <?php
 
 $params = getopt('', [
-    'project-name:'
+    'project-name:',
+    'query-type:',
 ]);
 
-$projectName = $params['project-name'];
+$projectName = isset($params['project-name']) ? $params['project-name'] : null;
+$queryType = isset($params['query-type']) ? $params['query-type'] : null;
+if ($queryType)
+    list($project, $queryType) = explode('\\', $queryType);
 
-$configFile = <<<FILE
+if ($projectName) {
+    mkdir($projectName, 0700);
+
+    $configFile = <<<FILE
 <?php
 
 return [
@@ -21,12 +28,19 @@ return [
 ];
 FILE;
 
-$simpleModelExampleFile = <<<FILE
+    mkdir("$projectName/config", 0700);
+    file_put_contents("$projectName/config/db.php", $configFile);
+
+    mkdir("$projectName/models", 0700);
+}
+
+if ($queryType === 'model') {
+    $simpleModelExampleFile = <<<FILE
 <?php
 
-namespace $projectName\\models;
+namespace $project\\models;
 
-use $projectName\\records\\ActiveRecord;
+use $project\\records\\ActiveRecord;
 
 class SimpleModelExample extends ActiveRecord
 {
@@ -42,12 +56,15 @@ class SimpleModelExample extends ActiveRecord
 }
 FILE;
 
-$viewExampleFile = <<<FILE
+    file_put_contents("$project/models/SimpleModelExample.php", $simpleModelExampleFile);
+}
+else if ($queryType === 'view') {
+    $viewExampleFile = <<<FILE
 <?php
 
-namespace $projectName\\models;
+namespace $project\\models;
 
-use $projectName\\records\\ActiveRecord;
+use $project\\records\\ActiveRecord;
 use suql\\syntax\\Field;
 
 class ViewExample extends ActiveRecord
@@ -82,12 +99,15 @@ class ViewExample extends ActiveRecord
 }
 FILE;
 
-$subQueryExampleFile = <<<FILE
+    file_put_contents("$project/models/ViewExample.php", $viewExampleFile);
+}
+else if ($queryType === 'sub') {
+    $subQueryExampleFile = <<<FILE
 <?php
 
-namespace $projectName\\models;
+namespace $project\\models;
 
-use $projectName\\records\\ActiveRecord;
+use $project\\records\\ActiveRecord;
 
 class SubQueryExample extends ActiveRecord
 {
@@ -118,12 +138,15 @@ class SubQueryExample extends ActiveRecord
 }
 FILE;
 
-$rawQueryExampleFile = <<<FILE
+    file_put_contents("$project/models/SubQueryExample.php", $subQueryExampleFile);
+}
+else if ($queryType === 'raw') {
+    $rawQueryExampleFile = <<<FILE
 <?php
 
-namespace $projectName\\models;
+namespace $project\\models;
 
-use $projectName\\records\\ActiveRecord;
+use $project\\records\\ActiveRecord;
 
 class RawQueryExample extends ActiveRecord
 {
@@ -154,13 +177,16 @@ class RawQueryExample extends ActiveRecord
 }
 FILE;
 
-$unionQueryExampleFile = <<<FILE
+    file_put_contents("$project/models/RawQueryExample.php", $rawQueryExampleFile);
+}
+else if ($queryType === 'union') {
+    $unionQueryExampleFile = <<<FILE
 <?php
 
-namespace $projectName\\models;
+namespace $project\\models;
 
 use suql\\syntax\\Field;
-use $projectName\\records\\ActiveRecord;
+use $project\\records\\ActiveRecord;
 
 class UnionQueryExample extends ActiveRecord
 {
@@ -202,7 +228,11 @@ class UnionQueryExample extends ActiveRecord
 }
 FILE;
 
-$activeRecordFile = <<<FILE
+    file_put_contents("$project/models/UnionQueryExample.php", $unionQueryExampleFile);
+}
+
+if ($projectName) {
+    $activeRecordFile = <<<FILE
 <?php
 
 namespace $projectName\\records;
@@ -233,7 +263,10 @@ abstract class ActiveRecord extends SuQL
 }
 FILE;
 
-$appSchemeFile = <<<FILE
+    mkdir("$projectName/records", 0700);
+    file_put_contents("$projectName/records/ActiveRecord.php", $activeRecordFile);
+
+    $appSchemeFile = <<<FILE
 <?php
 
 namespace $projectName\\schema;
@@ -256,7 +289,10 @@ class AppScheme extends Scheme
 }
 FILE;
 
-$customModifierExampleFile = <<<FILE
+    mkdir("$projectName/schema", 0700);
+    file_put_contents("$projectName/schema/AppScheme.php", $appSchemeFile);
+
+    $customModifierExampleFile = <<<FILE
 <?php
 
 namespace $projectName\\modifiers;
@@ -270,23 +306,6 @@ class CustomModifierExample
 }
 FILE;
 
-mkdir($projectName, 0700);
-
-mkdir("$projectName/config", 0700);
-file_put_contents("$projectName/config/db.php", $configFile);
-
-mkdir("$projectName/models", 0700);
-file_put_contents("$projectName/models/SimpleModelExample.php", $simpleModelExampleFile);
-file_put_contents("$projectName/models/ViewExample.php", $viewExampleFile);
-file_put_contents("$projectName/models/SubQueryExample.php", $subQueryExampleFile);
-file_put_contents("$projectName/models/RawQueryExample.php", $rawQueryExampleFile);
-file_put_contents("$projectName/models/UnionQueryExample.php", $unionQueryExampleFile);
-
-mkdir("$projectName/records", 0700);
-file_put_contents("$projectName/records/ActiveRecord.php", $activeRecordFile);
-
-mkdir("$projectName/schema", 0700);
-file_put_contents("$projectName/schema/AppScheme.php", $appSchemeFile);
-
-mkdir("$projectName/modifiers", 0700);
-file_put_contents("$projectName/modifiers/CustomModifierExample.php", $customModifierExampleFile);
+    mkdir("$projectName/modifiers", 0700);
+    file_put_contents("$projectName/modifiers/CustomModifierExample.php", $customModifierExampleFile);
+}
