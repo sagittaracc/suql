@@ -1,11 +1,30 @@
 <?php
 
 $params = getopt('', [
+    'help',
     'create-project',
     'create-model',
     'name:',
     'type:',
 ]);
+
+$isHelp = isset($params['help']);
+
+if ($isHelp) {
+    echo "Create a project\n";
+    echo "> php suql --create-project --name <project-name>\n\n";
+
+    echo "Create a model\n";
+    echo "> php suql --create-model --name <project-name>\<model-name> --type <model-type>\n\n";
+
+    echo "Available model types:\n";
+    echo "\tmodel\n";
+    echo "\tview\n";
+    echo "\tsub\n";
+    echo "\traw\n";
+    echo "\tunion\n";
+    return;
+}
 
 $createProject = isset($params['create-project']);
 $createModel = isset($params['create-model']);
