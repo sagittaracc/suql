@@ -1,0 +1,223 @@
+<?php
+
+$params = getopt('', [
+    'project-name:'
+]);
+
+$projectName = $params['project-name'];
+
+$configFile = <<<FILE
+<?php
+
+return [
+    'connection' => [
+        'driver' => 'mysql',
+        'host' => 'localhost',
+        'dbname' => '',
+        'user' => 'root',
+        'pass' => '',
+    ],
+    // ... another db connection
+];
+FILE;
+
+$rawQueryFile = <<<FILE
+<?php
+
+namespace app\\models;
+
+use app\\records\\ActiveRecord;
+
+class RawQuery extends ActiveRecord
+{
+    public function query()
+    {
+        return 'raw_query';
+    }
+
+    public function table()
+    {
+        return null;
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+
+    public function view()
+    {
+        return \$this->select([
+            '2 * 2',
+            "'Yuriy' as author",
+        ]);
+    }
+}
+FILE;
+
+$subQueryFile = <<<FILE
+<?php
+
+namespace app\\models;
+
+use app\\records\\ActiveRecord;
+
+class SubQuery extends ActiveRecord
+{
+    public function query()
+    {
+        return 'sub_query';
+    }
+
+    public function table()
+    {
+        return User::all();
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+}
+FILE;
+
+$userFile = <<<FILE
+<?php
+
+namespace app\\models;
+
+use app\\records\\ActiveRecord;
+
+class User extends ActiveRecord
+{
+    public function table()
+    {
+        return 'users';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+}
+FILE;
+
+$userViewFile = <<<FILE
+<?php
+
+namespace app\\models;
+
+use app\\records\\ActiveRecord;
+
+class UserView extends ActiveRecord
+{
+    public function query()
+    {
+        return 'user_view';
+    }
+
+    public function table()
+    {
+        return 'users';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+
+    public function view()
+    {
+        return
+            \$this
+                ->join('user_group')
+                ->join('groups')
+                    ->select([
+                        'name',
+                    ]);
+    }
+}
+FILE;
+
+$customModifierFile = <<<FILE
+<?php
+
+namespace app\\modifiers;
+
+use suql\\modifier\\field\\SQLCaseModifier;
+
+class CustomModifier extends SQLCaseModifier
+{
+    public static function mod_custom_one(\$ofield, \$params)
+    {
+        // ... Code here
+    }
+}
+FILE;
+
+$activeRecordFile = <<<FILE
+<?php
+
+namespace app\\records;
+
+use suql\\syntax\\SuQL;
+use app\\modifiers\\CustomModifier;
+use suql\\db\\Container;
+
+abstract class ActiveRecord extends SuQL
+{
+    protected static \$schemeClass = 'app\\\\schema\\\\AppScheme';
+    protected static \$builderClass = 'suql\\\\builder\\\\MySQLBuilder';
+
+    protected function modifierList()
+    {
+        return array_merge(
+            parent::modifierList(),
+            [
+                CustomModifier::class,
+            ]
+        );
+    }
+
+    public function getDb()
+    {
+        return Container::get('connection');
+    }
+}
+FILE;
+
+$appSchemeFile = <<<FILE
+<?php
+
+namespace app\\schema;
+
+use suql\\core\\Scheme;
+
+class AppScheme extends Scheme
+{
+    function __construct()
+    {
+        // \$this->rel('users', 'user_group', 'users.id = user_group.user_id');
+    }
+}
+FILE;
+
+mkdir('app', 0700);
+
+mkdir('app/config', 0700);
+file_put_contents('app/config/db.php', $configFile);
+
+mkdir('app/models', 0700);
+file_put_contents('app/models/RawQuery.php', $rawQueryFile);
+file_put_contents('app/models/SubQuery.php', $subQueryFile);
+file_put_contents('app/models/User.php', $userFile);
+file_put_contents('app/models/UserView.php', $userViewFile);
+
+mkdir('app/modifiers', 0700);
+file_put_contents('app/modifiers/CustomModifier.php', $customModifierFile);
+
+mkdir('app/records', 0700);
+file_put_contents('app/records/ActiveRecord.php', $activeRecordFile);
+
+mkdir('app/schema', 0700);
+file_put_contents('app/schema/AppScheme.php', $appSchemeFile);
