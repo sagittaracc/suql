@@ -71,11 +71,7 @@ class Scheme implements SchemeInterface
      */
     public function getTableAlias($name)
     {
-        if ($this->hasTableAlias($name)) {
-            return $this->tables[$name];
-        }
-
-        return null;
+        return '{{' . $this->tables[$name] . '}}';
     }
     /**
      * Получает схему таблиц
@@ -135,8 +131,11 @@ class Scheme implements SchemeInterface
             $on = str_replace($rightTable->format("%a."), $rightTable->format("%n."), $on);
 
         $scheme = $temporary ? 'temp_rel' : 'rel';
-        $this->$scheme[$leftTable->name][$rightTable->name] = $on;
-        $this->$scheme[$rightTable->name][$leftTable->name] = $on;
+        $leftTableName = $this->hasTableAlias($leftTable->name) ? $this->getTableAlias($leftTable->name) : $leftTable->name;
+        $rightTablename = $this->hasTableAlias($rightTable->name) ? $this->getTableAlias($rightTable->name) : $rightTable->name;
+
+        $this->$scheme[$leftTableName][$rightTablename] = $on;
+        $this->$scheme[$rightTablename][$leftTableName] = $on;
     }
     /**
      * Устанавливает временную связь между двумя сущностями (таблица или вьха)

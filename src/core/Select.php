@@ -161,6 +161,10 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addFrom($table)
     {
+        if ($this->getOSuQL()->getScheme()->hasTableAlias($table)) {
+            $table = $this->getOSuQL()->getScheme()->getTableAlias($table);
+        }
+
         $this->from = $table;
         $this->table_list[] = $table;
     }
@@ -273,6 +277,10 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addJoin($type, $table)
     {
+        if ($this->getOSuQL()->getScheme()->hasTableAlias($table)) {
+            $table = $this->getOSuQL()->getScheme()->getTableAlias($table);
+        }
+
         $this->join[] = new Join($this, $table, $type);
         $this->table_list[] = $table;
     }
@@ -292,6 +300,16 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addSmartJoin($fromTable, $toTable, $type = 'inner')
     {
+        $scheme = $this->getOSuQL()->getScheme();
+
+        if ($scheme->hasTableAlias($fromTable)) {
+            $fromTable = $scheme->getTableAlias($fromTable);
+        }
+
+        if ($scheme->hasTableAlias($toTable)) {
+            $toTable = $scheme->getTableAlias($toTable);
+        }
+
         $smartJoin = new SmartJoin($this, $fromTable, $toTable, $type);
         $joinChain = $smartJoin->getChain();
         array_shift($joinChain);

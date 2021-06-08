@@ -24,10 +24,6 @@ class SuQLMock extends TestCase
         $scheme->rel('{{u}}', '{{ug}}', '{{u}}.id = {{ug}}.user_id');
         $scheme->rel('{{ug}}', '{{g}}', '{{ug}}.group_id = {{g}}.id');
 
-        // TODO: Эти связи должны формироваться автоматически
-        $scheme->rel('users', 'user_group', 'users.id = user_group.user_id');
-        $scheme->rel('user_group', 'groups', 'user_group.group_id = groups.id');
-
         $builder = new MySQLBuilder();
 
         $this->osuql = new Obj($scheme, $builder);
