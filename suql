@@ -21,7 +21,28 @@ return [
 ];
 FILE;
 
-$activeGroupsFile = <<<FILE
+$simpleModelExampleFile = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+
+class SimpleModelExample extends ActiveRecord
+{
+    public function table()
+    {
+        return 'table_name';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+}
+FILE;
+
+$viewExampleFile = <<<FILE
 <?php
 
 namespace $projectName\\models;
@@ -29,56 +50,16 @@ namespace $projectName\\models;
 use $projectName\\records\\ActiveRecord;
 use suql\\syntax\\Field;
 
-class ActiveGroups extends ActiveRecord
+class ViewExample extends ActiveRecord
 {
     public function query()
     {
-        return 'active_groups';
+        return 'view_example_name';
     }
 
     public function table()
     {
-        return 'users';
-    }
-
-    public function fields()
-    {
-        return [];
-    }
-
-    public function view()
-    {
-        return
-            \$this->join('user_group')
-                ->join('groups')
-                    ->select([
-                        'name',
-                        new Field(['name' => 'count'], [
-                            'count',
-                        ])
-                    ])
-                ->group('name');
-    }
-}
-FILE;
-
-$firstGroupFile = <<<FILE
-<?php
-
-namespace $projectName\\models;
-
-use $projectName\\records\\ActiveRecord;
-
-class FirstGroup extends ActiveRecord
-{
-    public function query()
-    {
-        return 'first_group';
-    }
-
-    public function table()
-    {
-        return 'groups';
+        return 'table_from_name';
     }
 
     public function fields()
@@ -90,53 +71,34 @@ class FirstGroup extends ActiveRecord
     {
         return
             \$this
-                ->select(['*'])
-                ->limit(1);
+                ->join('another_table')
+                    ->select([
+                        'field_name',
+                        new Field(['another_field_name' => 'alias_for_it'], [
+                            'modifier_name',
+                        ])
+                    ]);
     }
 }
 FILE;
 
-$groupFile = <<<FILE
+$subQueryExampleFile = <<<FILE
 <?php
 
 namespace $projectName\\models;
 
 use $projectName\\records\\ActiveRecord;
 
-class Group extends ActiveRecord
-{
-    public function table()
-    {
-        return 'groups';
-    }
-
-    public function fields()
-    {
-        return [
-            'name',
-        ];
-    }
-}
-FILE;
-
-$lastRegistrationFile = <<<FILE
-<?php
-
-namespace $projectName\\models;
-
-use $projectName\\records\\ActiveRecord;
-use suql\\syntax\\Field;
-
-class LastRegistration extends ActiveRecord
+class SubQueryExample extends ActiveRecord
 {
     public function query()
     {
-        return 'last_registration';
+        return 'sub_query_example_name';
     }
 
     public function table()
     {
-        return 'users';
+        return InnerQueryModel::all();
     }
 
     public function fields()
@@ -146,61 +108,28 @@ class LastRegistration extends ActiveRecord
 
     public function view()
     {
-        return \$this->select([
-            new Field(['registration' => 'lastRegistration'], [
-                'max',
-            ])
-        ]);
+        return
+            \$this
+                ->select([
+                    'field_name',
+                    'another_field_name',
+                ]);
     }
 }
 FILE;
 
-$noNameFile = <<<FILE
+$rawQueryExampleFile = <<<FILE
 <?php
 
 namespace $projectName\\models;
 
 use $projectName\\records\\ActiveRecord;
 
-class NoName extends ActiveRecord
+class RawQueryExample extends ActiveRecord
 {
     public function query()
     {
-        return 'no_name';
-    }
-
-    public function table()
-    {
-        return ActiveGroups::all();
-    }
-
-    public function fields()
-    {
-        return [];
-    }
-
-    public function view()
-    {
-        return \$this->select([
-            'name',
-            'count',
-        ]);
-    }
-}
-FILE;
-
-$rawQueryFile = <<<FILE
-<?php
-
-namespace $projectName\\models;
-
-use $projectName\\records\\ActiveRecord;
-
-class RawQuery extends ActiveRecord
-{
-    public function query()
-    {
-        return 'raw_query';
+        return 'raw_query_name';
     }
 
     public function table()
@@ -215,15 +144,17 @@ class RawQuery extends ActiveRecord
 
     public function view()
     {
-        return \$this->select([
-            '2 * 2',
-            "'Yuriy' as author",
-        ]);
+        return
+            \$this
+                ->select([
+                    '2 * 2',
+                    "'Yuriy' as author",
+                ]);
     }
 }
 FILE;
 
-$unionQueryFile = <<<FILE
+$unionQueryExampleFile = <<<FILE
 <?php
 
 namespace $projectName\\models;
@@ -231,11 +162,11 @@ namespace $projectName\\models;
 use suql\\syntax\\Field;
 use $projectName\\records\\ActiveRecord;
 
-class UnionQuery extends ActiveRecord
+class UnionQueryExample extends ActiveRecord
 {
     public function query()
     {
-        return 'union_query';
+        return 'union_query_name';
     }
 
     public function table()
@@ -252,102 +183,21 @@ class UnionQuery extends ActiveRecord
     {
         return
             \$this->union([
-                User::all()
+                OneModel::all()
                     ->select([
-                        new Field(['registration' => 'reg_interval'], [
-                            'min'
+                        new Field(['field_name' => 'alias_for_it'], [
+                            'modifier_name'
                         ])
                     ])
-                    ->as('q1'),
-                User::all()
+                    ->as('alias_for_this_query'),
+                AnotherModel::all()
                     ->select([
-                        new Field(['registration' => 'reg_interval'], [
-                            'max'
+                        new Field(['field_name' => 'alias_for_it'], [
+                            'modifier_name'
                         ])
                     ])
-                    ->as('q2'),
+                    ->as('alias_for_this_query'),
             ]);
-    }
-}
-FILE;
-
-$userFile = <<<FILE
-<?php
-
-namespace $projectName\\models;
-
-use $projectName\\records\\ActiveRecord;
-
-class User extends ActiveRecord
-{
-    public function table()
-    {
-        return 'users';
-    }
-
-    public function fields()
-    {
-        return [];
-    }
-}
-FILE;
-
-$userGroupFile = <<<FILE
-<?php
-
-namespace $projectName\\models;
-
-use suql\\syntax\\Field;
-use suql\\syntax\\Raw;
-use $projectName\\records\\ActiveRecord;
-
-class UserGroup extends ActiveRecord
-{
-    public function table()
-    {
-        return 'user_group';
-    }
-
-    public function fields()
-    {
-        return [];
-    }
-}
-FILE;
-
-$userTableAliasFile = <<<FILE
-<?php
-
-namespace $projectName\\models;
-
-use $projectName\\records\\ActiveRecord;
-
-class UserTableAlias extends ActiveRecord
-{
-    public function table()
-    {
-        return '{{u}}';
-    }
-
-    public function fields()
-    {
-        return [];
-    }
-}
-FILE;
-
-$customModifierFile = <<<FILE
-<?php
-
-namespace $projectName\\modifiers;
-
-use suql\\modifier\\field\\SQLCaseModifier;
-
-class CustomModifier extends SQLCaseModifier
-{
-    public static function mod_custom_one(\$ofield, \$params)
-    {
-        // ... Code here
     }
 }
 FILE;
@@ -358,7 +208,7 @@ $activeRecordFile = <<<FILE
 namespace $projectName\\records;
 
 use suql\\syntax\\SuQL;
-use $projectName\\modifiers\\CustomModifier;
+use $projectName\\modifiers\\CustomModifierExample;
 use suql\\db\\Container;
 
 abstract class ActiveRecord extends SuQL
@@ -371,7 +221,7 @@ abstract class ActiveRecord extends SuQL
         return array_merge(
             parent::modifierList(),
             [
-                CustomModifier::class,
+                CustomModifierExample::class,
             ]
         );
     }
@@ -394,19 +244,28 @@ class AppScheme extends Scheme
 {
     function __construct()
     {
-        \$this->addTableList([
-            'users' => 'u',
-            'user_group' => 'ug',
-            'groups' => 'g',
-        ]);
+        // \$this->addTableList([
+        //     'users' => 'u',
+        //     'user_group' => 'ug',
+        //     'groups' => 'g',
+        // ]);
 
-        // Связь между реальными таблицами в базе данных
-        \$this->rel('{{u}}', '{{ug}}', '{{u}}.id = {{ug}}.user_id');
-        \$this->rel('{{ug}}', '{{g}}', '{{ug}}.group_id = {{g}}.id');
+        // \$this->rel('{{u}}', '{{ug}}', '{{u}}.id = {{ug}}.user_id');
+        // \$this->rel('{{ug}}', '{{g}}', '{{ug}}.group_id = {{g}}.id');
+    }
+}
+FILE;
 
-        // Связи с абстрактными вьюхами
-        \$this->rel('users', 'last_registration', 'users.registration = last_registration.lastRegistration');
-        \$this->rel('user_group', 'first_group', 'user_group.group_id = first_group.id');
+$customModifierExampleFile = <<<FILE
+<?php
+
+namespace $projectName\\modifiers;
+
+class CustomModifierExample
+{
+    public static function mod_modifierName(\$ofield, \$params)
+    {
+        // ... Code here
     }
 }
 FILE;
@@ -417,22 +276,17 @@ mkdir("$projectName/config", 0700);
 file_put_contents("$projectName/config/db.php", $configFile);
 
 mkdir("$projectName/models", 0700);
-file_put_contents("$projectName/models/ActiveGroups.php", $activeGroupsFile);
-file_put_contents("$projectName/models/FirstGroup.php", $firstGroupFile);
-file_put_contents("$projectName/models/Group.php", $groupFile);
-file_put_contents("$projectName/models/LastRegistration.php", $lastRegistrationFile);
-file_put_contents("$projectName/models/NoName.php", $noNameFile);
-file_put_contents("$projectName/models/RawQuery.php", $rawQueryFile);
-file_put_contents("$projectName/models/UnionQuery.php", $unionQueryFile);
-file_put_contents("$projectName/models/User.php", $userFile);
-file_put_contents("$projectName/models/UserGroup.php", $userGroupFile);
-file_put_contents("$projectName/models/UserTableAlias.php", $userTableAliasFile);
-
-mkdir("$projectName/modifiers", 0700);
-file_put_contents("$projectName/modifiers/CustomModifier.php", $customModifierFile);
+file_put_contents("$projectName/models/SimpleModelExample.php", $simpleModelExampleFile);
+file_put_contents("$projectName/models/ViewExample.php", $viewExampleFile);
+file_put_contents("$projectName/models/SubQueryExample.php", $subQueryExampleFile);
+file_put_contents("$projectName/models/RawQueryExample.php", $rawQueryExampleFile);
+file_put_contents("$projectName/models/UnionQueryExample.php", $unionQueryExampleFile);
 
 mkdir("$projectName/records", 0700);
 file_put_contents("$projectName/records/ActiveRecord.php", $activeRecordFile);
 
 mkdir("$projectName/schema", 0700);
 file_put_contents("$projectName/schema/AppScheme.php", $appSchemeFile);
+
+mkdir("$projectName/modifiers", 0700);
+file_put_contents("$projectName/modifiers/CustomModifierExample.php", $customModifierExampleFile);
