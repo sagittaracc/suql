@@ -1,18 +1,46 @@
 <?php
 
 $params = getopt('', [
-    'project-name:',
-    'query-type:',
+    'create-project',
+    'create-model',
+    'name:',
+    'type:',
 ]);
 
-$projectName = isset($params['project-name']) ? $params['project-name'] : null;
-$queryType = isset($params['query-type']) ? $params['query-type'] : null;
-if ($queryType)
-    list($project, $queryType) = explode('\\', $queryType);
+$createProject = isset($params['create-project']);
+$createModel = isset($params['create-model']);
 
-if ($projectName) {
+if ($createProject) {
+    $projectName = $params['name'];
+
+    createFolderStructure($projectName);
+    copyFiles($projectName);
+}
+else if ($createModel) {
+    list($projectName, $modelName) = explode('\\', $params['name']);
+    $modelType = $params['type'];
+
+    createModel($projectName, $modelName, $modelType);
+}
+
+/**
+ * -----------------------------------------------------------------
+ */
+function createFolderStructure($projectName)
+{
     mkdir($projectName, 0700);
+    mkdir("$projectName/config", 0700);
+    mkdir("$projectName/models", 0700);
+    mkdir("$projectName/modifiers", 0700);
+    mkdir("$projectName/records", 0700);
+    mkdir("$projectName/schema", 0700);
+}
 
+/**
+ * -----------------------------------------------------------------
+ */
+function copyFiles($projectName)
+{
     $configFile = <<<FILE
 <?php
 
@@ -28,25 +56,108 @@ return [
 ];
 FILE;
 
-    mkdir("$projectName/config", 0700);
     file_put_contents("$projectName/config/db.php", $configFile);
 
-    mkdir("$projectName/models", 0700);
-}
-
-if ($queryType === 'model') {
-    $simpleModelExampleFile = <<<FILE
+    $activeRecordFile = <<<FILE
 <?php
 
-namespace $project\\models;
+namespace $projectName\\records;
 
-use $project\\records\\ActiveRecord;
+use suql\\syntax\\SuQL;
+use $projectName\\modifiers\\CustomModifierExample;
+use suql\\db\\Container;
 
-class SimpleModelExample extends ActiveRecord
+abstract class ActiveRecord extends SuQL
+{
+    protected static \$schemeClass = '$projectName\\\\schema\\\\AppScheme';
+    protected static \$builderClass = 'suql\\\\builder\\\\MySQLBuilder';
+
+    protected function modifierList()
+    {
+        return array_merge(
+            parent::modifierList(),
+            [
+                CustomModifierExample::class,
+            ]
+        );
+    }
+
+    public function getDb()
+    {
+        return Container::get('connection');
+    }
+}
+FILE;
+    
+    file_put_contents("$projectName/records/ActiveRecord.php", $activeRecordFile);
+
+    $appSchemeFile = <<<FILE
+<?php
+
+namespace $projectName\\schema;
+
+use suql\\core\\Scheme;
+
+class AppScheme extends Scheme
+{
+    function __construct()
+    {
+        // \$this->addTableList([
+        //     'users' => 'u',
+        //     'user_group' => 'ug',
+        //     'groups' => 'g',
+        // ]);
+
+        // \$this->rel('{{u}}', '{{ug}}', '{{u}}.id = {{ug}}.user_id');
+        // \$this->rel('{{ug}}', '{{g}}', '{{ug}}.group_id = {{g}}.id');
+    }
+}
+FILE;
+    
+    file_put_contents("$projectName/schema/AppScheme.php", $appSchemeFile);
+
+    $customModifierExampleFile = <<<FILE
+<?php
+
+namespace $projectName\\modifiers;
+
+class CustomModifierExample
+{
+    public static function mod_modifierName(\$ofield, \$params)
+    {
+        // ... Code here
+    }
+}
+FILE;
+
+    file_put_contents("$projectName/modifiers/CustomModifierExample.php", $customModifierExampleFile);
+}
+
+/**
+ * --------------------------------------------------------
+ */
+function createModel($projectName, $modelName, $modelType)
+{
+    $className = implode('', array_map(
+        function($part) {
+            return ucfirst($part);
+        },
+        explode('_', $modelName)
+    ));
+
+    if ($modelType === 'model') {
+        $file = <<<FILE
+<?php
+
+namespace $projectName\\models;
+
+use $projectName\\records\\ActiveRecord;
+
+class $className extends ActiveRecord
 {
     public function table()
     {
-        return 'table_name';
+        return '$modelName';
     }
 
     public function fields()
@@ -55,28 +166,28 @@ class SimpleModelExample extends ActiveRecord
     }
 }
 FILE;
-
-    file_put_contents("$project/models/SimpleModelExample.php", $simpleModelExampleFile);
-}
-else if ($queryType === 'view') {
-    $viewExampleFile = <<<FILE
+    
+        file_put_contents("$projectName/models/$className.php", $file);
+    }
+    else if ($modelType === 'view') {
+        $file = <<<FILE
 <?php
 
-namespace $project\\models;
+namespace $projectName\\models;
 
-use $project\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 use suql\\syntax\\Field;
 
-class ViewExample extends ActiveRecord
+class $className extends ActiveRecord
 {
     public function query()
     {
-        return 'view_example_name';
+        return '$modelName';
     }
 
     public function table()
     {
-        return 'table_from_name';
+        return '{{table}}';
     }
 
     public function fields()
@@ -98,22 +209,22 @@ class ViewExample extends ActiveRecord
     }
 }
 FILE;
-
-    file_put_contents("$project/models/ViewExample.php", $viewExampleFile);
-}
-else if ($queryType === 'sub') {
-    $subQueryExampleFile = <<<FILE
+    
+        file_put_contents("$projectName/models/$className.php", $file);
+    }
+    else if ($modelType === 'sub') {
+        $file = <<<FILE
 <?php
 
-namespace $project\\models;
+namespace $projectName\\models;
 
-use $project\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 
-class SubQueryExample extends ActiveRecord
+class $className extends ActiveRecord
 {
     public function query()
     {
-        return 'sub_query_example_name';
+        return '$modelName';
     }
 
     public function table()
@@ -137,22 +248,22 @@ class SubQueryExample extends ActiveRecord
     }
 }
 FILE;
-
-    file_put_contents("$project/models/SubQueryExample.php", $subQueryExampleFile);
-}
-else if ($queryType === 'raw') {
-    $rawQueryExampleFile = <<<FILE
+    
+        file_put_contents("$projectName/models/$className.php", $file);
+    }
+    else if ($modelType === 'raw') {
+        $file = <<<FILE
 <?php
 
-namespace $project\\models;
+namespace $projectName\\models;
 
-use $project\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 
-class RawQueryExample extends ActiveRecord
+class $className extends ActiveRecord
 {
     public function query()
     {
-        return 'raw_query_name';
+        return '$modelName';
     }
 
     public function table()
@@ -176,23 +287,23 @@ class RawQueryExample extends ActiveRecord
     }
 }
 FILE;
-
-    file_put_contents("$project/models/RawQueryExample.php", $rawQueryExampleFile);
-}
-else if ($queryType === 'union') {
-    $unionQueryExampleFile = <<<FILE
+    
+        file_put_contents("$projectName/models/$className.php", $file);
+    }
+    else if ($modelType === 'union') {
+        $file = <<<FILE
 <?php
 
-namespace $project\\models;
+namespace $projectName\\models;
 
 use suql\\syntax\\Field;
-use $project\\records\\ActiveRecord;
+use $projectName\\records\\ActiveRecord;
 
-class UnionQueryExample extends ActiveRecord
+class $className extends ActiveRecord
 {
     public function query()
     {
-        return 'union_query_name';
+        return '$modelName';
     }
 
     public function table()
@@ -227,85 +338,7 @@ class UnionQueryExample extends ActiveRecord
     }
 }
 FILE;
-
-    file_put_contents("$project/models/UnionQueryExample.php", $unionQueryExampleFile);
-}
-
-if ($projectName) {
-    $activeRecordFile = <<<FILE
-<?php
-
-namespace $projectName\\records;
-
-use suql\\syntax\\SuQL;
-use $projectName\\modifiers\\CustomModifierExample;
-use suql\\db\\Container;
-
-abstract class ActiveRecord extends SuQL
-{
-    protected static \$schemeClass = '$projectName\\\\schema\\\\AppScheme';
-    protected static \$builderClass = 'suql\\\\builder\\\\MySQLBuilder';
-
-    protected function modifierList()
-    {
-        return array_merge(
-            parent::modifierList(),
-            [
-                CustomModifierExample::class,
-            ]
-        );
+    
+        file_put_contents("$projectName/models/$className.php", $file);
     }
-
-    public function getDb()
-    {
-        return Container::get('connection');
-    }
-}
-FILE;
-
-    mkdir("$projectName/records", 0700);
-    file_put_contents("$projectName/records/ActiveRecord.php", $activeRecordFile);
-
-    $appSchemeFile = <<<FILE
-<?php
-
-namespace $projectName\\schema;
-
-use suql\\core\\Scheme;
-
-class AppScheme extends Scheme
-{
-    function __construct()
-    {
-        // \$this->addTableList([
-        //     'users' => 'u',
-        //     'user_group' => 'ug',
-        //     'groups' => 'g',
-        // ]);
-
-        // \$this->rel('{{u}}', '{{ug}}', '{{u}}.id = {{ug}}.user_id');
-        // \$this->rel('{{ug}}', '{{g}}', '{{ug}}.group_id = {{g}}.id');
-    }
-}
-FILE;
-
-    mkdir("$projectName/schema", 0700);
-    file_put_contents("$projectName/schema/AppScheme.php", $appSchemeFile);
-
-    $customModifierExampleFile = <<<FILE
-<?php
-
-namespace $projectName\\modifiers;
-
-class CustomModifierExample
-{
-    public static function mod_modifierName(\$ofield, \$params)
-    {
-        // ... Code here
-    }
-}
-FILE;
-
-    mkdir("$projectName/modifiers", 0700);
-    file_put_contents("$projectName/modifiers/CustomModifierExample.php", $customModifierExampleFile);
 }
