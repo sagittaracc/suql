@@ -146,16 +146,16 @@ class SQLBuilder
         $selectTemplate = self::SELECT_TEMPLATE;
 
         $selectTemplate = str_replace('{select}', $this->buildSelect($query), $selectTemplate);
-        $selectTemplate = str_replace('{from}', $this->buildFrom($query),   $selectTemplate);
-        $selectTemplate = str_replace('{join}', $this->buildJoin($query),   $selectTemplate);
-        $selectTemplate = str_replace('{group}', $this->buildGroup($query),  $selectTemplate);
-        $selectTemplate = str_replace('{where}', $this->buildWhere($query),  $selectTemplate);
+        $selectTemplate = str_replace('{from}', $this->buildFrom($query), $selectTemplate);
+        $selectTemplate = str_replace('{join}', $this->buildJoin($query), $selectTemplate);
+        $selectTemplate = str_replace('{group}', $this->buildGroup($query), $selectTemplate);
+        $selectTemplate = str_replace('{where}', $this->buildWhere($query), $selectTemplate);
         $selectTemplate = str_replace('{having}', $this->buildHaving($query), $selectTemplate);
-        $selectTemplate = str_replace('{order}', $this->buildOrder($query),  $selectTemplate);
-        $selectTemplate = str_replace('{limit}', $this->buildLimit($query),  $selectTemplate);
+        $selectTemplate = str_replace('{order}', $this->buildOrder($query), $selectTemplate);
+        $selectTemplate = str_replace('{limit}', $this->buildLimit($query), $selectTemplate);
 
         // TODO: Перенести на более высокий уровень так как замена алиасов нужна будет не только для select запросов
-        return (new PlaceholderHelper($selectTemplate))->bindObject(Map::create($this->osuql->getScheme()->getTableList()));
+        return (new PlaceholderHelper($selectTemplate))->bindObject(Map::create(array_flip($this->osuql->getScheme()->getTableList())));
     }
     /**
      * Конвертирует union запрос

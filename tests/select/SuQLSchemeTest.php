@@ -8,9 +8,9 @@ final class SuQLSchemeTest extends SuQLMock
     {
         $this->assertEquals(
             [
-                'u' => 'users',
-                'ug' => 'user_group',
-                'g' => 'groups',
+                'users' => 'u',
+                'user_group' => 'ug',
+                'groups' => 'g',
             ],
             $this->osuql->getScheme()->getTableList()
         );

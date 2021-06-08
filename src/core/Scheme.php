@@ -39,7 +39,7 @@ class Scheme implements SchemeInterface
             $alias = $name;
         }
 
-        $this->tables[$alias] = $name;
+        $this->tables[$name] = $alias;
     }
     /**
      * Добавляет список таблиц
@@ -54,6 +54,28 @@ class Scheme implements SchemeInterface
 
             $this->addTable($name, $alias);
         }
+    }
+    /**
+     * Проверяет есть алиас для таблицы
+     * @param string $name
+     * @return boolean
+     */
+    public function hasTableAlias($name)
+    {
+        return isset($this->tables[$name]);
+    }
+    /**
+     * Получает алиас для таблицы
+     * @param string $name
+     * @return string
+     */
+    public function getTableAlias($name)
+    {
+        if ($this->hasTableAlias($name)) {
+            return $this->tables[$name];
+        }
+
+        return null;
     }
     /**
      * Получает схему таблиц
