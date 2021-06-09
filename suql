@@ -344,7 +344,16 @@ function createFolderStructure($projectName)
     mkdir("$projectName/records", 0700);
     mkdir("$projectName/schema", 0700);
 
+    autoload($projectName);
+
     return 0;
+}
+
+function autoload($projectName)
+{
+    $composerJson = json_decode(file_get_contents('composer.json'), true);
+    $composerJson['autoload']['classmap'][] = "$projectName/";
+    file_put_contents('composer.json', json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
 
 function copyMainFiles($projectName)
@@ -376,6 +385,7 @@ function createModel($projectName, $modelName, $modelType)
     $file = $tpls[$modelType];
 
     file_put_contents("$projectName/models/$className.php", str_replace($search, $replace, $file));
+    shell_exec('composer dump-autoload');
 }
 
 function createEntryPoint($projectName, $modelName, $entryName)
