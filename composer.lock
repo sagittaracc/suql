@@ -71,16 +71,16 @@
         },
         {
             "name": "sagittaracc/strings",
-            "version": "v0.1",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sagittaracc/strings.git",
-                "reference": "a49605c6c3461960a980eb8b84f201ac5418d6df"
+                "reference": "95a045651fb7a5102ed62fac52c5bd784e465be3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sagittaracc/strings/zipball/a49605c6c3461960a980eb8b84f201ac5418d6df",
-                "reference": "a49605c6c3461960a980eb8b84f201ac5418d6df",
+                "url": "https://api.github.com/repos/sagittaracc/strings/zipball/95a045651fb7a5102ed62fac52c5bd784e465be3",
+                "reference": "95a045651fb7a5102ed62fac52c5bd784e465be3",
                 "shasum": ""
             },
             "require-dev": {
@@ -95,9 +95,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "support": {
                 "issues": "https://github.com/sagittaracc/strings/issues",
-                "source": "https://github.com/sagittaracc/strings/tree/v0.1"
+                "source": "https://github.com/sagittaracc/strings/tree/v0.1.1"
             },
-            "time": "2021-05-07T11:14:39+00:00"
+            "time": "2021-06-09T13:24:04+00:00"
         }
     ],
     "packages-dev": [
