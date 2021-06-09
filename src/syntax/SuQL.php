@@ -390,10 +390,10 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
-     * Получение всех данных запроса
+     * Метод получения данных
      * @return mixed
      */
-    public function fetchAll()
+    private function fetch($method)
     {
         $pdoTypes = [
             'integer' => PDO::PARAM_INT,
@@ -401,6 +401,11 @@ abstract class SuQL extends Obj implements QueryObject
             'NULL'    => PDO::PARAM_NULL,
             'double'  => PDO::PARAM_STR,
             'string'  => PDO::PARAM_STR,
+        ];
+
+        $methodList = [
+            'all' => 'fetchAll',
+            'one' => 'fetch',
         ];
 
         $sth = $this->getDb()->prepare($this->getRawSql());
@@ -413,13 +418,29 @@ abstract class SuQL extends Obj implements QueryObject
 
         $sth->execute();
 
-        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $data = $sth->{$methodList[$method]}(PDO::FETCH_ASSOC);
 
         if ($this->index) {
             $data = ArrayHelper::group($this->index, $data);
         }
 
         return $data;
+    }
+    /**
+     * Получение всех данных запроса
+     * @return mixed
+     */
+    public function fetchAll()
+    {
+        return $this->fetch('all');
+    }
+    /**
+     * Получение одной строки запроса
+     * @return mixed
+     */
+    public function fetchOne()
+    {
+        return $this->fetch('one');
     }
     /**
      * TODO: Возможно лучше избавиться от этого метода
