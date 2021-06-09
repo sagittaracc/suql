@@ -1,5 +1,13 @@
 # Change log
 
+## v7.0.9 - June 09, 2021
+
+- Autoload project & models after generating
+- Refactor
+- Bug fixes
+
+---
+
 ## v7.0.8 - June 08, 2021
 
 - Add code generator
