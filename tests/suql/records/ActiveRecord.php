@@ -7,7 +7,7 @@ use test\suql\modifiers\CustomModifier;
 
 abstract class ActiveRecord extends SuQL
 {
-    protected static $schemeClass = 'test\suql\\schema\\AppScheme';
+    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
     protected static $builderClass = 'suql\\builder\\MySQLBuilder';
 
     public function create()
