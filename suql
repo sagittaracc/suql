@@ -44,6 +44,11 @@ abstract class ActiveRecord extends SuQL
     protected static \$schemeClass = '{{projectName}}\\\\schema\\\\AppScheme';
     protected static \$builderClass = 'suql\\\\builder\\\\MySQLBuilder';
 
+    public function create()
+    {
+        return [];
+    }
+
     protected function modifierList()
     {
         return array_merge(

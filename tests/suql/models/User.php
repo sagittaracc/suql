@@ -11,6 +11,16 @@ class User extends ActiveRecord
         return 'users';
     }
 
+    public function create()
+    {
+        return [
+            'id' => 'integer',
+            'login' => 'string',
+            'password' => 'string',
+            'role' => 'integer',
+        ];
+    }
+
     public function fields()
     {
         return [];

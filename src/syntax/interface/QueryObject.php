@@ -20,6 +20,11 @@ interface QueryObject
      */
     public function table();
     /**
+     * Создание модели
+     * @return array
+     */
+    public function create();
+    /**
      * Описание запроса
      * @return self
      */
