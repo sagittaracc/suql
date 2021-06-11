@@ -20,7 +20,7 @@ return [
     'connection' => [
         'driver' => 'mysql',
         'host' => 'localhost',
-        'dbname' => '',
+        'dbname' => '{{dbname}}',
         'user' => 'root',
         'pass' => '',
     ],
@@ -361,11 +361,11 @@ function autoload($projectName)
     file_put_contents('composer.json', json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
 
-function copyMainFiles($projectName)
+function copyMainFiles($projectName, $dbname)
 {
     global $configFile, $activeRecordFile, $appSchemeFile, $customModifierExampleFile;
 
-    file_put_contents("$projectName/config/db.php", $configFile);
+    file_put_contents("$projectName/config/db.php", str_replace('{{dbname}}', $dbname, $configFile));
     file_put_contents("$projectName/records/ActiveRecord.php", str_replace('{{projectName}}', $projectName, $activeRecordFile));
     file_put_contents("$projectName/schema/AppScheme.php", str_replace('{{projectName}}', $projectName, $appSchemeFile));
     file_put_contents("$projectName/modifiers/CustomModifierExample.php", str_replace('{{projectName}}', $projectName, $customModifierExampleFile));
@@ -412,6 +412,7 @@ function main()
         'name:',                    // Название создаваемой сущности
         'type:',                    // Тип создаваемой сущности
         'model:',                   // Название модели
+        'db:',                      // Название базы данных
     ]);
 
     if (isset($params['help'])) {
@@ -423,8 +424,9 @@ function main()
     if (isset($params['create-project'])) {
 
         $projectName = $params['name'];
+        $dbname = $params['db'];
         createFolderStructure($projectName);
-        copyMainFiles($projectName);
+        copyMainFiles($projectName, $dbname);
 
     }
     else if (isset($params['create-model'])) {
