@@ -1,3 +1,4 @@
+<div align="center"><img src="https://i.ibb.co/NNq7DLQ/suql-sugar-sql.png" alt="suql-sugar-sql" border="0"></div>
 <h1 align="center">Sugar SQL</h1>
 
 ### SuQL
