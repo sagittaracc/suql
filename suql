@@ -380,7 +380,10 @@ function copyMainFiles($projectName, $dbname)
 
 function createTable($modelName)
 {
-    Container::create(require __DIR__ . '/app/config/db.php');
+    $parts = explode('\\', $modelName);
+    $projectName = $parts[0];
+
+    Container::create(require __DIR__ . "/$projectName/config/db.php");
 
     $model = $modelName::getInstance();
 
