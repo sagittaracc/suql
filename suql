@@ -325,6 +325,9 @@ function echoHelp()
     echo "Create a project\n";
     echo "> php suql --create-project --name <project-name> --db <db-name>\n\n";
 
+    echo "Create a table\n";
+    echo "> php suql --create-table --model <model-name>\n\n";
+
     echo "Create a model\n";
     echo "> php suql --create-model --name <project-name>\<model-name> --type <model-type>\n\n";
 
@@ -374,6 +377,16 @@ function copyMainFiles($projectName, $dbname)
     return 0;
 }
 
+function createTable($modelName)
+{
+    $model = $modelName::getInstance();
+
+    $db = $model->getDb();
+    $builder = $model->getBuilder();
+
+    $db->exec($builder->createTable($model));
+}
+
 function createModel($projectName, $modelName, $modelType)
 {
     global $modelFile, $viewFile, $subFile, $rawFile, $unionFile;
@@ -408,6 +421,7 @@ function main()
     $params = getopt('', [
         'help',                     // Показать help
         'create-project',           // Создать новый проект
+        'create-table',             // Создать таблицу в бд
         'create-model',             // Создать новую модель
         'create-entry-point',       // Создать новую точку входа
         'name:',                    // Название создаваемой сущности
@@ -429,6 +443,9 @@ function main()
         createFolderStructure($projectName);
         copyMainFiles($projectName, $dbname);
 
+    }
+    else if (isset($params['create-table'])) {
+        createTable($params['model']);
     }
     else if (isset($params['create-model'])) {
 

@@ -50,7 +50,7 @@ abstract class SuQL extends Obj implements QueryObject
      * Получает тестовый экземпляр модели
      * @return self
      */
-    private static function getTempInstance()
+    public static function getTempInstance()
     {
         if (!static::$schemeClass)
             throw new SchemeNotDefined;
@@ -64,7 +64,7 @@ abstract class SuQL extends Obj implements QueryObject
      * Получает экземпляр модели
      * @return self
      */
-    private static function getInstance()
+    public static function getInstance()
     {
         if (!static::$schemeClass)
             throw new SchemeNotDefined;

@@ -51,6 +51,14 @@ class Obj
         return $this->scheme;
     }
     /**
+     * Получить builder
+     * @return suql\builder\SQLBuilder
+     */
+    public function getBuilder()
+    {
+        return $this->builder;
+    }
+    /**
      * Перечень используемых модификаторов
      * TODO: Возможно в будущем отказаться от использования так как
      * класс используемого модификатора будет указываться при его
