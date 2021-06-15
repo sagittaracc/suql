@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -322,10 +323,7 @@ FILE;
 function echoHelp()
 {
     echo "Create a project\n";
-    echo "> php suql --create-project --name <project-name>\n\n";
-
-    echo "Create an entry point\n";
-    echo "> php suql --create-entry-point --name <entry-point-name> --model <project-name>\<model-name>\n\n";
+    echo "> php suql --create-project --name <project-name> --db <db-name>\n\n";
 
     echo "Create a model\n";
     echo "> php suql --create-model --name <project-name>\<model-name> --type <model-type>\n\n";
@@ -335,7 +333,10 @@ function echoHelp()
     echo "\tview\n";
     echo "\tsub\n";
     echo "\traw\n";
-    echo "\tunion\n";
+    echo "\tunion\n\n";
+
+    echo "Create an entry point\n";
+    echo "> php suql --create-entry-point --name <entry-point-name> --model <project-name>\<model-name>\n\n";
 
     return 0;
 }
