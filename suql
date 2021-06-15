@@ -10,6 +10,7 @@
 require 'vendor/autoload.php';
 
 use sagittaracc\StringHelper;
+use suql\db\Container;
 
 /**
  * Шаблон конфигурации
@@ -379,6 +380,8 @@ function copyMainFiles($projectName, $dbname)
 
 function createTable($modelName)
 {
+    Container::create(require __DIR__ . '/app/config/db.php');
+
     $model = $modelName::getInstance();
 
     $db = $model->getDb();
