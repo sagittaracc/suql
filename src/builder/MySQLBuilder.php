@@ -2,6 +2,10 @@
 
 namespace suql\builder;
 
+use sagittaracc\ArrayHelper;
+use sagittaracc\PlaceholderHelper;
+use sagittaracc\SimpleList;
+
 /**
  * MySQL сборщик
  * 
@@ -9,30 +13,26 @@ namespace suql\builder;
  */
 final class MySQLBuilder extends SQLBuilder
 {
-    // FIX: This is a mess
     public function createTable($model)
     {
-        $typeList = [
-            'integer' => "INT(10) NOT NULL",
-            'string' => "VARCHAR(255) NOT NULL COLLATE 'utf8mb4_general_ci'",
-        ];
-
         $table = $model->table();
-        $fieldList = $model->create();
-
-        $s = [];
-        foreach ($fieldList as $field => $type) {
-            $s[] = "\t`$field` {$typeList[$type]}";
-        }
-        $s = implode(",\n", $s);
-
-        return <<<SQL
+        $createTableQuery = <<<SQL
 CREATE TABLE `$table` (
-$s
+#fieldList{`#key` #value}
 )
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 SQL;
+        $fieldList = ArrayHelper::join($model->create(), [
+            'integer' => "INT(10) NOT NULL",
+            'string' => "VARCHAR(255) NOT NULL COLLATE 'utf8mb4_general_ci'",
+        ]);
+
+        return (new PlaceholderHelper($createTableQuery))->bindObject(SimpleList::create([
+            'name' => 'fieldList',
+            'separator' => ",\n",
+            'list' => $fieldList,
+        ]));
     }
 }
