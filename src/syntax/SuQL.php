@@ -101,12 +101,7 @@ abstract class SuQL extends Obj implements QueryObject
         }
 
         $instance->view();
-
-        foreach ($instance->fields() as $field) {
-            $instance->select([
-                $field
-            ]);
-        }
+        $instance->select($instance->fields());
 
         return $instance;
     }
