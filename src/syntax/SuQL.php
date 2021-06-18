@@ -43,6 +43,10 @@ abstract class SuQL extends Obj implements QueryObject
      */
     private $index = null;
     /**
+     * @var array перечень функций пост обработки данных
+     */
+    private $postFunctions = [];
+    /**
      * Модель должна содержать перечень полей
      */
     abstract public function fields();
@@ -419,6 +423,12 @@ abstract class SuQL extends Obj implements QueryObject
             $data = ArrayHelper::group($this->index, $data);
         }
 
+        if (!empty($this->postFunctions)) {
+            foreach ($this->postFunctions as $function) {
+                $data = $this->$function($data);
+            }
+        }
+
         return $data;
     }
     /**
@@ -473,11 +483,43 @@ abstract class SuQL extends Obj implements QueryObject
         return $reflector->getDeclaringClass()->getName() === get_class($this);
     }
     /**
+     * Название функции пост обработчика
+     * @param string $name
+     * @return string
+     */
+    private function getPostFunctionName($name)
+    {
+        return 'post' . ucfirst($name);
+    }
+    /**
+     * Проверяет существует ли функция пост обработки
+     * @param string $name
+     * @return boolean
+     */
+    private function isPostFunction($name)
+    {
+        return method_exists($this, $this->getPostFunctionName($name));
+    }
+    /**
+     * Добавление пост обработчика
+     * @param string $name название пост обработчика
+     */
+    private function addPostFunction($name)
+    {
+        $this->postFunctions[] = $this->getPostFunctionName($name);
+    }
+    /**
      * Обработка ORM алиасов
      * @return self
      */
     public function __call($name, $arguments)
     {
+        if ($this->isPostFunction($name)) {
+            // TODO: Возможно нужно будет передать аргументы
+            $this->addPostFunction($name);
+            return $this;
+        }
+
         $modelNamespace = (new \ReflectionClass(get_class($this)))->getNamespaceName();
         $model = $modelNamespace . '\\' . str_replace('get', '', $name);
 
