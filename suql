@@ -383,7 +383,7 @@ function createTable($modelName)
     $parts = explode('\\', $modelName);
     $projectName = $parts[0];
 
-    Container::create(require __DIR__ . "/$projectName/config/db.php");
+    Container::create(require "./$projectName/config/db.php");
 
     $model = $modelName::getInstance();
 
