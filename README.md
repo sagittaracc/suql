@@ -61,9 +61,9 @@ class Users extends ActiveRecord
     public function create()
     {
     	return [
-		'id' => 'integer',
-		'login' => 'string',
-		'password' => 'string',
+	    'id' => 'integer',
+	    'login' => 'string',
+	    'password' => 'string',
 	];
     }
 
@@ -71,21 +71,21 @@ class Users extends ActiveRecord
     {
         return [];
     }
+    
+    public function getAdmins()
+    {
+        return
+	    $this->getGroups(['algorithm' => 'smart'])
+	         ->where('name', 'like', '%admin%');
+    }
 	
-	  public function getAdmins()
-	  {
-		    return
-            $this->getGroups(['algorithm' => 'smart'])
-                 ->where('name', 'like', '%admin%');
-	  }
-	
-	  public function postHidePassword($data)
-	  {
-		    return array_map(function($line) {
-			      $line['password'] = '***';
-			      return $line;
-		    }, $data);
-	  }
+    public function postHidePassword($data)
+    {
+        return array_map(function($line) {
+            $line['password'] = '***';
+            return $line;
+        }, $data);
+    }
 }
 ```
 
