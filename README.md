@@ -40,7 +40,9 @@ require 'vendor/autoload.php';
 Container::create(require __DIR__ . '/app/config/db.php');
 
 // Fetch data from the database
-$data = Users::all()->findOne('fayword')->isProgrammer();
+$data = Users::all()->findOne('mario')->hidePassword()->ifProgrammer();
+
+print_r($data);
 ```
 
 ```php
@@ -79,15 +81,19 @@ class Users extends ActiveRecord
         return $this;
     }
     
-    public function isProgrammer()
+    public function ifProgrammer()
     {
-        $user =
+        return
             $this->getGroups(['algorithm' => 'smart'])
                  ->where('login', 'like', "%{$this->login}%")
                  ->andWhere('name', 'like', '%programmer%')
                  ->fetchOne();
-        
-        return $user !== false;
+    }
+    
+    public function postHidePassword($data)
+    {
+        $data['password'] = '*****';
+        return $data;
     }
 }
 ```
