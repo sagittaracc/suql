@@ -34,29 +34,62 @@ SuQL stands for Sugar SQL and this is an ORM library for MySQL.
 use app\models\Users;
 use suql\db\Container;
 
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 // Connect to the database
-Container::create(require __DIR__ . '/config/db.php');
+Container::create(require __DIR__ . '/app/config/db.php');
 
 // Fetch data from the database
-$data =
-    Users::all()
-        ->getCounter()
-        ->getConsumption()
-            ->order([
-                'time' => 'desc',
-                'counter_id',
-            ])
-        ->getResurs()
-        ->getTarif([
-            'join' => 'left',
-        ])
-    ->fetchAll();
+$data = Users::all()->findOne('fayword')->isProgrammer();
+```
 
-echo "<pre>";
-print_r($data);
-echo "</pre>";
+```php
+
+namespace app\models;
+
+use app\records\ActiveRecord;
+
+class Users extends ActiveRecord
+{
+    private $id;
+    private $login;
+    
+    public function table()
+    {
+        return 'users';
+    }
+
+    public function create()
+    {
+        return [
+            'id' => 'integer',
+            'login' => 'string',
+            'password' => 'string',
+        ];
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+    
+    public function findOne($login)
+    {
+        $this->login = $login;
+        return $this;
+    }
+    
+    public function isProgrammer()
+    {
+        $user =
+            $this->getGroups(['algorithm' => 'smart'])
+                 ->where('login', 'like', "%{$this->login}%")
+                 ->andWhere('name', 'like', '%programmer%')
+                 ->fetchOne();
+        
+        return $user !== false;
+    }
+}
 ```
 
 ### Requirements
