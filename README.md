@@ -57,15 +57,15 @@ class Users extends ActiveRecord
     {
         return 'users';
     }
-	
-	  public function create()
-	  {
-		    return [
-			      'id' => 'integer',
-			      'login' => 'string',
-			      'password' => 'string',
-		    ];
-	  }
+    
+    public function create()
+    {
+    	return [
+		'id' => 'integer',
+		'login' => 'string',
+		'password' => 'string',
+	];
+    }
 
     public function fields()
     {
