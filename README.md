@@ -40,7 +40,7 @@ require 'vendor/autoload.php';
 Container::create(require __DIR__ . '/app/config/db.php');
 
 // Fetch data from the database
-$data = Users::all()->findOne('mario')->hidePassword()->ifProgrammer();
+$data = Users::all()->getAdmins()->hidePassword()->fetchAll();
 
 print_r($data);
 ```
@@ -53,48 +53,39 @@ use app\records\ActiveRecord;
 
 class Users extends ActiveRecord
 {
-    private $id;
-    private $login;
-    
     public function table()
     {
         return 'users';
     }
-
-    public function create()
-    {
-        return [
-            'id' => 'integer',
-            'login' => 'string',
-            'password' => 'string',
-        ];
-    }
+	
+	  public function create()
+	  {
+		    return [
+			      'id' => 'integer',
+			      'login' => 'string',
+			      'password' => 'string',
+		    ];
+	  }
 
     public function fields()
     {
         return [];
     }
-    
-    public function findOne($login)
-    {
-        $this->login = $login;
-        return $this;
-    }
-    
-    public function ifProgrammer()
-    {
-        return
+	
+	  public function getAdmins()
+	  {
+		    return
             $this->getGroups(['algorithm' => 'smart'])
-                 ->where('login', 'like', "%{$this->login}%")
-                 ->andWhere('name', 'like', '%programmer%')
-                 ->fetchOne();
-    }
-    
-    public function postHidePassword($data)
-    {
-        $data['password'] = '*****';
-        return $data;
-    }
+                 ->where('name', 'like', '%admin%');
+	  }
+	
+	  public function postHidePassword($data)
+	  {
+		    return array_map(function($line) {
+			      $line['password'] = '***';
+			      return $line;
+		    }, $data);
+	  }
 }
 ```
 
