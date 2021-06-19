@@ -81,9 +81,9 @@ class Users extends ActiveRecord
 	
     public function postHidePassword($data)
     {
-        return array_map(function($line) {
-            $line['password'] = '***';
-            return $line;
+        return array_map(function($row) {
+            $row['password'] = '***';
+            return $row;
         }, $data);
     }
 }
