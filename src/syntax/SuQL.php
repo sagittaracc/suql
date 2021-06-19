@@ -483,22 +483,13 @@ abstract class SuQL extends Obj implements QueryObject
         return $reflector->getDeclaringClass()->getName() === get_class($this);
     }
     /**
-     * Название функции пост обработчика
-     * @param string $name
-     * @return string
-     */
-    private function getPostFunctionName($name)
-    {
-        return 'post' . ucfirst($name);
-    }
-    /**
      * Проверяет существует ли функция пост обработки
      * @param string $name
      * @return boolean
      */
     private function isPostFunction($name)
     {
-        return method_exists($this, $this->getPostFunctionName($name));
+        return method_exists($this, $name);
     }
     /**
      * Добавление пост обработчика
@@ -506,7 +497,7 @@ abstract class SuQL extends Obj implements QueryObject
      */
     private function addPostFunction($name)
     {
-        $this->postFunctions[] = $this->getPostFunctionName($name);
+        $this->postFunctions[] = $name;
     }
     /**
      * Обработка ORM алиасов
