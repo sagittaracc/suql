@@ -45,6 +45,7 @@ $data = Users::all()->getAdmins()->hidePassword()->fetchAll();
 print_r($data);
 ```
 
+Model ```Users```
 ```php
 
 namespace app\models;
@@ -85,6 +86,35 @@ class Users extends ActiveRecord
             $row['password'] = '***';
             return $row;
         }, $data);
+    }
+}
+```
+
+Model ```Group```
+```php
+
+namespace app\models;
+
+use app\records\ActiveRecord;
+
+class Groups extends ActiveRecord
+{
+    public function table()
+    {
+        return 'groups';
+    }
+	
+    public function create()
+    {
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+        ];
+    }
+
+    public function fields()
+    {
+        return [];
     }
 }
 ```
