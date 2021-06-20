@@ -19,6 +19,13 @@ class Container
      */
     public static function create($dbList)
     {
+        self::add($dbList);
+    }
+    /** Добавление подключения
+     * @param array $dbList
+     */
+    public static function add($dbList)
+    {
         foreach ($dbList as $connection => $config) {
             self::$items[$connection] = pdo\Connection::create($config);
         }
