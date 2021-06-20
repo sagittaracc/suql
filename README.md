@@ -16,13 +16,13 @@ SuQL stands for Sugar SQL and this is an ORM library for MySQL.
 ### How to use it
 ```
 // Create a new project
-> suql --create-project --name app --db test
+> ./suql --create-project --name app --db test
 
 // Create a model that refers to the user table in the db
-> suql --create-model --name app\user --type model
+> ./suql --create-model --name app\user --type model
 
 // Create an entry point
-> suql --create-entry-point --name index --model app\user
+> ./suql --create-entry-point --name index --model app\user
 
 // Run the entry point
 > php index.php
@@ -58,7 +58,7 @@ class Users extends ActiveRecord
     {
         return 'users';
     }
-    
+
     public function create()
     {
     	return [
@@ -72,14 +72,14 @@ class Users extends ActiveRecord
     {
         return [];
     }
-    
+
     public function getAdmins()
     {
         return
 	    $this->getGroups(['algorithm' => 'smart'])
 	         ->where('name', 'like', '%admin%');
     }
-	
+
     public function postHidePassword($data)
     {
         return array_map(function($row) {
@@ -103,7 +103,7 @@ class Groups extends ActiveRecord
     {
         return 'groups';
     }
-	
+
     public function create()
     {
         return [
@@ -120,7 +120,7 @@ class Groups extends ActiveRecord
 ```
 
 ### Requirements
-The minimum requirement - PHP 5.6. 
+The minimum requirement - PHP 5.6.
 
 ### Examples
 More examples in the ```tests``` directory
