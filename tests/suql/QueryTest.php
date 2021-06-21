@@ -24,12 +24,12 @@ final class QueryTest extends TestCase
 
         $this->assertEquals(3, $count);
         $this->assertEquals([
-          ['field' => '1'],
-          ['field' => '2'],
-          ['field' => '3'],
+            ['field' => '1'],
+            ['field' => '2'],
+            ['field' => '3'],
         ], $data);
         $this->assertEquals([
-          'field' => 3,
+            'field' => 3,
         ], $firstRow);
     }
 }
