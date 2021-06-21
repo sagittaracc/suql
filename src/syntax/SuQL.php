@@ -403,6 +403,14 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * Проверяет прогружены ли в модель данные
+     * @return boolean
+     */
+    public function dataInitiative()
+    {
+        return !empty($this->data);
+    }
+    /**
      * Метод получения данных
      * @return mixed
      */
@@ -420,6 +428,10 @@ abstract class SuQL extends Obj implements QueryObject
             'all' => 'fetchAll',
             'one' => 'fetch',
         ];
+
+        if ($this->dataInitiative()) {
+            $this->getDb()->query($this->getBuilder()->createTemporaryTable($this));
+        }
 
         $sth = $this->getDb()->prepare($this->getRawSql());
 
