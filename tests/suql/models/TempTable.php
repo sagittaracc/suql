@@ -11,6 +11,14 @@ class TempTable extends ActiveRecord
         return 'temp_table';
     }
 
+    public function create()
+    {
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+        ];
+    }
+
     public function fields()
     {
         return [];
