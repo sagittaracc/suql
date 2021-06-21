@@ -24,7 +24,6 @@ SQL);
             ['id' => 3, 'name' => '1nterFucker'],
         ];
 
-        // TODO: Доработать обработку метода load при fetching данных
         $query = TempTable::load($tableData)->getGroup(['algorithm' => 'smart']);
 
         $this->assertEquals($sql, $query->getRawSql());
