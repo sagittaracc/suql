@@ -47,6 +47,10 @@ abstract class SuQL extends Obj implements QueryObject
      */
     private $postFunctions = [];
     /**
+     * @var array прогружаемый в модель массив
+     */
+    private $data = [];
+    /**
      * Модель должна содержать перечень полей
      */
     abstract public function fields();
@@ -80,6 +84,16 @@ abstract class SuQL extends Obj implements QueryObject
         $builder = new static::$builderClass;
 
         return new static($scheme, $builder);
+    }
+    /**
+     * Загрузить массив в модель
+     * @param array $data
+     */
+    public static function load($data)
+    {
+        $instance = static::all();
+        $instance->data = $data;
+        return $instance;
     }
     /**
      * Выборка всех данных из модели
