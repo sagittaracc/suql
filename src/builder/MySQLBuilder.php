@@ -47,6 +47,6 @@ SQL;
      */
     public function createTemporaryTable($model)
     {
-        return $this->createTable($model, false);
+        return $this->createTable($model, true);
     }
 }
