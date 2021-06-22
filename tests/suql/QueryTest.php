@@ -18,6 +18,9 @@ final class QueryTest extends TestCase
         Container::add(require('config/db-test.php'));
         Query::create('db_test', 'create table table_name(field int)')->exec();
         Query::create('db_test', 'insert into table_name (field) values (1), (2), (3)')->exec();
+
+        $this->testTempTable();
+
         $data = TableName::all()->fetchAll();
         $firstRow = TableName::all()->order(['field' => 'desc'])->fetchOne();
         $count = Query::create('db_test', 'delete from table_name')->exec();
@@ -31,8 +34,6 @@ final class QueryTest extends TestCase
         $this->assertEquals([
             'field' => 3,
         ], $firstRow);
-
-        $this->testTempTable();
 
         Query::create('db_test', 'drop table table_name')->exec();
         Query::create('connection', 'drop database db_test')->exec();
