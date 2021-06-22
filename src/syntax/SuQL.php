@@ -431,6 +431,11 @@ abstract class SuQL extends Obj implements QueryObject
 
         if ($this->dataInitiative()) {
             $this->getDb()->query($this->getBuilder()->createTemporaryTable($this));
+
+            $array = ArrayHelper::setArray($this->data);
+            $keys = $array->getHeader();
+            $body = $array->getBody();
+
             // $keys = implode(',', array_keys($this->data[0]));
             // $lines = [];
             // foreach ($this->data as $row) {
