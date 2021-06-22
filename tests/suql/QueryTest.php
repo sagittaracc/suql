@@ -36,27 +36,23 @@ final class QueryTest extends TestCase
         ], $firstRow);
 
         Query::create('db_test', 'drop table table_name')->exec();
-        Query::create('connection', 'drop database db_test')->exec();
+        Query::create('db_test', 'drop database db_test')->exec();
     }
 
     private function testTempTable()
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                groups.name
-            from temp_table
-            inner join user_group on temp_table.id = user_group.user_id
-            inner join groups on user_group.group_id = groups.id
-SQL);
-
         $tableData = [
             ['id' => 1, 'name' => 'mario'],
             ['id' => 2, 'name' => 'fayword'],
             ['id' => 3, 'name' => '1nterFucker'],
         ];
 
-        $query = TempTable::load($tableData)->getGroup(['algorithm' => 'smart']);
+        $query = TempTable::load($tableData)->getTableName();
 
-        $this->assertEquals($sql, $query->getRawSql());
+        $this->assertEquals([
+            ['id' => '1', 'name' => 'mario', 'field' => '1'],
+            ['id' => '2', 'name' => 'fayword', 'field' => '2'],
+            ['id' => '3', 'name' => '1nterFucker', 'field' => '3'],
+        ], $query->fetchAll());
     }
 }
