@@ -49,4 +49,20 @@ SQL;
     {
         return $this->createTable($model, true);
     }
+    /**
+     * Загрузить массив в таблицу
+     * @param string $table
+     * @param array $data
+     */
+    public function insertIntoTable($table, $data)
+    {
+        $array = ArrayHelper::setArray($data);
+        $keys = implode(',', $array->getHeader());
+        $body = $array->getBody();
+        $ph = new PlaceholderHelper(implode(',', array_fill(1, count($body), '?')));
+        $ph->setParenthesis('(', ')');
+        $lines = call_user_func_array([$ph, 'bind'], $body);
+
+        return "INSERT INTO $table ($keys) VALUES $lines";
+    }
 }

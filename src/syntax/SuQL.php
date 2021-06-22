@@ -13,7 +13,6 @@ use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\BuilderNotDefined;
 use \ReflectionMethod;
 use sagittaracc\ArrayHelper;
-use sagittaracc\PlaceholderHelper;
 
 /**
  * SuQL синтаксис
@@ -432,15 +431,7 @@ abstract class SuQL extends Obj implements QueryObject
 
         if ($this->dataInitiative()) {
             $this->getDb()->query($this->getBuilder()->createTemporaryTable($this));
-
-            $array = ArrayHelper::setArray($this->data);
-            $keys = implode(',', $array->getHeader());
-            $body = $array->getBody();
-            $ph = new PlaceholderHelper(implode(',', array_fill(1, count($body), '?')));
-            $ph->setParenthesis('(', ')');
-            $lines = call_user_func_array([$ph, 'bind'], $body);
-
-            $this->getDb()->query("INSERT INTO {$this->table()} ($keys) VALUES $lines");
+            $this->getDb()->query($this->getBuilder()->insertIntoTable($this->table(), $this->data));
         }
 
         $sth = $this->getDb()->prepare($this->getRawSql());

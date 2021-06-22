@@ -30,10 +30,6 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "support": {
-                "issues": "https://github.com/sagittaracc/arrays/issues",
-                "source": "https://github.com/sagittaracc/arrays/tree/v0.1.4"
-            },
             "time": "2021-06-22T11:27:02+00:00"
         },
         {
@@ -63,10 +59,6 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "support": {
-                "issues": "https://github.com/sagittaracc/placeholder/issues",
-                "source": "https://github.com/sagittaracc/placeholder/tree/v0.1.5"
-            },
             "time": "2021-06-22T14:32:02+00:00"
         },
         {
@@ -2200,5 +2192,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }
