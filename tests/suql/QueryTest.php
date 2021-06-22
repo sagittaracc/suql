@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use sagittaracc\StringHelper;
 use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\TableName;
+use test\suql\models\TempTable;
 
 final class QueryTest extends TestCase
 {
@@ -19,8 +21,6 @@ final class QueryTest extends TestCase
         $data = TableName::all()->fetchAll();
         $firstRow = TableName::all()->order(['field' => 'desc'])->fetchOne();
         $count = Query::create('db_test', 'delete from table_name')->exec();
-        Query::create('db_test', 'drop table table_name')->exec();
-        Query::create('connection', 'drop database db_test')->exec();
 
         $this->assertEquals(3, $count);
         $this->assertEquals([
@@ -31,5 +31,31 @@ final class QueryTest extends TestCase
         $this->assertEquals([
             'field' => 3,
         ], $firstRow);
+
+        $this->testTempTable();
+
+        Query::create('db_test', 'drop table table_name')->exec();
+        Query::create('connection', 'drop database db_test')->exec();
+    }
+
+    private function testTempTable()
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                groups.name
+            from temp_table
+            inner join user_group on temp_table.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+SQL);
+
+        $tableData = [
+            ['id' => 1, 'name' => 'mario'],
+            ['id' => 2, 'name' => 'fayword'],
+            ['id' => 3, 'name' => '1nterFucker'],
+        ];
+
+        $query = TempTable::load($tableData)->getGroup(['algorithm' => 'smart']);
+
+        $this->assertEquals($sql, $query->getRawSql());
     }
 }
