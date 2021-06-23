@@ -19,10 +19,13 @@ SuQL stands for Sugar SQL and this is an ORM library for MySQL.
 > ./suql --create-project --name app --db test
 
 // Create a model that refers to the user table in the db
-> ./suql --create-model --name app\user --type model
+> ./suql --create-model --name app\users --type model
+
+// Create a table from the model in database
+> ./suql --create-table --model app\models\Users
 
 // Create an entry point
-> ./suql --create-entry-point --name index --model app\user
+> ./suql --create-entry-point --name index --model app\users
 
 // Run the entry point
 > php index.php

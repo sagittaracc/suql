@@ -1,5 +1,12 @@
 # Change log
 
+## v7.0.10 - June 23, 2021
+
+- Refactor
+- Forgot to keep the change log up :)
+
+---
+
 ## v7.0.9 - June 09, 2021
 
 - Autoload project & models after generating
