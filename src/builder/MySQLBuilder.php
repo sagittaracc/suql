@@ -66,10 +66,8 @@ SQL;
         $body = $array->getBody();
 
         $columns = implode(',', $header);
-        // TODO: В PlaceholderHelper сделать генератор строки с нужным количество плейсхолдеров
-        $rowPlaceholder = implode(',', array_fill(1, count($body), '?'));
         $rows = call_user_func_array([
-            (new PlaceholderHelper($rowPlaceholder))->setParenthesis('(', ')'),
+            (new PlaceholderHelper)->stringOfChar(count($body))->setParenthesis('(', ')'),
             'bind'
         ], $body);
 
