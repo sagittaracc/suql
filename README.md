@@ -26,11 +26,11 @@ Container::create(require __DIR__ . '/app/config/db.php');
 
 $data =
     Users::all()
-    	->where(['{{u}}.Obj_Id_User' => 11])
+    	->where(['id' => 11])
 	->getCounters()
         ->getResurs()
         ->getManual()
-            ->order(['RecordTime' => 'desc'])
+            ->order(['time' => 'desc'])
         ->getTarif(['join' => 'left'])
         ->fetchAll();
 
