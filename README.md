@@ -13,6 +13,30 @@
 ### SuQL
 SuQL stands for Sugar SQL and this is an ORM library for MySQL.
 
+### Why?
+I use it at my work place. This is how:
+```php
+
+use app\models\Users;
+use suql\db\Container;
+
+require 'vendor/autoload.php';
+
+Container::create(require __DIR__ . '/app/config/db.php');
+
+$data =
+    Users::all()
+    	->where(['{{u}}.Obj_Id_User' => 11])
+	->getCounters()
+        ->getResurs()
+        ->getManual()
+            ->order(['RecordTime' => 'desc'])
+        ->getTarif(['join' => 'left'])
+        ->fetchAll();
+
+return $data;
+```
+
 ### How to use it
 ```
 // Create a new project
