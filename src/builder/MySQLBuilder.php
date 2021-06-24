@@ -67,7 +67,7 @@ SQL;
 
         $columns = implode(',', $header);
         $rows = call_user_func_array([
-            (new PlaceholderHelper)->stringOfChar(count($body))->setParenthesis('(', ')'),
+            (new PlaceholderHelper)->stringOfChar(count($body), '?')->setParenthesis('(', ')'),
             'bind'
         ], $body);
 
