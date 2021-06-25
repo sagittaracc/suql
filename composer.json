@@ -22,5 +22,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9"
-    }
+    },
+    "post-install-cmd": [
+        "mv ./vendor/sagittaracc/suql/suql ./suql"
+    ]
 }
