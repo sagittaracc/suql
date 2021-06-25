@@ -56,13 +56,25 @@ SQL;
      */
     public function insertIntoTable($table, $data)
     {
+        $insertIntoTableQuery = <<<SQL
+INSERT INTO $table ({columns})
+VALUES {rows}
+SQL;
         $array = ArrayHelper::setArray($data);
-        $keys = implode(',', $array->getHeader());
-        $body = $array->getBody();
-        $ph = new PlaceholderHelper(implode(',', array_fill(1, count($body), '?')));
-        $ph->setParenthesis('(', ')');
-        $lines = call_user_func_array([$ph, 'bind'], $body);
 
-        return "INSERT INTO $table ($keys) VALUES $lines";
+        $header = $array->getHeader();
+        $body = $array->getBody();
+
+        $columns = implode(',', $header);
+        $rows = call_user_func_array([
+            (new PlaceholderHelper)->stringOfChar(count($body), '?')->setParenthesis('(', ')'),
+            'bind'
+        ], $body);
+
+        return str_replace(
+            ['{columns}', '{rows}'],
+            [$columns, $rows],
+            $insertIntoTableQuery
+        );
     }
 }

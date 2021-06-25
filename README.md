@@ -13,16 +13,43 @@
 ### SuQL
 SuQL stands for Sugar SQL and this is an ORM library for MySQL.
 
+### Why?
+I use it at my work place. This is how:
+```php
+
+use app\models\Users;
+use suql\db\Container;
+
+require 'vendor/autoload.php';
+
+Container::create(require __DIR__ . '/app/config/db.php');
+
+$data =
+    Users::all()
+    	->where(['id' => 11])
+	->getCounters()
+        ->getResurs()
+        ->getManual()
+            ->order(['time' => 'desc'])
+        ->getTarif(['join' => 'left'])
+        ->fetchAll();
+
+return $data;
+```
+
 ### How to use it
 ```
 // Create a new project
 > ./suql --create-project --name app --db test
 
 // Create a model that refers to the user table in the db
-> ./suql --create-model --name app\user --type model
+> ./suql --create-model --name app\users --type model
+
+// Create a table from the model in database
+> ./suql --create-table --model app\models\Users
 
 // Create an entry point
-> ./suql --create-entry-point --name index --model app\user
+> ./suql --create-entry-point --name index --model app\users
 
 // Run the entry point
 > php index.php
@@ -127,7 +154,3 @@ More examples in the ```tests``` directory
 
 ### Tests
 `./vendor/bin/phpunit tests`
-
-## Conclusion
-SuQL is all about modifiers. They already replace standart SQL clauses such as `WHERE`, `GROUP`, `JOIN`, `ORDER` and SQL functions etc.
-More than that, you can develop your own modifiers.
