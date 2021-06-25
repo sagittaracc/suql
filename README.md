@@ -38,20 +38,28 @@ return $data;
 ```
 
 ### How to use it
+1. Install via composer
 ```
-// Create a new project
+composer require sagittaracc/suql
+```
+2. Create a new project
+```
 > ./suql --create-project --name app --db test
-
-// Create a model that refers to the user table in the db
+```
+3. Create a model that refers to a table in the db
+```
 > ./suql --create-model --name app\users --type model
-
-// Create a table from the model in database
+```
+4. Create a table from the model in database
+```
 > ./suql --create-table --model app\models\Users
-
-// Create an entry point
+```
+5. Create an entry point
+```
 > ./suql --create-entry-point --name index --model app\users
-
-// Run the entry point
+```
+6. Run the entry point
+```
 > php index.php
 ```
 
