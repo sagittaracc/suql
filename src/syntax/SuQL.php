@@ -374,6 +374,17 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * Подсчёт количества
+     * @return self
+     */
+    public function count($field)
+    {
+        $this->getQuery($this->query())->addField($this->currentTable, $field);
+        $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('count');
+
+        return $this;
+    }
+    /**
      * Задать имя запросу
      * @param string $name
      */

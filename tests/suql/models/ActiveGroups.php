@@ -29,10 +29,8 @@ class ActiveGroups extends ActiveRecord
                 ->join('groups')
                     ->select([
                         'name',
-                        new Field(['name' => 'count'], [
-                            'count',
-                        ])
                     ])
-                ->group('name');
+                ->group('name')
+                ->count(['name' => 'count']);
     }
 }
