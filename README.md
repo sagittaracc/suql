@@ -41,7 +41,6 @@ return $data;
 1. Install via composer
 ```
 composer create-project sagittaracc/suql-app app
-cd app
 ```
 2. Create a new project
 ```
