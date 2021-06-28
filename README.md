@@ -13,6 +13,9 @@
 ### SuQL
 SuQL stands for Sugar SQL and this is an ORM library for MySQL.
 
+### Installation
+Install the [SuQL App template](https://github.com/sagittaracc/suql-app)
+
 ### Why?
 I use it at my work place. This is how:
 ```php
@@ -35,32 +38,6 @@ $data =
         ->fetchAll();
 
 return $data;
-```
-
-### How to use it
-1. Install via composer
-```
-composer create-project sagittaracc/suql-app app
-```
-2. Create a new project
-```
-> ./suql --create-project --name app --db test
-```
-3. Create a model that refers to a table in the db
-```
-> ./suql --create-model --name app\users --type model
-```
-4. Create a table from the model in database
-```
-> ./suql --create-table --model app\models\Users
-```
-5. Create an entry point
-```
-> ./suql --create-entry-point --name index --model app\users
-```
-6. Run the entry point
-```
-> php index.php
 ```
 
 ### How it looks
