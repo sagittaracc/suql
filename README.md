@@ -135,7 +135,9 @@ class Groups extends ActiveRecord
 The minimum requirement - PHP 5.6.
 
 ### Examples
-More examples in the ```tests``` directory
+See more examples in the ```tests``` directory
 
 ### Tests
-`./vendor/bin/phpunit tests`
+This is tested with [PHPUnit](https://phpunit.de/). To run tests:
+
+`./vendor/bin/phpunit`
