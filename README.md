@@ -40,7 +40,8 @@ return $data;
 ### How to use it
 1. Install via composer
 ```
-composer require sagittaracc/suql
+composer create-project sagittaracc/suql-app app
+cd app
 ```
 2. Create a new project
 ```
