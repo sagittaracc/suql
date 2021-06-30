@@ -25,6 +25,9 @@ final class QueryTest extends TestCase
         $firstRow = TableName::all()->order(['field' => 'desc'])->fetchOne();
         $count = Query::create('db_test', 'delete from table_name')->exec();
 
+        Query::create('db_test', 'drop table table_name')->exec();
+        Query::create('db_test', 'drop database db_test')->exec();
+
         $this->assertEquals(3, $count);
         $this->assertEquals([
             ['field' => '1'],
@@ -34,9 +37,6 @@ final class QueryTest extends TestCase
         $this->assertEquals([
             'field' => 3,
         ], $firstRow);
-
-        Query::create('db_test', 'drop table table_name')->exec();
-        Query::create('db_test', 'drop database db_test')->exec();
     }
 
     private function testTempTable()
