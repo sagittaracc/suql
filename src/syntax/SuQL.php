@@ -30,6 +30,10 @@ abstract class SuQL extends Obj implements QueryObject
      */
     protected static $builderClass = null;
     /**
+     * @var string префикс функции пост обработки
+     */
+    private $postFunctionPrefix = 'command';
+    /**
      * Имя запроса
      * @var string
      */
@@ -527,7 +531,7 @@ abstract class SuQL extends Obj implements QueryObject
      */
     private function getPostFunctionName($name)
     {
-        return 'post' . ucfirst($name);
+        return $this->postFunctionPrefix . ucfirst($name);
     }
     /**
      * Проверяет существует ли функция пост обработки

@@ -43,6 +43,13 @@ final class QueryTest extends TestCase
             ['id' => '3', 'name' => '1nterFucker', 'field' => '3'],
         ], $query->fetchAll());
 
+        $data = TableName::all()->toInt()->fetchAll();
+        $this->assertEquals([
+            ['field' => 1],
+            ['field' => 2],
+            ['field' => 3],
+        ], $data);
+
         $data = TableName::all()->fetchAll();
         $firstRow = TableName::all()->order(['field' => 'desc'])->fetchOne();
         $count = Query::create('db_test', 'delete from table_name')->exec();

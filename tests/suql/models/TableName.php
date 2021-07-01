@@ -17,6 +17,14 @@ class TableName extends ActiveRecord
         return [];
     }
 
+    public function commandToInt($data)
+    {
+        return array_map(function($row) {
+            $row['field'] = intval($row['field']);
+            return $row;
+        }, $data);
+    }
+
     public function getDb()
     {
         return Container::get('db_test');
