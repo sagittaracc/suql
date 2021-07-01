@@ -32,6 +32,7 @@ final class QueryTest extends TestCase
     {
         $data = TableNameWithFields::all()->fetchAll();
         foreach ($data as $index => $row) {
+            $this->assertInstanceOf(TableNameWithFields::class, $row);
             $this->assertEquals($index + 1, $row->field);
         }
 
