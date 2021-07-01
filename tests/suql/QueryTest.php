@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\TableName;
+use test\suql\models\TableNameWithFields;
 use test\suql\models\TempTable;
 
 final class QueryTest extends TestCase
@@ -29,6 +30,11 @@ final class QueryTest extends TestCase
 
     public function testQuery(): void
     {
+        $data = TableNameWithFields::all()->fetchAll();
+        foreach ($data as $index => $row) {
+            $this->assertEquals($index + 1, $row->field);
+        }
+
         $tableData = [
             ['id' => 1, 'name' => 'mario'],
             ['id' => 2, 'name' => 'fayword'],

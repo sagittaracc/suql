@@ -5,6 +5,7 @@ namespace suql\syntax;
 use Closure;
 use Exception;
 use PDO;
+use ReflectionClass;
 use suql\core\Condition;
 use suql\core\FieldName;
 use suql\core\Obj;
@@ -12,6 +13,7 @@ use suql\core\SimpleParam;
 use suql\syntax\exception\SchemeNotDefined;
 use suql\syntax\exception\BuilderNotDefined;
 use \ReflectionMethod;
+use ReflectionProperty;
 use sagittaracc\ArrayHelper;
 
 /**
@@ -426,6 +428,17 @@ abstract class SuQL extends Obj implements QueryObject
         return !empty($this->data);
     }
     /**
+     * Получает public properties модели
+     * @return array
+     */
+    private function getPublicProperties()
+    {
+        $reflector = new ReflectionClass($this);
+        $properties = $reflector->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        return $properties;
+    }
+    /**
      * Метод получения данных
      * @return mixed
      */
@@ -471,7 +484,24 @@ abstract class SuQL extends Obj implements QueryObject
             }
         }
 
-        return $data;
+        $result = [];
+
+        // TODO: Вынести куда-нибудь
+        $publicProperties = $this->getPublicProperties();
+        if (count($publicProperties) > 0) {
+            foreach ($data as $row) {
+                $instance = static::getTempInstance();
+                foreach ($publicProperties as $property) {
+                    $instance->{$property->getName()} = $row[$property->getName()];
+                }
+                $result[] = $instance;
+            }
+        }
+        else {
+            $result = $data;
+        }
+
+        return $result;
     }
     /**
      * Получение всех данных запроса
