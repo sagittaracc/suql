@@ -31,7 +31,7 @@ final class QueryTest extends TestCase
 
     public function testTableNameWithFields(): void
     {
-        $tn1 = TableNameWithFields::getInstance();
+        $tn1 = TableNameWithFields::new();
         $tn1->field = 7;
         $tn1->another_field = 7;
         $tn1->save();

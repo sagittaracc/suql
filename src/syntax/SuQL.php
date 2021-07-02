@@ -92,6 +92,14 @@ abstract class SuQL extends Obj implements QueryObject
         return new static($scheme, $builder);
     }
     /**
+     * Алиас для getInstance
+     * @return self
+     */
+    public static function new()
+    {
+        return static::getInstance();
+    }
+    /**
      * Загрузить массив в модель
      * @param array $data
      */
