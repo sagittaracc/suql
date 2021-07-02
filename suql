@@ -36,12 +36,14 @@ function main()
 
         $projectName = $params['name'];
         $dbname = $params['db'];
-        createFolderStructure($projectName);
-        copyMainFiles($projectName, $dbname);
+        createProject($projectName, $dbname);
 
     }
     else if (isset($params['create-table'])) {
-        createTable($params['model']);
+
+        $modelName = $params['model'];
+        createTable($modelName);
+
     }
     else if (isset($params['create-model'])) {
 
@@ -81,6 +83,12 @@ function echoHelp()
     echo "> ./suql --create-entry-point --name <entry-point-name> --model <project-name>\<model-name>\n\n";
 
     return 0;
+}
+
+function createProject($projectName, $dbname)
+{
+    createFolderStructure($projectName);
+    copyMainFiles($projectName, $dbname);
 }
 
 function createFolderStructure($projectName)
