@@ -28,14 +28,17 @@ final class QueryTest extends TestCase
         Query::create('db_test', 'drop database db_test')->exec();
     }
 
-    public function testQuery(): void
+    public function testTableNameWithFields(): void
     {
         $data = TableNameWithFields::all()->fetchAll();
         foreach ($data as $index => $row) {
             $this->assertInstanceOf(TableNameWithFields::class, $row);
             $this->assertEquals($index + 1, $row->field);
         }
+    }
 
+    public function testJoinWithPHPArray(): void
+    {
         $tableData = [
             ['id' => 1, 'name' => 'mario'],
             ['id' => 2, 'name' => 'fayword'],
@@ -49,19 +52,23 @@ final class QueryTest extends TestCase
             ['id' => '2', 'name' => 'fayword', 'field' => '2'],
             ['id' => '3', 'name' => '1nterFucker', 'field' => '3'],
         ], $query->fetchAll());
+    }
 
+    public function testPostSuQLFunction(): void
+    {
         $data = TableName::all()->toInt()->fetchAll();
         $this->assertEquals([
             ['field' => 1],
             ['field' => 2],
             ['field' => 3],
         ], $data);
+    }
 
+    public function testFetchAllAndOne(): void
+    {
         $data = TableName::all()->fetchAll();
         $firstRow = TableName::all()->order(['field' => 'desc'])->fetchOne();
-        $count = Query::create('db_test', 'delete from table_name')->exec();
-
-        $this->assertEquals(3, $count);
+        
         $this->assertEquals([
             ['field' => '1'],
             ['field' => '2'],
@@ -70,5 +77,12 @@ final class QueryTest extends TestCase
         $this->assertEquals([
             'field' => 3,
         ], $firstRow);
+    }
+
+    public function testDeleteQuery(): void
+    {
+        $count = Query::create('db_test', 'delete from table_name')->exec();
+
+        $this->assertEquals(3, $count);
     }
 }
