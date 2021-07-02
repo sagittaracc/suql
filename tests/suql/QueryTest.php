@@ -17,9 +17,9 @@ final class QueryTest extends TestCase
         Container::create(require('config/db.php'));
         Query::create('connection', 'create database db_test')->exec();
         Container::add(require('config/db-test.php'));
-        Query::create('db_test', 'create table table_name(field int)')->exec();
-        Query::create('db_test', 'insert into table_name (field) values (1), (2), (3)')->exec();
-        Query::create('db_test', 'insert into table_name (field) values (?), (?), (?)')->exec([4, 5, 6]);
+        Query::create('db_test', 'create table table_name(field int, another_field int)')->exec();
+        Query::create('db_test', 'insert into table_name (field, another_field) values (1, 1), (2, 2), (3, 3)')->exec();
+        Query::create('db_test', 'insert into table_name (field, another_field) values (?, ?), (?, ?), (?, ?)')->exec([4, 4, 5, 5, 6, 6]);
     }
 
     public function tearDown(): void
@@ -49,9 +49,9 @@ final class QueryTest extends TestCase
         $query = TempTable::load($tableData)->getTableName();
 
         $this->assertEquals([
-            ['id' => '1', 'name' => 'mario', 'field' => '1'],
-            ['id' => '2', 'name' => 'fayword', 'field' => '2'],
-            ['id' => '3', 'name' => '1nterFucker', 'field' => '3'],
+            ['id' => '1', 'name' => 'mario', 'field' => '1', 'another_field' => '1'],
+            ['id' => '2', 'name' => 'fayword', 'field' => '2', 'another_field' => '2'],
+            ['id' => '3', 'name' => '1nterFucker', 'field' => '3', 'another_field' => '3'],
         ], $query->fetchAll());
     }
 
@@ -59,19 +59,19 @@ final class QueryTest extends TestCase
     {
         $data = TableName::all()->toInt()->fetchAll();
         $this->assertEquals([
-            ['field' => 1],
-            ['field' => 2],
-            ['field' => 3],
-            ['field' => 4],
-            ['field' => 5],
-            ['field' => 6],
+            ['field' => 1, 'another_field' => '1'],
+            ['field' => 2, 'another_field' => '2'],
+            ['field' => 3, 'another_field' => '3'],
+            ['field' => 4, 'another_field' => '4'],
+            ['field' => 5, 'another_field' => '5'],
+            ['field' => 6, 'another_field' => '6'],
         ], $data);
     }
 
     public function testFetchAllAndOne(): void
     {
-        $data = TableName::all()->fetchAll();
-        $firstRow = TableName::all()->order(['field' => 'desc'])->fetchOne();
+        $data = TableName::all()->select(['field'])->fetchAll();
+        $firstRow = TableName::all()->select(['field'])->order(['field' => 'desc'])->fetchOne();
         
         $this->assertEquals([
             ['field' => '1'],
