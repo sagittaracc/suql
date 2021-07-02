@@ -11,6 +11,7 @@ require 'vendor/autoload.php';
 
 use sagittaracc\StringHelper;
 use suql\db\Container;
+use suql\syntax\Query;
 
 function main()
 {
@@ -89,6 +90,7 @@ function createProject($projectName, $dbname)
 {
     createFolderStructure($projectName);
     copyMainFiles($projectName, $dbname);
+    checkDatabaseExists($projectName, $dbname);
 }
 
 function createFolderStructure($projectName)
@@ -116,12 +118,20 @@ function copyMainFiles($projectName, $dbname)
 {
     global $configFile, $activeRecordFile, $appSchemeFile, $customModifierExampleFile;
 
+    file_put_contents("$projectName/config/db.empty.php", str_replace('{{dbname}}', '', $configFile));
     file_put_contents("$projectName/config/db.php", str_replace('{{dbname}}', $dbname, $configFile));
     file_put_contents("$projectName/records/ActiveRecord.php", str_replace('{{projectName}}', $projectName, $activeRecordFile));
     file_put_contents("$projectName/schema/AppScheme.php", str_replace('{{projectName}}', $projectName, $appSchemeFile));
     file_put_contents("$projectName/modifiers/CustomModifierExample.php", str_replace('{{projectName}}', $projectName, $customModifierExampleFile));
 
     return 0;
+}
+
+function checkDatabaseExists($projectName, $dbname)
+{
+    Container::create(require "./$projectName/config/db.empty.php");
+    Query::create('connection', "create database if not exists $dbname")->exec();
+    unlink("./$projectName/config/db.empty.php");
 }
 
 function createTable($modelName)
