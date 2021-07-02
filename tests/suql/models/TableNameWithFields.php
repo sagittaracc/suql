@@ -8,6 +8,7 @@ use suql\db\Container;
 class TableNameWithFields extends ActiveRecord
 {
     public $field;
+    public $another_field;
 
     public function table()
     {

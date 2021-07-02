@@ -102,6 +102,18 @@ abstract class SuQL extends Obj implements QueryObject
         return $instance;
     }
     /**
+     * Сохранить модель
+     */
+    public function save()
+    {
+        $this->addInsert($this->query());
+        $this->getQuery($this->query())->addInto($this->table());
+        foreach ($this->getPublicProperties() as $property) {
+            $this->getQuery($this->query())->addValue($property->getName(), $this->{$property->getName()});
+        }
+        $this->exec($this->getRawSql());
+    }
+    /**
      * Выборка всех данных из модели
      * @return self
      */
@@ -437,6 +449,13 @@ abstract class SuQL extends Obj implements QueryObject
         $properties = $reflector->getProperties(ReflectionProperty::IS_PUBLIC);
 
         return $properties;
+    }
+    /**
+     * Выполнение запроса
+     */
+    private function exec($query)
+    {
+        $this->getDb()->exec($query);
     }
     /**
      * Метод получения данных

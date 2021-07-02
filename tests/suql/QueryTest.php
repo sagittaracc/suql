@@ -31,6 +31,16 @@ final class QueryTest extends TestCase
 
     public function testTableNameWithFields(): void
     {
+        $tn1 = TableNameWithFields::getInstance();
+        $tn1->field = 7;
+        $tn1->another_field = 7;
+        $tn1->save();
+
+        // TODO: Исправить. Не работает fetcOne. Ошибка в syntax\SuQL.php line 511. Когда выбирается только один элемент
+        // он не массив по которому мы итерируем
+        $justAddedRow = TableNameWithFields::all()->where(['field' => 7])->fetchAll();
+        $this->assertEquals(7, $justAddedRow[0]->field);
+
         $data = TableNameWithFields::all()->fetchAll();
         foreach ($data as $index => $row) {
             $this->assertInstanceOf(TableNameWithFields::class, $row);
