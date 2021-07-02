@@ -44,9 +44,12 @@ class Query
     }
     /**
      * Выполнение запроса
+     * @param array $params
      */
-    public function exec()
+    public function exec($params = [])
     {
-        return $this->db->exec($this->query);
+        return empty($params)
+            ? $this->db->exec($this->query)
+            : $this->db->prepare($this->query)->execute($params);
     }
 }

@@ -19,6 +19,7 @@ final class QueryTest extends TestCase
         Container::add(require('config/db-test.php'));
         Query::create('db_test', 'create table table_name(field int)')->exec();
         Query::create('db_test', 'insert into table_name (field) values (1), (2), (3)')->exec();
+        Query::create('db_test', 'insert into table_name (field) values (?), (?), (?)')->exec([4, 5, 6]);
     }
 
     public function tearDown(): void
@@ -61,6 +62,9 @@ final class QueryTest extends TestCase
             ['field' => 1],
             ['field' => 2],
             ['field' => 3],
+            ['field' => 4],
+            ['field' => 5],
+            ['field' => 6],
         ], $data);
     }
 
@@ -73,9 +77,12 @@ final class QueryTest extends TestCase
             ['field' => '1'],
             ['field' => '2'],
             ['field' => '3'],
+            ['field' => '4'],
+            ['field' => '5'],
+            ['field' => '6'],
         ], $data);
         $this->assertEquals([
-            'field' => 3,
+            'field' => 6,
         ], $firstRow);
     }
 
@@ -83,6 +90,6 @@ final class QueryTest extends TestCase
     {
         $count = Query::create('db_test', 'delete from table_name')->exec();
 
-        $this->assertEquals(3, $count);
+        $this->assertEquals(6, $count);
     }
 }
