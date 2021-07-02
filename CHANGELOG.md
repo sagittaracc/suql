@@ -1,6 +1,6 @@
 # Change log
 
-## v7.0.11 - July 02, 2021
+## v7.0.13 - July 02, 2021
 
 - Add ORM syntax for creating new models (INSERT QUERY)
 - Create a database from suql generator
