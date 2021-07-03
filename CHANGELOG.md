@@ -1,11 +1,19 @@
 # Change log
 
+## v7.0.14 - July 04, 2021
+
+- Fix db charset default (utf-8)
+
+---
+
 ## v7.0.13 - July 02, 2021
 
 - Add ORM syntax for creating new models (INSERT QUERY)
 - Create a database from suql generator
 - Bug fixes
 - Refactor
+
+---
 
 ## v7.0.10 - June 23, 2021
 

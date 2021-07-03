@@ -19,7 +19,7 @@ class Connection
     public static function create($config)
     {
         return new PDO(
-            "{$config['driver']}:host={$config['host']};dbname={$config['dbname']}",
+            "{$config['driver']}:host={$config['host']};dbname={$config['dbname']};charset=utf8",
             $config['user'],
             $config['pass']
         );
