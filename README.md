@@ -92,7 +92,7 @@ class Users extends ActiveRecord
 	         ->where('name', 'like', '%admin%');
     }
 
-    public function postHidePassword($data)
+    public function commandHidePassword($data)
     {
         return array_map(function($row) {
             $row['password'] = '***';
