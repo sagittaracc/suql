@@ -22,14 +22,7 @@ final class MySQLBuilder extends SQLBuilder
     {
         $table = $model->table();
         $tableType = $temp ? 'TEMPORARY' : '';
-        $createTableQuery = <<<SQL
-CREATE $tableType TABLE `$table` (
-#fieldList{`#key` #value}
-)
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-;
-SQL;
+        $createTableQuery = "CREATE $tableType TABLE `$table` (#fieldList{`#key` #value}) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB";
         $fieldList = ArrayHelper::join($model->create(), [
             'integer' => "INT(10) NOT NULL",
             'string' => "VARCHAR(255) NOT NULL COLLATE 'utf8mb4_general_ci'",
@@ -56,10 +49,7 @@ SQL;
      */
     public function insertIntoTable($table, $data)
     {
-        $insertIntoTableQuery = <<<SQL
-INSERT INTO $table ({columns})
-VALUES {rows}
-SQL;
+        $insertIntoTableQuery = "INSERT INTO $table ({columns}) VALUES {rows}";
         $array = ArrayHelper::setArray($data);
 
         $header = $array->getHeader();
