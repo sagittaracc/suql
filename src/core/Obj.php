@@ -191,10 +191,12 @@ class Obj
      */
     public function addUnionTable($name, $unionType, $table)
     {
-        if (!isset($this->queries[$name]))
+        if (!isset($this->queries[$name])) {
             $this->queries[$name] = new Union($this, $table);
-        else
+        }
+        else {
             $this->queries[$name]->addUnionTable($unionType, $table);
+        }
     }
     /**
      * Получить объект запроса по имени
