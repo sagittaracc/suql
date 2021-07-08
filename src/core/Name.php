@@ -27,15 +27,12 @@ class Name
     {
         if (func_num_args() === 2) {
             $this->parseSeparated(func_get_args());
-        }
-        else if (func_num_args() === 1)
-        {
+        } else if (func_num_args() === 1) {
             $arg = func_get_arg(0);
 
             if (is_array($arg)) {
                 $this->parseArray($arg);
-            }
-            else if (is_string($arg)) {
+            } else if (is_string($arg)) {
                 $this->parseString($arg);
             }
         }

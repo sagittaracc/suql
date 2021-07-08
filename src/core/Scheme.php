@@ -124,11 +124,13 @@ class Scheme implements SchemeInterface
         $leftTable = new TableName($leftTable);
         $rightTable = new TableName($rightTable);
 
-        if ($leftTable->alias)
+        if ($leftTable->alias) {
             $on = str_replace($leftTable->format("%a."), $leftTable->format("%n."), $on);
+        }
 
-        if ($rightTable->alias)
+        if ($rightTable->alias) {
             $on = str_replace($rightTable->format("%a."), $rightTable->format("%n."), $on);
+        }
 
         $scheme = $temporary ? 'temp_rel' : 'rel';
         $leftTableName = $this->hasTableAlias($leftTable->name) ? $this->getTableAlias($leftTable->name) : $leftTable->name;
@@ -175,12 +177,15 @@ class Scheme implements SchemeInterface
      */
     public function getRelTypeBetween($table1, $table2)
     {
-        if (isset($this->rel[$table1][$table2]))
+        if (isset($this->rel[$table1][$table2])) {
             return 'rel';
-        else if (isset($this->temp_rel[$table1][$table2]))
+        }
+        else if (isset($this->temp_rel[$table1][$table2])) {
             return 'temp_rel';
-        else
+        }
+        else {
             return null;
+        }
     }
     /**
      * Возвращает связь между двумя сущностями (таблицей или вьюхой)
@@ -190,9 +195,11 @@ class Scheme implements SchemeInterface
      */
     public function getRelBetween($table1, $table2)
     {
-        if ($this->hasRelBetween($table1, $table2))
+        if ($this->hasRelBetween($table1, $table2)) {
             return $this->{$this->getRelTypeBetween($table1, $table2)}[$table1][$table2];
-        else
+        }
+        else {
             return null;
+        }
     }
 }

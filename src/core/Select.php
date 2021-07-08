@@ -112,9 +112,7 @@ class Select extends Query implements SelectQueryInterface
         $field = new FieldName($table, $name);
 
         foreach ($this->select as $ofield) {
-            if ($ofield->getField() === $field->format('%t.%n')
-             && $ofield->getAlias() === $field->format('%a'))
-            {
+            if ($ofield->getField() === $field->format('%t.%n') && $ofield->getAlias() === $field->format('%a')) {
                 return $ofield;
             }
         }
@@ -129,8 +127,7 @@ class Select extends Query implements SelectQueryInterface
      */
     public function getField($table, $name)
     {
-        if ($ofield = $this->hasField($table, $name))
-        {
+        if ($ofield = $this->hasField($table, $name)) {
             return $ofield;
         }
 
@@ -148,8 +145,7 @@ class Select extends Query implements SelectQueryInterface
     {
         $fieldList = [];
 
-        foreach ($this->select as $ofield)
-        {
+        foreach ($this->select as $ofield) {
             $fieldList[$ofield->getField()] = $ofield->getAlias();
         }
 
@@ -185,16 +181,11 @@ class Select extends Query implements SelectQueryInterface
     {
         if (!$expression) return;
 
-        if (is_string($expression))
-        {
+        if (is_string($expression)) {
             $this->addStringWhere($expression, $stack);
-        }
-        else if ($expression instanceof Expression)
-        {
+        } else if ($expression instanceof Expression) {
             $this->addExpressionWhere($expression, $stack);
-        }
-        else if ($expression instanceof Condition)
-        {
+        } else if ($expression instanceof Condition) {
             $this->addConditionWhere($expression, $stack);
         }
     }
@@ -216,8 +207,7 @@ class Select extends Query implements SelectQueryInterface
     {
         $stack[] = $expression->getExpression();
 
-        foreach ($expression->getParams() as $param => $value)
-        {
+        foreach ($expression->getParams() as $param => $value) {
             $this->getOSuQL()->setParam($param, $value);
         }
     }
@@ -230,8 +220,7 @@ class Select extends Query implements SelectQueryInterface
     {
         $stack[] = $expression->getCondition();
 
-        foreach ($expression->getParams() as $param => $value)
-        {
+        foreach ($expression->getParams() as $param => $value) {
             $this->getOSuQL()->setParam($param, $value);
         }
     }
@@ -257,8 +246,7 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addHaving($having)
     {
-        if ($having)
-        {
+        if ($having) {
             $this->having[] = $having;
         }
     }
@@ -382,8 +370,7 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addOffset($offset)
     {
-        if ($offset)
-        {
+        if ($offset) {
             $this->offset = $offset;
         }
     }
@@ -409,8 +396,7 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addLimit($limit)
     {
-        if ($limit)
-        {
+        if ($limit) {
             $this->limit = $limit;
         }
     }

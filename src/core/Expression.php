@@ -35,8 +35,7 @@ class Expression
     {
         $expression = $this->expression;
 
-        foreach ($this->conditions as $index => $condition)
-        {
+        foreach ($this->conditions as $index => $condition) {
             $conditionIndex = $index + 1;
             $expression = str_replace("$$conditionIndex", $condition->getCondition(), $expression);
         }
@@ -51,8 +50,7 @@ class Expression
     {
         $paramList = [];
 
-        foreach ($this->conditions as $condition)
-        {
+        foreach ($this->conditions as $condition) {
             if ($onlyValuable && !$condition->isValuable()) continue;
 
             $paramList = array_merge($paramList, $condition->getParams());

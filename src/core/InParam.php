@@ -16,9 +16,8 @@ class InParam extends Param
     {
         $placeholderList = $this->getPlaceholderList();
 
-        return
-            !empty($placeholderList)
-                ? '(' . implode(',', $placeholderList) . ')'
-                : '';
+        return !empty($placeholderList)
+            ? '(' . implode(',', $placeholderList) . ')'
+            : '';
     }
 }

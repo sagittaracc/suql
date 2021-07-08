@@ -76,8 +76,7 @@ abstract class Param
     {
         $placeholderList = [];
 
-        foreach ($this->params as $index => $param)
-        {
+        foreach ($this->params as $index => $param) {
             $placeholderList[] = $param instanceof Placeholder ? $param->getPlaceholder() : ":ph{$index}_{$this->getFieldHash($param)}";
         }
 
@@ -90,14 +89,12 @@ abstract class Param
      */
     public function isValuable()
     {
-        foreach ($this->params as $param)
-        {
-            if (is_null($param))
-            {
+        foreach ($this->params as $param) {
+            if (is_null($param)) {
                 return false;
             }
         }
-        
+
         return true;
     }
 }

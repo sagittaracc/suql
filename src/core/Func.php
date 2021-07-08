@@ -35,14 +35,10 @@ class Func extends Query implements FunctionQueryInterface
      */
     public function addParams($params)
     {
-        foreach ($params as $param)
-        {
-            if ($param instanceof Placeholder)
-            {
+        foreach ($params as $param) {
+            if ($param instanceof Placeholder) {
                 $this->params[] = $param->getPlaceholder();
-            }
-            else
-            {
+            } else {
                 $this->params[] = (new PlaceholderHelper("?"))->bind($param);
             }
         }

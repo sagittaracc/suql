@@ -88,7 +88,7 @@ class SmartJoin
         if ($curr == $end) {
             return [$end];
         }
-    
+
         if (!isset($this->scheme[$curr])) {
             return null;
         }
@@ -97,14 +97,14 @@ class SmartJoin
         if (empty($possibleSteps)) {
             return null;
         }
-    
+
         foreach ($possibleSteps as $step) {
             $path = $this->step($curr, $step, $end);
             if ($path) {
                 return array_merge([$curr], $path);
             }
         }
-    
+
         return null;
     }
     /**

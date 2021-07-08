@@ -16,8 +16,7 @@ class LikeParam extends SimpleParam
     {
         $paramList = parent::getParamList();
 
-        foreach ($paramList as $placeholder => $value)
-        {
+        foreach ($paramList as $placeholder => $value) {
             $paramList[$placeholder] = "%{$value}%";
         }
 
