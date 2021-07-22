@@ -3,7 +3,7 @@
 class SmartDate
 {
     private $smartDate;
-    private $builderClass;
+    private $sqlAdapter;
 
     protected $patternList = [
         'simple' => [
@@ -23,10 +23,10 @@ class SmartDate
         ],
     ];
 
-    function __construct($smartDate, $builderClass)
+    function __construct($smartDate, $sqlAdapter)
     {
         $this->smartDate = $smartDate;
-        $this->builderClass = $builderClass;
+        $this->sqlAdapter = $sqlAdapter;
     }
 
     public static function create($smartDate)
