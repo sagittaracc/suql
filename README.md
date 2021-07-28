@@ -11,7 +11,7 @@
 </div>
 
 ### SuQL
-SuQL stands for Sugar SQL and this is an ORM library for MySQL.
+SuQL stands for Sugar SQL and this is an ORM library for PHP.
 
 ### Installation
 Install the [SuQLBasic Template](https://github.com/sagittaracc/suql-app)
