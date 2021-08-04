@@ -42,11 +42,11 @@ SQL);
 
         $query =
             User::all()
-                ->where([
-                    'id' => 1,
-                    'group_id' => 2,
-                ]);
-        
+            ->where([
+                'id' => 1,
+                'group_id' => 2,
+            ]);
+
         $this->assertEquals($sql, $query->getRawSql());
         $this->assertEquals([
             ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
@@ -67,8 +67,8 @@ SQL);
 
         $query =
             User::all()
-                ->where('id', '>', 1)
-                ->andWhere('id', '<', 3);
+            ->where('id', '>', 1)
+            ->andWhere('id', '<', 3);
 
         $this->assertEquals($sql, $query->getRawSql());
         $this->assertEquals([
@@ -90,7 +90,8 @@ SQL);
 
         $query = User::all()->whereExpression(
             Expression::create(
-                '$1 and $2', [
+                '$1 and $2',
+                [
                     [SimpleParam::class, ['users', 'id'], '$ > ?', [1]],
                     [SimpleParam::class, ['users', 'id'], '$ < ?', [3]],
                 ]
@@ -124,5 +125,24 @@ SQL);
         ])->where('users.id not in ?', [UserGroup::all()->distinct()->select(['user_id'])]);
 
         $this->assertEquals($sql, $query->getRawSql());
+    }
+
+    public function testFindMethod(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id as uid,
+                users.name as uname
+            from users
+            where id = :ph0_b90e7265948fc8b12c62f17f6f2c5363
+SQL);
+
+        $query = User::find(['id' => 3])->select([
+            'id' => 'uid',
+            'name' => 'uname',
+        ]);
+
+        $this->assertEquals($sql, $query->getRawSql());
+        $this->assertEquals([':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3], $query->getParamList());
     }
 }

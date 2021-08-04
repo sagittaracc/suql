@@ -122,6 +122,17 @@ abstract class SuQL extends Obj implements QueryObject
         $this->exec($this->getRawSql());
     }
     /**
+     * Выборка с начально заданной фильтрацией
+     * @return self
+     */
+    public static function find()
+    {
+        $instance = static::all();
+        call_user_func_array(array($instance, "where"), func_get_args());
+
+        return $instance;
+    }
+    /**
      * Выборка всех данных из модели
      * @return self
      */
