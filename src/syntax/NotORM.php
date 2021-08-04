@@ -14,10 +14,10 @@ class NotORM extends SuQL
 {
     private $connection;
 
-    function __construct($connection = null)
+    function __construct($connection = null, $schemeClass = Scheme::class, $builderClass = MySQLBuilder::class)
     {
         $this->connection = $connection;
-        parent::__construct(new Scheme, new MySQLBuilder);
+        parent::__construct(new $schemeClass, new $builderClass);
     }
 
     public function query()
