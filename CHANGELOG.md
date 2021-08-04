@@ -1,5 +1,11 @@
 # Change log
 
+## v7.0.15 - August 04, 2021
+
+- Add not orm syntax
+
+---
+
 ## v7.0.14 - July 04, 2021
 
 - Fix db charset default (utf-8)
