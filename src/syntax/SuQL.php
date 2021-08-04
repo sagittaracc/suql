@@ -43,7 +43,7 @@ abstract class SuQL extends Obj implements QueryObject
     /**
      * @var string текущая таблица в цепочке вызовов
      */
-    private $currentTable = null;
+    protected $currentTable = null;
     /**
      * @var string|array группировка или индексация данных
      */
