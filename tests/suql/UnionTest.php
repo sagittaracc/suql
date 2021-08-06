@@ -27,4 +27,25 @@ SQL);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
+
+    public function testAnotherUnion(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            (select min(users.registration) as reg_interval from users)
+                union
+            (select max(users.registration) as reg_interval from users)
+SQL);
+
+        $query1 = User::all()
+            ->select([new Field(['registration' => 'reg_interval'], ['min'])])
+            ->as('q1');
+
+        $query2 = User::all()
+            ->select([new Field(['registration' => 'reg_interval'], ['max'])])
+            ->as('q2');
+
+        $query = $query1->and([$query2]);
+
+        $this->assertEquals($sql, $query->getRawSql());
+    }
 }

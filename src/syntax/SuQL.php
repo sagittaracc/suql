@@ -313,6 +313,28 @@ abstract class SuQL extends Obj implements QueryObject
         return $this;
     }
     /**
+     * Экспериментальный вариант union
+     * @return self
+     */
+    public function and($queries)
+    {
+        $queryList = [];
+
+        $queryList[] = '@' . $this->query();
+        foreach ($queries as $query) {
+            $this->extend($query->getQueries());
+            $queryList[] = '@' . $query->query();
+        }
+        
+        $unionQuery = implode(' union ', $queryList);
+        $unionQueryName = implode('_', $queryList);
+
+        $this->queryName = $unionQueryName;
+        $this->addUnion($unionQueryName, $unionQuery);
+
+        return $this;
+    }
+    /**
      * Where фильтрация
      * @return self
      */
