@@ -5,6 +5,7 @@ declare(strict_types=1);
 use test\suql\models\NoName;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\SubUnion;
 
 final class SelectSubQueryTest extends TestCase
 {
@@ -36,6 +37,20 @@ final class SelectSubQueryTest extends TestCase
 SQL);
 
         $query = NoName::all();
+
+        $this->assertEquals($sql, $query->getRawSql());
+    }
+
+    public function testSubUnion(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select * from (
+                (select min(users.registration) as reg_interval from users)
+                union
+                (select max(users.registration) as reg_interval from users)
+            ) last_registration
+SQL);
+        $query = SubUnion::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }
