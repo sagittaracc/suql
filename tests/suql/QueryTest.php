@@ -8,6 +8,7 @@ use suql\syntax\Query;
 use test\suql\models\TableName;
 use test\suql\models\TableNameWithFields;
 use test\suql\models\TempTable;
+use test\suql\models\User;
 
 final class QueryTest extends TestCase
 {
@@ -101,5 +102,12 @@ final class QueryTest extends TestCase
         $count = Query::create('db_test', 'delete from table_name')->exec();
 
         $this->assertEquals(6, $count);
+    }
+
+    public function testQueryInjection(): void
+    {
+        $query = Query::create('db_test', 'select * from ?')->bind([User::all()])->getQuery();
+
+        $this->assertEquals('select * from \'(select * from users)\'', $query);
     }
 }

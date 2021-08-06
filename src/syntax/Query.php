@@ -2,6 +2,7 @@
 
 namespace suql\syntax;
 
+use sagittaracc\PlaceholderHelper;
 use suql\db\Container;
 
 /**
@@ -23,6 +24,7 @@ class Query
     /**
      * Создание нового запроса
      * @param string $query
+     * @return self
      */
     public static function create($connection, $query = '')
     {
@@ -33,8 +35,22 @@ class Query
         return $instance;
     }
     /**
+     * Внедрить запрос в сырой sql
+     * @param array $queries
+     * @return self
+     */
+    public function bind($queries)
+    {
+        foreach ($queries as $query) {
+            $this->query = (new PlaceholderHelper($this->query))->bind('(' . $query->getRawSql() . ')');
+        }
+
+        return $this;
+    }
+    /**
      * Задать запрос
      * @param string $query
+     * @return self
      */
     public function query($query)
     {
@@ -43,8 +59,17 @@ class Query
         return $this;
     }
     /**
+     * Вернуть текущий query
+     * @return string
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+    /**
      * Выполнение запроса
      * @param array $params
+     * @return mixed|array
      */
     public function exec($params = [])
     {
