@@ -41,8 +41,10 @@ class Query
      */
     public function bind($queries)
     {
+        $suqlStringPlaceholder = (new PlaceholderHelper())->setQuote('');
+
         foreach ($queries as $query) {
-            $this->query = (new PlaceholderHelper($this->query))->bind('(' . $query->getRawSql() . ')');
+            $this->query = $suqlStringPlaceholder->setString($this->query)->bind("({$query->getRawSql()})");
         }
 
         return $this;

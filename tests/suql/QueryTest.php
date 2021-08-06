@@ -108,6 +108,6 @@ final class QueryTest extends TestCase
     {
         $query = Query::create('db_test', 'select * from ?')->bind([User::all()])->getQuery();
 
-        $this->assertEquals('select * from \'(select * from users)\'', $query);
+        $this->assertEquals('select * from (select * from users)', $query);
     }
 }
