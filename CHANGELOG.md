@@ -1,5 +1,11 @@
 # Change log
 
+## v7.0.16 - August 06, 2021
+
+- Bug fixes
+
+---
+
 ## v7.0.15 - August 04, 2021
 
 - Add not orm syntax
