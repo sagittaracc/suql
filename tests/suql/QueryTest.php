@@ -16,18 +16,18 @@ final class QueryTest extends TestCase
     {
         // Create a database
         Container::create(require('config/db.php'));
-        Query::create('connection', 'create database db_test')->exec();
+        Query::create('create database db_test')->setConnection('connection')->exec();
         Container::add(require('config/db-test.php'));
-        Query::create('db_test', 'create table table_name(field int, another_field int)')->exec();
-        Query::create('db_test', 'insert into table_name (field, another_field) values (1, 1), (2, 2), (3, 3)')->exec();
-        Query::create('db_test', 'insert into table_name (field, another_field) values (?, ?), (?, ?), (?, ?)')->exec([4, 4, 5, 5, 6, 6]);
+        Query::create('create table table_name(field int, another_field int)')->setConnection('db_test')->exec();
+        Query::create('insert into table_name (field, another_field) values (1, 1), (2, 2), (3, 3)')->setConnection('db_test')->exec();
+        Query::create('insert into table_name (field, another_field) values (?, ?), (?, ?), (?, ?)')->setConnection('db_test')->exec([4, 4, 5, 5, 6, 6]);
     }
 
     public function tearDown(): void
     {
         // Drop the database
-        Query::create('db_test', 'drop table table_name')->exec();
-        Query::create('db_test', 'drop database db_test')->exec();
+        Query::create('drop table table_name')->setConnection('db_test')->exec();
+        Query::create('drop database db_test')->setConnection('db_test')->exec();
     }
 
     public function testTableNameWithFields(): void
@@ -99,14 +99,14 @@ final class QueryTest extends TestCase
 
     public function testDeleteQuery(): void
     {
-        $count = Query::create('db_test', 'delete from table_name')->exec();
+        $count = Query::create('delete from table_name')->setConnection('db_test')->exec();
 
         $this->assertEquals(6, $count);
     }
 
     public function testQueryInjection(): void
     {
-        $query = Query::create('db_test', 'select * from ?')->bind([User::all()])->getQuery();
+        $query = Query::create('select * from ?')->bind([User::all()])->getQuery();
 
         $this->assertEquals('select * from (select * from users)', $query);
     }

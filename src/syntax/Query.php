@@ -26,13 +26,23 @@ class Query
      * @param string $query
      * @return self
      */
-    public static function create($connection, $query = '')
+    public static function create($query = '')
     {
         $instance = new self();
+        $instance->db = null;
         $instance->query = $query;
-        $instance->db = Container::get($connection);
 
         return $instance;
+    }
+    /**
+     * Установить подключение к бд
+     * @param string $connection
+     */
+    public function setConnection($connection)
+    {
+        $this->db = Container::get($connection);
+
+        return $this;
     }
     /**
      * Внедрить запрос в сырой sql
@@ -75,6 +85,11 @@ class Query
      */
     public function exec($params = [])
     {
+        // TODO: Добавить проверку установлено ли соединение
+        // if (!$this->db) {
+        //     throw new ...
+        // }
+
         return empty($params)
             ? $this->db->exec($this->query)
             : $this->db->prepare($this->query)->execute($params);
