@@ -592,6 +592,14 @@ abstract class SuQL extends Obj implements QueryObject
         return $this->queryName ? $this->queryName : str_replace('\\', '_', static::class);
     }
     /**
+     * Создавать ли вьюху реальной в базе данных
+     * @return boolean
+     */
+    public function real()
+    {
+        return false;
+    }
+    /**
      * View
      * @return self
      */

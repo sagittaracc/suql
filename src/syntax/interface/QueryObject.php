@@ -25,6 +25,11 @@ interface QueryObject
      */
     public function create();
     /**
+     * Реальная вьюха или программная
+     * @return boolean
+     */
+    public function real();
+    /**
      * Описание запроса
      * @return self
      */
