@@ -15,6 +15,8 @@ use suql\syntax\exception\BuilderNotDefined;
 use \ReflectionMethod;
 use ReflectionProperty;
 use sagittaracc\ArrayHelper;
+use suql\syntax\field\Field;
+use suql\syntax\field\Raw;
 
 /**
  * SuQL синтаксис

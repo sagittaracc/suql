@@ -3,7 +3,7 @@
 namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
-use suql\syntax\Field;
+use suql\syntax\field\Field;
 
 class LastRegistration extends ActiveRecord
 {

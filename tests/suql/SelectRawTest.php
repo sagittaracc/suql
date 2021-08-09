@@ -6,7 +6,7 @@ use test\suql\models\RawQuery;
 use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\syntax\Raw;
+use suql\syntax\field\Field;
 
 final class SelectRawTest extends TestCase
 {
@@ -41,7 +41,7 @@ SQL);
 
         $query = User::all()->select([
             '*',
-            Raw::expression("'Yuriy' as author"),
+            Field::raw("'Yuriy' as author"),
         ]);
 
         $this->assertEquals($sql, $query->getRawSql());

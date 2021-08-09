@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\syntax\Field;
+use suql\syntax\field\Field;
 use test\suql\models\UnionQuery;
 use test\suql\models\User;
 

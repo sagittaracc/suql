@@ -9,7 +9,7 @@ use suql\core\Condition;
 use suql\core\Expression;
 use suql\core\FieldName;
 use suql\core\SimpleParam;
-use suql\syntax\Field;
+use suql\syntax\field\Field;
 
 final class FieldModifierTest extends TestCase
 {

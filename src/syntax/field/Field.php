@@ -1,6 +1,6 @@
 <?php
 
-namespace suql\syntax;
+namespace suql\syntax\field;
 
 /**
  * Модификация поля
@@ -54,5 +54,13 @@ class Field
     public function getModifiers()
     {
         return $this->modifiers;
+    }
+    /**
+     * Сырое выражение
+     * @param string сырое выражение
+     */
+    public static function raw($expression)
+    {
+        return Raw::expression($expression);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace test\suql\models;
 
-use suql\syntax\Field;
+use suql\syntax\field\Field;
 use test\suql\records\ActiveRecord;
 
 class UnionQuery extends ActiveRecord
