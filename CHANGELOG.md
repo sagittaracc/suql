@@ -1,5 +1,11 @@
 # Change log
 
+## v7.1.0 - August 09, 2021
+
+- Refactor
+
+---
+
 ## v7.0.16 - August 06, 2021
 
 - Bug fixes
