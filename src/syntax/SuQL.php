@@ -281,9 +281,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      * Алиас для join
      * @return self
      */
-    public function get($option)
+    public function get()
     {
-        return $this->join($option);
+        call_user_func_array(array($this, "join"), func_get_args());
+        return $this;
     }
     /**
      * LEFT JOIN
