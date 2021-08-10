@@ -3,13 +3,16 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use suql\builder\MySQLBuilder;
 use suql\db\Container;
+use suql\syntax\NotORM;
 use suql\syntax\Query;
 use suql\syntax\Transaction;
 use test\suql\models\TableName;
 use test\suql\models\TableNameWithFields;
 use test\suql\models\TempTable;
 use test\suql\models\User;
+use test\suql\schema\AppScheme;
 
 final class QueryTest extends TestCase
 {
@@ -96,6 +99,20 @@ final class QueryTest extends TestCase
         $this->assertEquals([
             'field' => 6,
         ], $firstRow);
+    }
+
+    public function testNotORM(): void
+    {
+        $db = new NotORM('db_test', AppScheme::class);
+        $data = $db->entity('table_name')->select(['field'])->fetchAll();
+        $this->assertEquals([
+            ['field' => '1'],
+            ['field' => '2'],
+            ['field' => '3'],
+            ['field' => '4'],
+            ['field' => '5'],
+            ['field' => '6'],
+        ], $data);
     }
 
     public function testDeleteQuery(): void

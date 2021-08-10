@@ -4,6 +4,7 @@ namespace suql\syntax;
 
 use suql\builder\MySQLBuilder;
 use suql\core\Scheme;
+use suql\db\Container;
 
 /**
  * Для тех кому лень создавать классы для таблиц
@@ -18,7 +19,7 @@ class NotORM extends SuQL
     private $connection;
     /**
      * Constructor
-     * @param PDO|null $connection подключение к базе данных
+     * @param string|null $connection подключение к базе данных
      * @param string класс определяющий схему базы данных
      * @param string класс билдера
      */
@@ -66,7 +67,7 @@ class NotORM extends SuQL
      */
     public function getDb()
     {
-        return $this->connection;
+        return Container::get($this->connection);
     }
     /**
      * Загружает сущность для которой вы поленились описывать модель
