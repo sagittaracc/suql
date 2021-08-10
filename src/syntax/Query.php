@@ -2,6 +2,7 @@
 
 namespace suql\syntax;
 
+use Exception;
 use sagittaracc\PlaceholderHelper;
 use suql\db\Container;
 
@@ -89,7 +90,6 @@ class Query implements DbObject
         // if (!$this->db) {
         //     throw new ...
         // }
-
         return empty($params)
             ? $this->db->exec($this->query)
             : $this->db->prepare($this->query)->execute($params);

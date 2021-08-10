@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
+use suql\syntax\Transaction;
 use test\suql\models\TableName;
 use test\suql\models\TableNameWithFields;
 use test\suql\models\TempTable;
@@ -83,7 +84,7 @@ final class QueryTest extends TestCase
     {
         $data = TableName::all()->select(['field'])->fetchAll();
         $firstRow = TableName::all()->select(['field'])->order(['field' => 'desc'])->fetchOne();
-        
+
         $this->assertEquals([
             ['field' => '1'],
             ['field' => '2'],
@@ -109,5 +110,43 @@ final class QueryTest extends TestCase
         $query = Query::create('select * from ?')->bind([User::all()])->getQuery();
 
         $this->assertEquals('select * from (select * from users)', $query);
+    }
+
+    public function testSuccessTransaction(): void
+    {
+        $success = false;
+        $db = Query::create()->setConnection('db_test');
+
+        try {
+            $transaction = Transaction::begin($db);
+            $db->query("insert into table_name (field, another_field) values (100, 100)")->exec();
+            $db->query("insert into table_name (field, another_field) values (101, 101)")->exec();
+            $success = true;
+            $transaction->commit();
+        } catch (Exception $e) {
+            $success = false;
+            $transaction->rollback();
+        }
+
+        $this->assertTrue($success);
+    }
+
+    public function testFailTransaction(): void
+    {
+        $success = false;
+        $db = Query::create()->setConnection('db_test');
+
+        try {
+            $transaction = Transaction::begin($db);
+            $db->query("insert into table_name (field, another_field) values (100, 100)")->exec();
+            $db->query("insert into table_name (field, another_field, third_field) values (101, 'string', false)")->exec();
+            $success = true;
+            $transaction->commit();
+        } catch (Exception $e) {
+            $success = false;
+            $transaction->rollback();
+        }
+
+        $this->assertFalse($success);
     }
 }

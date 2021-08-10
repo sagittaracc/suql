@@ -2,6 +2,8 @@
 
 namespace suql\syntax;
 
+use PDO;
+
 /**
  * Управление транзакциями
  * 
@@ -27,6 +29,7 @@ class Transaction
     public static function begin($model)
     {
         $transaction = new static($model);
+        $transaction->model->getDb()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $transaction->model->getDb()->beginTransaction();
         return $transaction;
     }
