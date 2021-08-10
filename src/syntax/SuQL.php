@@ -166,9 +166,13 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      * Distinct
      * @return self
      */
-    public function distinct()
+    public function distinct($options = [])
     {
         $this->getQuery($this->query())->addModifier('distinct');
+
+        if (!empty($options)) {
+            $this->select($options);
+        }
 
         return $this;
     }
