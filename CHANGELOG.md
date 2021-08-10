@@ -1,5 +1,12 @@
 # Change log
 
+## v7.1.1 - August 10, 2021
+
+- Transactions support
+- Real view support
+
+---
+
 ## v7.1.0 - August 09, 2021
 
 - Refactor

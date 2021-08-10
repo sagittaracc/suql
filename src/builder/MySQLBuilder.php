@@ -35,6 +35,15 @@ final class MySQLBuilder extends SQLBuilder
         ]));
     }
     /**
+     * Генерация запроса создания представления
+     * @param suql\syntax\SuQL $model
+     * @return string
+     */
+    public function createView($model)
+    {
+        return "CREATE OR REPLACE VIEW `{$model->query()}` AS {$model->view()}";
+    }
+    /**
      * Генерация запроса создания временной таблицы
      * @param suql\syntax\SuQL $model
      */

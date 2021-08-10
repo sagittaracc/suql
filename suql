@@ -20,6 +20,7 @@ function main()
         'create-project',           // Создать новый проект
         'create-table',             // Создать таблицу в бд
         'create-model',             // Создать новую модель
+        'create-view',              // Создать реальное представление в базе данных
         'create-entry-point',       // Создать новую точку входа
         'name:',                    // Название создаваемой сущности
         'type:',                    // Тип создаваемой сущности
@@ -52,6 +53,10 @@ function main()
         $modelType = $params['type'];
         createModel($projectName, $modelName, $modelType);
 
+    }
+    else if (isset($params['create-view'])) {
+        $modelName = $params['model'];
+        createView($modelName);
     }
     else if (isset($params['create-entry-point'])) {
 
@@ -167,6 +172,24 @@ function createModel($projectName, $modelName, $modelType)
 
     file_put_contents("$projectName/models/$className.php", str_replace($search, $replace, $file));
     shell_exec('composer dump-autoload');
+}
+
+function createView($modelName)
+{
+    $parts = explode('\\', $modelName);
+    $projectName = $parts[0];
+
+    Container::create(require "./$projectName/config/db.php");
+
+    $model = $modelName::getInstance();
+
+    $db = $model->getDb();
+    $builder = $model->getBuilder();
+
+    // Реальное представление?
+    if ($model->real()) {
+        $db->exec($builder->createView($model));
+    }
 }
 
 function createEntryPoint($projectName, $modelName, $entryName)
