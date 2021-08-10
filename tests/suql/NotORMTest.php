@@ -40,8 +40,8 @@ SQL);
         $query =
             $db->entity('users')
                 ->select(['id'])
-            ->get('user_group')
-            ->get('groups')
+            ->with('user_group')
+            ->with('groups')
                 ->select(['name']);
 
         $this->assertEquals($sql, $query->getRawSql());
@@ -50,7 +50,7 @@ SQL);
         $query =
             $db->entity('users')
                 ->select(['id'])
-            ->get('groups', 'inner', 'smart')
+            ->with('groups', 'inner', 'smart')
                 ->select(['name']);
 
         $this->assertEquals($sql, $query->getRawSql());

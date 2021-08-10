@@ -130,7 +130,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public static function find()
     {
         $instance = static::all();
-        call_user_func_array(array($instance, "where"), func_get_args());
+        call_user_func_array([$instance, 'where'], func_get_args());
 
         return $instance;
     }
@@ -283,7 +283,16 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function get()
     {
-        call_user_func_array(array($this, "join"), func_get_args());
+        call_user_func_array([$this, 'join'], func_get_args());
+        return $this;
+    }
+    /**
+     * Еще один алиас для join
+     * @return self
+     */
+    public function with()
+    {
+        call_user_func_array([$this, 'join'], func_get_args());
         return $this;
     }
     /**
@@ -398,7 +407,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function andWhere()
     {
-        call_user_func_array(array($this, "where"), func_get_args());
+        call_user_func_array([$this, 'where'], func_get_args());
         return $this;
     }
     /**
