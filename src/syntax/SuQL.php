@@ -23,7 +23,7 @@ use suql\syntax\field\Raw;
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-abstract class SuQL extends Obj implements QueryObject
+abstract class SuQL extends Obj implements QueryObject, DbObject
 {
     /**
      * @var string класс реализующий схему
