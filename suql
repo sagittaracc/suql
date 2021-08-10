@@ -135,7 +135,7 @@ function copyMainFiles($projectName, $dbname)
 function checkDatabaseExists($projectName, $dbname)
 {
     Container::create(require "./$projectName/config/db.empty.php");
-    Query::create('connection', "create database if not exists $dbname")->exec();
+    Query::create("create database if not exists $dbname")->setConnection('connection')->exec();
     unlink("./$projectName/config/db.empty.php");
 }
 
