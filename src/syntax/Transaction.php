@@ -15,7 +15,7 @@ class Transaction
     private $model;
     /**
      * Constructor
-     * @param suql\syntax\SuQL $model
+     * @param suql\syntax\SuQL|suql\syntax\Query $model
      */
     function __construct($model)
     {

@@ -10,7 +10,7 @@ use suql\db\Container;
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Query
+class Query implements DbObject
 {
     /**
      * Db connection
@@ -93,5 +93,13 @@ class Query
         return empty($params)
             ? $this->db->exec($this->query)
             : $this->db->prepare($this->query)->execute($params);
+    }
+    /**
+     * Реализация getDb
+     * @return PDO|null
+     */
+    public function getDb()
+    {
+        return $this->db;
     }
 }
