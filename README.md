@@ -16,7 +16,7 @@ SuQL stands for Sugar SQL and this is an ORM library for PHP.
 ### Installation
 Install the [SuQLBasic Template](https://github.com/sagittaracc/suql-app)
 
-### How it looks
+### Example
 ```php
 $orders =
     Users:find(['active' => false])
