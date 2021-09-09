@@ -18,19 +18,22 @@ Install the [SuQLBasic Template](https://github.com/sagittaracc/suql-app)
 
 ### How it looks
 ```php
+$orders =
+    Users:find(['active' => false])
+         ->getOrders()->where(['paid' => true]);
 
-use app\models\Users;
-use suql\db\Container;
+try {
+    $transaction = Transaction::begin($orders);
 
-require 'vendor/autoload.php';
+    foreach($orders->fetchAll() as $order) {
+        $order->delete();
+    }
 
-// Connect to the database
-Container::create(require __DIR__ . '/app/config/db.php');
+    $transaction->commit();
+} catch (Exception $e) {
+    $transaction->rollback();
+}
 
-// Fetch data from the database
-$data = Users::all()->getAdmins()->hidePassword()->fetchAll();
-
-print_r($data);
 ```
 
 ### Requirements
