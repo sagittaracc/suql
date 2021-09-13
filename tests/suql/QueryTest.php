@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use suql\builder\MySQLBuilder;
 use suql\db\Container;
-use suql\syntax\NotORM;
 use suql\syntax\Query;
 use suql\syntax\Transaction;
 use test\suql\models\TableName;
@@ -101,9 +99,9 @@ final class QueryTest extends TestCase
         ], $firstRow);
     }
 
-    public function testNotORM(): void
+    public function testDbManager(): void
     {
-        $db = new NotORM('db_test', AppScheme::class);
+        $db = new suql\db\Manager('db_test', AppScheme::class);
         $data = $db->entity('table_name')->select(['field'])->fetchAll();
         $this->assertEquals([
             ['field' => '1'],

@@ -1,17 +1,17 @@
 <?php
 
-namespace suql\syntax;
+namespace suql\db;
 
 use suql\builder\MySQLBuilder;
 use suql\core\Scheme;
-use suql\db\Container;
+use suql\syntax\SuQL;
 
 /**
  * Для тех кому лень создавать классы для таблиц
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class NotORM extends SuQL
+class Manager extends SuQL
 {
     /**
      * @var PDO подключение к базе данных

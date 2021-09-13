@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\syntax\NotORM;
 use test\suql\schema\AppScheme;
 
-final class NotORMTest extends TestCase
+final class DbManagerTest extends TestCase
 {
-    public function testNotORM(): void
+    public function testDbManager(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
@@ -18,12 +17,12 @@ final class NotORMTest extends TestCase
             order by users.id asc
 SQL);
 
-        $db = new NotORM();
+        $db = new suql\db\Manager();
         $query = $db->entity('users')->order(['id']);
         $this->assertEquals($sql, $query->getRawSql());
     }
 
-    public function testNotORMChain(): void
+    public function testDbManagerTableChain(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
@@ -34,7 +33,7 @@ SQL);
             inner join groups on user_group.group_id = groups.id
 SQL);
 
-        $db = new NotORM(null, AppScheme::class);
+        $db = new suql\db\Manager(null, AppScheme::class);
 
         // Simple join
         $query =
