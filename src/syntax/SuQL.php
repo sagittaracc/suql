@@ -578,6 +578,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $result = [];
 
         // TODO: Вынести куда-нибудь
+        // FIX: Это скорее всего можно удалить когда доделаю метод fetch с сериализацией результата в объект
         $publicProperties = $this->getPublicProperties();
         if (count($publicProperties) > 0) {
             foreach ($data as $row) {
