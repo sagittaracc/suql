@@ -25,7 +25,7 @@ $orders =
 try {
     $transaction = Transaction::begin($orders);
 
-    foreach($orders->fetch() as $order) {
+    foreach($orders->fetchAll() as $order) {
         $order->delete();
     }
 
