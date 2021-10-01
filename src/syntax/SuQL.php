@@ -515,10 +515,25 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $this->getDb()->exec($query);
     }
     /**
+     * Метод получения данных с сериализацией в объект
+     * @return mixed
+     */
+    public function fetch()
+    {
+        $rows = $this->_fetch('all');
+
+        $serializedRows = [];
+        foreach ($rows as $row) {
+            // TODO: Сериализация...
+        }
+
+        return $serializedRows;
+    }
+    /**
      * Метод получения данных
      * @return mixed
      */
-    private function fetch($method)
+    private function _fetch($method)
     {
         $pdoTypes = [
             'integer' => PDO::PARAM_INT,
@@ -585,7 +600,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function fetchAll()
     {
-        return $this->fetch('all');
+        return $this->_fetch('all');
     }
     /**
      * Получение одной строки запроса
@@ -593,7 +608,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function fetchOne()
     {
-        return $this->fetch('one');
+        return $this->_fetch('one');
     }
     /**
      * TODO: Возможно лучше избавиться от этого метода
