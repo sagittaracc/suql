@@ -515,25 +515,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $this->getDb()->exec($query);
     }
     /**
-     * Метод получения данных с сериализацией в объект
-     * @return mixed
-     */
-    public function fetch()
-    {
-        $rows = $this->_fetch('all');
-
-        $serializedRows = [];
-        foreach ($rows as $row) {
-            // TODO: Сериализация...
-        }
-
-        return $serializedRows;
-    }
-    /**
      * Метод получения данных
      * @return mixed
      */
-    private function _fetch($method)
+    private function fetch($method)
     {
         $pdoTypes = [
             'integer' => PDO::PARAM_INT,
@@ -579,6 +564,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         // TODO: Вынести куда-нибудь
         // FIX: Это скорее всего можно удалить когда доделаю метод fetch с сериализацией результата в объект
+        // TODO: Здесь заместо этого сделать сериализацию в последний запрошенный объект
         $publicProperties = $this->getPublicProperties();
         if (count($publicProperties) > 0) {
             foreach ($data as $row) {
@@ -601,7 +587,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function fetchAll()
     {
-        return $this->_fetch('all');
+        return $this->fetch('all');
     }
     /**
      * Получение одной строки запроса
@@ -609,7 +595,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function fetchOne()
     {
-        return $this->_fetch('one');
+        return $this->fetch('one');
     }
     /**
      * TODO: Возможно лучше избавиться от этого метода
