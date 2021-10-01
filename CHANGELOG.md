@@ -1,5 +1,11 @@
 # Change log
 
+## v7.1.2 - October 1, 2021
+
+- Result serialization
+
+---
+
 ## v7.1.1 - August 10, 2021
 
 - Transactions support
