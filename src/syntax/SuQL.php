@@ -59,6 +59,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     private $data = [];
     /**
+     * @var string последняя запрошенная модель
+     */
+    private $lastRequestedModel = null;
+    /**
      * Модель должна содержать перечень полей
      */
     abstract public function fields();
@@ -667,6 +671,14 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $this->postFunctions[] = $this->getPostFunctionName($name);
     }
     /**
+     * Получает последнюю запрошенную модель
+     * @return string
+     */
+    public function getLastRequestedModel()
+    {
+        return $this->lastRequestedModel ? $this->lastRequestedModel : static::class;
+    }
+    /**
      * Обработка ORM алиасов
      * @return self
      */
@@ -684,6 +696,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         if (!class_exists($model)) {
             throw new Exception("Class $model not defined!");
         }
+
+        $this->lastRequestedModel = $model;
 
         $type = isset($arguments[0]) && isset($arguments[0]['join']) ? $arguments[0]['join'] : 'inner';
         $algorithm = isset($arguments[0]) && isset($arguments[0]['algorithm']) ? $arguments[0]['algorithm'] : 'simple';
