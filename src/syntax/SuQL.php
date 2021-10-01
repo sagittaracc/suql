@@ -568,17 +568,22 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         $result = [];
 
-        // TODO: Вынести куда-нибудь
-        // FIX: Это скорее всего можно удалить когда доделаю метод fetch с сериализацией результата в объект
-        // TODO: Здесь заместо этого сделать сериализацию в последний запрошенный объект
-        $publicProperties = $this->getPublicProperties();
-        if (count($publicProperties) > 0) {
-            foreach ($data as $row) {
-                $instance = static::getTempInstance();
-                foreach ($publicProperties as $property) {
-                    $instance->{$property->getName()} = $row[$property->getName()];
+        // TODO: Сериализацию необходимо проверить
+        if ($this->lastRequestedModel) {
+            $lastRequestedModelName = $this->lastRequestedModel;
+            $lastRequestedModel = $lastRequestedModelName::getTempInstance();
+            $publicProperties = $lastRequestedModel->getPublicProperties();
+            if (count($publicProperties) > 0) {
+                foreach ($data as $row) {
+                    $instance = $lastRequestedModel::getTempInstance();
+                    foreach ($publicProperties as $property) {
+                        $instance->{$property->getName()} = $row[$property->getName()];
+                    }
+                    $result[] = $instance;
                 }
-                $result[] = $instance;
+            }
+            else {
+                $result = $data;
             }
         }
         else {
