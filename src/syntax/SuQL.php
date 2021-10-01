@@ -146,6 +146,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     {
         $instance = static::getInstance();
 
+        $instance->lastRequestedModel = static::class;
+
         $instance->addSelect($instance->query());
 
         $option = $instance->table();
@@ -676,7 +678,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function getLastRequestedModel()
     {
-        return $this->lastRequestedModel ? $this->lastRequestedModel : static::class;
+        return $this->lastRequestedModel;
     }
     /**
      * Обработка ORM алиасов
