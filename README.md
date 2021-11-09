@@ -22,13 +22,23 @@ Find all the paid orders of the users that are not active anymore and delete the
 ```php
 $orders =
     Users:find(['active' => false])
+        ->select([
+            '*',
+            Fun::expression('{{initials fullname}} as users_initials')
+        ])
         ->getOrders()
-        ->where(['paid' => true]);
+        ->where(['paid' => true])
+        ->register([
+            'initials' => function ($fullname) {
+                // Getting the initials of the current user
+            }
+        ]);
 
 try {
     $transaction = Transaction::begin($orders);
 
     foreach($orders->fetchAll() as $order) {
+        echo $order->users_initials;
         $order->delete();
     }
 
