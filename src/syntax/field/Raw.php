@@ -5,7 +5,7 @@ namespace suql\syntax\field;
 /**
  * Сырые sql выражения
  * Пример:
- * RawField::expression("CONCAT(@Name, ' (', FORMAT(@Price, 0), ' р.)') AS tarif"),
+ * Raw::expression("CONCAT(@Name, ' (', FORMAT(@Price, 0), ' р.)') AS tarif"),
  * Символ @ - будет заменен при сборке запроса на текущую используемую таблицу
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
