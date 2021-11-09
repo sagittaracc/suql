@@ -17,6 +17,8 @@ SuQL stands for Sugar SQL and this is an ORM library for PHP.
 Install the [SuQLBasic Template](https://github.com/sagittaracc/suql-app)
 
 ### Example
+Find all the paid orders of the users that are not active anymore and delete them.
+
 ```php
 $orders =
     Users:find(['active' => false])
