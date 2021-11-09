@@ -22,8 +22,8 @@ Find all the paid orders of the users that are not active anymore and delete the
 ```php
 $orders =
     Users:find(['active' => false])
-         ->getOrders()
-         ->where(['paid' => true]);
+        ->getOrders()
+        ->where(['paid' => true]);
 
 try {
     $transaction = Transaction::begin($orders);
