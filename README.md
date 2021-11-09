@@ -53,7 +53,7 @@ try {
 The minimum requirement - PHP 5.6.
 
 ### Examples
-See more examples in the ```tests``` directory
+See more examples in the ```tests``` directory or read [the documentation](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
 
 ### Tests
 This is tested with [PHPUnit](https://phpunit.de/). To run tests:
