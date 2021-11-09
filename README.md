@@ -20,7 +20,8 @@ Install the [SuQLBasic Template](https://github.com/sagittaracc/suql-app)
 ```php
 $orders =
     Users:find(['active' => false])
-         ->getOrders()->where(['paid' => true]);
+         ->getOrders()
+         ->where(['paid' => true]);
 
 try {
     $transaction = Transaction::begin($orders);
