@@ -2,41 +2,29 @@
 
 declare(strict_types=1);
 
-use test\suql\models\NoName;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\NestedQueryModel;
 use test\suql\models\SubUnion;
 
-final class SelectSubQueryTest extends TestCase
+final class NestedQueryTest extends TestCase
 {
-    /**
-     * SELECT
-     *   ...
-     * FROM (
-     *   SELECT
-     *     ...
-     *   FROM <table>
-     *   ...
-     * )
-     */
-    public function testSubQueries(): void
+    public function testNestedQuery(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                active_groups.name,
-                active_groups.count
+                tbl_1.field_1,
+                tbl_1.field_2
             from (
                 select
-                    groups.name,
-                    count(groups.name) as count
-                from users
-                inner join user_group on users.id = user_group.user_id
-                inner join groups on user_group.group_id = groups.id
-                group by groups.name
-            ) active_groups
+                    table_1.field_1,
+                    table_1.field_2,
+                    table_1.field_3
+                from table_1
+            ) tbl_1
 SQL);
 
-        $query = NoName::all();
+        $query = NestedQueryModel::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }

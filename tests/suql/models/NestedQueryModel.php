@@ -4,16 +4,16 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class NoName extends ActiveRecord
+class NestedQueryModel extends ActiveRecord
 {
     public function query()
     {
-        return 'no_name';
+        return 'nested_query_model';
     }
 
     public function table()
     {
-        return ActiveGroups::all();
+        return TableModel::all()->select(['field_1', 'field_2', 'field_3']);
     }
 
     public function fields()
@@ -24,8 +24,8 @@ class NoName extends ActiveRecord
     public function view()
     {
         return $this->select([
-            'name',
-            'count',
+            'field_1',
+            'field_2',
         ]);
     }
 }
