@@ -609,8 +609,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $this->fetch('one');
     }
     /**
-     * TODO: Возможно лучше избавиться от этого метода
-     * Оставить только $queryName
      * Query
      * @return string
      */
