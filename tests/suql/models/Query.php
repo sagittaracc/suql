@@ -13,14 +13,9 @@ class Query extends ActiveRecord
 
     public function fields()
     {
-        return [];
-    }
-
-    public function view()
-    {
-        return $this->select([
+        return [
             'field_1',
             'field_2',
-        ]);
+        ];
     }
 }
