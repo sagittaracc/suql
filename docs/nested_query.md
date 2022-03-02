@@ -33,18 +33,18 @@ class Query extends ActiveRecord
 ```
 ## Usage
 ```php
-    /**
-        select
-            NestedQuery.field_1,
-            NestedQuery.field_2
-        from (
-            select
-                table_1.field_1,
-                table_1.field_2,
-                table_1.field_3
-            from table_1
-        ) NestedQuery
-    */
-
     Query::all()->getRawSql();
+```
+## Raw SQL
+```sql
+select
+    NestedQuery.field_1,
+    NestedQuery.field_2
+from (
+    select
+        table_1.field_1,
+        table_1.field_2,
+        table_1.field_3
+    from table_1
+) NestedQuery
 ```
