@@ -13,19 +13,11 @@ class NestedQueryModel extends ActiveRecord
 
     public function table()
     {
-        return TableModel::all()->select(['field_1', 'field_2', 'field_3']);
+        return 'table_1';
     }
 
     public function fields()
     {
         return [];
-    }
-
-    public function view()
-    {
-        return $this->select([
-            'field_1',
-            'field_2',
-        ]);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use test\suql\models\NestedQueryModel;
+use test\suql\models\QueryModel;
 use test\suql\models\SubUnion;
 
 final class NestedQueryTest extends TestCase
@@ -13,18 +13,18 @@ final class NestedQueryTest extends TestCase
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                tbl_1.field_1,
-                tbl_1.field_2
+                nested_query_model.field_1,
+                nested_query_model.field_2
             from (
                 select
                     table_1.field_1,
                     table_1.field_2,
                     table_1.field_3
                 from table_1
-            ) tbl_1
+            ) nested_query_model
 SQL);
 
-        $query = NestedQueryModel::all();
+        $query = QueryModel::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }

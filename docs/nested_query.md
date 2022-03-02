@@ -1,9 +1,9 @@
 ```php
-class TableModel extends ActiveRecord
+class NestedQueryModel extends ActiveRecord
 {
     public function query()
     {
-        return 'tbl_1';
+        return 'nested_query_model';
     }
 
     public function table()
@@ -18,16 +18,16 @@ class TableModel extends ActiveRecord
 }
 ```
 ```php
-class NestedQueryModel extends ActiveRecord
+class QueryModel extends ActiveRecord
 {
     public function query()
     {
-        return 'nested_query_model';
+        return 'query_model';
     }
 
     public function table()
     {
-        return TableModel::all()->select(['field_1', 'field_2', 'field_3']);
+        return NestedQueryModel::all()->select(['field_1', 'field_2', 'field_3']);
     }
 
     public function fields()
@@ -47,16 +47,16 @@ class NestedQueryModel extends ActiveRecord
 ```php
     /**
         select
-            tbl_1.field_1,
-            tbl_1.field_2
+            nested_query_model.field_1,
+            nested_query_model.field_2
         from (
             select
                 table_1.field_1,
                 table_1.field_2,
                 table_1.field_3
             from table_1
-        ) tbl_1
+        ) nested_query_model
     */
 
-    NestedQueryModel::all()->getRawSql();
+    QueryModel::all()->getRawSql();
 ```
