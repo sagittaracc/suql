@@ -25,5 +25,6 @@ class Query extends ActiveRecord
     $query2 = Query::all()->select(['field_4', 'field_5', 'field_6'])->as('query2');
 
     $query = $query1->and([$query2]);
+
     $query->getRawSql();
 ```
