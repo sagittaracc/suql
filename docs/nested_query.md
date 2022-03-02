@@ -1,3 +1,4 @@
+## Nested query
 ```php
 class NestedQueryModel extends ActiveRecord
 {
@@ -17,6 +18,7 @@ class NestedQueryModel extends ActiveRecord
     }
 }
 ```
+## Inner query
 ```php
 class QueryModel extends ActiveRecord
 {
@@ -44,6 +46,7 @@ class QueryModel extends ActiveRecord
     }
 }
 ```
+## Usage
 ```php
     /**
         select
