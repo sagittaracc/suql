@@ -5,7 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use test\suql\models\Query1;
-use test\suql\models\Query2;
+use test\suql\models\QuerySome;
 
 final class SelectTest extends TestCase
 {
@@ -76,7 +76,7 @@ SQL);
             from table_2 t2
 SQL);
 
-        $query = Query2::all();
+        $query = QuerySome::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }

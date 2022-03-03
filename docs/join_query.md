@@ -1,11 +1,41 @@
-# Simple join
-## Query
+## Queries
+### Query1
 ```php
-class Query extends ActiveRecord
+class Query1 extends ActiveRecord
 {
     public function table()
     {
         return 'table_1';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+}
+```
+### Query2
+```php
+class Query2 extends ActiveRecord
+{
+    public function table()
+    {
+        return 'table_2';
+    }
+
+    public function fields()
+    {
+        return [];
+    }
+}
+```
+### Query3
+```php
+class Query3 extends ActiveRecord
+{
+    public function table()
+    {
+        return 'table_3';
     }
 
     public function fields()
@@ -31,15 +61,32 @@ class DBSchema extends Scheme
     }
 }
 ```
-## Usage
+# Simple join
+## Usage #1
 ```php
 $query =
-    Query::all()
+    Query1::all()
         ->select([
             'f1',
         ])
         ->join('table_2')
         ->join('table_3')
+            ->select([
+                'f1' => 'af1',
+                'f2' => 'af2',
+            ]);
+
+$query->getRawSql();
+```
+## Usage #2
+```php
+$query =
+    Query1::all()
+        ->select([
+            'f1',
+        ])
+        ->getQuery2()
+        ->getQuery3()
             ->select([
                 'f1' => 'af1',
                 'f2' => 'af2',
@@ -58,23 +105,47 @@ inner join table_2 on table_1.id = table_2.id
 inner join table_3 on table_2.id = table_3.id
 ```
 # Smart join
-...
-# Join by named relation
-## Query
+## Usage #1
 ```php
-class Query extends ActiveRecord
-{
-    public function table()
-    {
-        return 'table_1';
-    }
+$query =
+    Query1::all()
+        ->select([
+            'f1',
+        ])
+        ->join('table_3', 'inner', 'smart')
+            ->select([
+                'f1' => 'af1',
+                'f2' => 'af2',
+            ]);
 
-    public function fields()
-    {
-        return [];
-    }
-}
+$query->getRawSql();
 ```
+## Usage #2
+```php
+$query =
+    Query1::all()
+        ->select([
+            'f1',
+        ])
+        ->getQuery3(['algorithm' => 'smart'])
+            ->select([
+                'f1' => 'af1',
+                'f2' => 'af2',
+            ]);
+
+$query->getRawSql();
+```
+## Raw SQL
+```sql
+select
+    table_1.f1,
+    table_3.f1 as af1,
+    table_3.f2 as af2
+from table_1
+inner join table_2 on table_1.id = table_2.id
+inner join table_3 on table_2.id = table_3.id
+```
+# Join by named relation
 ## Relation 1
 ```php
 class NamedRel1 extends NamedRel
@@ -117,7 +188,7 @@ class NamedRel2 extends NamedRel
 ```
 ## Usage
 ```php
-    $query = Query::all()->join(NamedRel1::class)->join(NamedRel2::class, 'left');
+    $query = Query1::all()->join(NamedRel1::class)->join(NamedRel2::class, 'left');
 
     $query->getRawSql();
 ```
