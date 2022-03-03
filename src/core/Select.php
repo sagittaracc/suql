@@ -20,6 +20,10 @@ class Select extends Query implements SelectQueryInterface
      */
     private $from = null;
     /**
+     * @var string алиас таблицы из которой происходит выборка
+     */
+    private $alias = null;
+    /**
      * @var array список условий where
      */
     private $where = [];
@@ -163,6 +167,14 @@ class Select extends Query implements SelectQueryInterface
 
         $this->from = $table;
         $this->table_list[] = $table;
+    }
+    /**
+     * Добавляет алиас таблицы from секции
+     * @param string $alias алиас таблицы
+     */
+    public function addAlias($alias)
+    {
+        $this->alias = $alias;
     }
     /**
      * Получает таблицу секции from

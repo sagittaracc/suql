@@ -8,7 +8,7 @@ class User extends ActiveRecord
 {
     public function table()
     {
-        return 'users';
+        return ['users' => 'u'];
     }
 
     public function create()
