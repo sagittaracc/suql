@@ -1,5 +1,12 @@
 # Change log
 
+## v7.1.3 - March 3, 2022
+
+- Support table aliases (FROM CLAUSE)
+- Refactor
+
+---
+
 ## v7.1.2 - October 1, 2021
 
 - Result serialization
