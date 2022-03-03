@@ -78,4 +78,35 @@ SQL);
                 ->getRawSql()
         );
     }
+
+    public function testOrmChain(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id,
+                groups.name
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join groups on user_group.group_id = groups.id
+SQL);
+
+        // Simple join
+        $this->assertEquals(
+            $sql,
+            User::all()
+                ->select(['id'])
+                ->getUserGroup()
+                ->getGroup()
+                ->getRawSql()
+        );
+        // Smart join
+        $this->assertEquals(
+            $sql,
+            User::all()
+                ->select(['id'])
+                ->getGroup([
+                    'algorithm' => 'smart'
+                ])->getRawSql()
+        );
+    }
 }
