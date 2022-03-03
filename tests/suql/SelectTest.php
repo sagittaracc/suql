@@ -2,80 +2,65 @@
 
 declare(strict_types=1);
 
-use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use test\suql\models\Query1;
+use test\suql\models\Query2;
 
 final class SelectTest extends TestCase
 {
-    /**
-     * SELECT * FROM <table>
-     */
     public function testSelectAll(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
                 *
-            from users
+            from table_2
 SQL);
 
-        $query = User::all();
+        $query = Query2::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }
-    /**
-     * SELECT <table>.* FROM <table>
-     */
+
     public function testSelectAllWithTableName(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                users.*
-            from users
+                table_2.*
+            from table_2
 SQL);
 
-        $query = User::all()->select(['*']);
+        $query = Query2::all()->select(['*']);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
-    /**
-     * SELECT
-     *   <table>.<field-1>,
-     *   <table>.<field-2>
-     * FROM <table>
-     */
+
     public function testSelectFieldList(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                users.id,
-                users.name
-            from users
+                table_2.f1,
+                table_2.f2
+            from table_2
 SQL);
 
-        $query = User::all()->select(['id', 'name']);
+        $query = Query2::all()->select(['f1', 'f2']);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
-    /**
-     * SELECT
-     *   <table>.<field-1> AS <alias-1>,
-     *   <table>.<field-2> AS <alias-2>
-     * FROM <table>
-     */
+
     public function testSelectUsingAliases(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                users.id as uid,
-                users.name as uname
-            from users
+                table_2.f1 as af1,
+                table_2.f2 as af2
+            from table_2
 SQL);
 
-        $query = User::all()->select([
-            'id' => 'uid',
-            'name' => 'uname',
+        $query = Query2::all()->select([
+            'f1' => 'af1',
+            'f2' => 'af2',
         ]);
 
         $this->assertEquals($sql, $query->getRawSql());
