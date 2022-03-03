@@ -185,6 +185,14 @@ class Select extends Query implements SelectQueryInterface
         return $this->from;
     }
     /**
+     * Получает алиас секции from
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+    /**
      * Добавляет выражение
      * @param string|Expression $expression
      * @param array $stack
