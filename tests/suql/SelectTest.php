@@ -5,6 +5,7 @@ declare(strict_types=1);
 use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\Query1;
 
 final class SelectTest extends TestCase
 {
@@ -76,6 +77,21 @@ SQL);
             'id' => 'uid',
             'name' => 'uname',
         ]);
+
+        $this->assertEquals($sql, $query->getRawSql());
+    }
+
+    public function testSelectWithTableAlias(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                t.f1,
+                t.f2,
+                t.f3
+            from table t
+SQL);
+
+        $query = Query1::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }
