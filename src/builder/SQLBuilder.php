@@ -5,12 +5,7 @@ namespace suql\builder;
 use sagittaracc\ArrayHelper;
 use sagittaracc\Map;
 use sagittaracc\PlaceholderHelper;
-use suql\core\FunctionQueryInterface;
-use suql\core\InsertQueryInterface;
 use suql\core\Name;
-use suql\core\ProcedureQueryInterface;
-use suql\core\SelectQueryInterface;
-use suql\core\UnionQueryInterface;
 use suql\modifier\field\SQLFunctionModifier;
 
 /**
