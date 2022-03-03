@@ -84,6 +84,16 @@ class Select extends Query implements SelectQueryInterface
      */
     public function addField($table, $name, $visible = true)
     {
+        $tablePlaceholderName = $table;
+
+        if ($this->getOSuQL()->getScheme()->hasTableAlias($table)) {
+            $tablePlaceholderName = $this->getOSuQL()->getScheme()->getTableAlias($table);
+        }
+
+        if ($tablePlaceholderName === $this->from && $this->alias) {
+            $table = $this->alias;
+        }
+
         $field = new FieldName($table, $name);
 
         $this->select[] = new Field(

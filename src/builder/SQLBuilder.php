@@ -261,13 +261,17 @@ class SQLBuilder
     protected function buildFrom($query)
     {
         $from = $this->osuql->getQuery($query)->getFrom();
+        $alias = $this->osuql->getQuery($query)->getAlias();
 
         if (!$from)
             return '';
 
         return $this->osuql->hasQuery($from)
             ? " from @$from $from"
-            : " from $from";
+            : ($alias
+                ? " from $from $alias"
+                : " from $from"
+            );
     }
     /**
      * Строит секцию join
