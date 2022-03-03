@@ -1,5 +1,11 @@
 # Change log
 
+## v7.1.4 - March 4, 2022
+
+- Join by named relations
+
+---
+
 ## v7.1.3 - March 3, 2022
 
 - Support table aliases (FROM CLAUSE)
