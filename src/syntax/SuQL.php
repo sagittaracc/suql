@@ -262,16 +262,26 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public function join($option, $type = 'inner', $algorithm = 'simple')
     {
         if (is_string($option)) {
-            $table = $option;
-
-            if ($algorithm === 'simple') {
-                $this->getQuery($this->query())->addJoin($type, $table);
+            if (class_exists($option)) {
+                $namedRel = new $option;
+    
+                $scheme = $this->getScheme();
+                $scheme->rel($namedRel->leftTable(), $namedRel->rightTable(), $namedRel->on());
+        
+                $this->join($namedRel->rightTable(), $type);
             }
-            else if ($algorithm === 'smart') {
-                $this->getQuery($this->query())->addSmartJoin($this->currentTable, $table, $type);
+            else {
+                $table = $option;
+    
+                if ($algorithm === 'simple') {
+                    $this->getQuery($this->query())->addJoin($type, $table);
+                }
+                else if ($algorithm === 'smart') {
+                    $this->getQuery($this->query())->addSmartJoin($this->currentTable, $table, $type);
+                }
+    
+                $this->currentTable = $table;
             }
-
-            $this->currentTable = $table;
         }
         else if ($option instanceof SuQL) {
             $subquery = $option;
@@ -285,24 +295,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
             $this->extend($subquery->getQueries());
             $this->currentTable = $subquery->query();
-        }
-
-        return $this;
-    }
-    /**
-     * Сцепление по именнованной связи
-     * @param string $namedRelClass класс именованной связи
-     * @param string $type тип join
-     */
-    public function joinBy($namedRelClass, $type = 'inner')
-    {
-        if (class_exists($namedRelClass)) {
-            $namedRel = new $namedRelClass;
-    
-            $scheme = $this->getScheme();
-            $scheme->rel($namedRel->leftTable(), $namedRel->rightTable(), $namedRel->on());
-    
-            $this->join($namedRel->rightTable(), $type);
         }
 
         return $this;

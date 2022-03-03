@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use test\suql\models\Query1;
 use test\suql\schema\NamedRel2;
+use test\suql\schema\NamedRel3;
 
 final class JoinTest extends TestCase
 {
@@ -119,9 +120,10 @@ SQL);
                 *
             from table_1
             inner join table_2 on table_1.id = table_2.id
+            left join table_3 on table_2.id = table_3.id
 SQL);
 
-        $query = Query1::all()->joinBy(NamedRel2::class);
+        $query = Query1::all()->join(NamedRel2::class)->join(NamedRel3::class, 'left');
 
         $this->assertEquals($sql, $query->getRawSql());
     }
