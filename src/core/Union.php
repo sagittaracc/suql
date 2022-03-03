@@ -9,7 +9,7 @@ use suql\core\UnionQueryInterface;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Union extends Query implements UnionQueryInterface
+class Union extends Query implements UnionQueryInterface, Buildable
 {
     /**
      * @var string $suql строковое представление union запроса @query1 union [all] @query2 union ...
@@ -24,6 +24,13 @@ class Union extends Query implements UnionQueryInterface
     {
         parent::__construct($osuql);
         $this->suql = $suql;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getBuilderFunction()
+    {
+        return 'buildUnionQuery';
     }
     /**
      * Получить union строку запроса

@@ -9,7 +9,7 @@ use suql\core\SelectQueryInterface;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Select extends Query implements SelectQueryInterface
+class Select extends Query implements SelectQueryInterface, Buildable
 {
     /**
      * @var array перечень suql\core\Field полей учавствующих в выборке
@@ -63,6 +63,13 @@ class Select extends Query implements SelectQueryInterface
      * @var array список таблиц учавствующих в запросе. Необходимо для выполнения автоматического join
      */
     private $table_list  = [];
+    /**
+     * @inheritdoc
+     */
+    public function getBuilderFunction()
+    {
+        return 'buildSelectQuery';
+    }
     /**
      * Получить перечень suql\core\Field учавствующий в запросе.
      * @return array

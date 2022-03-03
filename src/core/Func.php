@@ -9,7 +9,7 @@ use sagittaracc\PlaceholderHelper;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Func extends Query implements FunctionQueryInterface
+class Func extends Query implements FunctionQueryInterface, Buildable
 {
     /**
      * @var string название хранимой функции
@@ -28,6 +28,13 @@ class Func extends Query implements FunctionQueryInterface
     {
         parent::__construct($osuql);
         $this->name = $name;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getBuilderFunction()
+    {
+        return 'buildStoredFunction';
     }
     /**
      * Добавление параметров в хранимую функцию

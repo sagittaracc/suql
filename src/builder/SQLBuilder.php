@@ -95,20 +95,11 @@ class SQLBuilder
     private function buildQuery($query)
     {
         $osuql = $this->osuql->getQuery($query);
+        $builderFunctionName = $osuql->getBuilderFunction();
 
-        if ($osuql instanceof ProcedureQueryInterface) {
-            return $this->buildStoredProcedure($query);
-        } else if ($osuql instanceof FunctionQueryInterface) {
-            return $this->buildStoredFunction($query);
-        } else if ($osuql instanceof SelectQueryInterface) {
-            return $this->buildSelectQuery($query);
-        } else if ($osuql instanceof InsertQueryInterface) {
-            return $this->buildInsertQuery($query);
-        } else if ($osuql instanceof UnionQueryInterface) {
-            return $this->buildUnionQuery($query);
-        } else {
-            return null;
-        }
+        return method_exists($this, $builderFunctionName)
+            ? $this->$builderFunctionName($query)
+            : null;
     }
     /**
      * Конвертирует хранимую процедуру

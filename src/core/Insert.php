@@ -10,7 +10,7 @@ use suql\core\InsertQueryInterface;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Insert extends Query implements InsertQueryInterface
+class Insert extends Query implements InsertQueryInterface, Buildable
 {
     /**
      * @var string таблица в которую осуществляется добавление записей
@@ -20,6 +20,13 @@ class Insert extends Query implements InsertQueryInterface
      * @var array массив записей для добавления
      */
     private $values = [];
+    /**
+     * @inheritdoc
+     */
+    public function getBuilderFunction()
+    {
+        return 'buildInsertQuery';
+    }
     /**
      * Задать таблицу в которую будут добавляться записи
      * @param string $table название таблицы
