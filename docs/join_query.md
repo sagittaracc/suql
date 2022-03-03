@@ -1,3 +1,13 @@
+# Simple join
+
+...
+
+# Smart join
+
+...
+
+# Join by named relation
+
 ## Query
 ```php
 class Query extends ActiveRecord
