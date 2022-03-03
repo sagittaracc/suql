@@ -14,10 +14,10 @@ final class SelectTest extends TestCase
         $sql = StringHelper::trimSql(<<<SQL
             select
                 *
-            from table_2
+            from table_1
 SQL);
 
-        $query = Query2::all();
+        $query = Query1::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }
@@ -26,11 +26,11 @@ SQL);
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                table_2.*
-            from table_2
+                table_1.*
+            from table_1
 SQL);
 
-        $query = Query2::all()->select(['*']);
+        $query = Query1::all()->select(['*']);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
@@ -39,12 +39,12 @@ SQL);
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                table_2.f1,
-                table_2.f2
-            from table_2
+                table_1.f1,
+                table_1.f2
+            from table_1
 SQL);
 
-        $query = Query2::all()->select(['f1', 'f2']);
+        $query = Query1::all()->select(['f1', 'f2']);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
@@ -53,12 +53,12 @@ SQL);
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                table_2.f1 as af1,
-                table_2.f2 as af2
-            from table_2
+                table_1.f1 as af1,
+                table_1.f2 as af2
+            from table_1
 SQL);
 
-        $query = Query2::all()->select([
+        $query = Query1::all()->select([
             'f1' => 'af1',
             'f2' => 'af2',
         ]);
@@ -70,13 +70,13 @@ SQL);
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                t.f1,
-                t.f2,
-                t.f3
-            from table t
+                t2.f1,
+                t2.f2,
+                t2.f3
+            from table_2 t2
 SQL);
 
-        $query = Query1::all();
+        $query = Query2::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }

@@ -8,15 +8,11 @@ class Query1 extends ActiveRecord
 {
     public function table()
     {
-        return ['table' => 't'];
+        return 'table_1';
     }
 
     public function fields()
     {
-        return [
-            'f1',
-            'f2',
-            'f3',
-        ];
+        return [];
     }
 }
