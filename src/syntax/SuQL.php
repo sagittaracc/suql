@@ -290,6 +290,24 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $this;
     }
     /**
+     * Сцепление по именнованной связи
+     * @param string $namedRelClass класс именованной связи
+     * @param string $type тип join
+     */
+    public function joinBy($namedRelClass, $type = 'inner')
+    {
+        if (class_exists($namedRelClass)) {
+            $namedRel = new $namedRelClass;
+    
+            $scheme = $this->getScheme();
+            $scheme->rel($namedRel->leftTable(), $namedRel->rightTable(), $namedRel->on());
+    
+            $this->join($namedRel->rightTable(), $type);
+        }
+
+        return $this;
+    }
+    /**
      * Алиас для join
      * @return self
      */

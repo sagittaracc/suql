@@ -6,6 +6,8 @@ use test\suql\models\LastRegistration;
 use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\Query1;
+use test\suql\schema\NamedRel2;
 
 final class JoinTest extends TestCase
 {
@@ -108,5 +110,19 @@ SQL);
                     'algorithm' => 'smart'
                 ])->getRawSql()
         );
+    }
+
+    public function testJoinByNamedRel(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from table_1
+            inner join table_2 on table_1.id = table_2.id
+SQL);
+
+        $query = Query1::all()->joinBy(NamedRel2::class);
+
+        $this->assertEquals($sql, $query->getRawSql());
     }
 }
