@@ -8,16 +8,16 @@ class NamedRel2 extends NamedRel
 {
     public function leftTable()
     {
-        return 'table_1';
+        return 'table_2';
     }
 
     public function rightTable()
     {
-        return 'table_2';
+        return 'table_3';
     }
 
     public function on()
     {
-        return 'table_1.id = table_2.id';
+        return 'table_2.id = table_3.id';
     }
 }

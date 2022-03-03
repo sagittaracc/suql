@@ -7,41 +7,33 @@ use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use test\suql\models\Query1;
+use test\suql\schema\NamedRel1;
 use test\suql\schema\NamedRel2;
-use test\suql\schema\NamedRel3;
 
 final class JoinTest extends TestCase
 {
-    /**
-     * SELECT
-     *   ...
-     * FROM <table>
-     * [INNER|LEFT|RIGHT] JOIN <join-table-1> ON <join-1>
-     * [INNER|LEFT|RIGHT] JOIN <join-table-2> ON <join-2>
-     * ...
-     */
     public function testSimpleJoin(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                users.id,
-                groups.id as gid,
-                groups.name as gname
-            from users
-            inner join user_group on users.id = user_group.user_id
-            inner join groups on user_group.group_id = groups.id
+                table_1.f1,
+                table_3.f1 as af1,
+                table_3.f2 as af2
+            from table_1
+            inner join table_2 on table_1.id = table_2.id
+            inner join table_3 on table_2.id = table_3.id
 SQL);
 
         $query =
-            User::all()
+            Query1::all()
                 ->select([
-                    'id',
+                    'f1',
                 ])
-                ->join('user_group')
-                ->join('groups')
+                ->join('table_2')
+                ->join('table_3')
                     ->select([
-                        'id' => 'gid',
-                        'name' => 'gname',
+                        'f1' => 'af1',
+                        'f2' => 'af2',
                     ]);
 
         $this->assertEquals($sql, $query->getRawSql());
@@ -123,7 +115,7 @@ SQL);
             left join table_3 on table_2.id = table_3.id
 SQL);
 
-        $query = Query1::all()->join(NamedRel2::class)->join(NamedRel3::class, 'left');
+        $query = Query1::all()->join(NamedRel1::class)->join(NamedRel2::class, 'left');
 
         $this->assertEquals($sql, $query->getRawSql());
     }

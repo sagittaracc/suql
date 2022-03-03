@@ -14,6 +14,10 @@ class AppScheme extends Scheme
             'groups' => 'g',
             'temp_table' => 'tt',
             'table_name' => 'tn',
+            // ---
+            'table_1' => 't1',
+            'table_2' => 't2',
+            'table_3' => 't3',
         ]);
 
         // Связь между реальными таблицами в базе данных
@@ -25,5 +29,8 @@ class AppScheme extends Scheme
         // Связи с абстрактными вьюхами
         $this->rel('users', 'last_registration', 'users.registration = last_registration.lastRegistration');
         $this->rel('user_group', 'first_group', 'user_group.group_id = first_group.id');
+
+        $this->rel('{{t1}}', '{{t2}}', '{{t1}}.id = {{t2}}.id');
+        $this->rel('{{t2}}', '{{t3}}', '{{t2}}.id = {{t3}}.id');
     }
 }
