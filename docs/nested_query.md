@@ -13,7 +13,7 @@ class NestedQuery extends ActiveRecord
     }
 }
 ```
-## Inner query
+## Main query
 ```php
 class Query extends ActiveRecord
 {
