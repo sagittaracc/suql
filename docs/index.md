@@ -1,5 +1,7 @@
 ## Documentation
 
+### Clauses
+
 [Select Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/SelectTest.php)
 
 [Order Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/OrderTest.php)
@@ -11,6 +13,8 @@
 [Limit Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/LimitTest.php)
 
 [Where Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/WhereTest.php)
+
+### Advanced Queries
 
 [Nested Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/NestedQueryTest.php)
 
