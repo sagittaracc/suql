@@ -46,9 +46,9 @@
 
 ### Features
 
-[Join php array with a db table](https://github.com/sagittaracc/suql/blob/master/tests/suql/FeatureTest.php)
+[Join php array with a db table](https://github.com/sagittaracc/suql/blob/master/tests/suql/ProcessDataFeatureTest.php)
 
-[Post process functions](https://github.com/sagittaracc/suql/blob/master/tests/suql/FeatureTest.php)
+[Post process functions](https://github.com/sagittaracc/suql/blob/master/tests/suql/ProcessDataFeatureTest.php)
 
 [Field Modifier](https://github.com/sagittaracc/suql/blob/master/tests/suql/FieldModifierTest.php)
 

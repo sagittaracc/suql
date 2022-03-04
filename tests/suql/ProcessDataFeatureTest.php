@@ -8,7 +8,7 @@ use suql\syntax\Query;
 use test\suql\models\Query10;
 use test\suql\models\Query9;
 
-final class FeatureTest extends TestCase
+final class ProcessDataFeatureTest extends TestCase
 {
     public function setUp(): void
     {
