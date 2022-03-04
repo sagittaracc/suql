@@ -52,48 +52,6 @@ final class QueryTest extends TestCase
         }
     }
 
-    public function testJoinWithPHPArray(): void
-    {
-        $tableData = [
-            ['id' => 1, 'name' => 'mario'],
-            ['id' => 2, 'name' => 'fayword'],
-            ['id' => 3, 'name' => '1nterFucker'],
-        ];
-
-        $query = TempTable::load($tableData)->join('table_name');
-
-        $this->assertEquals([
-            ['id' => '1', 'name' => 'mario', 'field' => '1', 'another_field' => '1'],
-            ['id' => '2', 'name' => 'fayword', 'field' => '2', 'another_field' => '2'],
-            ['id' => '3', 'name' => '1nterFucker', 'field' => '3', 'another_field' => '3'],
-        ], $query->fetchAll());
-    }
-
-    public function testPostSuQLFunction(): void
-    {
-        // no using post function
-        $data = TableName::all()->fetchAll();
-        $this->assertEquals([
-            ['field' => '1', 'another_field' => '1'],
-            ['field' => '2', 'another_field' => '2'],
-            ['field' => '3', 'another_field' => '3'],
-            ['field' => '4', 'another_field' => '4'],
-            ['field' => '5', 'another_field' => '5'],
-            ['field' => '6', 'another_field' => '6'],
-        ], $data);
-
-        // using post function
-        $data = TableName::all()->fieldToInt()->fetchAll();
-        $this->assertEquals([
-            ['field' => 1, 'another_field' => '1'],
-            ['field' => 2, 'another_field' => '2'],
-            ['field' => 3, 'another_field' => '3'],
-            ['field' => 4, 'another_field' => '4'],
-            ['field' => 5, 'another_field' => '5'],
-            ['field' => 6, 'another_field' => '6'],
-        ], $data);
-    }
-
     public function testFetchAllAndOne(): void
     {
         $data = TableName::all()->select(['field'])->fetchAll();

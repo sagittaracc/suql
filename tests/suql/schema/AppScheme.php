@@ -18,6 +18,8 @@ class AppScheme extends Scheme
             'table_1' => 't1',
             'table_2' => 't2',
             'table_3' => 't3',
+            'table_9' => 't9',
+            'table_10' => 't10',
         ]);
 
         // Связь между реальными таблицами в базе данных
@@ -32,5 +34,6 @@ class AppScheme extends Scheme
 
         $this->rel('{{t1}}', '{{t2}}', '{{t1}}.id = {{t2}}.id');
         $this->rel('{{t2}}', '{{t3}}', '{{t2}}.id = {{t3}}.id');
+        $this->rel('{{t9}}', '{{t10}}', '{{t9}}.p1 = {{t10}}.f1');
     }
 }
