@@ -28,6 +28,10 @@
 
 [Raw Queries](https://github.com/sagittaracc/suql/blob/master/tests/suql/RawQueryTest.php)
 
+### Insert Query
+
+[Insert](https://github.com/sagittaracc/suql/blob/master/tests/suql/InsertTest.php)
+
 ### Transaction
 
 [Transaction](https://github.com/sagittaracc/suql/blob/master/tests/suql/TransactionTest.php)
