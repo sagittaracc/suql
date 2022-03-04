@@ -4,42 +4,14 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use test\suql\models\Query;
-use test\suql\models\SubUnion;
+use test\suql\models\Query6;
 
 final class NestedQueryTest extends TestCase
 {
     public function testNestedQuery(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                test_suql_models_NestedQuery.field_1,
-                test_suql_models_NestedQuery.field_2
-            from (
-                select
-                    table_1.field_1,
-                    table_1.field_2,
-                    table_1.field_3
-                from table_1
-            ) test_suql_models_NestedQuery
-SQL);
-
-        $query = Query::all();
-
-        $this->assertEquals($sql, $query->getRawSql());
-    }
-
-    public function testSubUnion(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select * from (
-                (select min(users.registration) as reg_interval from users)
-                union
-                (select max(users.registration) as reg_interval from users)
-            ) last_registration
-SQL);
-        $query = SubUnion::all();
-
-        $this->assertEquals($sql, $query->getRawSql());
+        $expected = StringHelper::trimSql(require('queries/q14.php'));
+        $actual = Query6::all()->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
 }

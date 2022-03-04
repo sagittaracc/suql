@@ -9,3 +9,5 @@
 [Join Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/JoinTest.php)
 
 [Limit Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/LimitTest.php)
+
+[Nested Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/NestedQueryTest.php)

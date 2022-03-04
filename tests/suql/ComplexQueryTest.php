@@ -7,6 +7,7 @@ use sagittaracc\StringHelper;
 use test\suql\models\FirstGroup;
 use test\suql\models\LastRegistration;
 use test\suql\models\Query1;
+use test\suql\models\SubUnion;
 use test\suql\models\User;
 
 final class ComplexQueryTest extends TestCase
@@ -92,6 +93,20 @@ SQL);
                 ->getFirstGroup([
                     'algorithm' => 'smart',
                 ]);
+
+        $this->assertEquals($sql, $query->getRawSql());
+    }
+
+    public function testSubUnion(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select * from (
+                (select min(users.registration) as reg_interval from users)
+                union
+                (select max(users.registration) as reg_interval from users)
+            ) last_registration
+SQL);
+        $query = SubUnion::all();
 
         $this->assertEquals($sql, $query->getRawSql());
     }

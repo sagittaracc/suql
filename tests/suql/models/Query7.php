@@ -4,11 +4,11 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class NestedQuery extends ActiveRecord
+class Query7 extends ActiveRecord
 {
     public function table()
     {
-        return 'table_1';
+        return 'table_7';
     }
 
     public function fields()
