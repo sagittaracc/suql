@@ -58,4 +58,4 @@ See more examples in the ```tests``` directory or read [the documentation](https
 ### Tests
 This is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
-`./vendor/bin/phpunit`
+`./vendor/bin/phpunit tests`
