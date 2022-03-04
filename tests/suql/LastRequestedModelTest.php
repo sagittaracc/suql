@@ -2,41 +2,23 @@
 
 declare(strict_types=1);
 
-use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
-use sagittaracc\StringHelper;
+use test\suql\models\Query1;
 
 final class LastRequestedModelTest extends TestCase
 {
     public function testMainModel(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from users
-SQL);
-
-        $query = User::all();
-
-        $this->assertEquals('test\suql\models\User', $query->getLastRequestedModel());
+        $query = Query1::all();
+        $this->assertEquals('test\suql\models\Query1', $query->getLastRequestedModel());
     }
 
-    public function testRequestedModel(): void
+    public function testLastRequestedModel(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id,
-                groups.name
-            from users
-            inner join user_group on users.id = user_group.user_id
-            inner join groups on user_group.group_id = groups.id
-SQL);
+        $query = Query1::all()
+            ->getQuery2()
+            ->getQuery3();
 
-        $query = User::all()
-            ->select(['id'])
-            ->getUserGroup()
-            ->getGroup();
-
-        $this->assertEquals('test\suql\models\Group', $query->getLastRequestedModel());
+        $this->assertEquals('test\suql\models\Query3', $query->getLastRequestedModel());
     }
 }
