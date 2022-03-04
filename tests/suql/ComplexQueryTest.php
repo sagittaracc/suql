@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\LastRegistration;
 use test\suql\models\Query1;
+use test\suql\models\User;
 
 final class ComplexQueryTest extends TestCase
 {
@@ -28,5 +30,33 @@ SQL);
             ->count(['f1' => 'count']);
         
         $this->assertEquals($sql, $query->getRawSql());
+    }
+
+    public function testJoinWithSubQuery(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                *
+            from users
+            inner join (
+                select
+                    max(users.registration) as lastRegistration
+                from users
+            ) last_registration on users.registration = last_registration.lastRegistration
+SQL);
+
+        $this->assertEquals(
+            $sql,
+            User::all()
+                ->join(LastRegistration::all())
+                ->getRawSql()
+        );
+
+        $this->assertEquals(
+            $sql,
+            User::all()
+                ->getLastRegistration()
+                ->getRawSql()
+        );
     }
 }
