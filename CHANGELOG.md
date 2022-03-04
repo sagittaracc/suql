@@ -1,5 +1,11 @@
 # Change log
 
+## v7.1.7 - March 4, 2022
+
+- Add documentation
+
+---
+
 ## v7.1.4 - March 4, 2022
 
 - Join by named relations
