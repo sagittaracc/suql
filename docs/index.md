@@ -23,3 +23,7 @@
 ### Db Manager
 
 [Db Manager](https://github.com/sagittaracc/suql/blob/master/tests/suql/DbManagerTest.php)
+
+### Execute Raw Queries
+
+[Raw Queries](https://github.com/sagittaracc/suql/blob/master/tests/suql/RawQueryTest.php)
