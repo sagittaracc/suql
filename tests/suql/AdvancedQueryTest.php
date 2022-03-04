@@ -66,10 +66,10 @@ final class AdvancedQueryTest extends TestCase
      * inner join table_2 on table_1.id = table_2.id
      * inner join (
      *     select
-     *         table_15.*
-     *     from table_15
+     *         table.*
+     *     from table
      *     limit 1
-     * ) query_15 on table_2.id = table_15.id
+     * ) table_3 on table_2.id = table_3.id
      * 
      */
     public function testSmartJoinWithView(): void
@@ -105,7 +105,7 @@ final class AdvancedQueryTest extends TestCase
      *     (select table_1.f1, table_1.f2, table_1.f3 from table_1)
      *         union
      *     (select table_2.f1, table_2.f2, table_2.f3 from table_2)
-     * ) query_14
+     * ) t
      * 
      */
     public function testNestedUnion(): void
