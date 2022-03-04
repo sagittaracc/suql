@@ -32,6 +32,12 @@
 
 [Insert](https://github.com/sagittaracc/suql/blob/master/tests/suql/InsertTest.php)
 
+### Fetch Method
+
+[Fetch All](https://github.com/sagittaracc/suql/blob/master/tests/suql/FetchTest.php)
+
+[Fetch One](https://github.com/sagittaracc/suql/blob/master/tests/suql/FetchTest.php)
+
 ### Transaction
 
 [Transaction](https://github.com/sagittaracc/suql/blob/master/tests/suql/TransactionTest.php)
