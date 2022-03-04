@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use suql\syntax\field\Raw;
 use test\suql\models\Query1;
 use test\suql\models\Query4;
+use test\suql\models\Query5;
 
 final class SelectTest extends TestCase
 {
@@ -80,6 +82,38 @@ final class SelectTest extends TestCase
     {
         $expected = StringHelper::trimSql(require('queries/q5.php'));
         $actual = Query4::all()->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+    /**
+     * Example:
+     * 
+     * select
+     *     2 * 2,
+     *     'Yuriy' as author
+     * 
+     */
+    public function testSelectRaw(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/q9.php'));
+        $actual = Query5::all()->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+    /**
+     * Example:
+     * 
+     * select
+     *     table.f1,
+     *     <raw sql expression>
+     * from table
+     * 
+     */
+    public function testSelectWithRaw(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/q10.php'));
+        $actual = Query1::all()->select([
+            '*',
+            Raw::expression("'Yuriy' as author"),
+        ])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }

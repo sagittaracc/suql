@@ -4,13 +4,8 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class RawQuery extends ActiveRecord
+class Query5 extends ActiveRecord
 {
-    public function query()
-    {
-        return 'raw_query';
-    }
-
     public function table()
     {
         return null;
