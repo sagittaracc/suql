@@ -5,16 +5,16 @@ namespace test\suql\models;
 use test\suql\records\ActiveRecord;
 use suql\syntax\field\Field;
 
-class LastRegistration extends ActiveRecord
+class Query13 extends ActiveRecord
 {
     public function query()
     {
-        return 'last_registration';
+        return 'query_13';
     }
 
     public function table()
     {
-        return 'users';
+        return 'table_13';
     }
 
     public function fields()
@@ -25,7 +25,7 @@ class LastRegistration extends ActiveRecord
     public function view()
     {
         return $this->select([
-            new Field(['registration' => 'lastRegistration'], [
+            new Field(['f1' => 'mf1'], [
                 'max',
             ])
         ]);

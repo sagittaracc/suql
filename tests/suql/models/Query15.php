@@ -4,16 +4,16 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class FirstGroup extends ActiveRecord
+class Query15 extends ActiveRecord
 {
     public function query()
     {
-        return 'first_group';
+        return 'query_15';
     }
 
     public function table()
     {
-        return 'groups';
+        return 'table_15';
     }
 
     public function fields()

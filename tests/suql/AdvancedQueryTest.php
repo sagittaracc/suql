@@ -4,133 +4,137 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use test\suql\models\FirstGroup;
-use test\suql\models\LastRegistration;
 use test\suql\models\Query1;
-use test\suql\models\SubUnion;
-use test\suql\models\User;
-use test\suql\models\UserGroup;
+use test\suql\models\Query13;
+use test\suql\models\Query14;
+use test\suql\models\Query15;
+use test\suql\models\Query2;
 
 final class AdvancedQueryTest extends TestCase
 {
+    /**
+     * Example:
+     * 
+     * select
+     *     table_3.f1,
+     *     count(table_3.f1) as count
+     * from table_1
+     * inner join table_2 on table_1.id = table_2.id
+     * inner join table_3 on table_2.id = table_3.id
+     * group by table_3.f1
+     * 
+     */
     public function testSelectGroupWithJoin(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                table_3.f1,
-                count(table_3.f1) as count
-            from table_1
-            inner join table_2 on table_1.id = table_2.id
-            inner join table_3 on table_2.id = table_3.id
-            group by table_3.f1
-SQL);
-
-        $query = Query1::all()
+        $expected = StringHelper::trimSql(require('queries/q22.php'));
+        $actual = Query1::all()
             ->getQuery2()
             ->getQuery3()
                 ->select(['f1'])
             ->group('f1')
-            ->count(['f1' => 'count']);
-        
-        $this->assertEquals($sql, $query->getRawSql());
+            ->count(['f1' => 'count'])
+            ->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
-
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table_1
+     * inner join (
+     *     select
+     *         max(table_2.f1) as mf1
+     *     from table_2
+     * ) t2 on table_1.id = table_2.id
+     * 
+     */
     public function testJoinWithSubQuery(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from users
-            inner join (
-                select
-                    max(users.registration) as lastRegistration
-                from users
-            ) last_registration on users.registration = last_registration.lastRegistration
-SQL);
-
-        $this->assertEquals(
-            $sql,
-            User::all()
-                ->join(LastRegistration::all())
-                ->getRawSql()
-        );
-
-        $this->assertEquals(
-            $sql,
-            User::all()
-                ->getLastRegistration()
-                ->getRawSql()
-        );
+        $expected = StringHelper::trimSql(require('queries/q23.php'));
+        $actual1 = Query1::all()->join(Query13::all())->getRawSql();
+        $actual2 = Query1::all()->getQuery13()->getRawSql();
+        $this->assertEquals($expected, $actual1);
+        $this->assertEquals($expected, $actual2);
     }
+    /**
+     * Example:
+     * 
+     * select
+     *     table_1.f1
+     * from table_1
+     * inner join table_2 on table_1.id = table_2.id
+     * inner join (
+     *     select
+     *         table_15.*
+     *     from table_15
+     *     limit 1
+     * ) query_15 on table_2.id = table_15.id
+     * 
+     */
     public function testSmartJoinWithView(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id
-            from users
-            inner join user_group on users.id = user_group.user_id
-            inner join (
-                select
-                    groups.*
-                from groups
-                limit 1
-            ) first_group on user_group.group_id = first_group.id
-SQL);
+        $expected = StringHelper::trimSql(require('queries/q26.php'));
 
-        $query =
-            User::all()
+        $actual1 =
+            Query1::all()
                 ->select([
-                    'id',
+                    'f1',
                 ])
-                ->join(FirstGroup::all(), 'inner', 'smart');
-        
-        $this->assertEquals($sql, $query->getRawSql());
+                ->join(Query15::all(), 'inner', 'smart')
+                ->getRawSql();
 
-        $query =
-            User::all()
+        $actual2 =
+            Query1::all()
                 ->select([
-                    'id',
+                    'f1',
                 ])
-                ->getFirstGroup([
+                ->getQuery15([
                     'algorithm' => 'smart',
-                ]);
+                ])
+                ->getRawSql();
 
-        $this->assertEquals($sql, $query->getRawSql());
+        
+        $this->assertEquals($expected, $actual1);
+        $this->assertEquals($expected, $actual2);
     }
-
-    public function testSubUnion(): void
+    /**
+     * Example:
+     * 
+     * select * from (
+     *     (select table_1.f1, table_1.f2, table_1.f3 from table_1)
+     *         union
+     *     (select table_2.f1, table_2.f2, table_2.f3 from table_2)
+     * ) query_14
+     * 
+     */
+    public function testNestedUnion(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select * from (
-                (select min(users.registration) as reg_interval from users)
-                union
-                (select max(users.registration) as reg_interval from users)
-            ) last_registration
-SQL);
-        $query = SubUnion::all();
-
-        $this->assertEquals($sql, $query->getRawSql());
+        $expected = StringHelper::trimSql(require('queries/q24.php'));
+        $actual = Query14::all()->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
-
-    public function testSelectWhereSubQuery(): void
+    /**
+     * Example:
+     * 
+     * select
+     *     table_1.f1 as af1,
+     *     table_1.f2
+     * from table_1
+     * where table_1.f1 not in (
+     *     select distinct
+     *         table_2.f1
+     *     from table_2
+     * )
+     * 
+     */
+    public function testSelectWhereNestedQuery(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid,
-                users.name
-            from users
-            where users.id not in (
-                select distinct
-                    user_group.user_id
-                from user_group
-            )
-SQL);
-
-        $query = User::all()->select([
-            'id' => 'uid',
-            'name',
-        ])->where('users.id not in ?', [UserGroup::all()->distinct(['user_id'])]);
-
-        $this->assertEquals($sql, $query->getRawSql());
+        $expected = StringHelper::trimSql(require('queries/q25.php'));
+        $actual = Query1::all()->select([
+            'f1' => 'af1',
+            'f2',
+        ])->where('table_1.f1 not in ?', [Query2::all()->distinct(['f1'])])->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
 }
