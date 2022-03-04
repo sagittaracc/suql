@@ -99,7 +99,7 @@ final class WhereTest extends TestCase
      *     )
      * 
      */
-    public function testCusomExpression(): void
+    public function testCustomExpression(): void
     {
         $sql = require('queries/q19.php');
 
