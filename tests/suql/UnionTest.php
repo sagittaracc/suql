@@ -4,43 +4,46 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\syntax\field\Field;
-use test\suql\models\SimpleQuery;
-use test\suql\models\UnionQuery;
-use test\suql\models\User;
+use test\suql\models\Query1;
+use test\suql\models\Query2;
+use test\suql\models\Query3;
+use test\suql\models\Query8;
 
 final class UnionTest extends TestCase
 {
     /**
-     * (SELECT ...)
-     *   UNION
-     * (SELECT ...)
+     * Example:
+     * 
+     * (select table_1.f1, table_1.f2, table_1.f3 from table_1)
+     *     union
+     * (select table_2.f1, table_2.f2, table_2.f3 from table_2)
+     *     union
+     * (select table_3.f1, table_3.f2, table_3.f3 from table_3)
+     */
+    public function testOneModelUnion(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/q15.php'));
+        $actual = Query8::all()->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+    /**
+     * Example:
+     * 
+     * (select table_1.f1, table_1.f2, table_1.f3 from table_1)
+     *     union
+     * (select table_2.f1, table_2.f2, table_2.f3 from table_2)
+     *     union
+     * (select table_3.f1, table_3.f2, table_3.f3 from table_3)
      */
     public function testUnion(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            (select min(users.registration) as reg_interval from users)
-                union
-            (select max(users.registration) as reg_interval from users)
-SQL);
+        $expected = StringHelper::trimSql(require('queries/q15.php'));
 
-        $query = UnionQuery::all();
+        $query1 = Query1::all()->select(['f1', 'f2', 'f3'])->as('query1');
+        $query2 = Query2::all()->select(['f1', 'f2', 'f3'])->as('query2');
+        $query3 = Query3::all()->select(['f1', 'f2', 'f3'])->as('query3');
 
-        $this->assertEquals($sql, $query->getRawSql());
-    }
-
-    public function testSomeUnion(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            (select table_1.field_1, table_1.field_2, table_1.field_3 from table_1)
-                union
-            (select table_1.field_4, table_1.field_5, table_1.field_6 from table_1)
-SQL);
-        $query1 = SimpleQuery::all()->select(['field_1', 'field_2', 'field_3'])->as('query1');
-        $query2 = SimpleQuery::all()->select(['field_4', 'field_5', 'field_6'])->as('query2');
-
-        $query = $query1->and([$query2]);
-
-        $this->assertEquals($sql, $query->getRawSql());
+        $actual = $query1->and([$query2, $query3])->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
 }
