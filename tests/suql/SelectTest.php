@@ -11,15 +11,15 @@ final class SelectTest extends TestCase
 {
     public function testSelectAll(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
+        $actual = Query1::all()->getRawSql();
+
+        $expected = StringHelper::trimSql(<<<SQL
             select
                 *
             from table_1
 SQL);
 
-        $query = Query1::all();
-
-        $this->assertEquals($sql, $query->getRawSql());
+        $this->assertEquals($expected, $actual);
     }
 
     public function testSelectAllWithTableName(): void
