@@ -8,141 +8,149 @@ use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\core\SimpleParam;
 use suql\syntax\Expression;
+use test\suql\models\Query1;
 
 final class WhereTest extends TestCase
 {
+    /**
+     * Example:
+     * 
+     * select
+     *     table.f1 as af1,
+     *     table.f2 as af2
+     * from table
+     * where table.f1 % 2 = 0
+     * 
+     */
     public function testStringWhere(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid,
-                users.name as uname
-            from users
-            where users.id % 2 = 0
-SQL);
-
-        $query = User::all()->select([
-            'id' => 'uid',
-            'name' => 'uname',
-        ])->where('users.id % 2 = 0');
-
-        $this->assertEquals($sql, $query->getRawSql());
+        $expected = StringHelper::trimSql(require('queries/q16.php'));
+        $actual = Query1::all()->select([
+            'f1' => 'af1',
+            'f2' => 'af2',
+        ])->where('table_1.f1 % 2 = 0')->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
-
-    public function testExactExpressionWhere(): void
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table
+     * where f1 = 1 and f2 = 2
+     * 
+     */
+    public function testEqualWhere(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from users
-            where
-                id = :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
-            and group_id = :ph0_8dcb248fff6e63eb07b5b1060a245442
-SQL);
+        $sql = require('queries/q17.php');
+
+        $expectedSQL = StringHelper::trimSql($sql['query']);
+        $expectedParams = $sql['params'];
 
         $query =
-            User::all()
-            ->where([
-                'id' => 1,
-                'group_id' => 2,
-            ]);
+            Query1::all()
+                ->where([
+                    'f1' => 1,
+                    'f2' => 2,
+                ]);
 
-        $this->assertEquals($sql, $query->getRawSql());
-        $this->assertEquals([
-            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
-            ':ph0_8dcb248fff6e63eb07b5b1060a245442' => 2,
-        ], $query->getParamList());
+        $actualSQL = $query->getRawSql();
+        $actualParams = $query->getParamList();
+
+        $this->assertEquals($expectedSQL, $actualSQL);
+        $this->assertEquals($expectedParams, $actualParams);
     }
-
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table
+     * where f1 > 1 and f2 < 2
+     * 
+     */
     public function testExpressionWhere(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from users
-            where
-                id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
-            and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
-SQL);
+        $sql = require('queries/q18.php');
+
+        $expectedSQL = StringHelper::trimSql($sql['query']);
+        $expectedParams = $sql['params'];
 
         $query =
-            User::all()
-            ->where('id', '>', 1)
-            ->andWhere('id', '<', 3);
+            Query1::all()
+                ->where('f1', '>', 1)
+                ->andWhere('f2', '<', 2);
 
-        $this->assertEquals($sql, $query->getRawSql());
-        $this->assertEquals([
-            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
-            ':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3,
-        ], $query->getParamList());
+        $actualSQL = $query->getRawSql();
+        $actualParams = $query->getParamList();
+
+        $this->assertEquals($expectedSQL, $actualSQL);
+        $this->assertEquals($expectedParams, $actualParams);
     }
-
-    public function testComplexExpression(): void
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table
+     * where
+     *     f1 > :ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b and
+     *     (
+     *         f2 > :ph0_52b577f9a00337a21f2f63d83847c058 or
+     *         f2 < :ph0_df41dd88e94a1d6f56fb80165480688b
+     *     )
+     * 
+     */
+    public function testCusomExpression(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from users
-            where
-                id > :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b
-            and id < :ph0_b90e7265948fc8b12c62f17f6f2c5363
-SQL);
+        $sql = require('queries/q19.php');
 
-        $query = User::all()->whereExpression(
+        $expectedSQL = StringHelper::trimSql($sql['query']);
+        $expectedParams = $sql['params'];
+
+        $query = Query1::all()->whereExpression(
             Expression::create(
-                '$1 and $2',
+                '$1 and ($2 or $3)',
                 [
-                    [SimpleParam::class, ['users', 'id'], '$ > ?', [1]],
-                    [SimpleParam::class, ['users', 'id'], '$ < ?', [3]],
+                    [SimpleParam::class, ['table_1', 'f1'], '$ > ?', [1]],
+                    [SimpleParam::class, ['table_1', 'f2'], '$ > ?', [2]],
+                    [SimpleParam::class, ['table_1', 'f2'], '$ < ?', [3]],
                 ]
             )
         );
 
-        $this->assertEquals($sql, $query->getRawSql());
-        $this->assertEquals([
-            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
-            ':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3,
-        ], $query->getParamList());
+        $actualSQL = $query->getRawSql();
+        $actualParams = $query->getParamList();
+
+        $this->assertEquals($expectedSQL, $actualSQL);
+        $this->assertEquals($expectedParams, $actualParams);
     }
-
-    public function testSelectWhereSubQuery(): void
-    {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid,
-                users.name
-            from users
-            where users.id not in (
-                select distinct
-                    user_group.user_id
-                from user_group
-            )
-SQL);
-
-        $query = User::all()->select([
-            'id' => 'uid',
-            'name',
-        ])->where('users.id not in ?', [UserGroup::all()->distinct(['user_id'])]);
-
-        $this->assertEquals($sql, $query->getRawSql());
-    }
-
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table
+     * where f1 = 1 and f2 = 2
+     * 
+     */
     public function testFindMethod(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                users.id as uid,
-                users.name as uname
-            from users
-            where id = :ph0_b90e7265948fc8b12c62f17f6f2c5363
-SQL);
+        $sql = require('queries/q17.php');
 
-        $query = User::find(['id' => 3])->select([
-            'id' => 'uid',
-            'name' => 'uname',
-        ]);
+        $expectedSQL = StringHelper::trimSql($sql['query']);
+        $expectedParams = $sql['params'];
 
-        $this->assertEquals($sql, $query->getRawSql());
-        $this->assertEquals([':ph0_b90e7265948fc8b12c62f17f6f2c5363' => 3], $query->getParamList());
+        $query =
+            Query1::find([
+                'f1' => 1,
+                'f2' => 2,
+            ]);
+
+        $actualSQL = $query->getRawSql();
+        $actualParams = $query->getParamList();
+
+        $this->assertEquals($expectedSQL, $actualSQL);
+        $this->assertEquals($expectedParams, $actualParams);
     }
 }

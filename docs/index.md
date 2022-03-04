@@ -10,6 +10,8 @@
 
 [Limit Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/LimitTest.php)
 
+[Where Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/WhereTest.php)
+
 [Nested Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/NestedQueryTest.php)
 
 [Union Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/UnionTest.php)

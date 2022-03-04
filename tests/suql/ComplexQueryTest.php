@@ -9,6 +9,7 @@ use test\suql\models\LastRegistration;
 use test\suql\models\Query1;
 use test\suql\models\SubUnion;
 use test\suql\models\User;
+use test\suql\models\UserGroup;
 
 final class ComplexQueryTest extends TestCase
 {
@@ -107,6 +108,28 @@ SQL);
             ) last_registration
 SQL);
         $query = SubUnion::all();
+
+        $this->assertEquals($sql, $query->getRawSql());
+    }
+
+    public function testSelectWhereSubQuery(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id as uid,
+                users.name
+            from users
+            where users.id not in (
+                select distinct
+                    user_group.user_id
+                from user_group
+            )
+SQL);
+
+        $query = User::all()->select([
+            'id' => 'uid',
+            'name',
+        ])->where('users.id not in ?', [UserGroup::all()->distinct(['user_id'])]);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
