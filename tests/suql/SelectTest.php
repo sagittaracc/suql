@@ -116,4 +116,18 @@ final class SelectTest extends TestCase
         ])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
+    /**
+     * Example:
+     * 
+     * select
+     *     distinct table.f1
+     * from table
+     * 
+     */
+    public function testSelectDistinct(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/q11.php'));
+        $actual = Query1::all()->distinct(['f1', 'f2'])->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
 }
