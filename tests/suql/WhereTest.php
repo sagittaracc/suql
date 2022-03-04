@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use test\suql\models\User;
-use test\suql\models\UserGroup;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\core\SimpleParam;
