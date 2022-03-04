@@ -20,6 +20,8 @@
 
 [Union Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/UnionTest.php)
 
+[Advanced Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/AdvancedQueryTest.php)
+
 ### Db Manager
 
 [Db Manager](https://github.com/sagittaracc/suql/blob/master/tests/suql/DbManagerTest.php)

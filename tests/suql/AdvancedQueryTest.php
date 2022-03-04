@@ -11,7 +11,7 @@ use test\suql\models\SubUnion;
 use test\suql\models\User;
 use test\suql\models\UserGroup;
 
-final class ComplexQueryTest extends TestCase
+final class AdvancedQueryTest extends TestCase
 {
     public function testSelectGroupWithJoin(): void
     {
