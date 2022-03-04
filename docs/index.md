@@ -53,3 +53,5 @@
 [Field Modifier](https://github.com/sagittaracc/suql/blob/master/tests/suql/FieldModifierTest.php)
 
 [Table Placeholder](https://github.com/sagittaracc/suql/blob/master/tests/suql/TablePlaceholderTest.php)
+
+[Last requested model](https://github.com/sagittaracc/suql/blob/master/tests/suql/LastRequestedModelTest.php)
