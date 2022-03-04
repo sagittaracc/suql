@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use sagittaracc\StringHelper;
 use suql\db\Container;
 use suql\syntax\Query;
+use test\suql\models\Query1;
 
 final class RawQueryTest extends TestCase
 {
@@ -34,5 +36,12 @@ final class RawQueryTest extends TestCase
         // Удаляем все записи из таблицы и сверяем количество удаленных записей
         $count = Query::create('delete from table_1')->setConnection('db_test')->exec();
         $this->assertEquals(6, $count);
+    }
+
+    public function testQueryInjection(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/q20.php'));
+        $actual = Query::create('select * from ?')->bind([Query1::all()])->getQuery();
+        $this->assertEquals($expected, $actual);
     }
 }

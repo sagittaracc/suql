@@ -126,20 +126,6 @@ final class QueryTest extends TestCase
         ], $data);
     }
 
-    public function testDeleteQuery(): void
-    {
-        $count = Query::create('delete from table_name')->setConnection('db_test')->exec();
-
-        $this->assertEquals(6, $count);
-    }
-
-    public function testQueryInjection(): void
-    {
-        $query = Query::create('select * from ?')->bind([Query1::all()])->getQuery();
-
-        $this->assertEquals('select * from (select * from table_1)', $query);
-    }
-
     public function testSuccessTransaction(): void
     {
         $success = false;
