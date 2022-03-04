@@ -51,3 +51,5 @@
 [Post process functions](https://github.com/sagittaracc/suql/blob/master/tests/suql/FeatureTest.php)
 
 [Field Modifier](https://github.com/sagittaracc/suql/blob/master/tests/suql/FieldModifierTest.php)
+
+[Table Placeholder](https://github.com/sagittaracc/suql/blob/master/tests/suql/TablePlaceholder.php)
