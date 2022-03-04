@@ -52,4 +52,4 @@
 
 [Field Modifier](https://github.com/sagittaracc/suql/blob/master/tests/suql/FieldModifierTest.php)
 
-[Table Placeholder](https://github.com/sagittaracc/suql/blob/master/tests/suql/TablePlaceholder.php)
+[Table Placeholder](https://github.com/sagittaracc/suql/blob/master/tests/suql/TablePlaceholderTest.php)
