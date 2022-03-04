@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\FirstGroup;
 use test\suql\models\LastRegistration;
 use test\suql\models\Query1;
 use test\suql\models\User;
@@ -58,5 +59,40 @@ SQL);
                 ->getLastRegistration()
                 ->getRawSql()
         );
+    }
+    public function testSmartJoinWithView(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                users.id
+            from users
+            inner join user_group on users.id = user_group.user_id
+            inner join (
+                select
+                    groups.*
+                from groups
+                limit 1
+            ) first_group on user_group.group_id = first_group.id
+SQL);
+
+        $query =
+            User::all()
+                ->select([
+                    'id',
+                ])
+                ->join(FirstGroup::all(), 'inner', 'smart');
+        
+        $this->assertEquals($sql, $query->getRawSql());
+
+        $query =
+            User::all()
+                ->select([
+                    'id',
+                ])
+                ->getFirstGroup([
+                    'algorithm' => 'smart',
+                ]);
+
+        $this->assertEquals($sql, $query->getRawSql());
     }
 }
