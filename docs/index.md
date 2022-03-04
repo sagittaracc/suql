@@ -5,3 +5,5 @@
 [Group Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/GroupTest.php)
 
 [Join Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/JoinTest.php)
+
+[Limit Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/LimitTest.php)
