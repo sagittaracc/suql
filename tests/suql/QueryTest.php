@@ -60,7 +60,7 @@ final class QueryTest extends TestCase
             ['id' => 3, 'name' => '1nterFucker'],
         ];
 
-        $query = TempTable::load($tableData)->getTableName();
+        $query = TempTable::load($tableData)->join('table_name');
 
         $this->assertEquals([
             ['id' => '1', 'name' => 'mario', 'field' => '1', 'another_field' => '1'],

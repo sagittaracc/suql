@@ -11,3 +11,5 @@
 [Raw Query Execution](raw_query_execution.md)
 
 [Run Post Functions](run_post_functions.md)
+
+[Join PHP Array with DB Tables](join_php_array_with_db_tables.md)
