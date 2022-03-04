@@ -11,14 +11,8 @@ final class SelectTest extends TestCase
 {
     public function testSelectAll(): void
     {
+        $expected = StringHelper::trimSql(require('queries/q1.php'));
         $actual = Query1::all()->getRawSql();
-
-        $expected = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from table_1
-SQL);
-
         $this->assertEquals($expected, $actual);
     }
 
