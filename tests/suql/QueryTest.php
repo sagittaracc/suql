@@ -125,42 +125,4 @@ final class QueryTest extends TestCase
             ['field' => '6'],
         ], $data);
     }
-
-    public function testSuccessTransaction(): void
-    {
-        $success = false;
-        $db = Query::create()->setConnection('db_test');
-
-        try {
-            $transaction = Transaction::begin($db);
-            $db->query("insert into table_name (field, another_field) values (100, 100)")->exec();
-            $db->query("insert into table_name (field, another_field) values (101, 101)")->exec();
-            $success = true;
-            $transaction->commit();
-        } catch (Exception $e) {
-            $success = false;
-            $transaction->rollback();
-        }
-
-        $this->assertTrue($success);
-    }
-
-    public function testFailTransaction(): void
-    {
-        $success = false;
-        $db = Query::create()->setConnection('db_test');
-
-        try {
-            $transaction = Transaction::begin($db);
-            $db->query("insert into table_name (field, another_field) values (100, 100)")->exec();
-            $db->query("insert into table_name (field, another_field, third_field) values (101, 'string', false)")->exec();
-            $success = true;
-            $transaction->commit();
-        } catch (Exception $e) {
-            $success = false;
-            $transaction->rollback();
-        }
-
-        $this->assertFalse($success);
-    }
 }
