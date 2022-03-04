@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
 use suql\syntax\Transaction;
+use test\suql\models\Query1;
 use test\suql\models\TableName;
 use test\suql\models\TableNameWithFields;
 use test\suql\models\TempTable;
@@ -122,9 +123,9 @@ final class QueryTest extends TestCase
 
     public function testQueryInjection(): void
     {
-        $query = Query::create('select * from ?')->bind([User::all()])->getQuery();
+        $query = Query::create('select * from ?')->bind([Query1::all()])->getQuery();
 
-        $this->assertEquals('select * from (select * from users)', $query);
+        $this->assertEquals('select * from (select * from table_1)', $query);
     }
 
     public function testSuccessTransaction(): void
