@@ -8,62 +8,72 @@ use test\suql\schema\AppScheme;
 
 final class DbManagerTest extends TestCase
 {
-    public function testDbManager(): void
+    /**
+     * Example:
+     * 
+     * select * from table order by id
+     * 
+     */
+    public function testOrder(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from table_1
-            order by table_1.f1 asc
-SQL);
-
         $db = new suql\db\Manager();
-        $query = $db->entity('table_1')->order(['f1']);
-        $this->assertEquals($sql, $query->getRawSql());
+
+        $expected = StringHelper::trimSql(require('queries/q6.php'));
+        $actual = $db->entity('table_1')->order([
+            'f1' => 'desc',
+            'f2' => 'asc',
+        ])->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
-
-    public function testDbManagerSimpleJoin(): void
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table_1
+     * join table_2 on table_1.id = table_2.id
+     * join table_3 on table_2.id = table_3.id
+     * 
+     */
+    public function testSimpleJoin(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                table_1.f1,
-                table_3.f1
-            from table_1
-            inner join table_2 on table_1.id = table_2.id
-            inner join table_3 on table_2.id = table_3.id
-SQL);
-
         $db = new suql\db\Manager(null, AppScheme::class);
 
-        $query =
+        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $actual =
             $db->entity('table_1')
                 ->select(['f1'])
             ->with('table_2')
             ->with('table_3')
-                ->select(['f1']);
-
-        $this->assertEquals($sql, $query->getRawSql());
+                ->select([
+                    'f1' => 'af1',
+                    'f2' => 'af2',
+                ])->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
-
-    public function testDbManagerSmartJoin(): void
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table_1
+     * join table_2 on table_1.id = table_2.id
+     * join table_3 on table_2.id = table_3.id
+     * 
+     */
+    public function testSmartJoin(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                table_1.f1,
-                table_3.f1
-            from table_1
-            inner join table_2 on table_1.id = table_2.id
-            inner join table_3 on table_2.id = table_3.id
-SQL);
-
         $db = new suql\db\Manager(null, AppScheme::class);
 
-        $query =
+        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $actual =
             $db->entity('table_1')
                 ->select(['f1'])
             ->with('table_3', 'inner', 'smart')
-                ->select(['f1']);
-
-        $this->assertEquals($sql, $query->getRawSql());
+                ->select([
+                    'f1' => 'af1',
+                    'f2' => 'af2',
+                ])->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
 }

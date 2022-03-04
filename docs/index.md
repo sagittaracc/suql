@@ -19,3 +19,7 @@
 [Nested Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/NestedQueryTest.php)
 
 [Union Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/UnionTest.php)
+
+### Db Manager
+
+[Db Manager](https://github.com/sagittaracc/suql/blob/master/tests/suql/DbManagerTest.php)
