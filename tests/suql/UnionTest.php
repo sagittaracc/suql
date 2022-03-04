@@ -20,10 +20,15 @@ final class UnionTest extends TestCase
      *     union
      * (select table_3.f1, table_3.f2, table_3.f3 from table_3)
      */
-    public function testOneModelUnion(): void
+    public function testUnion(): void
     {
         $expected = StringHelper::trimSql(require('queries/q15.php'));
-        $actual = Query8::all()->getRawSql();
+
+        $query1 = Query1::all()->select(['f1', 'f2', 'f3'])->as('query1');
+        $query2 = Query2::all()->select(['f1', 'f2', 'f3'])->as('query2');
+        $query3 = Query3::all()->select(['f1', 'f2', 'f3'])->as('query3');
+
+        $actual = $query1->and([$query2, $query3])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
     /**
@@ -35,15 +40,10 @@ final class UnionTest extends TestCase
      *     union
      * (select table_3.f1, table_3.f2, table_3.f3 from table_3)
      */
-    public function testUnion(): void
+    public function testOneModelUnion(): void
     {
         $expected = StringHelper::trimSql(require('queries/q15.php'));
-
-        $query1 = Query1::all()->select(['f1', 'f2', 'f3'])->as('query1');
-        $query2 = Query2::all()->select(['f1', 'f2', 'f3'])->as('query2');
-        $query3 = Query3::all()->select(['f1', 'f2', 'f3'])->as('query3');
-
-        $actual = $query1->and([$query2, $query3])->getRawSql();
+        $actual = Query8::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }
