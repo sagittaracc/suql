@@ -17,7 +17,7 @@ class TableName extends ActiveRecord
         return [];
     }
 
-    public function commandToInt($data)
+    public function commandFieldToInt($data)
     {
         return array_map(function($row) {
             $row['field'] = intval($row['field']);

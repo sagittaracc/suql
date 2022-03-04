@@ -71,7 +71,19 @@ final class QueryTest extends TestCase
 
     public function testPostSuQLFunction(): void
     {
-        $data = TableName::all()->toInt()->fetchAll();
+        // no using post function
+        $data = TableName::all()->fetchAll();
+        $this->assertEquals([
+            ['field' => '1', 'another_field' => '1'],
+            ['field' => '2', 'another_field' => '2'],
+            ['field' => '3', 'another_field' => '3'],
+            ['field' => '4', 'another_field' => '4'],
+            ['field' => '5', 'another_field' => '5'],
+            ['field' => '6', 'another_field' => '6'],
+        ], $data);
+
+        // using post function
+        $data = TableName::all()->fieldToInt()->fetchAll();
         $this->assertEquals([
             ['field' => 1, 'another_field' => '1'],
             ['field' => 2, 'another_field' => '2'],
