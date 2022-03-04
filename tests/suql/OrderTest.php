@@ -2,35 +2,25 @@
 
 declare(strict_types=1);
 
-use test\suql\models\User;
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\Query1;
 
 final class OrderTest extends TestCase
 {
     /**
-     * SELECT
-     *   ...
-     * FROM <table>
-     * ORDER BY
-     *   <table>.<field-1> [DESC|ASC],
-     *   <table>.<field-2> [DESC|ASC],
-     *   ...
+     * Example:
+     * 
+     * select * from table order by id
+     * 
      */
     public function testSelectOrder(): void
     {
-        $sql = StringHelper::trimSql(<<<SQL
-            select
-                *
-            from users
-            order by users.name desc, users.id asc
-SQL);
-
-        $query = User::all()->order([
-            'name' => 'desc',
-            'id' => 'asc',
-        ]);
-
-        $this->assertEquals($sql, $query->getRawSql());
+        $expected = StringHelper::trimSql(require('queries/q6.php'));
+        $actual = Query1::all()->order([
+            'f1' => 'desc',
+            'f2' => 'asc',
+        ])->getRawSql();
+        $this->assertEquals($expected, $actual);
     }
 }
