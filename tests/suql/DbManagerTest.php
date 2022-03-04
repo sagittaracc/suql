@@ -13,44 +13,56 @@ final class DbManagerTest extends TestCase
         $sql = StringHelper::trimSql(<<<SQL
             select
                 *
-            from users
-            order by users.id asc
+            from table_1
+            order by table_1.f1 asc
 SQL);
 
         $db = new suql\db\Manager();
-        $query = $db->entity('users')->order(['id']);
+        $query = $db->entity('table_1')->order(['f1']);
         $this->assertEquals($sql, $query->getRawSql());
     }
 
-    public function testDbManagerTableChain(): void
+    public function testDbManagerSimpleJoin(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
             select
-                users.id,
-                groups.name
-            from users
-            inner join user_group on users.id = user_group.user_id
-            inner join groups on user_group.group_id = groups.id
+                table_1.f1,
+                table_3.f1
+            from table_1
+            inner join table_2 on table_1.id = table_2.id
+            inner join table_3 on table_2.id = table_3.id
 SQL);
 
         $db = new suql\db\Manager(null, AppScheme::class);
 
-        // Simple join
         $query =
-            $db->entity('users')
-                ->select(['id'])
-            ->with('user_group')
-            ->with('groups')
-                ->select(['name']);
+            $db->entity('table_1')
+                ->select(['f1'])
+            ->with('table_2')
+            ->with('table_3')
+                ->select(['f1']);
 
         $this->assertEquals($sql, $query->getRawSql());
+    }
 
-        // Smart join
+    public function testDbManagerSmartJoin(): void
+    {
+        $sql = StringHelper::trimSql(<<<SQL
+            select
+                table_1.f1,
+                table_3.f1
+            from table_1
+            inner join table_2 on table_1.id = table_2.id
+            inner join table_3 on table_2.id = table_3.id
+SQL);
+
+        $db = new suql\db\Manager(null, AppScheme::class);
+
         $query =
-            $db->entity('users')
-                ->select(['id'])
-            ->with('groups', 'inner', 'smart')
-                ->select(['name']);
+            $db->entity('table_1')
+                ->select(['f1'])
+            ->with('table_3', 'inner', 'smart')
+                ->select(['f1']);
 
         $this->assertEquals($sql, $query->getRawSql());
     }
