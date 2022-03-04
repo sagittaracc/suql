@@ -1,15 +1,1 @@
-[Nested Query](nested_query.md)
-
-[Union Query](union_query.md)
-
-[Join Query](join_query.md)
-
-[Group Clause](group_clause.md)
-
-[Db Manager](db_manager.md)
-
-[Raw Query Execution](raw_query_execution.md)
-
-[Run Post Functions](run_post_functions.md)
-
-[Join PHP Array with DB Tables](join_php_array_with_db_tables.md)
+[Select Data](https://github.com/sagittaracc/suql/blob/master/tests/suql/SelectTest.php)
