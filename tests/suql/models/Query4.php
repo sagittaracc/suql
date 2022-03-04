@@ -4,11 +4,11 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class QuerySome extends ActiveRecord
+class Query4 extends ActiveRecord
 {
     public function table()
     {
-        return ['table_2' => 't2'];
+        return ['table_4' => 't4'];
     }
 
     public function fields()
