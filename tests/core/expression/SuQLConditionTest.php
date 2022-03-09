@@ -13,27 +13,27 @@ use suql\core\SimpleParam;
 
 final class SuQLConditionTest extends TestCase
 {
-    private $fieldUserId;
-    private $fieldUserName;
+    private $fieldF1;
+    private $fieldF2;
 
     protected function setUp(): void
     {
-        $this->fieldUserId = new FieldName('users', 'id');
-        $this->fieldUserName = new FieldName('users', 'name');
+        $this->fieldF1 = new FieldName('table_1', 'f1');
+        $this->fieldF2 = new FieldName('table_1', 'f2');
     }
 
     protected function tearDown(): void
     {
-        $this->fieldUserId = null;
-        $this->fieldUserName = null;
+        $this->fieldF1 = null;
+        $this->fieldF2 = null;
     }
 
     public function testSimpleParamCondition(): void
     {
-        $expectedCondition = 'id = :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b';
-        $expectedParams = [':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1];
+        $expectedCondition = 'f1 = :ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b';
+        $expectedParams = [':ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b' => 1];
 
-        $simpleParam = new SimpleParam($this->fieldUserId, [1]);
+        $simpleParam = new SimpleParam($this->fieldF1, [1]);
         $actualCondition = new Condition($simpleParam, '$ = ?');
 
         $this->assertEquals($expectedCondition, $actualCondition->getCondition());
@@ -42,14 +42,14 @@ final class SuQLConditionTest extends TestCase
 
     public function testBetweenParamCondition(): void
     {
-        $expectedCondition = 'users.id between :ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b and :ph1_b90e7265948fc8b12c62f17f6f2c5363';
+        $expectedCondition = 'table_1.f1 between :ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b and :ph1_687821896f80eb70591ac4f812a45fe3';
         $expectedParams = [
-            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
-            ':ph1_b90e7265948fc8b12c62f17f6f2c5363' => 3,
+            ':ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b' => 1,
+            ':ph1_687821896f80eb70591ac4f812a45fe3' => 3,
         ];
 
         
-        $betweenParam = new BetweenParam($this->fieldUserId, [1, 3]);
+        $betweenParam = new BetweenParam($this->fieldF1, [1, 3]);
         $actualCondition = new Condition($betweenParam, '$ between ?');
         $actualCondition->setFormat('%t.%n');
 
@@ -59,14 +59,14 @@ final class SuQLConditionTest extends TestCase
 
     public function testInParamCondition(): void
     {
-        $expectedCondition = 'id in (:ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b,:ph1_3aeb5fe8e84508eecd31e480918704a7,:ph2_b90e7265948fc8b12c62f17f6f2c5363)';
+        $expectedCondition = 'f1 in (:ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b,:ph1_f8e904b767520bcfd4819447bddeafc4,:ph2_687821896f80eb70591ac4f812a45fe3)';
         $expectedParams = [
-            ':ph0_3ced11dfdbcf0d0ca4f89ad0cabc664b' => 1,
-            ':ph1_3aeb5fe8e84508eecd31e480918704a7' => 2,
-            ':ph2_b90e7265948fc8b12c62f17f6f2c5363' => 3,
+            ':ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b' => 1,
+            ':ph1_f8e904b767520bcfd4819447bddeafc4' => 2,
+            ':ph2_687821896f80eb70591ac4f812a45fe3' => 3,
         ];
 
-        $inParam = new InParam($this->fieldUserId, [1, 2, 3]);
+        $inParam = new InParam($this->fieldF1, [1, 2, 3]);
         $actualCondition = new Condition($inParam, '$ in ?');
 
         $this->assertEquals($expectedCondition, $actualCondition->getCondition());
@@ -75,12 +75,12 @@ final class SuQLConditionTest extends TestCase
 
     public function testLikeParamCondition(): void
     {
-        $expectedCondition = 'users.name like :ph0_c52e9ca1ce023b250556fab760727d9e';
+        $expectedCondition = 'table_1.f2 like :ph0_2ce8d160537737958bcef91a22b01044';
         $expectedParams = [
-            ':ph0_c52e9ca1ce023b250556fab760727d9e' => '%sagittaracc%',
+            ':ph0_2ce8d160537737958bcef91a22b01044' => '%sagittaracc%',
         ];
 
-        $likeParam = new LikeParam($this->fieldUserName, ['sagittaracc']);
+        $likeParam = new LikeParam($this->fieldF2, ['sagittaracc']);
         $actualCondition = new Condition($likeParam, '$ like ?', '%t.%n');
 
         $this->assertEquals($expectedCondition, $actualCondition->getCondition());
@@ -89,9 +89,9 @@ final class SuQLConditionTest extends TestCase
 
     public function testPlaceholderParamCondition(): void
     {
-        $expectedCondition = 'id = :id';
+        $expectedCondition = 'f1 = :f1';
 
-        $placeholderParam = new SimpleParam($this->fieldUserId, [new Placeholder('id')]);
+        $placeholderParam = new SimpleParam($this->fieldF1, [new Placeholder('f1')]);
         $actualCondition = new Condition($placeholderParam, '$ = ?');
 
         $this->assertEquals($expectedCondition, $actualCondition->getCondition());

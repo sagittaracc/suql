@@ -6,40 +6,35 @@ use sagittaracc\StringHelper;
 
 final class SuQLInsertTest extends SuQLTest
 {
-    /**
-     * INSERT INTO <table> (<field list>) VALUES (<actual value list>)
-     */
     public function testInsert(): void
     {
         $sql = StringHelper::trimSql(<<<SQL
-            insert into users (id,name) values (1,'Yuriy')
+            insert into table_1 (f1,f2) values (1,'Yuriy Arutyunyan')
 SQL);
 
-        $this->osuql->addInsert('main');
-        $this->osuql->getQuery('main')->addInto('users');
-        $this->osuql->getQuery('main')->addValue('id', 1);
-        $this->osuql->getQuery('main')->addValue('name', 'Yuriy');
-        $suql = $this->osuql->getSQL(['main']);
+        $this->osuql->addInsert('query_1');
+        $this->osuql->getQuery('query_1')->addInto('table_1');
+        $this->osuql->getQuery('query_1')->addValue('f1', 1);
+        $this->osuql->getQuery('query_1')->addValue('f2', 'Yuriy Arutyunyan');
+        $suql = $this->osuql->getSQL(['query_1']);
 
         $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['main']));
+        $this->assertNull($this->osuql->getSQL(['query_1']));
     }
-    /**
-     * INSERT INTO <table> (<field list>) VALUES (<placeholder list>)
-     */
+
     public function testInsertWithPlaceholder(): void
     {
         $sql = StringHelper::trimSQL(<<<SQL
-            insert into users (id,name) values (:id,:name)
+            insert into table_1 (f1,f2) values (:f1,:f2)
 SQL);
 
-        $this->osuql->addInsert('main');
-        $this->osuql->getQuery('main')->addInto('users');
-        $this->osuql->getQuery('main')->addPlaceholder('id', ':id');
-        $this->osuql->getQuery('main')->addPlaceholder('name', ':name');
-        $suql = $this->osuql->getSQL(['main']);
+        $this->osuql->addInsert('query_1');
+        $this->osuql->getQuery('query_1')->addInto('table_1');
+        $this->osuql->getQuery('query_1')->addPlaceholder('f1', ':f1');
+        $this->osuql->getQuery('query_1')->addPlaceholder('f2', ':f2');
+        $suql = $this->osuql->getSQL(['query_1']);
 
         $this->assertEquals($sql, $suql);
-        $this->assertNull($this->osuql->getSQL(['main']));
+        $this->assertNull($this->osuql->getSQL(['query_1']));
     }
 }
