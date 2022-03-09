@@ -3,6 +3,8 @@
 namespace suql\db;
 
 use suql\db\pdo\MySQLConnection;
+use suql\db\pdo\PgSQLConnection;
+use suql\db\pdo\SqliteConnection;
 
 /**
  * Фабрика подключений
@@ -21,6 +23,10 @@ class ConnectionFactory
         switch ($config['driver']) {
             case 'mysql':
                 return MySQLConnection::create($config);
+            case 'sqlite':
+                return SqliteConnection::create($config);
+            case 'pgsql':
+                return PgSQLConnection::create($config);
         }
     }
 }
