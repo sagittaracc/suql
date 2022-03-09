@@ -274,6 +274,7 @@ class SQLBuilder
         $joinList = [];
         foreach ($join as $ojoin) {
             $table = $ojoin->getTable();
+            $alias = $ojoin->getAlias();
             $type = $ojoin->getType();
             $on = $ojoin->getOn();
 
@@ -281,7 +282,11 @@ class SQLBuilder
                 ? "@$table $table"
                 : $table;
 
-            $joinList[] = "$type join $table on $on";
+            $joinList[] = (
+                $alias
+                    ? "$type join $table $alias on $on"
+                    : "$type join $table on $on"
+            );
         }
 
         $joinList = ' ' . implode(' ', $joinList);

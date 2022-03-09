@@ -295,10 +295,14 @@ class Select extends Query implements SelectQueryInterface, Buildable
     /**
      * Добавляет таблицу в цепочку join в рамках этого запроса
      * @param string $type [left|right|inner|cross|...]
-     * @param string $table название таблицы
+     * @param mixed $table название таблицы
      */
     public function addJoin($type, $table)
     {
+        $tableFrom = new TableName($table);
+        $table = $tableFrom->name;
+        $alias = $tableFrom->alias;
+
         if ($this->getOSuQL()->getScheme()->hasTableAlias($table)) {
             $table = $this->getOSuQL()->getScheme()->getTableAlias($table);
         }

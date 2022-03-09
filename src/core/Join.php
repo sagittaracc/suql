@@ -18,6 +18,10 @@ class Join
      */
     private $table;
     /**
+     * @var string алиас таблицы которая цепляется
+     */
+    private $alias;
+    /**
      * @var string тип join (inner, left, right, cross, etc.)
      */
     private $type;
@@ -30,11 +34,13 @@ class Join
      * @param suql\core\Select
      * @param string $table название таблицы
      * @param string $type тип join
+     * @param string $alias алиас таблицы
      */
-    function __construct($oselect, $table, $type)
+    function __construct($oselect, $table, $type, $alias = '')
     {
         $this->oselect = $oselect;
         $this->table = $table;
+        $this->alias = $alias;
         $this->type = $type;
         $this->on = $this->getLink();
     }
@@ -60,6 +66,14 @@ class Join
     public function getTable()
     {
         return $this->table;
+    }
+    /**
+     * Возвращается алиас таблицы
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
     /**
      * Возвращает тип join
