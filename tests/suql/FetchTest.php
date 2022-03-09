@@ -26,6 +26,7 @@ final class FetchTest extends TestCase
     {
         // Drop the database
         Query::create('drop table table_10')->setConnection('db_test')->exec();
+        Query::create('drop view view_17')->setConnection('db_test')->exec();
         Query::create('drop database db_test')->setConnection('db_test')->exec();
     }
 

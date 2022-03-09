@@ -16,10 +16,14 @@ class MySQLConnection extends Connection
      */
     public static function create($config)
     {
-        return new PDO(
+        $dbh = new PDO(
             "mysql:host={$config['host']};dbname={$config['dbname']};charset=utf8",
             $config['user'],
             $config['pass']
         );
+
+        // $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        return $dbh;
     }
 }
