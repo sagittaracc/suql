@@ -302,7 +302,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             $this->getQuery($this->query())->addJoin($type, "$table@$alias");
             $this->getQuery($this->query())->getLastJoin()->setOn($on);
 
-            $this->currentTable = $table;
+            $this->currentTable = $alias;
         }
         else if ($option instanceof SuQL) {
             $subquery = $option;
