@@ -107,30 +107,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return static::getInstance();
     }
     /**
-     * Проверка существования таблицы
-     * @return boolean
-     */
-    public function exists()
-    {
-        try
-        {
-            $this->limit(1)->fetchAll();
-            return true;
-        }
-        catch (PDOException $e)
-        {
-            return false;
-        }
-    }
-    /**
-     * Вью надо обновить
-     * @return boolean
-     */
-    public function needsUpdate()
-    {
-        return true;
-    }
-    /**
      * Создание вью
      */
     public function createView()
@@ -203,14 +179,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         $view = $instance->view();
         if (is_string($view)) {
-            // if ($instance->exists()) {
-            //     if ($instance->needsUpdate()) {
-            //         $instance->createView();
-            //     }
-            // }
-            // else {
-            //     $instance->createView();
-            // }
             $instance->createView();
         }
 

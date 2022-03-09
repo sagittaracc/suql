@@ -22,7 +22,7 @@ class MySQLConnection extends Connection
             $config['pass']
         );
 
-        // $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $dbh;
     }
