@@ -5,6 +5,7 @@ namespace suql\syntax;
 use Closure;
 use Exception;
 use PDO;
+use PDOException;
 use ReflectionClass;
 use suql\core\Condition;
 use suql\core\FieldName;
@@ -106,6 +107,22 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return static::getInstance();
     }
     /**
+     * Проверка существования таблицы
+     * @return boolean
+     */
+    public function exists()
+    {
+        try
+        {
+            $this->limit(1)->fetchAll();
+            return true;
+        }
+        catch (Exception $e)
+        {
+            return false;
+        }
+    }
+    /**
      * Загрузить массив в модель
      * @param array $data
      */
@@ -170,18 +187,21 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         $view = $instance->view();
         if (is_string($view)) {
-            /**
-             * TODO:
-             * if existsView {
-             *     if needsUpdate {
-             *         deleteView
-             *         createView
-             *     }
-             * }
-             * else {
-             *     createView
-             * }
-             */
+            if ($instance->exists()) {
+                /**
+                 * TODO:
+                 * if (needsUpdate) {
+                 *     deleteView
+                 *     createView
+                 * }
+                 */
+            }
+            else {
+                /**
+                 * TODO:
+                 * createView
+                 */
+            }
         }
 
         $instance->select($instance->fields());

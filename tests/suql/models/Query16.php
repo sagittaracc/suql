@@ -2,6 +2,7 @@
 
 namespace test\suql\models;
 
+use suql\db\Container;
 use test\suql\records\ActiveRecord;
 
 class Query16 extends ActiveRecord
@@ -36,5 +37,10 @@ class Query16 extends ActiveRecord
             join user_group ug on u.id = ug.user_id
             join groups g on g.id = ug.group_id
 SQL;
+    }
+
+    public function getDb()
+    {
+        return Container::get('db_test');
     }
 }

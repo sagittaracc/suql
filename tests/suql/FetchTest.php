@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\Query10;
+use test\suql\models\Query16;
 use test\suql\schema\AppScheme;
 
 final class FetchTest extends TestCase
@@ -60,5 +61,15 @@ final class FetchTest extends TestCase
             ['f1' => '5'],
             ['f1' => '6'],
         ], $data);
+    }
+
+    public function testModelExists(): void
+    {
+        $this->assertTrue(Query10::all()->exists());
+    }
+
+    public function testModelNotExists(): void
+    {
+        $this->assertFalse(Query16::all()->exists());
     }
 }
