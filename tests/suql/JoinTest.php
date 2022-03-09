@@ -123,12 +123,12 @@ final class JoinTest extends TestCase
      *     *
      * from table_1
      * join table_2 on table_1.id = table_2.id
-     * join table_3 on table_2.id = table_3.id
+     * join table_3 t3 on table_2.id = t3.id
      * 
      */
     public function testJoinByNamedRel(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $expected = StringHelper::trimSql(require('queries/q27.php'));
         $actual = Query1::all()
             ->select([
                 'f1'

@@ -272,7 +272,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      * Сцепление таблиц
      * @return self
      */
-    public function join($option, $type = 'inner', $algorithm = 'simple')
+    public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
     {
         if (is_string($option)) {
             if (class_exists($option)) {
@@ -281,7 +281,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
                 $scheme = $this->getScheme();
                 $scheme->rel($namedRel->leftTable(), $namedRel->rightTable(), $namedRel->on());
         
-                $this->join($namedRel->rightTable(), $type);
+                $this->join($namedRel->rightTable(), $type, 'simple', $namedRel->on());
             }
             else {
                 $table = $option;
@@ -295,6 +295,14 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     
                 $this->currentTable = $table;
             }
+        }
+        else if (is_array($option)) {
+            foreach ($option as $table => $alias) break;
+
+            $this->getQuery($this->query())->addJoin($type, "$table@$alias");
+            $this->getQuery($this->query())->getLastJoin()->setOn($on);
+
+            $this->currentTable = $table;
         }
         else if ($option instanceof SuQL) {
             $subquery = $option;

@@ -307,7 +307,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
             $table = $this->getOSuQL()->getScheme()->getTableAlias($table);
         }
 
-        $this->join[] = new Join($this, $table, $type);
+        $this->join[] = new Join($this, $table, $type, $alias);
         $this->table_list[] = $table;
     }
     /**
@@ -317,6 +317,14 @@ class Select extends Query implements SelectQueryInterface, Buildable
     public function getJoin()
     {
         return $this->join;
+    }
+    /**
+     * Получает последний join
+     * @return suql\core\Join
+     */
+    public function getLastJoin()
+    {
+        return end($this->join);
     }
     /**
      * Выполняет автоматическую цепочку join'ов от начальной таблицы до конечной

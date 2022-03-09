@@ -13,11 +13,11 @@ class NamedRel2 extends NamedRel
 
     public function rightTable()
     {
-        return 'table_3';
+        return ['table_3' => 't3'];
     }
 
     public function on()
     {
-        return 'table_2.id = table_3.id';
+        return 'table_2.id = t3.id';
     }
 }

@@ -91,4 +91,12 @@ class Join
     {
         return $this->on;
     }
+    /**
+     * Устанавливает условие сцепления
+     * @param string $on
+     */
+    public function setOn($on)
+    {
+        $this->on = $on;
+    }
 }
