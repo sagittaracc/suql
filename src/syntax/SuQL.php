@@ -172,13 +172,14 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         if (is_string($view)) {
             /**
              * TODO:
-             * if exists {
+             * if existsView {
              *     if needsUpdate {
-             *         updateView
+             *         deleteView
+             *         createView
              *     }
              * }
              * else {
-             *     create
+             *     createView
              * }
              */
         }
