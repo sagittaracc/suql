@@ -14,6 +14,14 @@ use sagittaracc\SimpleList;
 final class MySQLBuilder extends SQLBuilder
 {
     /**
+     * @var string $quote
+     */
+    protected $quote = '';
+    /**
+     * @var string $unquote
+     */
+    protected $unquote = '';
+    /**
      * Генерация запроса создания таблицы
      * @param suql\syntax\SuQL $model
      * @param boolean $temp
@@ -41,7 +49,7 @@ final class MySQLBuilder extends SQLBuilder
      */
     public function createView($model)
     {
-        return "CREATE OR REPLACE VIEW `{$model->query()}` AS {$model->view()}";
+        return "CREATE OR REPLACE VIEW `{$model->table()}` AS {$model->view()}";
     }
     /**
      * Генерация запроса создания временной таблицы

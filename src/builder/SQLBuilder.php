@@ -32,6 +32,14 @@ class SQLBuilder
      */
     const INSERT_TEMPLATE = "insert into {table} ({fields}) values ({values})";
     /**
+     * @var string $quote
+     */
+    protected $quote = '';
+    /**
+     * @var string $unquote
+     */
+    protected $unquote = '';
+    /**
      * Привязать объект OSuQL
      * @param suql\core\SuQLObject $osuql основной объект хранящий всю структуру запроса переданный для преобразования в sql
      */
@@ -259,8 +267,8 @@ class SQLBuilder
         return $this->osuql->hasQuery($from)
             ? " from @$from $from"
             : ($alias
-                ? " from $from $alias"
-                : " from $from"
+                ? " from {$this->quote}$from{$this->unquote} $alias"
+                : " from {$this->quote}$from{$this->unquote}"
             );
     }
     /**
@@ -288,8 +296,8 @@ class SQLBuilder
 
             $joinList[] = (
                 $alias
-                    ? "$type join $table $alias on $on"
-                    : "$type join $table on $on"
+                    ? "$type join {$this->quote}$table{$this->unquote} $alias on $on"
+                    : "$type join {$this->quote}$table{$this->unquote} on $on"
             );
         }
 

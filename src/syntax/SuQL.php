@@ -107,14 +107,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return static::getInstance();
     }
     /**
-     * Создание вью
-     */
-    public function createView()
-    {
-        $viewQuery = 'create or replace view `' . $this->table() . '` as ' . $this->view();
-        Query::create($viewQuery)->setDb($this->getDb())->exec();
-    }
-    /**
      * Загрузить массив в модель
      * @param array $data
      */
@@ -179,7 +171,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         $view = $instance->view();
         if (is_string($view)) {
-            $instance->createView();
+            $viewQuery = $instance->getBuilder()->createView($instance);
+            $instance->getDb()->exec($viewQuery);
         }
 
         $instance->select($instance->fields());
