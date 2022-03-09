@@ -48,16 +48,16 @@ class Field
      * @param suql\core\Select ссылка на основной объект выборки
      * @param string $table название таблицы
      * @param suql\core\FieldName $field объект с параметрами поля
-     * @param string $alias алиас поля
      * @param boolean $visible добавить поле в выборку или нет
+     * @param boolean $raw флажок - сырое поле или нет
      */
-    function __construct($oselect, $table, $field, $alias, $visible, $raw = false)
+    function __construct($oselect, $table, $field, $visible, $raw = false)
     {
         $this->oselect = $oselect;
         $this->table = $table;
         $this->name = $field->format('%n');
         $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
-        $this->alias = $alias;
+        $this->alias = $field->format('%a');
         $this->visible = $visible;
         $this->raw = $raw;
     }
