@@ -16,6 +16,9 @@ SuQL stands for Sugar SQL and this is a PHP DataMapper, ORM.
 ### Installation
 Install the [SuQLBasic Template](https://github.com/sagittaracc/suql-app)
 
+### Documentation
+See more examples in the ```tests``` directory or read [the documentation](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
+
 ### Example
 Find all the paid orders of the users that are not active anymore and delete them.
 
@@ -51,9 +54,6 @@ try {
 
 ### Requirements
 The minimum requirement - PHP 5.6.
-
-### Examples
-See more examples in the ```tests``` directory or read [the documentation](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
 
 ### Tests
 This is tested with [PHPUnit](https://phpunit.de/). To run tests:
