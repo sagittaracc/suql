@@ -36,6 +36,10 @@ class Field
      */
     private $visible;
     /**
+     * @var boolean сырое поле или нет
+     */
+    private $raw;
+    /**
      * @var array перечень модификаторов которые будут применяться к полю
      */
     private $modifier = [];
@@ -47,7 +51,7 @@ class Field
      * @param string $alias алиас поля
      * @param boolean $visible добавить поле в выборку или нет
      */
-    function __construct($oselect, $table, $field, $alias, $visible)
+    function __construct($oselect, $table, $field, $alias, $visible, $raw = false)
     {
         $this->oselect = $oselect;
         $this->table = $table;
@@ -55,6 +59,7 @@ class Field
         $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
         $this->alias = $alias;
         $this->visible = $visible;
+        $this->raw = $raw;
     }
     /**
      * Вернуть ссылку на основной объект выборки
@@ -155,5 +160,13 @@ class Field
     public function getModifierList()
     {
         return $this->modifier;
+    }
+    /**
+     * Сырое поле или нет
+     * @return boolean
+     */
+    public function isRaw()
+    {
+        return $this->raw;
     }
 }

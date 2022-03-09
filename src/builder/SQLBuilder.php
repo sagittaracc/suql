@@ -228,6 +228,10 @@ class SQLBuilder
         $selectList = [];
         foreach ($oselect->getSelect() as $field => $ofield) {
             if ($ofield->visible()) {
+                /**
+                 * TODO: При сборке полей учитывать сырое оно или нет
+                 * $ofield->isRaw()
+                 */
                 $fieldName = new Name($ofield->getField(), $ofield->getAlias());
                 $selectList[] = $fieldName->format('%n as %a');
             }

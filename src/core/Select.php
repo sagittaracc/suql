@@ -89,7 +89,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
      * например поля сортировки или группировки или фильтрации но их не нужно выводить в результат
      * @return suql\core\FieldName
      */
-    public function addField($table, $name, $visible = true)
+    public function addField($table, $name, $visible = true, $raw = false)
     {
         $tablePlaceholderName = $table;
 
@@ -108,7 +108,8 @@ class Select extends Query implements SelectQueryInterface, Buildable
             $table,
             $field,
             $field->format('%a'),
-            $visible
+            $visible,
+            $raw
         );
 
         return $field;
@@ -120,7 +121,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
      */
     public function addRaw($expression, $visible = true)
     {
-        $this->addField(null, $expression, $visible);
+        $this->addField(null, $expression, $visible, true);
     }
     /**
      * Проверяет есть ли поле в текущей выборке
