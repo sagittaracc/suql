@@ -14,7 +14,7 @@
 SuQL stands for Sugar SQL and this is a PHP DataMapper, ORM.
 
 ### Installation
-Install the [SuQLBasic Template](https://github.com/sagittaracc/suql-app)
+Install the [Basic Template](https://github.com/sagittaracc/suql-app)
 
 ### Documentation
 See more examples in the ```tests``` directory or read [the documentation](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
