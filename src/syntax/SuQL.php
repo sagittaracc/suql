@@ -114,7 +114,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     {
         try
         {
-            $this->limit(1)->fetchAll();
+            $this->limit(0)->fetchAll();
             return true;
         }
         catch (Exception $e)
