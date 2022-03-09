@@ -169,7 +169,21 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             $instance->currentTable = $subquery->query();
         }
 
-        $instance->view();
+        $view = $instance->view();
+        if (is_string($view)) {
+            /**
+             * TODO:
+             * if exists {
+             *     if needsUpdate {
+             *         updateView
+             *     }
+             * }
+             * else {
+             *     create
+             * }
+             */
+        }
+
         $instance->select($instance->fields());
 
         return $instance;
