@@ -2,26 +2,17 @@
 
 namespace suql\db\pdo;
 
-use PDO;
-
 /**
- * PDO подключение
+ * Подключение
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Connection
+abstract class Connection
 {
     /**
-     * Создает PDO подключение
+     * Создает подключение
      * @param array $config настройки подключения
      * @return PDO
      */
-    public static function create($config)
-    {
-        return new PDO(
-            "{$config['driver']}:host={$config['host']};dbname={$config['dbname']};charset=utf8",
-            $config['user'],
-            $config['pass']
-        );
-    }
+    abstract public static function create($config);
 }

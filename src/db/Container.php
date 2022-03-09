@@ -27,7 +27,7 @@ class Container
     public static function add($dbList)
     {
         foreach ($dbList as $connection => $config) {
-            self::$items[$connection] = pdo\Connection::create($config);
+            self::$items[$connection] = ConnectionFactory::create($config);
         }
     }
     /**
