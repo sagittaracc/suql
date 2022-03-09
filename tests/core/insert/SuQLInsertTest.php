@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use sagittaracc\StringHelper;
 
-final class SuQLInsertTest extends SuQLMock
+final class SuQLInsertTest extends SuQLTest
 {
     /**
      * INSERT INTO <table> (<field list>) VALUES (<actual value list>)

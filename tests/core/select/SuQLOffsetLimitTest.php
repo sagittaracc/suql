@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use sagittaracc\StringHelper;
 
-final class SuQLOffsetLimitTest extends SuQLMock
+final class SuQLOffsetLimitTest extends SuQLTest
 {
     /**
      * SELECT ... FROM <table> LIMIT <limit>

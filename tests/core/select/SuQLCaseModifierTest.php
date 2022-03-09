@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use sagittaracc\StringHelper;
 
-final class SuQLCaseModifierTest extends SuQLMock
+final class SuQLCaseModifierTest extends SuQLTest
 {
     public function testCaseModifier(): void
     {

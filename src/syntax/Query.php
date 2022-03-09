@@ -2,7 +2,6 @@
 
 namespace suql\syntax;
 
-use Exception;
 use sagittaracc\PlaceholderHelper;
 use suql\db\Container;
 

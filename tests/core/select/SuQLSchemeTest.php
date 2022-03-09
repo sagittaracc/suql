@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class SuQLSchemeTest extends SuQLMock
+final class SuQLSchemeTest extends SuQLTest
 {
     public function testTableList(): void
     {

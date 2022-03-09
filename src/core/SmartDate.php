@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\core;
+
 class SmartDate
 {
     private $smartDate;

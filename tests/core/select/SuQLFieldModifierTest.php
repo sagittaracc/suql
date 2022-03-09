@@ -8,7 +8,7 @@ use suql\core\FieldName;
 use suql\core\SimpleParam;
 use suql\core\Expression;
 
-final class SuQLFieldModifierTest extends SuQLMock
+final class SuQLFieldModifierTest extends SuQLTest
 {
     public function testCallbackModifier(): void
     {

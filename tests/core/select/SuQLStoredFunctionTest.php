@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class SuQLStoredFunctionTest extends SuQLMock
+final class SuQLStoredFunctionTest extends SuQLTest
 {
     /**
      * SELECT <function>(<parameters>)

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 
-final class SuQLSmartJoinTest extends SuQLMock
+final class SuQLSmartJoinTest extends SuQLTest
 {
     public function testSmartJoinWithTable(): void
     {

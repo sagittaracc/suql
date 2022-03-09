@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use sagittaracc\StringHelper;
 
-final class SuQLJoinTest extends SuQLMock
+final class SuQLJoinTest extends SuQLTest
 {
     public function testSimpleJoin(): void
     {

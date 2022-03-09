@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use sagittaracc\StringHelper;
 
-final class SuQLOrderTest extends SuQLMock
+final class SuQLOrderTest extends SuQLTest
 {
     /**
      * SELECT

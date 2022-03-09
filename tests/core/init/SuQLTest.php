@@ -7,7 +7,7 @@ use suql\builder\MySQLBuilder;
 use suql\core\Obj;
 use suql\core\Scheme;
 
-class SuQLMock extends TestCase
+class SuQLTest extends TestCase
 {
     protected $osuql;
 
@@ -32,5 +32,11 @@ class SuQLMock extends TestCase
     protected function tearDown(): void
     {
         $this->osuql = null;
+    }
+
+    // TODO: Удалить и сделать хотя бы один реальный тест
+    public function testEmpty(): void
+    {
+        $this->assertTrue(true);
     }
 }

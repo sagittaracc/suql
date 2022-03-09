@@ -9,7 +9,7 @@ use suql\core\FieldName;
 use suql\core\Placeholder;
 use suql\core\SimpleParam;
 
-final class SuQLWhereTest extends SuQLMock
+final class SuQLWhereTest extends SuQLTest
 {
     public function testStringWhere(): void
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use sagittaracc\StringHelper;
 
-final class SuQLQueryModifierTest extends SuQLMock
+final class SuQLQueryModifierTest extends SuQLTest
 {
     /**
      * SELECT DISTINCT ... FROM <table>
