@@ -159,7 +159,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         else if (is_array($option)) {
             foreach ($option as $table => $alias) break;
             $instance->getQuery($instance->query())->addFrom("$table@$alias");
-            $instance->currentTable = $table;
+            $instance->currentTable = $alias;
         }
         else if ($option instanceof SuQL) {
             $subquery = $option;
