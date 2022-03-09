@@ -30,6 +30,8 @@
 
 [Raw Queries](https://github.com/sagittaracc/suql/blob/master/tests/suql/RawQueryTest.php)
 
+[Raw Views](https://github.com/sagittaracc/suql/blob/master/tests/suql/RawViewTest.php)
+
 ### Insert Query
 
 [Insert](https://github.com/sagittaracc/suql/blob/master/tests/suql/InsertTest.php)
