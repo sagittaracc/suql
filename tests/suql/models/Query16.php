@@ -4,16 +4,16 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class ViewModel extends ActiveRecord
+class Query16 extends ActiveRecord
 {
     public function query()
     {
-        return 'view_model';
+        return 'query_16';
     }
 
     public function table()
     {
-        return null;
+        return 'table_16';
     }
 
     public function fields()
