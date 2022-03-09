@@ -18,6 +18,10 @@ class Field
      */
     private $table;
     /**
+     * @var string название поля
+     */
+    private $name;
+    /**
      * @var string название поля (полное с таблицей если таблица указана)
      */
     private $field;
@@ -47,6 +51,7 @@ class Field
     {
         $this->oselect = $oselect;
         $this->table = $table;
+        $this->name = $field->format('%n');
         $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
         $this->alias = $alias;
         $this->visible = $visible;
@@ -66,6 +71,14 @@ class Field
     public function getTable()
     {
         return $this->table;
+    }
+    /**
+     * Вернуть название поля
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
     /**
      * Вернуть название поля
