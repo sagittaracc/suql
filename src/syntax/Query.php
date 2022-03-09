@@ -101,4 +101,14 @@ class Query implements DbObject
     {
         return $this->db;
     }
+    /**
+     * Задать подключение
+     * @param PDO $db
+     */
+    public function setDb($db)
+    {
+        $this->db = $db;
+
+        return $this;
+    }
 }
