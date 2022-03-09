@@ -174,24 +174,21 @@ class Select extends Query implements SelectQueryInterface, Buildable
     }
     /**
      * Добавляет таблицу from секции
-     * @param string $table имя таблицы
+     * @param mixed $table имя таблицы
      */
     public function addFrom($table)
     {
+        $tableFrom = new TableName($table);
+        $table = $tableFrom->name;
+        $alias = $tableFrom->alias;
+
         if ($this->getOSuQL()->getScheme()->hasTableAlias($table)) {
             $table = $this->getOSuQL()->getScheme()->getTableAlias($table);
         }
 
         $this->from = $table;
-        $this->table_list[] = $table;
-    }
-    /**
-     * Добавляет алиас таблицы from секции
-     * @param string $alias алиас таблицы
-     */
-    public function addAlias($alias)
-    {
         $this->alias = $alias;
+        $this->table_list[] = $table;
     }
     /**
      * Получает таблицу секции from
