@@ -1,5 +1,12 @@
 # Change log
 
+## v7.1.8 - March 9, 2022
+
+- Support Raw View
+- Support Join Aliases
+
+---
+
 ## v7.1.7 - March 4, 2022
 
 - Add documentation

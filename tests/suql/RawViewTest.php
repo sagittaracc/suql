@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\Query17;
-use test\suql\schema\AppScheme;
 
 final class RawViewTest extends TestCase
 {
