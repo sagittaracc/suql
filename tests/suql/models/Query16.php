@@ -31,11 +31,9 @@ class Query16 extends ActiveRecord
     {
         return <<<SQL
             select
-                u.*,
-                g.name
-            from users u
-            join user_group ug on u.id = ug.user_id
-            join groups g on g.id = ug.group_id
+                *
+            from table_16
+            where f1 % 2 = 0
 SQL;
     }
 
