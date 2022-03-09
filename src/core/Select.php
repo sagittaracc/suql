@@ -87,6 +87,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
      *   3. <field>@<alias> - строка с полем и его алиасом
      * @param boolean $visible некоторые поля нужны просто чтобы применить к ним модификатор
      * например поля сортировки или группировки или фильтрации но их не нужно выводить в результат
+     * @param boolean $raw флажок - сырое поле или нет
      * @return suql\core\FieldName
      */
     public function addField($table, $name, $visible = true, $raw = false)
