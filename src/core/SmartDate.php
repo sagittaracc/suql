@@ -2,55 +2,112 @@
 
 namespace suql\core;
 
+/**
+ * Умная дата
+ * 
+ * @author sagittaracc <sagittaracc@gmail.com>
+ */
 class SmartDate
 {
-    private $smartDate;
-    private $type;
-
+    /**
+     * @var string умная дата
+     */
+    private $date;
+    /**
+     * @var string числа из умной даты
+     */
+    private $number;
+    /**
+     * @var string период из умной даты
+     */
+    private $period;
+    /**
+     * @var array перечень возможных умных дат по типам
+     */
     protected $patternList = [
         'simple' => [
-            '/yesterday/' => true,
-            '/today/'     => true,
-            '/tomorrow/'  => true,
+            '/(yesterday)/' => true,
+            '/(today)/'     => true,
+            '/(tomorrow)/'  => true,
         ],
         'ago' => [
-            '/(\d+) days? ago/'  => true,
-            '/(\d+) weeks? ago/' => true,
-            '/(\d+) years? ago/' => true,
+            '/(\d+) (day)s? ago/'  => true,
+            '/(\d+) (week)s? ago/' => true,
+            '/(\d+) (year)s? ago/' => true,
         ],
         'last' => [
-            '/last (\d+) days?/'  => true,
-            '/last (\d+) weeks?/' => true,
-            '/last (\d+) years?/' => true,
+            '/last (\d+) (day)s?/'  => true,
+            '/last (\d+) (week)s?/' => true,
+            '/last (\d+) (year)s?/' => true,
         ],
     ];
-
-    protected function getSmartDateType()
+    /**
+     * Получает тип умной даты
+     * @return string
+     */
+    public function getType()
     {
-        if (strpos($this->smartDate, ' ago') !== false)
+        if (strpos($this->date, ' ago') !== false)
             return 'ago';
-        else if (strpos($this->smartDate, 'last ') !== false)
+        else if (strpos($this->date, 'last ') !== false)
             return 'last';
         else
             return 'simple';
     }
-
-    function __construct($smartDate)
+    /**
+     * Constructor
+     * @param string $date умная дата
+     */
+    function __construct($date)
     {
-        $this->smartDate = $smartDate;
+        $this->date = $date;
 
-        $this->type = $this->getSmartDateType();
-        $cases = $this->patternList[$this->type];
+        $type = $this->getType();
 
+        $cases = $this->patternList[$type];
         foreach ($cases as $case => $sql) {
-            if (preg_match($case, $this->smartDate, $matches)) {
-                // $matches[1];
+            if (preg_match($case, $this->date, $matches)) {
+                if ($type === 'simple') {
+                    $this->period = $matches[1];
+                }
+                else {
+                    $this->number = intval($matches[1]);
+                    $this->period = $matches[2];
+                }
+                break;
             }
         }
     }
-
-    public static function create($smartDate)
+    /**
+     * Получает переданную умную дату
+     * @return string
+     */
+    public function getDate()
     {
-        return new static($smartDate);
+        return $this->date;
+    }
+    /**
+     * Получает номер из умной даты
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+    /**
+     * Получает период из умной даты
+     * @return string
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+    /**
+     * Алиас для конструктора
+     * @return self
+     */
+    public static function create($date)
+    {
+        return new static($date);
     }
 }
