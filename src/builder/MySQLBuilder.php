@@ -85,12 +85,9 @@ final class MySQLBuilder extends SQLBuilder
         );
     }
     /**
-     * Сборка SmartDate
-     * @param suql\core\FieldName $fieldName
-     * @param suql\core\SmartDate $smartDate
-     * @return string
+     * @inheritdoc
      */
-    public function buildSmartDate($fieldName, $smartDate)
+    protected function buildSmartDate($fieldName, $smartDate)
     {
         $field = $fieldName->format('`%t`.`%n`');
 

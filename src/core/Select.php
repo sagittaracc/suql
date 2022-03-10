@@ -28,6 +28,11 @@ class Select extends Query implements SelectQueryInterface, Buildable
      */
     private $where = [];
     /**
+     * @var array WHERE 2.0 =) То как список where должен был выглядеть изначально
+     * TODO: Весь перечень из $this->where перенести в этот список и переименовать
+     */
+    private $where20 = [];
+    /**
      * @var array список условий для фильтрации не будут применяться если фильтры пустые
      */
     private $filterWhere = [];
@@ -262,12 +267,32 @@ class Select extends Query implements SelectQueryInterface, Buildable
         $this->addExpression($where, $this->where);
     }
     /**
+     * Добавляет условие where 2.0
+     * @param suql\core\FieldName $fieldName
+     * @param mixed $condition
+     */
+    public function addWhere20($fieldName, $condition)
+    {
+        $this->where20[] = [
+            'fieldName' => $fieldName,
+            'condition' => $condition,
+        ];
+    }
+    /**
      * Возвращает текущий список всех where условий
      * @return array
      */
     public function getWhere()
     {
         return $this->where;
+    }
+    /**
+     * Возвращает текущий список всех where условий 2.0
+     * @return array
+     */
+    public function getWhere20()
+    {
+        return $this->where20;
     }
     /**
      * Добавляет условие having

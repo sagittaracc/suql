@@ -329,8 +329,9 @@ class SQLBuilder
     protected function buildWhere($query)
     {
         $whereList = $this->osuql->getQuery($query)->getWhere();
+        $whereList20 = $this->osuql->getQuery($query)->getWhere20();
 
-        if (empty($whereList))
+        if (empty($whereList) && empty($whereList20))
             return '';
 
         $fieldList = $this->osuql->getQuery($query)->getFieldList();
@@ -342,7 +343,12 @@ class SQLBuilder
         }
         unset($where);
 
-        $fullWhereList = array_merge($whereList, []);
+        $extraWhere = [];
+        foreach ($whereList20 as $where20) {
+            $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
+        }
+
+        $fullWhereList = array_merge($whereList, $extraWhere);
         if (empty($fullWhereList))
             return '';
 
@@ -407,5 +413,15 @@ class SQLBuilder
         $bound = implode(', ', $bound);
 
         return " limit $bound";
+    }
+    /**
+     * Сборка SmartDate
+     * @param suql\core\FieldName $fieldName
+     * @param suql\core\SmartDate $smartDate
+     * @return string
+     */
+    protected function buildSmartDate($fieldName, $smartDate)
+    {
+        return '';
     }
 }
