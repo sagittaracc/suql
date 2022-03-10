@@ -16,6 +16,7 @@ use suql\syntax\exception\BuilderNotDefined;
 use \ReflectionMethod;
 use ReflectionProperty;
 use sagittaracc\ArrayHelper;
+use suql\core\SmartDate;
 use suql\syntax\field\Field;
 use suql\syntax\field\Raw;
 
@@ -402,6 +403,22 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $this;
     }
     /**
+     * Where фильтрация 2.0
+     * @return self
+     */
+    public function whereExpression20($field, $where, $subqueries = [])
+    {
+        foreach ($subqueries as $subquery) {
+            $this->extend($subquery->getQueries());
+            $query = $subquery->query();
+            $where = str_replace('?', "@$query", $where);
+        }
+
+        $this->getQuery($this->query())->addWhere20($field, $where);
+
+        return $this;
+    }
+    /**
      * Where фильтрация
      * @return self
      */
@@ -414,9 +431,14 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             }
             else if (is_array($where)) {
                 foreach ($where as $field => $value) {
-                    $this->whereExpression(
-                        new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ = ?")
-                    );
+                    if ($value instanceof SmartDate) {
+                        $this->whereExpression20(new FieldName($this->currentTable, $field), $value);
+                    }
+                    else {
+                        $this->whereExpression(
+                            new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ = ?")
+                        );
+                    }
                 }
             }
         }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\core\SimpleParam;
+use suql\core\SmartDate;
 use suql\syntax\Expression;
 use test\suql\models\Query1;
 
@@ -150,5 +151,21 @@ final class WhereTest extends TestCase
 
         $this->assertEquals($expectedSQL, $actualSQL);
         $this->assertEquals($expectedParams, $actualParams);
+    }
+
+    public function testWhere20(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/q28.php'));
+
+        $query =
+            Query1::find()
+                ->select(['f1', 'f2'])
+                ->where([
+                    'f1' => SmartDate::create('last 3 days')
+                ]);
+
+        $actual = $query->getRawSql();
+
+        $this->assertEquals($expected, $actual);
     }
 }
