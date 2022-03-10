@@ -84,4 +84,31 @@ final class MySQLBuilder extends SQLBuilder
             $insertIntoTableQuery
         );
     }
+    /**
+     * Сборка SmartDate
+     * @param suql\core\FieldName $fieldName
+     * @param suql\core\SmartDate $smartDate
+     * @return string
+     */
+    public function buildSmartDate($fieldName, $smartDate)
+    {
+        $field = $fieldName->format('`%t`.`%n`');
+
+        switch ($smartDate->getType()) {
+            case 'simple':
+                switch ($smartDate->getPeriod()) {
+                    case 'yesterday':
+                        return "$field = DATE_SUB(CURDATE(), INTERVAL 1 day)";
+                    case 'today';
+                        return "DATE($field) = CURDATE()";
+                    case 'tomorrow':
+                        return "$field = CURDATE() + INTERVAL 1 DAY";
+                }
+                break;
+            case 'ago':
+                return "$field = DATE_SUB(CURDATE(), INTERVAL -{$smartDate->getNumber()} {$smartDate->getPeriod()})";
+            case 'last':
+                return "$field >= DATE_ADD(CURDATE(), INTERVAL -{$smartDate->getNumber()} {$smartDate->getPeriod()})";
+        }
+    }
 }

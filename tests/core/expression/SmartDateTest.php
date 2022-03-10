@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use suql\builder\MySQLBuilder;
+use suql\core\FieldName;
 use suql\core\SmartDate;
 
 final class SmartDateTest extends TestCase
@@ -86,5 +88,18 @@ final class SmartDateTest extends TestCase
         $this->assertEquals('3', $this->lastYear->getNumber());
         $this->assertEquals('year', $this->lastYear->getPeriod());
         $this->assertEquals('last', $this->lastYear->getType());
+    }
+
+    public function testSmartDateBuild(): void
+    {
+        $fieldName = new FieldName('table_1', 'f1');
+
+        $this->assertEquals('`table_1`.`f1` = DATE_SUB(CURDATE(), INTERVAL 1 day)', (new MySQLBuilder(null))->buildSmartDate($fieldName, $this->yesterday));
+        $this->assertEquals('DATE(`table_1`.`f1`) = CURDATE()', (new MySQLBuilder(null))->buildSmartDate($fieldName, $this->today));
+        $this->assertEquals('`table_1`.`f1` = CURDATE() + INTERVAL 1 DAY', (new MySQLBuilder(null))->buildSmartDate($fieldName, $this->tomorrow));
+
+        $this->assertEquals('`table_1`.`f1` = DATE_SUB(CURDATE(), INTERVAL -3 day)', (new MySQLBuilder(null))->buildSmartDate($fieldName, $this->dayAgo));
+
+        $this->assertEquals('`table_1`.`f1` >= DATE_ADD(CURDATE(), INTERVAL -3 day)', (new MySQLBuilder(null))->buildSmartDate($fieldName, $this->lastDay));
     }
 }
