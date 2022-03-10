@@ -152,7 +152,16 @@ final class WhereTest extends TestCase
         $this->assertEquals($expectedSQL, $actualSQL);
         $this->assertEquals($expectedParams, $actualParams);
     }
-
+    /**
+     * Example:
+     * 
+     * select
+     *     table.f1,
+     *     table.f2
+     * from table
+     * where `table`.`f1` >= DATE_ADD(CURDATE(), INTERVAL -3 day)
+     * 
+     */
     public function testWhere20(): void
     {
         $expected = StringHelper::trimSql(require('queries/q28.php'));
