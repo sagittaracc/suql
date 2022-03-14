@@ -206,6 +206,7 @@ abstract class SQLBuilder
         $oselect = $this->osuql->getQuery($query);
 
         foreach ($oselect->getSelect() as $field => $ofield) {
+            $this->buildSelectField($ofield);
             if ($ofield->hasModifier()) {
                 foreach ($ofield->getModifierList() as $name => $params) {
                     if ($name === 'callback' && $params instanceof \Closure) {
@@ -213,7 +214,6 @@ abstract class SQLBuilder
                     } else {
                         $modifierHandler = "mod_$name";
                         $modifierClass = $this->osuql->getModifierClass($modifierHandler);
-                        $this->buildSelectField($ofield);
                         if ($modifierClass) {
                             $modifierClass::$modifierHandler($ofield, $params);
                         }

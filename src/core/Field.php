@@ -62,7 +62,6 @@ class Field
         $this->oselect = $oselect;
         $this->table = $table;
         $this->name = $field->name;
-        $this->field = $table ? "$field->table.$field->name" : $field->name;
         $this->alias = $field->alias;
         $this->field2 = $field;
         $this->visible = $visible;
