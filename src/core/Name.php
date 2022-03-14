@@ -63,15 +63,4 @@ class Name
         $this->name = isset($parts[0]) ? $parts[0] : '';
         $this->alias = isset($parts[1]) ? $parts[1] : '';
     }
-    /**
-     * Выводит имя в заданном формате
-     * @param string $s формат вывода. Поддерживает два плейсхолдера %n - имя, %a - алиас
-     * @return string
-     */
-    public function format($s)
-    {
-        return $this->alias
-            ? str_replace(['%n', '%a'], [$this->name, $this->alias], $s)
-            : $this->name;
-    }
 }

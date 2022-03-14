@@ -24,12 +24,4 @@ class FieldName extends Name
         $this->table = $table;
         parent::__construct($name);
     }
-    /**
-     * Вывод имени поля в запрошенном формате. Помимо плейсхолдеров для имени и алиаса, также поддерживает %t - название таблицы
-     * @return string
-     */
-    public function format($s)
-    {
-        return str_replace(['%t', '%n', '%a'], [$this->table, $this->name, $this->alias], $s);
-    }
 }

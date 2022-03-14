@@ -55,9 +55,9 @@ class Field
     {
         $this->oselect = $oselect;
         $this->table = $table;
-        $this->name = $field->format('%n');
-        $this->field = $table ? $field->format('%t.%n') : $field->format('%n');
-        $this->alias = $field->format('%a');
+        $this->name = $field->name;
+        $this->field = $table ? "$field->table.$field->name" : $field->name;
+        $this->alias = $field->alias;
         $this->visible = $visible;
         $this->raw = $raw;
     }
