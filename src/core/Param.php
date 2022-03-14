@@ -34,7 +34,7 @@ abstract class Param
      */
     public function getFieldHash($value = 0)
     {
-        return md5($this->field->format('%t.%n') . ':' . $value);
+        return md5("{$this->field->table}.{$this->field->name}:$value");
     }
     /**
      * Получить поле

@@ -125,11 +125,11 @@ class Scheme implements SchemeInterface
         $rightTable = new TableName($rightTable);
 
         if ($leftTable->alias) {
-            $on = str_replace($leftTable->format("%a."), $leftTable->format("%n."), $on);
+            $on = str_replace("{$leftTable->alias}.", "{$leftTable->name}.", $on);
         }
 
         if ($rightTable->alias) {
-            $on = str_replace($rightTable->format("%a."), $rightTable->format("%n."), $on);
+            $on = str_replace("{$rightTable->alias}.", "{$rightTable->name}.", $on);
         }
 
         $scheme = $temporary ? 'temp_rel' : 'rel';
