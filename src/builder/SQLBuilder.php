@@ -213,6 +213,7 @@ abstract class SQLBuilder
                     } else {
                         $modifierHandler = "mod_$name";
                         $modifierClass = $this->osuql->getModifierClass($modifierHandler);
+                        $this->buildSelectField($ofield);
                         if ($modifierClass) {
                             $modifierClass::$modifierHandler($ofield, $params);
                         }
@@ -223,6 +224,20 @@ abstract class SQLBuilder
                 }
             }
         }
+    }
+    /**
+     * Тестовая функция сборки имени поля
+     */
+    public function buildSelectField($ofield)
+    {
+        $table = $ofield->getTable();
+        $name = $ofield->getName();
+
+        $name = $table
+            ? "$table.$name"
+            : $name;
+
+        $ofield->setField($name);
     }
     /**
      * Строит секцию select (перечень полей в выборке)
@@ -240,8 +255,9 @@ abstract class SQLBuilder
                  * TODO: При сборке полей учитывать сырое оно или нет
                  * $ofield->isRaw()
                  */
-                $fieldName = new Name($ofield->getField(), $ofield->getAlias());
-                $selectList[] = $fieldName->alias ? "$fieldName->name as $fieldName->alias" : $fieldName->name;
+                $name = $ofield->getField();
+                $alias = $ofield->getAlias();
+                $selectList[] = $alias ? "$name as $alias" : $name;
             }
         }
 
