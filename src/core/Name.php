@@ -15,11 +15,11 @@ class Name
     /**
      * @var string имя
      */
-    public $name = null;
+    public $name = '';
     /**
      * @var string алиас
      */
-    public $alias = null;
+    public $alias = '';
     /**
      * Constructor
      */
@@ -60,8 +60,8 @@ class Name
     private function parseString($string)
     {
         $parts = explode('@', $string);
-        $this->name = isset($parts[0]) ? $parts[0] : null;
-        $this->alias = isset($parts[1]) ? $parts[1] : null;
+        $this->name = isset($parts[0]) ? $parts[0] : '';
+        $this->alias = isset($parts[1]) ? $parts[1] : '';
     }
     /**
      * Выводит имя в заданном формате

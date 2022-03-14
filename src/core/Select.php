@@ -133,7 +133,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
         $field = new FieldName($table, $name);
 
         foreach ($this->select as $ofield) {
-            if ($ofield->getField() === $field->format('%t.%n') && $ofield->getAlias() === $field->format('%a')) {
+            if ($ofield->getField() === $field->format('%t.%n') && $ofield->getAlias() === $field->alias) {
                 return $ofield;
             }
         }
