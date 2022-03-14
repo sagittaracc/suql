@@ -241,7 +241,7 @@ abstract class SQLBuilder
                  * $ofield->isRaw()
                  */
                 $fieldName = new Name($ofield->getField(), $ofield->getAlias());
-                $selectList[] = $fieldName->format('%n as %a');
+                $selectList[] = $fieldName->alias ? "$fieldName->name as $fieldName->alias" : $fieldName->name;
             }
         }
 

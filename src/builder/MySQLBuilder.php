@@ -89,7 +89,7 @@ final class MySQLBuilder extends SQLBuilder
      */
     protected function buildSmartDate($fieldName, $smartDate)
     {
-        $field = $fieldName->format('`%t`.`%n`');
+        $field = "`$fieldName->table`.`$fieldName->name`";
 
         switch ($smartDate->getType()) {
             case 'simple':
