@@ -26,6 +26,12 @@ class Field
      */
     private $field;
     /**
+     * @var suql\core\FieldName поле с его настройками
+     * Это поле впоследствии должно избавить класс от полей $table, $name, $alias
+     * TODO: Потом переименовть в $field когда выпилится $table, $name, $alias
+     */
+    private $field2;
+    /**
      * @var string алиас поля если указан
      */
     private $alias;
@@ -58,6 +64,7 @@ class Field
         $this->name = $field->name;
         $this->field = $table ? "$field->table.$field->name" : $field->name;
         $this->alias = $field->alias;
+        $this->field2 = $field;
         $this->visible = $visible;
         $this->raw = $raw;
     }
@@ -92,6 +99,15 @@ class Field
     public function getField()
     {
         return $this->field;
+    }
+    /**
+     * Вернуть поле
+     * TODO: Переименовать в getField когда избавимся от полей $table, $name, $alias
+     * @return suql\core\FieldName
+     */
+    public function getField2()
+    {
+        return $this->field2;
     }
     /**
      * Установить новое значение поле
