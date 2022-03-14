@@ -13,7 +13,7 @@ use suql\modifier\field\SQLFunctionModifier;
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SQLBuilder
+abstract class SQLBuilder
 {
     /**
      * @var suql\core\SuQLObject основной объект хранящий всю структуру запроса
@@ -420,8 +420,5 @@ class SQLBuilder
      * @param suql\core\SmartDate $smartDate
      * @return string
      */
-    protected function buildSmartDate($fieldName, $smartDate)
-    {
-        return '';
-    }
+    abstract protected function buildSmartDate($fieldName, $smartDate);
 }
