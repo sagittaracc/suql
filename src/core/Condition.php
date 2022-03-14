@@ -54,7 +54,7 @@ class Condition
                 '?',
             ],
             [
-                $this->param->getField()->format($this->format),
+                $this->param->getField()->name,
                 $this->param->getPlaceholder(),
             ],
             $this->condition
