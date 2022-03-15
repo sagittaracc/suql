@@ -308,15 +308,18 @@ abstract class SQLBuilder
             $alias = $ojoin->getAlias();
             $type = $ojoin->getType();
             $on = $ojoin->getOn();
+            $quote = $this->quote;
+            $unquote = $this->unquote;
 
-            $table = $this->osuql->hasQuery($table)
-                ? "@$table $table"
-                : $table;
+            if ($this->osuql->hasQuery($table)) {
+                $table = "@$table $table";
+                $quote = $unquote = '';
+            }
 
             $joinList[] = (
                 $alias
-                    ? "$type join $table $alias on $on"
-                    : "$type join $table on $on"
+                    ? "$type join {$quote}$table{$unquote} $alias on $on"
+                    : "$type join {$quote}$table{$unquote} on $on"
             );
         }
 
