@@ -226,7 +226,8 @@ abstract class SQLBuilder
         }
     }
     /**
-     * Тестовая функция сборки имени поля
+     * Сборка поля по имени и таблице
+     * @param suql\core\Field ссылка на объект поля
      */
     public function buildSelectField($ofield)
     {
@@ -234,8 +235,8 @@ abstract class SQLBuilder
         $name = $ofield->getName();
 
         $name = $table
-            ? "$table.$name"
-            : $name;
+            ? "{$this->quote}$table{$this->unquote}.{$this->quote}$name{$this->unquote}"
+            : "{$this->quote}$name{$this->unquote}";
 
         $ofield->setField($name);
     }
