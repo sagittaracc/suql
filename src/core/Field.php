@@ -14,27 +14,13 @@ class Field
      */
     private $oselect = null;
     /**
-     * @var string название таблицы которой принадлежит это поле
-     */
-    private $table;
-    /**
-     * @var string название поля
-     */
-    private $name;
-    /**
      * @var string название поля (полное с таблицей если таблица указана)
      */
     private $field;
     /**
      * @var suql\core\FieldName поле с его настройками
-     * Это поле впоследствии должно избавить класс от полей $table, $name, $alias
-     * TODO: Потом переименовть в $field когда выпилится $table, $name, $alias
      */
-    private $field2;
-    /**
-     * @var string алиас поля если указан
-     */
-    private $alias;
+    private $fieldNameObject;
     /**
      * @var boolean флаг говорящий выводить это поле в выборке или нет
      * Иногда необходимо использовать поле только в служебных целях
@@ -52,18 +38,14 @@ class Field
     /**
      * Constructor
      * @param suql\core\Select ссылка на основной объект выборки
-     * @param string $table название таблицы
-     * @param suql\core\FieldName $field объект с параметрами поля
+     * @param suql\core\FieldName $fieldNameObject объект с параметрами поля
      * @param boolean $visible добавить поле в выборку или нет
      * @param boolean $raw флажок - сырое поле или нет
      */
-    function __construct($oselect, $table, $field, $visible, $raw = false)
+    function __construct($oselect, $fieldNameObject, $visible, $raw = false)
     {
         $this->oselect = $oselect;
-        $this->table = $table;
-        $this->name = $field->name;
-        $this->alias = $field->alias;
-        $this->field2 = $field;
+        $this->fieldNameObject = $fieldNameObject;
         $this->visible = $visible;
         $this->raw = $raw;
     }
@@ -81,7 +63,7 @@ class Field
      */
     public function getTable()
     {
-        return $this->table;
+        return $this->fieldNameObject->table;
     }
     /**
      * Вернуть название поля
@@ -89,7 +71,23 @@ class Field
      */
     public function getName()
     {
-        return $this->name;
+        return $this->fieldNameObject->name;
+    }
+    /**
+     * Проверяет задан ли у поля алиас
+     * @return boolean
+     */
+    public function hasAlias()
+    {
+        return !empty($this->fieldNameObject->alias);
+    }
+    /**
+     * Возвращает алиас поля
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->fieldNameObject->alias;
     }
     /**
      * Вернуть название поля
@@ -98,15 +96,6 @@ class Field
     public function getField()
     {
         return $this->field;
-    }
-    /**
-     * Вернуть поле
-     * TODO: Переименовать в getField когда избавимся от полей $table, $name, $alias
-     * @return suql\core\FieldName
-     */
-    public function getField2()
-    {
-        return $this->field2;
     }
     /**
      * Установить новое значение поле
@@ -119,20 +108,13 @@ class Field
         $this->field = $field;
     }
     /**
-     * Проверяет задан ли у поля алиас
-     * @return boolean
+     * Вернуть поле
+     * TODO: Переименовать в getField когда избавимся от полей $table, $name, $alias
+     * @return suql\core\FieldName
      */
-    public function hasAlias()
+    public function getFieldNameObject()
     {
-        return !empty($this->alias);
-    }
-    /**
-     * Возвращает алиас поля
-     * @return string
-     */
-    public function getAlias()
-    {
-        return $this->alias;
+        return $this->fieldNameObject;
     }
     /**
      * Возвращает видимое ли поле

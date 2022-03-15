@@ -259,7 +259,7 @@ abstract class SQLBuilder
         foreach ($oselect->getSelect() as $field => $ofield) {
             if ($ofield->visible()) {
                 $name = $ofield->getField();
-                $alias = $ofield->getField2()->alias;
+                $alias = $ofield->getAlias();
                 $selectList[] = $alias ? "$name as {$this->quote}$alias{$this->unquote}" : $name;
             }
         }

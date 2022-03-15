@@ -109,7 +109,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
 
         $field = new FieldName($table, $name);
 
-        $this->select[] = new Field($this, $table, $field, $visible, $raw);
+        $this->select[] = new Field($this, $field, $visible, $raw);
 
         return $field;
     }
