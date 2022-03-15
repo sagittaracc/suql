@@ -18,6 +18,6 @@ class NamedRel2 extends NamedRel
 
     public function on()
     {
-        return 'table_2.id = t3.id';
+        return '`table_2`.`id` = `t3`.`id`';
     }
 }
