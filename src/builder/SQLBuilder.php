@@ -241,7 +241,7 @@ abstract class SQLBuilder
         }
 
         $name = $table
-            ? "{$quote}$table{$unquote}.{$quote}$name{$unquote}"
+            ? "{$quote}$table{$unquote}." . ($name === '*' ? $name : "{$quote}$name{$unquote}")
             : "{$quote}$name{$unquote}";
 
         $ofield->setField($name);
