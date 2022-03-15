@@ -5,17 +5,16 @@ namespace suql\syntax;
 use Closure;
 use Exception;
 use PDO;
-use PDOException;
 use ReflectionClass;
 use suql\core\Condition;
 use suql\core\FieldName;
 use suql\core\Obj;
 use suql\core\SimpleParam;
 use suql\syntax\exception\SchemeNotDefined;
-use suql\syntax\exception\BuilderNotDefined;
 use \ReflectionMethod;
 use ReflectionProperty;
 use sagittaracc\ArrayHelper;
+use suql\core\Scheme;
 use suql\core\SmartDate;
 use suql\syntax\field\Field;
 use suql\syntax\field\Raw;
@@ -30,7 +29,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     /**
      * @var string класс реализующий схему
      */
-    protected static $schemeClass = null;
+    protected static $schemeClass = Scheme::class;
     /**
      * @var string используемый билдер
      */
