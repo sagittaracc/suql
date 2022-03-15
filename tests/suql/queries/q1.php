@@ -2,5 +2,5 @@
 return <<<SQL
     select
         *
-    from table_1
+    from `table_1`
 SQL;

@@ -1,10 +1,10 @@
 <?php
 return <<<SQL
     select
-        table_3.f1,
-        count(table_3.f1) as count
-    from table_1
+        `table_3`.`f1`,
+        count(`table_3`.`f1`) as `count`
+    from `table_1`
     inner join table_2 on table_1.id = table_2.id
     inner join table_3 on table_2.id = table_3.id
-    group by table_3.f1
+    group by `table_3`.`f1`
 SQL;

@@ -4,7 +4,7 @@ return [
     'query' => <<<SQL
         select
             *
-        from table_1
+        from `table_1`
         where
             f1 > :ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b and
             (

@@ -16,11 +16,11 @@ final class MySQLBuilder extends SQLBuilder
     /**
      * @var string $quote
      */
-    protected $quote = '';
+    protected $quote = '`';
     /**
      * @var string $unquote
      */
-    protected $unquote = '';
+    protected $unquote = '`';
     /**
      * Генерация запроса создания таблицы
      * @param suql\syntax\SuQL $model

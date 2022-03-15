@@ -2,6 +2,7 @@
 
 namespace test\suql\models;
 
+use suql\syntax\field\Raw;
 use test\suql\records\ActiveRecord;
 
 class Query5 extends ActiveRecord
@@ -19,8 +20,8 @@ class Query5 extends ActiveRecord
     public function view()
     {
         return $this->select([
-            '2 * 2',
-            "'Yuriy' as author",
+            Raw::expression('2 * 2'),
+            Raw::expression("'Yuriy' as author"),
         ]);
     }
 }

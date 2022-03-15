@@ -5,6 +5,6 @@ return <<<SQL
     from (
         select
             *
-        from table_10
+        from `table_10`
     )
 SQL;

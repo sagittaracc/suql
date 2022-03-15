@@ -233,10 +233,16 @@ abstract class SQLBuilder
     {
         $table = $ofield->getTable();
         $name = $ofield->getName();
+        $quote = $this->quote;
+        $unquote = $this->unquote;
+
+        if ($ofield->isRaw()) {
+            $quote = $unquote = '';
+        }
 
         $name = $table
-            ? "{$this->quote}$table{$this->unquote}.{$this->quote}$name{$this->unquote}"
-            : "{$this->quote}$name{$this->unquote}";
+            ? "{$quote}$table{$unquote}.{$quote}$name{$unquote}"
+            : "{$quote}$name{$unquote}";
 
         $ofield->setField($name);
     }
@@ -252,13 +258,9 @@ abstract class SQLBuilder
         $selectList = [];
         foreach ($oselect->getSelect() as $field => $ofield) {
             if ($ofield->visible()) {
-                /**
-                 * TODO: При сборке полей учитывать сырое оно или нет
-                 * $ofield->isRaw()
-                 */
                 $name = $ofield->getField();
                 $alias = $ofield->getField2()->alias;
-                $selectList[] = $alias ? "$name as $alias" : $name;
+                $selectList[] = $alias ? "$name as {$this->quote}$alias{$this->unquote}" : $name;
             }
         }
 
@@ -313,8 +315,8 @@ abstract class SQLBuilder
 
             $joinList[] = (
                 $alias
-                    ? "$type join {$this->quote}$table{$this->unquote} $alias on $on"
-                    : "$type join {$this->quote}$table{$this->unquote} on $on"
+                    ? "$type join $table $alias on $on"
+                    : "$type join $table on $on"
             );
         }
 
