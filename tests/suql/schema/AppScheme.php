@@ -23,7 +23,7 @@ class AppScheme extends Scheme
         $this->rel('{{t9}}', '{{t10}}', '{{t9}}.p1 = {{t10}}.f1');
 
         // Связи с абстрактными вьюхами
-        $this->rel('table_1', 'query_13', 'table_1.id = table_13.id');
-        $this->rel('table_2', 'query_15', 'table_2.id = table_15.id');
+        $this->rel('table_1', 'query_13', '`table_1`.`id` = `table_13`.`id`');
+        $this->rel('table_2', 'query_15', '`table_2`.`id` = `table_15`.`id`');
     }
 }

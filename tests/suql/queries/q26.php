@@ -10,5 +10,5 @@ return <<<SQL
             `table_15`.*
         from `table_15`
         limit 1
-    ) query_15 on table_2.id = table_15.id
+    ) query_15 on `table_2`.`id` = `table_15`.`id`
 SQL;
