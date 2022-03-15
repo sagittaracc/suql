@@ -77,9 +77,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         if (!static::$schemeClass)
             throw new SchemeNotDefined;
 
-        if (!static::$builderClass)
-            throw new BuilderNotDefined;
-
         return new static(null, null);
     }
     /**
@@ -91,13 +88,20 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         if (!static::$schemeClass)
             throw new SchemeNotDefined;
 
-        if (!static::$builderClass)
-            throw new BuilderNotDefined();
-
         $scheme = new static::$schemeClass;
-        $builder = new static::$builderClass;
+        $builder = static::$builderClass
+            ? new static::$builderClass
+            : null;
 
         return new static($scheme, $builder);
+    }
+    /**
+     * @inheritdoc
+     */
+    public function setBuilder($builderClass)
+    {
+        parent::setBuilder($builderClass);
+        return $this;
     }
     /**
      * Алиас для getInstance

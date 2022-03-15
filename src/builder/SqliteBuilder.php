@@ -12,9 +12,16 @@ final class SqliteBuilder extends SQLBuilder
     /**
      * @var string $quote
      */
-    protected $quote = '`';
+    protected $quote = '"';
     /**
      * @var string $unquote
      */
-    protected $unquote = '`';
+    protected $unquote = '"';
+    /**
+     * @inheritdoc
+     */
+    protected function buildSmartDate($fieldName, $smartDate)
+    {
+        return '';
+    }
 }

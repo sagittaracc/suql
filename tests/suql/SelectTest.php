@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use suql\builder\SqliteBuilder;
 use suql\syntax\field\Raw;
 use test\suql\models\Query1;
 use test\suql\models\Query4;
@@ -128,6 +129,15 @@ final class SelectTest extends TestCase
     {
         $expected = StringHelper::trimSql(require('queries/q11.php'));
         $actual = Query1::all()->distinct(['f1', 'f2'])->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+    /**
+     * Тестовая проба выборки с помощью Sqlite драйвера
+     */
+    public function testSqliteSelect(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/q29.php'));
+        $actual = Query1::all()->select(['f1' => 'af1', 'f2' => 'af2'])->setBuilder(SqliteBuilder::class)->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }

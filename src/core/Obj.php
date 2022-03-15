@@ -59,6 +59,16 @@ class Obj
         return $this->builder;
     }
     /**
+     * Задает билдер
+     * @param string класс билдера
+     */
+    public function setBuilder($builderClass)
+    {
+        if (class_exists($builderClass)) {
+            $this->builder = new $builderClass;
+        }
+    }
+    /**
      * Перечень используемых модификаторов
      * TODO: Возможно в будущем отказаться от использования так как
      * класс используемого модификатора будет указываться при его
