@@ -257,7 +257,7 @@ abstract class SQLBuilder
                  * $ofield->isRaw()
                  */
                 $name = $ofield->getField();
-                $alias = $ofield->getAlias();
+                $alias = $ofield->getField2()->alias;
                 $selectList[] = $alias ? "$name as $alias" : $name;
             }
         }
