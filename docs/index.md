@@ -58,6 +58,6 @@
 
 [Last requested model](https://github.com/sagittaracc/suql/blob/master/tests/suql/LastRequestedModelTest.php)
 
-### SQL Builder
+### Sqlite
 
-[Custom Sql Builder](https://github.com/sagittaracc/suql/blob/master/tests/suql/SetSqlBuilderTest.php)
+[Sqlite](https://github.com/sagittaracc/suql/blob/master/tests/suql/SqliteTest.php)
