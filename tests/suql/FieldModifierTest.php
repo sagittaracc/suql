@@ -15,7 +15,7 @@ final class FieldModifierTest extends TestCase
 {
     public function testCallbackModifier(): void
     {
-        $sql = require('queries/q21.php');
+        $sql = require('queries/mysql/q21.php');
 
         $expectedSQL = StringHelper::trimSql($sql['query']);
         $expectedParams = $sql['params'];

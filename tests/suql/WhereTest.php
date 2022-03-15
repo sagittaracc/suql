@@ -23,7 +23,7 @@ final class WhereTest extends TestCase
      */
     public function testStringWhere(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q16.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q16.php'));
         $actual = Query1::all()->select([
             'f1' => 'af1',
             'f2' => 'af2',
@@ -41,7 +41,7 @@ final class WhereTest extends TestCase
      */
     public function testEqualWhere(): void
     {
-        $sql = require('queries/q17.php');
+        $sql = require('queries/mysql/q17.php');
 
         $expectedSQL = StringHelper::trimSql($sql['query']);
         $expectedParams = $sql['params'];
@@ -70,7 +70,7 @@ final class WhereTest extends TestCase
      */
     public function testExpressionWhere(): void
     {
-        $sql = require('queries/q18.php');
+        $sql = require('queries/mysql/q18.php');
 
         $expectedSQL = StringHelper::trimSql($sql['query']);
         $expectedParams = $sql['params'];
@@ -102,7 +102,7 @@ final class WhereTest extends TestCase
      */
     public function testCustomExpression(): void
     {
-        $sql = require('queries/q19.php');
+        $sql = require('queries/mysql/q19.php');
 
         $expectedSQL = StringHelper::trimSql($sql['query']);
         $expectedParams = $sql['params'];
@@ -135,7 +135,7 @@ final class WhereTest extends TestCase
      */
     public function testFindMethod(): void
     {
-        $sql = require('queries/q17.php');
+        $sql = require('queries/mysql/q17.php');
 
         $expectedSQL = StringHelper::trimSql($sql['query']);
         $expectedParams = $sql['params'];
@@ -164,7 +164,7 @@ final class WhereTest extends TestCase
      */
     public function testWhere20(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q28.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q28.php'));
 
         $query =
             Query1::find()

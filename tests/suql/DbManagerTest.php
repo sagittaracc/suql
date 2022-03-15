@@ -18,7 +18,7 @@ final class DbManagerTest extends TestCase
     {
         $db = new suql\db\Manager();
 
-        $expected = StringHelper::trimSql(require('queries/q6.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q6.php'));
         $actual = $db->entity('table_1')->order([
             'f1' => 'desc',
             'f2' => 'asc',
@@ -39,7 +39,7 @@ final class DbManagerTest extends TestCase
     {
         $db = new suql\db\Manager(null, AppScheme::class);
 
-        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
             $db->entity('table_1')
                 ->select(['f1'])
@@ -65,7 +65,7 @@ final class DbManagerTest extends TestCase
     {
         $db = new suql\db\Manager(null, AppScheme::class);
 
-        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
             $db->entity('table_1')
                 ->select(['f1'])

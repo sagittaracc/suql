@@ -16,7 +16,7 @@ final class OrderTest extends TestCase
      */
     public function testSelectOrder(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q6.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q6.php'));
         $actual = Query1::all()->order([
             'f1' => 'desc',
             'f2' => 'asc',

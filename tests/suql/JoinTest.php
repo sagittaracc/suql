@@ -22,7 +22,7 @@ final class JoinTest extends TestCase
      */
     public function testSimpleJoin(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
             Query1::all()
                 ->select([
@@ -49,7 +49,7 @@ final class JoinTest extends TestCase
      */
     public function testSmartJoin(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
             Query1::all()
                 ->select([
@@ -75,7 +75,7 @@ final class JoinTest extends TestCase
      */
     public function testSimpleJoinWithMagicMethods(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
             Query1::all()
                 ->select([
@@ -102,7 +102,7 @@ final class JoinTest extends TestCase
      */
     public function testSmartJoinWithMagicMethods(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q8.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
             Query1::all()
                 ->select([
@@ -128,7 +128,7 @@ final class JoinTest extends TestCase
      */
     public function testJoinByNamedRel(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q27.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q27.php'));
         $actual = Query1::all()
             ->select([
                 'f1'

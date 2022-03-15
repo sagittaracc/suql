@@ -20,7 +20,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectAll(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q1.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q1.php'));
         $actual = Query1::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -32,7 +32,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectAllWithTableName(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q2.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q2.php'));
         $actual = Query1::all()->select(['*'])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -47,7 +47,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectFieldList(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q3.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q3.php'));
         $actual = Query1::all()->select(['f1', 'f2'])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -62,7 +62,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectUsingAliases(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q4.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q4.php'));
         $actual = Query1::all()->select([
             'f1' => 'af1',
             'f2' => 'af2',
@@ -81,7 +81,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectWithTableAlias(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q5.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q5.php'));
         $actual = Query4::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -95,7 +95,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectRaw(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q9.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q9.php'));
         $actual = Query5::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -110,7 +110,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectWithRaw(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q10.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q10.php'));
         $actual = Query1::all()->select([
             '*',
             Raw::expression("'Yuriy' as author"),
@@ -127,7 +127,7 @@ final class SelectTest extends TestCase
      */
     public function testSelectDistinct(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q11.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q11.php'));
         $actual = Query1::all()->distinct(['f1', 'f2'])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -136,7 +136,7 @@ final class SelectTest extends TestCase
      */
     public function testSqliteSelect(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q29.php'));
+        $expected = StringHelper::trimSql(require('queries/sqlite/q29.php'));
         $actual = Query1::all()->select(['f1' => 'af1', 'f2' => 'af2'])->setBuilder(SqliteBuilder::class)->getRawSql();
         $this->assertEquals($expected, $actual);
     }

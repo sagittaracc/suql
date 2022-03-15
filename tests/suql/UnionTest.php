@@ -22,7 +22,7 @@ final class UnionTest extends TestCase
      */
     public function testUnion(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q15.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q15.php'));
 
         $query1 = Query1::all()->select(['f1', 'f2', 'f3'])->as('query1');
         $query2 = Query2::all()->select(['f1', 'f2', 'f3'])->as('query2');
@@ -42,7 +42,7 @@ final class UnionTest extends TestCase
      */
     public function testOneModelUnion(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q15.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q15.php'));
         $actual = Query8::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }

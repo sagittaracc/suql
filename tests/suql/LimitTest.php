@@ -16,7 +16,7 @@ final class LimitTest extends TestCase
      */
     public function testSelectLimit(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q12.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q12.php'));
         $actual = Query1::all()->limit(3)->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -28,7 +28,7 @@ final class LimitTest extends TestCase
      */
     public function testSelectOffsetLimit(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q13.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q13.php'));
         $actual = Query1::all()->offset(3)->limit(3)->getRawSql();
         $this->assertEquals($expected, $actual);
     }

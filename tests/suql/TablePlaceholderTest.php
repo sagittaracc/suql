@@ -16,7 +16,7 @@ final class TablePlaceholderTest extends TestCase
      */
     public function testSelectAll(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q1.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q1.php'));
         $actual = Query12::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -28,7 +28,7 @@ final class TablePlaceholderTest extends TestCase
      */
     public function testSelectAllWithTableName(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q2.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q2.php'));
         $actual = Query12::all()->select(['*'])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -43,7 +43,7 @@ final class TablePlaceholderTest extends TestCase
      */
     public function testSelectFieldList(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q3.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q3.php'));
         $actual = Query12::all()->select(['f1', 'f2'])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -58,7 +58,7 @@ final class TablePlaceholderTest extends TestCase
      */
     public function testSelectUsingAliases(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q4.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q4.php'));
         $actual = Query12::all()->select([
             'f1' => 'af1',
             'f2' => 'af2',

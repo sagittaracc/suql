@@ -26,7 +26,7 @@ final class AdvancedQueryTest extends TestCase
      */
     public function testSelectGroupWithJoin(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q22.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q22.php'));
         $actual = Query1::all()
             ->getQuery2()
             ->getQuery3()
@@ -51,7 +51,7 @@ final class AdvancedQueryTest extends TestCase
      */
     public function testJoinWithSubQuery(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q23.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q23.php'));
         $actual1 = Query1::all()->join(Query13::all())->getRawSql();
         $actual2 = Query1::all()->getQuery13()->getRawSql();
         $this->assertEquals($expected, $actual1);
@@ -74,7 +74,7 @@ final class AdvancedQueryTest extends TestCase
      */
     public function testSmartJoinWithView(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q26.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q26.php'));
 
         $actual1 =
             Query1::all()
@@ -110,7 +110,7 @@ final class AdvancedQueryTest extends TestCase
      */
     public function testNestedUnion(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q24.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q24.php'));
         $actual = Query14::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -130,7 +130,7 @@ final class AdvancedQueryTest extends TestCase
      */
     public function testSelectWhereNestedQuery(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q25.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q25.php'));
         $actual = Query1::all()->select([
             'f1' => 'af1',
             'f2',

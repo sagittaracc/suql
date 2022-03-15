@@ -24,7 +24,7 @@ final class NestedQueryTest extends TestCase
      */
     public function testNestedQuery(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q14.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q14.php'));
         $actual = Query6::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }

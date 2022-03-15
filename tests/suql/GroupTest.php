@@ -19,7 +19,7 @@ final class GroupTest extends TestCase
      */
     public function testSelectGroup(): void
     {
-        $expected = StringHelper::trimSql(require('queries/q7.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q7.php'));
         $actual = Query1::all()->select(['f1'])
             ->group('f1')
             ->count(['f1' => 'count'])
