@@ -131,13 +131,4 @@ final class SelectTest extends TestCase
         $actual = Query1::all()->distinct(['f1', 'f2'])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
-    /**
-     * Тестовая проба выборки с помощью Sqlite драйвера
-     */
-    public function testSqliteSelect(): void
-    {
-        $expected = StringHelper::trimSql(require('queries/sqlite/q29.php'));
-        $actual = Query1::all()->select(['f1' => 'af1', 'f2' => 'af2'])->setBuilder(SqliteBuilder::class)->getRawSql();
-        $this->assertEquals($expected, $actual);
-    }
 }

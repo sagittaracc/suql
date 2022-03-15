@@ -57,3 +57,7 @@
 [Table Placeholder](https://github.com/sagittaracc/suql/blob/master/tests/suql/TablePlaceholderTest.php)
 
 [Last requested model](https://github.com/sagittaracc/suql/blob/master/tests/suql/LastRequestedModelTest.php)
+
+### SQL Builder
+
+[Custom Sql Builder](https://github.com/sagittaracc/suql/blob/master/tests/suql/SetSqlBuilderTest.php)

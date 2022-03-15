@@ -1,5 +1,11 @@
 # Change log
 
+## v7.1.11 - March 15, 2022
+
+- Update docs
+
+---
+
 ## v7.1.10 - March 15, 2022
 
 - Support Sqlite, Postgresql
