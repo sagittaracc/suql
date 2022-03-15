@@ -1,5 +1,11 @@
 # Change log
 
+## v7.1.10 - March 15, 2022
+
+- Support Sqlite, Postgresql
+
+---
+
 ## v7.1.9 - March 10, 2022
 
 - Support Smart Date
