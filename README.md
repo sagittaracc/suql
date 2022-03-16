@@ -11,51 +11,18 @@
 </div>
 
 ### SuQL
-SuQL stands for Sugar SQL and this is a PHP DataMapper, ORM.
+SuQL расшифровывается как Sugar SQL. Это PHP DataMapper, ORM.
 
-### Installation
-Install the [Basic Template](https://github.com/sagittaracc/suql-app)
+### Установка
+Установите [базовый шаблон приложения](https://github.com/sagittaracc/suql-app)
 
-### Documentation
-See more examples in the ```tests``` directory or read [the documentation](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
+### Документация
+Прочитать можно [здесь](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
 
-### Example
-Find all the paid orders of the users that are not active anymore and delete them.
+### Системные требования
+PHP версии не менее 5.6.
 
-```php
-$orders =
-    Users:find(['active' => false])
-        ->getOrders()
-        ->select([
-            Fun::expression('{{round cost}} as cost')
-        ])
-        ->where(['paid' => true])
-        ->register([
-            'round' => function ($cost) {
-                // Need the precision to be 3
-                return round($cost, 3) . "$";
-            }
-        ]);
-
-try {
-    $transaction = Transaction::begin($orders);
-
-    foreach($orders->fetchAll() as $order) {
-        echo $order->cost;
-        $order->delete();
-    }
-
-    $transaction->commit();
-} catch (Exception $e) {
-    $transaction->rollback();
-}
-
-```
-
-### Requirements
-The minimum requirement - PHP 5.6.
-
-### Tests
-This is tested with [PHPUnit](https://phpunit.de/). To run tests:
+### Тестирование
+Покрыто тестами [PHPUnit](https://phpunit.de/). Для запуска тестов выполните:
 
 `./vendor/bin/phpunit tests`
