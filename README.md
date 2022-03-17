@@ -20,7 +20,7 @@ SuQL расшифровывается как Sugar SQL. Это PHP DataMapper, O
 Прочитать можно [здесь](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
 
 ### Системные требования
-PHP версии не менее 5.6.
+PHP версии не ниже 5.6.
 
 ### Тестирование
 Покрыто тестами [PHPUnit](https://phpunit.de/). Для запуска тестов выполните:
