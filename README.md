@@ -14,7 +14,7 @@
 SuQL расшифровывается как Sugar SQL. Это PHP DataMapper, ORM.
 
 ### Установка
-Установите [базовый шаблон приложения](https://github.com/sagittaracc/suql-app)
+`composer require sagittaracc/suql`
 
 ### Документация
 Прочитать можно [здесь](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
