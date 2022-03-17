@@ -2,8 +2,8 @@
 
 namespace suql\db\pdo;
 
-use MySQLBuilder;
 use PDO;
+use suql\builder\MySQLBuilder;
 
 /**
  * MySQL
