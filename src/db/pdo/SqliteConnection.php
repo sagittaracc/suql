@@ -12,6 +12,9 @@ use suql\builder\SqliteBuilder;
  */
 class SqliteConnection extends Connection
 {
+    /**
+     * @var string $builder использует сборщик Sqlite
+     */
     protected $builder = SqliteBuilder::class;
     /**
      * @inheritdoc

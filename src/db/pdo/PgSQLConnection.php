@@ -12,6 +12,9 @@ use suql\builder\PgSQLBuilder;
  */
 class PgSQLConnection extends Connection
 {
+    /**
+     * @var string $builder использует сборщик PgSQL
+     */
     protected $builder = PgSQLBuilder::class;
     /**
      * @inheritdoc

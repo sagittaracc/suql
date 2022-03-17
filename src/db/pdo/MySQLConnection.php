@@ -12,6 +12,9 @@ use suql\builder\MySQLBuilder;
  */
 class MySQLConnection extends Connection
 {
+    /**
+     * @var string $builder использует сборщик MySQL
+     */
     protected $builder = MySQLBuilder::class;
     /**
      * @inheritdoc

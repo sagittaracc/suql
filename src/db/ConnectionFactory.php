@@ -16,7 +16,7 @@ class ConnectionFactory
     /**
      * Создает подключение
      * @param array $config настройки подключения
-     * @return mixed
+     * @return suql\db\pdo\Connection
      */
     public static function create($config)
     {
