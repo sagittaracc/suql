@@ -90,8 +90,8 @@ class Query implements DbObject
         //     throw new ...
         // }
         return empty($params)
-            ? $this->db->exec($this->query)
-            : $this->db->prepare($this->query)->execute($params);
+            ? $this->db->getPdo()->exec($this->query)
+            : $this->db->getPdo()->prepare($this->query)->execute($params);
     }
     /**
      * Реализация getDb

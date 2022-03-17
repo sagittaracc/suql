@@ -176,7 +176,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $view = $instance->view();
         if (is_string($view)) {
             $viewQuery = $instance->getBuilder()->createView($instance);
-            $instance->getDb()->exec($viewQuery);
+            $instance->getDb()->getPdo()->exec($viewQuery);
         }
 
         $instance->select($instance->fields());
@@ -572,7 +572,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     private function exec($query)
     {
-        $this->getDb()->exec($query);
+        $this->getDb()->getPdo()->exec($query);
     }
     /**
      * Метод получения данных
@@ -593,12 +593,16 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             'one' => 'fetch',
         ];
 
+        $db = $this->getDb();
+
+        $this->setBuilder($db->getBuilder());
+
         if ($this->dataInitiative()) {
-            $this->getDb()->query($this->getBuilder()->createTemporaryTable($this));
-            $this->getDb()->query($this->getBuilder()->insertIntoTable($this->table(), $this->data));
+            $db->getPdo()->query($this->getBuilder()->createTemporaryTable($this));
+            $db->getPdo()->query($this->getBuilder()->insertIntoTable($this->table(), $this->data));
         }
 
-        $sth = $this->getDb()->prepare($this->getRawSql());
+        $sth = $db->getPdo()->prepare($this->getRawSql());
 
         foreach ($this->getParamList() as $param => $value) {
             if (isset($pdoTypes[gettype($value)])) {

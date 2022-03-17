@@ -3,6 +3,7 @@
 namespace suql\db\pdo;
 
 use PDO;
+use suql\builder\SqliteBuilder;
 
 /**
  * Sqlite
@@ -11,11 +12,14 @@ use PDO;
  */
 class SqliteConnection extends Connection
 {
+    protected $builder = SqliteBuilder::class;
     /**
      * @inheritdoc
      */
-    public static function create($config)
+    public function __construct($config)
     {
-        return new PDO("sqlite:{$config['file']}");
+        $dbh = new PDO("sqlite:{$config['file']}");
+
+        return parent::__construct($dbh, $config);
     }
 }

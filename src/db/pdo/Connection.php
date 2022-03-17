@@ -9,10 +9,22 @@ namespace suql\db\pdo;
  */
 abstract class Connection
 {
-    /**
-     * Создает подключение
-     * @param array $config настройки подключения
-     * @return PDO
-     */
-    abstract public static function create($config);
+    protected $dbh;
+    protected $config;
+    protected $builder;
+    function __construct($dbh, $config)
+    {
+        $this->dbh = $dbh;
+        $this->config = $config;
+    }
+
+    public function getPdo()
+    {
+        return $this->dbh;
+    }
+
+    public function getBuilder()
+    {
+        return $this->builder;
+    }
 }

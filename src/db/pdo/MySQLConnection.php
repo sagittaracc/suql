@@ -2,6 +2,7 @@
 
 namespace suql\db\pdo;
 
+use MySQLBuilder;
 use PDO;
 
 /**
@@ -11,10 +12,11 @@ use PDO;
  */
 class MySQLConnection extends Connection
 {
+    protected $builder = MySQLBuilder::class;
     /**
      * @inheritdoc
      */
-    public static function create($config)
+    public function __construct($config)
     {
         $dbh = new PDO(
             "mysql:host={$config['host']};dbname={$config['dbname']};charset=utf8",
@@ -24,6 +26,6 @@ class MySQLConnection extends Connection
 
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        return $dbh;
+        parent::__construct($dbh, $config);
     }
 }

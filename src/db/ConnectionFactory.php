@@ -22,11 +22,11 @@ class ConnectionFactory
     {
         switch ($config['driver']) {
             case 'mysql':
-                return MySQLConnection::create($config);
+                return new MySQLConnection($config);
             case 'sqlite':
-                return SqliteConnection::create($config);
+                return new SqliteConnection($config);
             case 'pgsql':
-                return PgSQLConnection::create($config);
+                return new PgSQLConnection($config);
         }
     }
 }

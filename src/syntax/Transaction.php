@@ -29,8 +29,8 @@ class Transaction
     public static function begin($model)
     {
         $transaction = new static($model);
-        $transaction->model->getDb()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $transaction->model->getDb()->beginTransaction();
+        $transaction->model->getDb()->getPdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $transaction->model->getDb()->getPdo()->beginTransaction();
         return $transaction;
     }
     /**
@@ -38,13 +38,13 @@ class Transaction
      */
     public function commit()
     {
-        $this->model->getDb()->commit();
+        $this->model->getDb()->getPdo()->commit();
     }
     /**
      * Откат транзакции в случае возникновения ошибки
      */
     public function rollback()
     {
-        $this->model->getDb()->rollback();
+        $this->model->getDb()->getPdo()->rollback();
     }
 }

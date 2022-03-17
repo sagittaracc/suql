@@ -32,7 +32,7 @@ class Container
     }
     /**
      * Получает подключение из контейнера
-     * @return PDO|null
+     * @return suql\db\pdo\Connection|null
      */
     public static function get($connection)
     {

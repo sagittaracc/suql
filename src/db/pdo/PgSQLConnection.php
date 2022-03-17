@@ -3,6 +3,7 @@
 namespace suql\db\pdo;
 
 use PDO;
+use suql\builder\PgSQLBuilder;
 
 /**
  * PgSQL
@@ -11,15 +12,18 @@ use PDO;
  */
 class PgSQLConnection extends Connection
 {
+    protected $builder = PgSQLBuilder::class;
     /**
      * @inheritdoc
      */
-    public static function create($config)
+    public function __construct($config)
     {
-        return new PDO(
+        $dbh = new PDO(
             "pgsql:host={$config['host']};dbname={$config['dbname']}",
             $config['user'],
             $config['pass']
         );
+
+        return parent::__construct($dbh, $config);
     }
 }

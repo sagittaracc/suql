@@ -17,7 +17,6 @@ final class SqliteTest extends TestCase
                 'f1' => 'af1',
                 'f2' => 'af2',
             ])
-            ->setBuilder(SqliteBuilder::class)
             ->fetchAll();
         $this->assertEquals([
             ['af1' => '1', 'af2' => '1'],
