@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\builder\MySQLBuilder;
 use test\suql\models\Query1;
 
 final class ModelTest extends TestCase
