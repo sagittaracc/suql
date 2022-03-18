@@ -33,6 +33,6 @@ class Query19 extends SuQL
 
     public function getDb()
     {
-        return Container::get('db-sqlite');
+        return Container::get('db_test');
     }
 }

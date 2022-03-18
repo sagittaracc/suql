@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\Query10;
-use test\suql\models\Query20;
+use test\suql\models\Query19;
 use test\suql\schema\AppScheme;
 
 final class FetchTest extends TestCase
@@ -51,8 +51,8 @@ final class FetchTest extends TestCase
 
     public function testFetchFromTableThatDoesntExist(): void
     {
-        $this->expectException(PDOException::class);
-        Query20::all()->fetchAll();
+        $data = Query19::all()->fetchAll();
+        $this->assertEquals([], $data);
     }
 
     public function testFetchWithDbManager(): void

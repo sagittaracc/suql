@@ -609,7 +609,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             $tableExistsQuery = $db->getPdo()->query($this->getBuilder()->tableExistsQuery($config, $table));
             $tableExists = $tableExistsQuery && $table ? $tableExistsQuery->fetchColumn() : true;
             if (!$tableExists) {
-                // TODO: Создать таблицу
+                $this->create();
+                $db->getPdo()->query($this->getBuilder()->buildModel($this));
             }
         }
 
