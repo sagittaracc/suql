@@ -34,13 +34,13 @@ final class ModelTest extends TestCase
         $this->assertEquals(2, count($this->model->getColumns()));
         $this->assertEquals('t2', $this->model->getCurrentColumn());
 
-        $this->assertEquals('int', $this->model->getTypeByColumnName('t1'));
-        $this->assertEquals(11, $this->model->getLengthByColumnName('t1'));
-        $this->assertEquals(null, $this->model->getDefaultByColumnName('t1'));
+        $this->assertEquals('int', $this->model->getColumn('t1')->getType());
+        $this->assertEquals(11, $this->model->getColumn('t1')->getLength());
+        $this->assertEquals(null, $this->model->getColumn('t1')->getDefault());
 
-        $this->assertEquals('varchar', $this->model->getTypeByColumnName('t2'));
-        $this->assertEquals(255, $this->model->getLengthByColumnName('t2'));
-        $this->assertEquals(0, $this->model->getDefaultByColumnName('t2'));
+        $this->assertEquals('varchar', $this->model->getColumn('t2')->getType());
+        $this->assertEquals(255, $this->model->getColumn('t2')->getLength());
+        $this->assertEquals(0, $this->model->getColumn('t2')->getDefault());
     }
 
     public function testBuildModel(): void
