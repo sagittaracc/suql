@@ -632,12 +632,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             $data = ArrayHelper::group($this->index, $data);
         }
 
-        if (!empty($this->postFunctions)) {
-            foreach ($this->postFunctions as $function) {
-                $data = $this->$function($data);
-            }
-        }
-
         $result = [];
 
         // TODO: Сериализацию необходимо проверить
@@ -660,6 +654,12 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         }
         else {
             $result = $data;
+        }
+
+        if (!empty($this->postFunctions)) {
+            foreach ($this->postFunctions as $function) {
+                $result = $this->$function($result);
+            }
         }
 
         return $result;
