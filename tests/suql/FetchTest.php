@@ -59,12 +59,9 @@ final class FetchTest extends TestCase
         $record->c2 = 'sagittaracc';
         $record->save();
 
-        $data = Query19::all()->intCast()->fetchAll();
-        foreach ($data as $row) {
-            $this->assertEquals(1, $row->c1);
-            $this->assertEquals('sagittaracc', $row->c2);
-            break;
-        }
+        $row = Query19::all()->intCast()->fetchOne();
+        $this->assertEquals(1, $row->c1);
+        $this->assertEquals('sagittaracc', $row->c2);
     }
 
     public function testFetchWithDbManager(): void

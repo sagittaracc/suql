@@ -39,11 +39,9 @@ class Query19 extends SuQL
         return Container::get('db_test');
     }
 
-    public function commandIntCast($data)
+    public function commandIntCast($row)
     {
-        return array_map(function($row) {
-            $row->c1 = intval($row->c1);
-            return $row;
-        }, $data);
+        $row->c1 = intval($row->c1);
+        return $row;
     }
 }
