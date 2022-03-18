@@ -640,12 +640,23 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             $lastRequestedModel = $lastRequestedModelName::getTempInstance();
             $publicProperties = $lastRequestedModel->getPublicProperties();
             if (count($publicProperties) > 0) {
-                foreach ($data as $row) {
-                    $instance = $lastRequestedModel::getTempInstance();
-                    foreach ($publicProperties as $property) {
-                        $instance->{$property->getName()} = $row[$property->getName()];
+                if ($method === 'all') {
+                    foreach ($data as $row) {
+                        $instance = $lastRequestedModel::getTempInstance();
+                        foreach ($publicProperties as $property) {
+                            $instance->{$property->getName()} = $row[$property->getName()];
+                        }
+                        $result[] = $instance;
                     }
-                    $result[] = $instance;
+                }
+                else if ($method === 'one') {
+                    $instance = $lastRequestedModel::getTempInstance();
+                    if ($data) {
+                        foreach ($publicProperties as $property) {
+                            $instance->{$property->getName()} = $data[$property->getName()];
+                        }
+                    }
+                    $result = $instance;
                 }
             }
             else {

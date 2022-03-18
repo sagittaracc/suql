@@ -34,10 +34,8 @@ final class InsertTest extends TestCase
         $record->f2 = 7;
         $record->save();
 
-        // TODO: Исправить. Не работает fetcOne. Ошибка в syntax\SuQL.php line 511. Когда выбирается только один элемент
-        // он не массив по которому мы итерируем
-        $justAddedRow = Query11::all()->where(['f1' => 7])->fetchAll();
-        $this->assertEquals(7, $justAddedRow[0]->f2);
+        $justAddedRow = Query11::all()->where(['f1' => 7])->fetchOne();
+        $this->assertEquals(7, $justAddedRow->f2);
 
         $data = Query11::all()->fetchAll();
         foreach ($data as $index => $row) {
