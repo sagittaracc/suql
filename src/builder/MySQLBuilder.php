@@ -113,7 +113,7 @@ final class MySQLBuilder extends SQLBuilder
      */
     public function tableExistsQuery($config, $table)
     {
-        $query = 'select * from information_schema.tables where table_schema = ? and table_name = ? limit 1';
+        $query = 'select count(*) from information_schema.tables where table_schema = ? and table_name = ? limit 1';
         return (new PlaceholderHelper($query))->bind($config['dbname'], $table);
     }
 }

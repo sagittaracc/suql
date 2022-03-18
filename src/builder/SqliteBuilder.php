@@ -29,6 +29,6 @@ final class SqliteBuilder extends SQLBuilder
      */
     public function tableExistsQuery($config, $table)
     {
-        return true;
+        return null;
     }
 }
