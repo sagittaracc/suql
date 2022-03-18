@@ -460,6 +460,6 @@ abstract class SQLBuilder
 
         $columnList = implode(', ', $columnList);
 
-        return "create table {$this->quote}{$model->getName()}{$this->unquote} ($columnList);";
+        return "create table {$this->quote}{$model->table()}{$this->unquote} ($columnList);";
     }
 }

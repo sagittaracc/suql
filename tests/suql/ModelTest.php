@@ -5,7 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\builder\MySQLBuilder;
-use suql\syntax\Model;
+use test\suql\models\Query1;
 
 final class ModelTest extends TestCase
 {
@@ -13,7 +13,7 @@ final class ModelTest extends TestCase
 
     public function setUp(): void
     {
-        $this->model = Model::create('table_1')
+        $this->model = Query1::all()
             ->column('t1')
                 ->setType('int')
                 ->setLength(11)
@@ -31,7 +31,7 @@ final class ModelTest extends TestCase
 
     public function testModel(): void
     {
-        $this->assertEquals('table_1', $this->model->getName());
+        $this->assertEquals('table_1', $this->model->table());
         $this->assertEquals(2, count($this->model->getColumns()));
         $this->assertEquals('t2', $this->model->getCurrentColumn());
 
@@ -46,10 +46,8 @@ final class ModelTest extends TestCase
 
     public function testBuildModel(): void
     {
-        $builder = new MySQLBuilder();
-
         $expected = StringHelper::trimSql(require('queries/mysql/q29.php'));
-        $actual = $builder->buildModel($this->model);
+        $actual = $this->model->getBuilder()->buildModel($this->model);
         $this->assertEquals($expected, $actual);
     }
 }

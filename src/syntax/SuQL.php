@@ -26,6 +26,7 @@ use suql\syntax\field\Raw;
  */
 abstract class SuQL extends Obj implements QueryObject, DbObject
 {
+    use Model;
     /**
      * @var string класс реализующий схему
      */

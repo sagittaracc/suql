@@ -2,28 +2,10 @@
 
 namespace suql\syntax;
 
-class Model
+trait Model
 {
-    private $name;
-    private $columnList;
-    private $currentColumn;
-
-    function __construct($name)
-    {
-        $this->name = $name;
-        $this->columnList = [];
-        $this->currentColumn = null;
-    }
-
-    public static function create($name)
-    {
-        return new static($name);
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
+    private $columnList = [];
+    private $currentColumn = null;
 
     public function column($column)
     {
