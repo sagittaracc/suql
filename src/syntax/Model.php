@@ -1,42 +1,18 @@
 <?php
 
-/**
- * Экспериментальное и недоделанное
- */
-
-class Field
-{
-    public $type;
-    public $notNull = false;
-
-    public function getType()
-    {
-        $types = [
-            'integer' => 'int(11)',
-            'string' => 'varchar(255)',
-        ];
-
-        return $types[$this->type];
-    }
-
-    public function compile()
-    {
-        return '# ' . $this->getType() . ($this->notNull ? ' not null' : '');
-
-    }
-}
+namespace suql\syntax;
 
 class Model
 {
     private $name;
-    private $fieldList;
-    private $currentField;
+    private $columnList;
+    private $currentColumn;
 
     function __construct($name)
     {
         $this->name = $name;
-        $this->fieldList = [];
-        $this->currentField = null;
+        $this->columnList = [];
+        $this->currentColumn = null;
     }
 
     public static function create($name)
@@ -44,45 +20,53 @@ class Model
         return new static($name);
     }
 
-    public function notNull()
+    public function column($column)
     {
-        if (!$this->currentField) {
-            return;
-        }
-
-        $this->fieldList[$this->currentField]->notNull = true;
-
+        $this->columnList[$column] = Column::create($column);
+        $this->currentColumn = $column;
         return $this;
     }
 
-    public function __call($name, $arguments)
+    public function getColumns()
     {
-        $field = new Field();
-        $field->type = $arguments[0];
+        return $this->columnList;
+    }
 
-        $this->fieldList[$name] = $field;
-        $this->currentField = $name;
+    public function getCurrentColumn()
+    {
+        return $this->currentColumn;
+    }
 
+    public function setType($type)
+    {
+        $this->columnList[$this->currentColumn]->setType($type);
         return $this;
     }
 
-    public function __toString()
+    public function getTypeByColumnName($column)
     {
-        $fieldList = [];
+        return $this->columnList[$column]->getType();
+    }
 
-        foreach ($this->fieldList as $name => $options) {
-            $fieldList[] = str_replace('#', $name, $options->compile());
-        }
+    public function setLength($length)
+    {
+        $this->columnList[$this->currentColumn]->setLength($length);
+        return $this;
+    }
 
-        return 'create table ' . $this->name . ' (' . implode(',', $fieldList) . ')' . " collate='utf8_general_ci' engine=InnoDB;";
+    public function getLengthByColumnName($column)
+    {
+        return $this->columnList[$column]->getLength();
+    }
+
+    public function setDefault($default)
+    {
+        $this->columnList[$this->currentColumn]->setDefault($default);
+        return $this;
+    }
+
+    public function getDefaultByColumnName($column)
+    {
+        return $this->columnList[$column]->getDefault();
     }
 }
-
-$c2000dz = Model::create('c2000dz')
-    ->Obj_Id_Device('integer')->notNull()
-    ->Alarm('integer')->notNull()
-    ->StateText('string')
-    ->Obj_Id_User('integer')->notNull()
-    ->Obj_Id_Home('integer');
-
-echo $c2000dz;
