@@ -443,4 +443,23 @@ abstract class SQLBuilder
      * @return string
      */
     abstract protected function buildSmartDate($fieldName, $smartDate);
+    /**
+     * Сборка модели в запрос на create table
+     * @param suql\syntax\Model $model
+     * @return string
+     */
+    public function buildModel($model)
+    {
+        $columnList = [];
+
+        foreach ($model->getColumns() as $name => $column) {
+            $columnList[] =
+                $this->quote . $name . $this->unquote . ' ' .
+                $column->getType($name) . '(' . $column->getLength($name) . ')';
+        }
+
+        $columnList = implode(', ', $columnList);
+
+        return "create table {$this->quote}{$model->getName()}{$this->unquote} ($columnList);";
+    }
 }
