@@ -131,6 +131,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         foreach ($this->getPublicProperties() as $property) {
             $this->getQuery($this->query())->addValue($property->getName(), $this->{$property->getName()});
         }
+
+        $this->setBuilder($this->getDb()->getBuilder());
         $this->exec($this->getRawSql());
     }
     /**

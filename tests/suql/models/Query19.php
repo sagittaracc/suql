@@ -7,6 +7,9 @@ use suql\syntax\SuQL;
 
 class Query19 extends SuQL
 {
+    public $c1;
+    public $c2;
+
     public function table()
     {
         return 'table_19';
