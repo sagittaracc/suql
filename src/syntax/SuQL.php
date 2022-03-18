@@ -14,6 +14,8 @@ use suql\syntax\exception\SchemeNotDefined;
 use \ReflectionMethod;
 use ReflectionProperty;
 use sagittaracc\ArrayHelper;
+use suql\core\INamedRel;
+use suql\core\NamedRel;
 use suql\core\Scheme;
 use suql\core\SmartDate;
 use suql\syntax\field\Field;
@@ -274,7 +276,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
     {
         if (is_string($option)) {
-            if (class_exists($option)) {
+            if (class_exists($option) && is_subclass_of($option, NamedRel::class)) {
                 $namedRel = new $option;
     
                 $scheme = $this->getScheme();
