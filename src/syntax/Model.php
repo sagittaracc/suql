@@ -20,6 +20,11 @@ class Model
         return new static($name);
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function column($column)
     {
         $this->columnList[$column] = Column::create($column);

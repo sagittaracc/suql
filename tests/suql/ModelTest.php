@@ -18,7 +18,7 @@ final class ModelTest extends TestCase
                 ->setType('varchar')
                 ->setLength(255)
                 ->setDefault(0);
-        
+        $this->assertEquals('table_1', $model->getName());
         $this->assertEquals(2, count($model->getColumns()));
         $this->assertEquals('t2', $model->getCurrentColumn());
 
