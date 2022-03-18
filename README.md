@@ -19,7 +19,7 @@ SuQL расшифровывается как Sugar SQL. Это PHP DataMapper, O
 ### Документация
 Прочитать можно [здесь](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
 
-### Генератор кода для Visual Studio Code
+### Сниппеты для VS Code
 Скачайте плагин [здесь](https://github.com/sagittaracc/suql-gen) и установите его с помощью команды `code --install-extension suql-gen-0.0.1.vsix`
 
 ### Системные требования
