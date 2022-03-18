@@ -462,4 +462,11 @@ abstract class SQLBuilder
 
         return "create table {$this->quote}{$model->table()}{$this->unquote} ($columnList);";
     }
+    /**
+     * Проверяет что таблица существует
+     * @param string $config конфигурация подключения к базе данных
+     * @param string $table имя таблицы
+     * @return boolean
+     */
+    abstract public function tableExistsQuery($config, $table);
 }

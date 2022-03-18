@@ -596,6 +596,9 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         $db = $this->getDb();
 
+        $config = $db->getConfig();
+        $table = $this->table();
+
         $this->setBuilder($db->getBuilder());
 
         if ($this->dataInitiative()) {

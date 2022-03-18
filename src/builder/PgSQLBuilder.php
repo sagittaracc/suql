@@ -17,4 +17,18 @@ final class PgSQLBuilder extends SQLBuilder
      * @var string $unquote
      */
     protected $unquote = '"';
+    /**
+     * @inheritdoc
+     */
+    protected function buildSmartDate($fieldName, $smartDate)
+    {
+        return '';
+    }
+    /**
+     * @inheritdoc
+     */
+    public function tableExistsQuery($config, $table)
+    {
+        return true;
+    }
 }

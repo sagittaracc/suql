@@ -24,4 +24,11 @@ final class SqliteBuilder extends SQLBuilder
     {
         return '';
     }
+    /**
+     * @inheritdoc
+     */
+    public function tableExistsQuery($config, $table)
+    {
+        return true;
+    }
 }

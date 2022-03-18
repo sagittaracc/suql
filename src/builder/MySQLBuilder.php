@@ -108,4 +108,12 @@ final class MySQLBuilder extends SQLBuilder
                 return "$field >= DATE_ADD(CURDATE(), INTERVAL -{$smartDate->getNumber()} {$smartDate->getPeriod()})";
         }
     }
+    /**
+     * @inheritdoc
+     */
+    public function tableExistsQuery($config, $table)
+    {
+        $query = 'select * from information_schema.tables where table_schema = ? and table_name = ? limit 1';
+        return (new PlaceholderHelper($query))->bind([$config['dbname'], $table]);
+    }
 }

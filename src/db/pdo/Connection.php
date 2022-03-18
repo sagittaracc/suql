@@ -40,6 +40,14 @@ abstract class Connection
         return $this->dbh;
     }
     /**
+     * Получить конфиг подключения
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+    /**
      * Получить используемый класс билдера
      * @return string
      */
