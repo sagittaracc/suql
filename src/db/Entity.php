@@ -12,14 +12,19 @@ use suql\syntax\SuQL;
 class Entity extends SuQL
 {
     /**
+     * @var string имя сущности в базе данных
+     */
+    private $name;
+    /**
      * @var PDO подключение к базе данных
      */
     private $connection;
     /**
      * Constructor
      */
-    function __construct()
+    function __construct($name)
     {
+        $this->name = $name;
         parent::__construct();
     }
     /**
@@ -29,6 +34,17 @@ class Entity extends SuQL
     public function setConnection($connection)
     {
         $this->connection = $connection;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function setScheme($schemeClass)
+    {
+        parent::setScheme($schemeClass);
+
+        $this->addSelect($this->query());
+        $this->getQuery($this->query())->addFrom($this->name);
+        $this->currentTable = $this->name;
     }
     /**
      * Наименование запроса
@@ -70,17 +86,5 @@ class Entity extends SuQL
     public function getDb()
     {
         return Container::get($this->connection);
-    }
-    /**
-     * Загружает сущность для которой вы поленились описывать модель
-     * @return self
-     */
-    public function entity($name)
-    {
-        $this->addSelect($this->query());
-        $this->getQuery($this->query())->addFrom($name);
-        $this->currentTable = $name;
-
-        return $this;
     }
 }

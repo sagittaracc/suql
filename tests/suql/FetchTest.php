@@ -79,11 +79,11 @@ final class FetchTest extends TestCase
 
     public function testFetchFromEntity(): void
     {
-        $db = new suql\db\Entity();
+        $table10 = new suql\db\Entity('table_10');
 
-        $db->setConnection('db_test');
+        $table10->setConnection('db_test');
 
-        $data = $db->entity('table_10')->select(['f1'])->fetchAll();
+        $data = $table10->select(['f1'])->fetchAll();
         $this->assertEquals([
             ['f1' => '1'],
             ['f1' => '2'],

@@ -17,13 +17,12 @@ final class EntityTest extends TestCase
      */
     public function testOrder(): void
     {
-        $db = new suql\db\Entity();
+        $table1 = new suql\db\Entity('table_1');
 
-        $db->setConnection(null);
-        $db->setBuilder(MySQLBuilder::class);
+        $table1->setBuilder(MySQLBuilder::class);
 
         $expected = StringHelper::trimSql(require('queries/mysql/q6.php'));
-        $actual = $db->entity('table_1')->order([
+        $actual = $table1->order([
             'f1' => 'desc',
             'f2' => 'asc',
         ])->getRawSql();
@@ -41,15 +40,14 @@ final class EntityTest extends TestCase
      */
     public function testSimpleJoin(): void
     {
-        $db = new suql\db\Entity();
+        $table1 = new suql\db\Entity('table_1');
 
-        $db->setConnection(null);
-        $db->setScheme(AppScheme::class);
-        $db->setBuilder(MySQLBuilder::class);
+        $table1->setScheme(AppScheme::class);
+        $table1->setBuilder(MySQLBuilder::class);
 
         $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
-            $db->entity('table_1')
+            $table1
                 ->select(['f1'])
             ->with('table_2')
             ->with('table_3')
@@ -71,15 +69,14 @@ final class EntityTest extends TestCase
      */
     public function testSmartJoin(): void
     {
-        $db = new suql\db\Entity();
+        $table1 = new suql\db\Entity('table_1');
 
-        $db->setConnection(null);
-        $db->setScheme(AppScheme::class);
-        $db->setBuilder(MySQLBuilder::class);
+        $table1->setScheme(AppScheme::class);
+        $table1->setBuilder(MySQLBuilder::class);
 
         $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
-            $db->entity('table_1')
+            $table1
                 ->select(['f1'])
             ->with('table_3', 'inner', 'smart')
                 ->select([
