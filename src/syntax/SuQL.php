@@ -640,7 +640,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $result = [];
 
         // TODO: Сериализацию необходимо проверить
-        if ($this->lastRequestedModel && $this->serializeResult) {
+        if ($this->serializeResult && $this->lastRequestedModel) {
             $lastRequestedModelName = $this->lastRequestedModel;
             $lastRequestedModel = $lastRequestedModelName::getTempInstance();
             $publicProperties = $lastRequestedModel->getPublicProperties();
