@@ -27,9 +27,12 @@ final class EntityTest extends TestCase
          *     $manager->setBuilder({$builder});
          *     $manager->setScheme({$scheme});
          * 
-         *     $manager->load($table1);
+         *     $repository = $manager->getRepository($table1);
+         *  or
+         *     $repository = $manager->getRepository(Query1::class);
+         *     $repository->select([])->order()->...
          * 
-         *     $manager->fetchAll();
+         *     $repository->fetchAll();
          */
 
         $table1->setBuilder(MySQLBuilder::class);

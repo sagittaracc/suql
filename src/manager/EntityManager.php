@@ -2,6 +2,8 @@
 
 namespace suql\manager;
 
+use suql\db\Entity;
+
 /**
  * Действия выполняемые с сущностями
  * 
@@ -9,7 +11,34 @@ namespace suql\manager;
  */
 class EntityManager
 {
-    /**
-     * TODO: Здесь и именно здесь должны задаваться $builderClass и $schemeClass
-     */
+    private $schemeClass;
+
+    private $builderClass;
+
+    public function setScheme($schemeClass)
+    {
+        $this->schemeClass = $schemeClass;
+    }
+
+    public function setBuilder($builderClass)
+    {
+        $this->builderClass = $builderClass;
+    }
+
+    public function getRepository($repositoryQuery)
+    {
+        if (is_string($repositoryQuery)) {
+            if (class_exists($repositoryQuery)) {
+                $repository = $repositoryQuery::all();
+                $repository->setScheme($this->schemeClass);
+                $repository->setBuilder($this->builderClass);
+    
+                return $repository;
+            }
+        }
+        else if ($repositoryQuery instanceof Entity) {
+        }
+
+        return null;
+    }
 }
