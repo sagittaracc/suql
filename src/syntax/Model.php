@@ -73,7 +73,7 @@ trait Model
      */
     public function setDefault($default)
     {
-        $this->columnList[$this->currentColumn]->setDefault($default);
+        $this->getColumn($this->currentColumn)->setDefault($default);
         return $this;
     }
     /**
