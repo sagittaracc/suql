@@ -128,7 +128,20 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             $this->getQuery($this->query())->addValue($property->getName(), $this->{$property->getName()});
         }
 
-        $this->setBuilder($this->getDb()->getBuilder());
+        $db = $this->getDb();
+
+        $this->setBuilder($db->getBuilder());
+
+        $config = $db->getConfig();
+        $table = $this->table();
+
+        $tableExistsQuery = $db->getPdo()->query($this->getBuilder()->tableExistsQuery($config, $table));
+        $tableExists = $tableExistsQuery && $table ? $tableExistsQuery->fetchColumn() : true;
+        if (!$tableExists) {
+            $this->create();
+            $db->getPdo()->query($this->getBuilder()->buildModel($this));
+        }
+
         $this->exec($this->getRawSql());
     }
     /**

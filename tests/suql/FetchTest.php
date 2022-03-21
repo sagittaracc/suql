@@ -65,6 +65,19 @@ final class FetchTest extends TestCase
         ], $data);
     }
 
+    public function testInsertIntoTableThatDoesntExist(): void
+    {
+        $record = new Query19();
+        $record->c1 = 1;
+        $record->c2 = 'sagittaracc';
+        $record->save();
+
+        $data = Query19::all()->asArray()->fetchAll();
+        $this->assertEquals([
+            ['c1' => '1', 'c2' => 'sagittaracc'],
+        ], $data);
+    }
+
     public function testFetchWithDbManager(): void
     {
         $db = new suql\db\Manager('db_test', AppScheme::class);
