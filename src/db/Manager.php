@@ -27,7 +27,7 @@ class Manager extends SuQL
     {
         $this->connection = $connection;
         parent::__construct();
-        $this->setScheme(new $schemeClass);
+        $this->setScheme($schemeClass);
         $this->setBuilder($builderClass);
     }
     /**

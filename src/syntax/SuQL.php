@@ -80,7 +80,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         parent::__construct();
 
-        $this->setScheme(new static::$schemeClass);
+        $this->setScheme(static::$schemeClass);
         
 
         if (static::$builderClass) {
@@ -93,10 +93,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public static function getTempInstance()
     {
-        if (!static::$schemeClass) {
-            throw new SchemeNotDefined;
-        }
-
         return new static();
     }
     /**

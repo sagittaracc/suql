@@ -40,11 +40,13 @@ class Obj
     }
     /**
      * Установить схему
-     * @param suql\core\Scheme $scheme
+     * @param string $schemeClass класс описывающий схему
      */
-    public function setScheme($scheme)
+    public function setScheme($schemeClass)
     {
-        $this->scheme = $scheme;
+        if (class_exists($schemeClass)) {
+            $this->scheme = new $schemeClass;
+        }
     }
     /**
      * Получить схему
