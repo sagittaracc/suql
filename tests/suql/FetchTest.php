@@ -77,7 +77,7 @@ final class FetchTest extends TestCase
         ], $data);
     }
 
-    public function testFetchWithDbManager(): void
+    public function testFetchFromEntity(): void
     {
         $db = new suql\db\Entity();
 

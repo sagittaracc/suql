@@ -7,7 +7,7 @@ use sagittaracc\StringHelper;
 use suql\builder\MySQLBuilder;
 use test\suql\schema\AppScheme;
 
-final class DbManagerTest extends TestCase
+final class DbEntityTest extends TestCase
 {
     /**
      * Example:
