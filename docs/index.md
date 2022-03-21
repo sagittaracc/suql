@@ -22,9 +22,9 @@
 
 [Advanced Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/AdvancedQueryTest.php)
 
-### Db Manager
+### Entity Manager
 
-[Db Manager](https://github.com/sagittaracc/suql/blob/master/tests/suql/DbManagerTest.php)
+[Db Manager](https://github.com/sagittaracc/suql/blob/master/tests/suql/EntityManagerTest.php)
 
 ### Execute Raw Queries
 
