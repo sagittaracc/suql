@@ -19,6 +19,19 @@ final class EntityTest extends TestCase
     {
         $table1 = new suql\db\Entity('table_1');
 
+        /**
+         * TODO:
+         *     $table1 = new suql\db\Entity('table_1');
+         * 
+         *     $manager = new suql\manager\EntityManager();
+         *     $manager->setBuilder({$builder});
+         *     $manager->setScheme({$scheme});
+         * 
+         *     $manager->load($table1);
+         * 
+         *     $manager->fetchAll();
+         */
+
         $table1->setBuilder(MySQLBuilder::class);
 
         $expected = StringHelper::trimSql(require('queries/mysql/q6.php'));
