@@ -27,28 +27,27 @@ class EntityManager
 
     public function getRepository($repositoryQuery)
     {
+        $repository = null;
+
         if (is_string($repositoryQuery)) {
             if (class_exists($repositoryQuery)) {
                 $repository = $repositoryQuery::all();
+
+                $repository->setScheme($this->schemeClass);
+                $repository->setBuilder($this->builderClass);
+            }
+            else {
+                $repository = new Entity($repositoryQuery);
+
                 $repository->setScheme($this->schemeClass);
                 $repository->setBuilder($this->builderClass);
     
-                return $repository;
+                $repository->addSelect($repository->query());
+                $repository->getQuery($repository->query())->addFrom($repository->getName());
+                $repository->setCurrentTable($repository->getName());
             }
         }
-        else if ($repositoryQuery instanceof Entity) {
-            $repository = $repositoryQuery;
 
-            $repository->setScheme($this->schemeClass);
-            $repository->setBuilder($this->builderClass);
-
-            $repository->addSelect($repository->query());
-            $repository->getQuery($repository->query())->addFrom($repository->getName());
-            $repository->setCurrentTable($repository->getName());
-
-            return $repository;
-        }
-
-        return null;
+        return $repository;
     }
 }

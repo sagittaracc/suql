@@ -50,9 +50,7 @@ final class EntityManagerTest extends TestCase
      */
     public function testOrder(): void
     {
-        $table1 = new suql\db\Entity('table_1');
-
-        $query1 = $this->orm->getRepository($table1);
+        $query1 = $this->orm->getRepository('table_1');
 
         $expected = StringHelper::trimSql(require('queries/mysql/q6.php'));
         $actual = $query1->order([
@@ -73,9 +71,7 @@ final class EntityManagerTest extends TestCase
      */
     public function testSimpleJoin(): void
     {
-        $table1 = new suql\db\Entity('table_1');
-
-        $query1 = $this->orm->getRepository($table1);
+        $query1 = $this->orm->getRepository('table_1');
 
         $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
@@ -101,9 +97,7 @@ final class EntityManagerTest extends TestCase
      */
     public function testSmartJoin(): void
     {
-        $table1 = new suql\db\Entity('table_1');
-
-        $query1 = $this->orm->getRepository($table1);
+        $query1 = $this->orm->getRepository('table_1');
 
         $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
