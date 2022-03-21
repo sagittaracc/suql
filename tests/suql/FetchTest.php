@@ -54,7 +54,7 @@ final class FetchTest extends TestCase
         $data = Query19::all()->fetchAll();
         $this->assertEquals([], $data);
 
-        $record = Query19::new();
+        $record = new Query19();
         $record->c1 = 1;
         $record->c2 = 'sagittaracc';
         $record->save();

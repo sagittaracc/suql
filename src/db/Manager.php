@@ -26,7 +26,9 @@ class Manager extends SuQL
     function __construct($connection = null, $schemeClass = Scheme::class, $builderClass = MySQLBuilder::class)
     {
         $this->connection = $connection;
-        parent::__construct(new $schemeClass, new $builderClass);
+        parent::__construct();
+        $this->setScheme(new $schemeClass);
+        $this->setBuilder($builderClass);
     }
     /**
      * Наименование запроса

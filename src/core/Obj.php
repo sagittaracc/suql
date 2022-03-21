@@ -34,13 +34,17 @@ class Obj
     protected $params = [];
     /**
      * Constructor
-     * @param suql\core\Scheme $scheme экземпляр схемы
-     * @param suql\builder\SQLBuilder $driver экземляр драйвера
      */
-    function __construct($scheme, $builder)
+    function __construct()
+    {
+    }
+    /**
+     * Установить схему
+     * @param suql\core\Scheme $scheme
+     */
+    public function setScheme($scheme)
     {
         $this->scheme = $scheme;
-        $this->builder = $builder;
     }
     /**
      * Получить схему
@@ -51,14 +55,6 @@ class Obj
         return $this->scheme;
     }
     /**
-     * Получить builder
-     * @return suql\builder\SQLBuilder
-     */
-    public function getBuilder()
-    {
-        return $this->builder;
-    }
-    /**
      * Задает билдер
      * @param string класс билдера
      */
@@ -67,6 +63,14 @@ class Obj
         if (class_exists($builderClass)) {
             $this->builder = new $builderClass;
         }
+    }
+    /**
+     * Получить builder
+     * @return suql\builder\SQLBuilder
+     */
+    public function getBuilder()
+    {
+        return $this->builder;
     }
     /**
      * Перечень используемых модификаторов

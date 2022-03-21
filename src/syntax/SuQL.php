@@ -14,7 +14,6 @@ use suql\syntax\exception\SchemeNotDefined;
 use \ReflectionMethod;
 use ReflectionProperty;
 use sagittaracc\ArrayHelper;
-use suql\core\INamedRel;
 use suql\core\NamedRel;
 use suql\core\Scheme;
 use suql\core\SmartDate;
@@ -71,31 +70,34 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     abstract public function fields();
     /**
+     * Конструктор
+     */
+    function __construct()
+    {
+        if (!static::$schemeClass) {
+            throw new SchemeNotDefined;
+        }
+
+        parent::__construct();
+
+        $this->setScheme(new static::$schemeClass);
+        
+
+        if (static::$builderClass) {
+            $this->setBuilder(static::$builderClass);
+        }
+    }
+    /**
      * Получает тестовый экземпляр модели
      * @return self
      */
     public static function getTempInstance()
     {
-        if (!static::$schemeClass)
+        if (!static::$schemeClass) {
             throw new SchemeNotDefined;
+        }
 
-        return new static(null, null);
-    }
-    /**
-     * Получает экземпляр модели
-     * @return self
-     */
-    public static function getInstance()
-    {
-        if (!static::$schemeClass)
-            throw new SchemeNotDefined;
-
-        $scheme = new static::$schemeClass;
-        $builder = static::$builderClass
-            ? new static::$builderClass
-            : null;
-
-        return new static($scheme, $builder);
+        return new static();
     }
     /**
      * @inheritdoc
@@ -104,14 +106,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     {
         parent::setBuilder($builderClass);
         return $this;
-    }
-    /**
-     * Алиас для getInstance
-     * @return self
-     */
-    public static function new()
-    {
-        return static::getInstance();
     }
     /**
      * Загрузить массив в модель
@@ -154,7 +148,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public static function all()
     {
-        $instance = static::getInstance();
+        $instance = new static();
 
         $instance->lastRequestedModel = static::class;
 

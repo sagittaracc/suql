@@ -29,7 +29,7 @@ final class InsertTest extends TestCase
 
     public function testInsert(): void
     {
-        $record = Query11::new();
+        $record = new Query11();
         $record->f1 = 7;
         $record->f2 = 7;
         $record->save();
