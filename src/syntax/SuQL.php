@@ -66,6 +66,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     private $lastRequestedModel = null;
     /**
+     * @var boolean сериализовать результат?
+     */
+    private $serializeResult = true;
+    /**
      * Модель должна содержать перечень полей
      */
     abstract public function fields();
@@ -544,6 +548,15 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $this;
     }
     /**
+     * Вернуть данные в виде массива без сериализации
+     * @return self
+     */
+    public function asArray()
+    {
+        $this->serializeResult = false;
+        return $this;
+    }
+    /**
      * Проверяет прогружены ли в модель данные
      * @return boolean
      */
@@ -627,7 +640,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $result = [];
 
         // TODO: Сериализацию необходимо проверить
-        if ($this->lastRequestedModel) {
+        if ($this->lastRequestedModel && $this->serializeResult) {
             $lastRequestedModelName = $this->lastRequestedModel;
             $lastRequestedModel = $lastRequestedModelName::getTempInstance();
             $publicProperties = $lastRequestedModel->getPublicProperties();
