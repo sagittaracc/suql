@@ -28,6 +28,14 @@ class Entity extends SuQL
         parent::__construct();
     }
     /**
+     * Получает имя сущности
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    /**
      * Устанавливает подключение
      * @param string $connection имя подключения
      */

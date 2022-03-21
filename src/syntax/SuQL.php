@@ -92,6 +92,14 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         }
     }
     /**
+     * Устанавливает текущую таблицу
+     * @param string $currentTable
+     */
+    public function setCurrentTable($currentTable)
+    {
+        $this->currentTable = $currentTable;
+    }
+    /**
      * Получает тестовый экземпляр модели
      * @return self
      */

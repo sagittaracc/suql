@@ -37,6 +37,16 @@ class EntityManager
             }
         }
         else if ($repositoryQuery instanceof Entity) {
+            $repository = $repositoryQuery;
+
+            $repository->setScheme($this->schemeClass);
+            $repository->setBuilder($this->builderClass);
+
+            $repository->addSelect($repository->query());
+            $repository->getQuery($repository->query())->addFrom($repository->getName());
+            $repository->setCurrentTable($repository->getName());
+
+            return $repository;
         }
 
         return null;

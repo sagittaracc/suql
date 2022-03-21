@@ -42,4 +42,78 @@ final class EntityManagerTest extends TestCase
         ])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
+    /**
+     * Example:
+     * 
+     * select * from table order by id
+     * 
+     */
+    public function testOrder(): void
+    {
+        $table1 = new suql\db\Entity('table_1');
+
+        $query1 = $this->orm->getRepository($table1);
+
+        $expected = StringHelper::trimSql(require('queries/mysql/q6.php'));
+        $actual = $query1->order([
+            'f1' => 'desc',
+            'f2' => 'asc',
+        ])->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table_1
+     * join table_2 on table_1.id = table_2.id
+     * join table_3 on table_2.id = table_3.id
+     * 
+     */
+    public function testSimpleJoin(): void
+    {
+        $table1 = new suql\db\Entity('table_1');
+
+        $query1 = $this->orm->getRepository($table1);
+
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
+        $actual =
+            $query1
+                ->select(['f1'])
+            ->with('table_2')
+            ->with('table_3')
+                ->select([
+                    'f1' => 'af1',
+                    'f2' => 'af2',
+                ])->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+    /**
+     * Example:
+     * 
+     * select
+     *     *
+     * from table_1
+     * join table_2 on table_1.id = table_2.id
+     * join table_3 on table_2.id = table_3.id
+     * 
+     */
+    public function testSmartJoin(): void
+    {
+        $table1 = new suql\db\Entity('table_1');
+
+        $query1 = $this->orm->getRepository($table1);
+
+        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
+        $actual =
+            $query1
+                ->select(['f1'])
+            ->with('table_3', 'inner', 'smart')
+                ->select([
+                    'f1' => 'af1',
+                    'f2' => 'af2',
+                ])->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
 }
