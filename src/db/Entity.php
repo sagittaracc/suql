@@ -2,8 +2,6 @@
 
 namespace suql\db;
 
-use suql\builder\MySQLBuilder;
-use suql\core\Scheme;
 use suql\syntax\SuQL;
 
 /**
@@ -11,7 +9,7 @@ use suql\syntax\SuQL;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Manager extends SuQL
+class Entity extends SuQL
 {
     /**
      * @var PDO подключение к базе данных
@@ -19,16 +17,18 @@ class Manager extends SuQL
     private $connection;
     /**
      * Constructor
-     * @param string|null $connection подключение к базе данных
-     * @param string класс определяющий схему базы данных
-     * @param string класс билдера
      */
-    function __construct($connection = null, $schemeClass = Scheme::class, $builderClass = MySQLBuilder::class)
+    function __construct()
+    {
+        parent::__construct();
+    }
+    /**
+     * Устанавливает подключение
+     * @param string $connection имя подключения
+     */
+    public function setConnection($connection)
     {
         $this->connection = $connection;
-        parent::__construct();
-        $this->setScheme($schemeClass);
-        $this->setBuilder($builderClass);
     }
     /**
      * Наименование запроса

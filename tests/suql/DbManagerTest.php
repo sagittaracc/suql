@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use suql\builder\MySQLBuilder;
 use test\suql\schema\AppScheme;
 
 final class DbManagerTest extends TestCase
@@ -16,7 +17,10 @@ final class DbManagerTest extends TestCase
      */
     public function testOrder(): void
     {
-        $db = new suql\db\Manager();
+        $db = new suql\db\Entity();
+
+        $db->setConnection(null);
+        $db->setBuilder(MySQLBuilder::class);
 
         $expected = StringHelper::trimSql(require('queries/mysql/q6.php'));
         $actual = $db->entity('table_1')->order([
@@ -37,7 +41,11 @@ final class DbManagerTest extends TestCase
      */
     public function testSimpleJoin(): void
     {
-        $db = new suql\db\Manager(null, AppScheme::class);
+        $db = new suql\db\Entity();
+
+        $db->setConnection(null);
+        $db->setScheme(AppScheme::class);
+        $db->setBuilder(MySQLBuilder::class);
 
         $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =
@@ -63,7 +71,11 @@ final class DbManagerTest extends TestCase
      */
     public function testSmartJoin(): void
     {
-        $db = new suql\db\Manager(null, AppScheme::class);
+        $db = new suql\db\Entity();
+
+        $db->setConnection(null);
+        $db->setScheme(AppScheme::class);
+        $db->setBuilder(MySQLBuilder::class);
 
         $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
         $actual =

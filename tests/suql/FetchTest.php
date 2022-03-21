@@ -7,7 +7,6 @@ use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\Query10;
 use test\suql\models\Query19;
-use test\suql\schema\AppScheme;
 
 final class FetchTest extends TestCase
 {
@@ -80,7 +79,10 @@ final class FetchTest extends TestCase
 
     public function testFetchWithDbManager(): void
     {
-        $db = new suql\db\Manager('db_test', AppScheme::class);
+        $db = new suql\db\Entity();
+
+        $db->setConnection('db_test');
+
         $data = $db->entity('table_10')->select(['f1'])->fetchAll();
         $this->assertEquals([
             ['f1' => '1'],
