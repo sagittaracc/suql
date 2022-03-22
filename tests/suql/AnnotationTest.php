@@ -12,7 +12,7 @@ final class AnnotationTest extends TestCase
 {
     public function testReadAnnotationByModelName(): void
     {
-        $annotation = Annotation::from(Users::class)->for(Products::class)->read();
+        $annotation = Annotation::from(Users::class)->for('products')->read();
         $this->assertEquals('hasMany', $annotation->relation);
         $this->assertEquals('test\suql\models\Products', $annotation->second_model);
         $this->assertEquals('products', $annotation->second_table);

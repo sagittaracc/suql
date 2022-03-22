@@ -12,15 +12,15 @@ class Annotation
     /**
      * @const string регулярное выражение для парсинга аннотации
      */
-    const REGEX_BY_MODEL = '/#\s*(?<relation>hasOne|hasMany|manyToMany)\[({SECOND_MODEL}\()?(?<second_table>\w+)\.(?<second_field>\w+)\)?\]\s+(protected|private|public)\s+\$(?<first_field>\w+);/msi';
+    const REGEX = '/#\s*(?<relation>hasOne|hasMany|manyToMany)\[((?<second_model>[\w\\\\]+)\()?{SECOND_TABLE}\.(?<second_field>\w+)\)?\]\s+(protected|private|public)\s+\$(?<first_field>\w+);/msi';
     /**
      * @var string из какой модели читать аннотацию
      */
     private $modelNameToReadFrom;
     /**
-     * @var string для какой модели прочитать аннотацию
+     * @var string для какой таблицы прочитать аннотацию
      */
-    private $modelNameToReadFor = null;
+    private $tableNameToReadFor;
     /**
      * @var string тип связи на который указывает аннотация
      */
@@ -61,13 +61,13 @@ class Annotation
         return $instance;
     }
     /**
-     * Задает какую модель искать в аннотации
-     * @param string $modelName имя класса модели
+     * Задает какую таблицу искать в аннотации
+     * @param string $tableName имя таблицы
      * @return self
      */
-    public function for($modelName)
+    public function for($tableName)
     {
-        $this->modelNameToReadFor = $modelName;
+        $this->tableNameToReadFor = $tableName;
         return $this;
     }
     /**
@@ -78,14 +78,14 @@ class Annotation
     {
         $model = new \ReflectionClass($this->modelNameToReadFrom);
         $file = file_get_contents($model->getFileName());
-        $regex = str_replace('{SECOND_MODEL}', addslashes($this->modelNameToReadFor), static::REGEX_BY_MODEL);
+        $regex = str_replace('{SECOND_TABLE}', $this->tableNameToReadFor, static::REGEX);
 
         preg_match($regex, $file, $matches);
 
         if (!empty($matches)) {
             $this->relation = $matches['relation'];
-            $this->second_model = $this->modelNameToReadFor ? $this->modelNameToReadFor : $this->modelNameToReadFrom;
-            $this->second_table = $matches['second_table'];
+            $this->second_model = $matches['second_model'];
+            $this->second_table = $this->tableNameToReadFor;
             $this->second_field = $matches['second_field'];
             $this->first_field = $matches['first_field'];
         }
