@@ -5,12 +5,11 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\syntax\Annotation;
-use test\suql\models\Products;
 use test\suql\models\Users;
 
 final class AnnotationTest extends TestCase
 {
-    public function testReadAnnotationByModelName(): void
+    public function testReadAnnotation(): void
     {
         $annotation = Annotation::from(Users::class)->for('products')->read();
         $this->assertEquals('hasMany', $annotation->relation);

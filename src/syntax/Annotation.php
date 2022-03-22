@@ -24,7 +24,7 @@ class Annotation
     /**
      * @var string тип связи на который указывает аннотация
      */
-    public $relation;
+    public $relation = null;
     /**
      * @var string левая модель в связи
      */

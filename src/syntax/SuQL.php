@@ -50,9 +50,9 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     protected $currentTable = null;
     /**
-     * @var string текущая запрошенная модель
+     * @var string текущая модель разобранная по цепочке аннотаций
      */
-    protected $currentModel = null;
+    protected $currentAnnotatedModel = null;
     /**
      * @var string|array группировка или индексация данных
      */
@@ -176,6 +176,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $instance = new static();
 
         $instance->lastRequestedModel = static::class;
+        $instance->currentAnnotatedModel = static::class;
 
         $instance->addSelect($instance->query());
 
@@ -289,34 +290,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $this;
     }
     /**
-     * Чтение аннотаций
-     * @param string $tableTwo
-     */
-    public function readAnnotation($tableTwo)
-    {
-        if (is_null($this->currentModel)) {
-            $classObject = static::class;
-        }
-        else {
-            $classObject = $this->currentModel;
-        }
-        $class = new \ReflectionClass($classObject);
-        $classFileName = $class->getFileName();
-        $classFile = file_get_contents($classFileName);
-        $regex = '/#\s*(hasMany|hasOne)\[(.*?)\((.?' . $tableTwo . '.?\.(.*?))\)\]\s*protected\s\$(.*?);/mis';
-        preg_match($regex, $classFile, $matches);
-        if (empty($matches)) {
-            return;
-        }
-        $this->currentModel = $matches[2];
-        $on = $matches[3];
-        $field = $matches[5];
-        // TODO: builder->buildJoinOn()
-        $on = "{$this->currentTable}.$field = $on";
-        $this->getScheme()->rel($this->currentTable, $tableTwo, $on);
-        return $on;
-    }
-    /**
      * Сцепление таблиц
      * @return self
      */
@@ -334,7 +307,15 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             else {
                 $table = $option;
 
-                $this->readAnnotation($table);
+                if ($this->currentAnnotatedModel) {
+                    $annotation = Annotation::from($this->currentAnnotatedModel)->for($table)->read();
+                    if ($annotation->relation) {
+                        // TODO: builder->buildJoinOn()
+                        $on = "{$this->currentTable}.{$annotation->first_field} = {$annotation->second_table}.{$annotation->second_field}";
+                        $this->getScheme()->rel($this->currentTable, $table, $on);
+                        $this->currentAnnotatedModel = $annotation->second_model;
+                    }
+                }
     
                 if ($algorithm === 'simple') {
                     $this->getQuery($this->query())->addJoin($type, $table);
