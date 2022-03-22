@@ -4,14 +4,14 @@ namespace test\suql\models;
 
 use test\suql\records\ActiveRecord;
 
-class Query21 extends ActiveRecord
+class Users extends ActiveRecord
 {
-    # hasMany[test\suql\models\Query22(table_22.id)]
-    protected $table22_id;
+    # hasMany[test\suql\models\Products(products.id)]
+    protected $product_id;
 
     public function table()
     {
-        return 'table_21';
+        return 'users';
     }
 
     public function fields()

@@ -2,7 +2,7 @@
 return <<<SQL
     select
         *
-    from `table_20`
-    inner join `table_21` on table_20.table21_id = table_21.id
-    inner join `table_22` on table_21.table22_id = table_22.id
+    from `users`
+    inner join `products` on users.product_id = products.id
+    inner join `categories` on products.category_id = categories.id
 SQL;
