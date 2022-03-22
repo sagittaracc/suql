@@ -50,6 +50,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     protected $currentTable = null;
     /**
+     * @var string текущая запрошенная модель
+     */
+    protected $currentModel = null;
+    /**
      * @var string|array группировка или индексация данных
      */
     private $index = null;
@@ -285,6 +289,34 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $this;
     }
     /**
+     * Чтение аннотаций
+     * @param string $tableTwo
+     */
+    public function readAnnotation($tableTwo)
+    {
+        if (is_null($this->currentModel)) {
+            $classObject = static::class;
+        }
+        else {
+            $classObject = $this->currentModel;
+        }
+        $class = new \ReflectionClass($classObject);
+        $classFileName = $class->getFileName();
+        $classFile = file_get_contents($classFileName);
+        $regex = '/#\s*(hasMany|hasOne)\[(.*?)\((.?' . $tableTwo . '.?\.(.*?))\)\]\s*protected\s\$(.*?);/mis';
+        preg_match($regex, $classFile, $matches);
+        if (empty($matches)) {
+            return;
+        }
+        $this->currentModel = $matches[2];
+        $on = $matches[3];
+        $field = $matches[5];
+        // TODO: builder->buildJoinOn()
+        $on = "{$this->currentTable}.$field = $on";
+        $this->getScheme()->rel($this->currentTable, $tableTwo, $on);
+        return $on;
+    }
+    /**
      * Сцепление таблиц
      * @return self
      */
@@ -301,6 +333,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             }
             else {
                 $table = $option;
+
+                $this->readAnnotation($table);
     
                 if ($algorithm === 'simple') {
                     $this->getQuery($this->query())->addJoin($type, $table);
