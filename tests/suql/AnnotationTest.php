@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use test\suql\models\Query20;
 use test\suql\models\Users;
 
 final class AnnotationTest extends TestCase
