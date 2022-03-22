@@ -87,6 +87,13 @@ final class MySQLBuilder extends SQLBuilder
     /**
      * @inheritdoc
      */
+    public function buildJoinOn($leftTable, $leftField, $rightTable, $rightField)
+    {
+        return "`$leftTable`.`$leftField` = `$rightTable`.`$rightField`";
+    }
+    /**
+     * @inheritdoc
+     */
     protected function buildSmartDate($fieldName, $smartDate)
     {
         $field = "`$fieldName->table`.`$fieldName->name`";

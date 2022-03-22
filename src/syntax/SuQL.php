@@ -310,8 +310,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
                 if ($this->currentAnnotatedModel) {
                     $annotation = Annotation::from($this->currentAnnotatedModel)->for($table)->read();
                     if ($annotation->relation) {
-                        // TODO: builder->buildJoinOn()
-                        $on = "{$this->currentTable}.{$annotation->first_field} = {$annotation->second_table}.{$annotation->second_field}";
+                        $on = $this->getBuilder()->buildJoinOn($this->currentTable, $annotation->first_field, $annotation->second_table, $annotation->second_field);
                         $this->getScheme()->rel($this->currentTable, $table, $on);
                         $this->currentAnnotatedModel = $annotation->second_model;
                     }

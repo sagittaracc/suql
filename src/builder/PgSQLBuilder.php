@@ -20,6 +20,13 @@ final class PgSQLBuilder extends SQLBuilder
     /**
      * @inheritdoc
      */
+    public function buildJoinOn($leftTable, $leftField, $rightTable, $rightField)
+    {
+        return '';
+    }
+    /**
+     * @inheritdoc
+     */
     protected function buildSmartDate($fieldName, $smartDate)
     {
         return '';

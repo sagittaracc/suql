@@ -291,6 +291,15 @@ abstract class SQLBuilder
             );
     }
     /**
+     * Построение on в join
+     * @param string $leftTable
+     * @param string $leftField
+     * @param string $rightTable
+     * @param string $rightField
+     * @return string
+     */
+    abstract public function buildJoinOn($leftTable, $leftField, $rightTable, $rightField);
+    /**
      * Строит секцию join
      * @param string $query имя запроса для конвертации
      * @return string
