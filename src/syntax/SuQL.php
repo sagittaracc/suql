@@ -611,6 +611,18 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $properties;
     }
     /**
+     * Получает primary key у таблицы
+     * @param string $table
+     * @return string
+     */
+    public function getPrimaryKey($table)
+    {
+        $db = $this->getDb();
+        $pkQuery = $this->getBuilder()->getPrimaryKeyQuery($table);
+        $result = $db->getPdo()->query($pkQuery->getQuery());
+        return $pkQuery->getColumn('primary', $result);
+    }
+    /**
      * Выполнение запроса
      */
     private function exec($query)
