@@ -38,11 +38,13 @@ final class PgSQLBuilder extends SQLBuilder
      */
     public function getPrimaryKeyQuery($table)
     {
-        return (new QMap())
+        $qmap = new QMap();
+        $qmap
             ->setQuery("SELECT column_name FROM information_schema.key_column_usage WHERE table_name = '$table'")
             ->setColumn('primary', function($result){
                 return $result[0]['column_name'];
             });
+        return $qmap;
     }
     /**
      * @inheritdoc

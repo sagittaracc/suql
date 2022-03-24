@@ -94,6 +94,11 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         if (static::$builderClass) {
             $this->setBuilder(static::$builderClass);
         }
+        
+        $db = $this->getDb();
+        if ($db) {
+            $this->setBuilder($db->getBuilder());
+        }
     }
     /**
      * Устанавливает текущую таблицу
@@ -612,14 +617,13 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     }
     /**
      * Получает primary key у таблицы
-     * @param string $table
      * @return string
      */
-    public function getPrimaryKey($table)
+    public function getPrimaryKey()
     {
         $db = $this->getDb();
-        $pkQuery = $this->getBuilder()->getPrimaryKeyQuery($table);
-        $result = $db->getPdo()->query($pkQuery->getQuery());
+        $pkQuery = $this->getBuilder()->getPrimaryKeyQuery($this->table());
+        $result = $db->getPdo()->query($pkQuery->getQuery())->fetchAll();
         return $pkQuery->getColumn('primary', $result);
     }
     /**

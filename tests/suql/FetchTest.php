@@ -16,7 +16,7 @@ final class FetchTest extends TestCase
         Container::create(require('config/db.php'));
         Query::create('create database db_test')->setConnection('connection')->exec();
         Container::add(require('config/db-test.php'));
-        Query::create('create table table_10(f1 int, f2 int)')->setConnection('db_test')->exec();
+        Query::create('create table table_10(f1 int, f2 int, primary key (f1))')->setConnection('db_test')->exec();
         Query::create('insert into table_10 (f1, f2) values (1, 1), (2, 2), (3, 3)')->setConnection('db_test')->exec();
         Query::create('insert into table_10 (f1, f2) values (?, ?), (?, ?), (?, ?)')->setConnection('db_test')->exec([4, 4, 5, 5, 6, 6]);
     }
@@ -92,5 +92,10 @@ final class FetchTest extends TestCase
             ['f1' => '5'],
             ['f1' => '6'],
         ], $data);
+    }
+
+    public function testPrimaryKey(): void
+    {
+        $this->assertEquals('f1', Query10::all()->getPrimaryKey());
     }
 }

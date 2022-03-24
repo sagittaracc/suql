@@ -38,11 +38,13 @@ final class SqliteBuilder extends SQLBuilder
      */
     public function getPrimaryKeyQuery($table)
     {
-        return (new QMap())
+        $qmap = new QMap();
+        $qmap
             ->setQuery("SELECT t1.name AS column_name FROM pragma_table_info('$table') AS t1 WHERE t1.pk = 1")
             ->setColumn('primary', function($result){
                 return $result[0]['column_name'];
             });
+        return $qmap;
     }
     /**
      * @inheritdoc

@@ -121,11 +121,13 @@ final class MySQLBuilder extends SQLBuilder
      */
     public function getPrimaryKeyQuery($table)
     {
-        return (new QMap())
+        $qmap = new QMap();
+        $qmap
             ->setQuery("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'")
             ->setColumn('primary', function($result){
                 return $result[0]['Column_name'];
             });
+        return $qmap;
     }
     /**
      * @inheritdoc
