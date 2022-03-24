@@ -2,6 +2,8 @@
 
 namespace suql\builder;
 
+use sagittaracc\QMap;
+
 /**
  * PostgreSQL сборщик
  *
@@ -30,6 +32,17 @@ final class PgSQLBuilder extends SQLBuilder
     protected function buildSmartDate($fieldName, $smartDate)
     {
         return '';
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getPrimaryKeyQuery($table)
+    {
+        return (new QMap())
+            ->setQuery("SELECT column_name FROM information_schema.key_column_usage WHERE table_name = '$table'")
+            ->setColumn('primary', function($result){
+                return $result[0]['column_name'];
+            });
     }
     /**
      * @inheritdoc

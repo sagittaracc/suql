@@ -4,6 +4,7 @@ namespace suql\builder;
 
 use sagittaracc\ArrayHelper;
 use sagittaracc\PlaceholderHelper;
+use sagittaracc\QMap;
 use sagittaracc\SimpleList;
 
 /**
@@ -114,6 +115,17 @@ final class MySQLBuilder extends SQLBuilder
             case 'last':
                 return "$field >= DATE_ADD(CURDATE(), INTERVAL -{$smartDate->getNumber()} {$smartDate->getPeriod()})";
         }
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getPrimaryKeyQuery($table)
+    {
+        return (new QMap())
+            ->setQuery("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'")
+            ->setColumn('primary', function($result){
+                return $result[0]['Column_name'];
+            });
     }
     /**
      * @inheritdoc

@@ -472,6 +472,12 @@ abstract class SQLBuilder
         return "create table {$this->quote}{$model->table()}{$this->unquote} ($columnList);";
     }
     /**
+     * Возвращает запрос получения primary key у таблицы
+     * @param string $table
+     * @return sagittaracc\QMap
+     */
+    abstract public function getPrimaryKeyQuery($table);
+    /**
      * Проверяет что таблица существует
      * @param string $config конфигурация подключения к базе данных
      * @param string $table имя таблицы

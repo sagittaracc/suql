@@ -2,6 +2,8 @@
 
 namespace suql\builder;
 
+use sagittaracc\QMap;
+
 /**
  * Sqlite сборщик
  *
@@ -30,6 +32,17 @@ final class SqliteBuilder extends SQLBuilder
     protected function buildSmartDate($fieldName, $smartDate)
     {
         return '';
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getPrimaryKeyQuery($table)
+    {
+        return (new QMap())
+            ->setQuery("SELECT t1.name AS column_name FROM pragma_table_info('$table') AS t1 WHERE t1.pk = 1")
+            ->setColumn('primary', function($result){
+                return $result[0]['column_name'];
+            });
     }
     /**
      * @inheritdoc
