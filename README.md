@@ -1,4 +1,4 @@
-<div align="center"><img src="https://i.postimg.cc/52Q3nsjW/suql.png" alt="suql-sugar-sql" border="0"></div>
+<div align="center"><img src="https://i.postimg.cc/bvpF0Xhd/suql.png" alt="suql-sugar-sql" border="0"></div>
 <h1 align="center">Sugar SQL</h1>
 <div align="center">
   <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
