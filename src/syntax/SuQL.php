@@ -366,7 +366,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public function on($leftTableField, $rightTableField)
     {
         if ($this->lastJoin) {
-            $this->lastJoin->setOn("$leftTableField = $rightTableField");
+            list($leftTable, $leftField) = explode('.', $leftTableField);
+            list($rightTable, $rightField) = explode('.', $rightTableField);
+
+            $this->lastJoin->setOn($this->getBuilder()->buildJoinOn($leftTable, $leftField, $rightTable, $rightField));
         }
 
         return $this;
