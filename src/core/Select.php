@@ -331,8 +331,12 @@ class Select extends Query implements SelectQueryInterface, Buildable
             $table = $this->getOSuQL()->getScheme()->getTableAlias($table);
         }
 
-        $this->join[] = new Join($this, $table, $type, $alias);
+        $join = new Join($this, $table, $type, $alias);
+
+        $this->join[] = $join;
         $this->table_list[] = $table;
+
+        return $join;
     }
     /**
      * Получить цепочку join

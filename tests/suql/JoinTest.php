@@ -142,4 +142,40 @@ final class JoinTest extends TestCase
             ->getRawSql();
         $this->assertEquals($expected, $actual);
     }
+
+    public function testFailedJoin(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q31.php'));
+        $actual =
+            Query1::all()
+                ->select([
+                    'f1',
+                ])
+                ->join('table_2')
+                ->join('table_4')
+                    ->select([
+                        'f1' => 'af1',
+                        'f2' => 'af2',
+                    ])
+                ->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testJoinWithDefineOn(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q32.php'));
+        $actual =
+            Query1::all()
+                ->select([
+                    'f1',
+                ])
+                ->join('table_2')
+                ->join('table_4')->on("table_2.id", "table_4.id")
+                    ->select([
+                        'f1' => 'af1',
+                        'f2' => 'af2',
+                    ])
+                ->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
 }

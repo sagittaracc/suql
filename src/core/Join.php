@@ -50,12 +50,16 @@ class Join
      */
     private function getLink()
     {
-        $scheme        = $this->oselect->getOSuQL()->getScheme()->getRels();
-        $tableList     = $this->oselect->getTableList();
-        $tableLinks    = array_keys($scheme[$this->table]);
-        $possibleLinks = array_intersect($tableLinks, $tableList);
-        $targetLink    = array_pop($possibleLinks);
-        $on            = $scheme[$this->table][$targetLink];
+        $scheme = $this->oselect->getOSuQL()->getScheme()->getRels();
+        $tableList = $this->oselect->getTableList();
+        $on = null;
+
+        if (isset($scheme[$this->table])) {
+            $tableLinks = array_keys($scheme[$this->table]);
+            $possibleLinks = array_intersect($tableLinks, $tableList);
+            $targetLink = array_pop($possibleLinks);
+            $on = $scheme[$this->table][$targetLink];
+        }
 
         return $on;
     }

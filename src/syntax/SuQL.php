@@ -70,6 +70,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     private $lastRequestedModel = null;
     /**
+     * @var suql\core\Join последний выполненный join
+     */
+    private $lastJoin = null;
+    /**
      * @var boolean сериализовать результат?
      */
     private $serializeResult = true;
@@ -322,7 +326,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
                 }
     
                 if ($algorithm === 'simple') {
-                    $this->getQuery($this->query())->addJoin($type, $table);
+                    $this->lastJoin = $this->getQuery($this->query())->addJoin($type, $table);
                 }
                 else if ($algorithm === 'smart') {
                     $this->getQuery($this->query())->addSmartJoin($this->currentTable, $table, $type);
@@ -334,7 +338,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         else if (is_array($option)) {
             foreach ($option as $table => $alias) break;
 
-            $this->getQuery($this->query())->addJoin($type, "$table@$alias");
+            $this->lastJoin = $this->getQuery($this->query())->addJoin($type, "$table@$alias");
             $this->getQuery($this->query())->getLastJoin()->setOn($on);
 
             $this->currentTable = $alias;
@@ -343,7 +347,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             $subquery = $option;
 
             if ($algorithm === 'simple') {
-                $this->getQuery($this->query())->addJoin($type, $subquery->query());
+                $this->lastJoin = $this->getQuery($this->query())->addJoin($type, $subquery->query());
             }
             else if ($algorithm === 'smart') {
                 $this->getQuery($this->query())->addSmartJoin($this->currentTable, $subquery->query(), $type);
@@ -351,6 +355,18 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
             $this->extend($subquery->getQueries());
             $this->currentTable = $subquery->query();
+        }
+
+        return $this;
+    }
+    /**
+     * Пробный вариант
+     * @return self
+     */
+    public function on($leftTableField, $rightTableField)
+    {
+        if ($this->lastJoin) {
+            $this->lastJoin->setOn("$leftTableField = $rightTableField");
         }
 
         return $this;

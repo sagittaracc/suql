@@ -327,8 +327,8 @@ abstract class SQLBuilder
 
             $joinList[] = (
                 $alias
-                    ? "$type join {$quote}$table{$unquote} $alias on $on"
-                    : "$type join {$quote}$table{$unquote} on $on"
+                    ? "$type join {$quote}$table{$unquote} $alias" . ($on ? " on $on" : '')
+                    : "$type join {$quote}$table{$unquote}" . ($on ? " on $on" : '')
             );
         }
 
