@@ -16,6 +16,19 @@ final class AdvancedQueryTest extends TestCase
      * Example:
      * 
      * select
+     *     count(*)
+     * from table_1
+     */
+    public function testSimpleCount(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q33.php'));
+        $actual = Query1::all()->count()->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+    /**
+     * Example:
+     * 
+     * select
      *     table_3.f1,
      *     count(table_3.f1) as count
      * from table_1

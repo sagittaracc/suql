@@ -240,9 +240,13 @@ abstract class SQLBuilder
             $quote = $unquote = '';
         }
 
-        $name = $table
-            ? "{$quote}$table{$unquote}." . ($name === '*' ? $name : "{$quote}$name{$unquote}")
-            : "{$quote}$name{$unquote}";
+        if ($name === '*') {
+        }
+        else {
+            $name = $table
+                ? "{$quote}$table{$unquote}." . ($name === '*' ? $name : "{$quote}$name{$unquote}")
+                : "{$quote}$name{$unquote}";
+        }
 
         $ofield->setField($name);
     }

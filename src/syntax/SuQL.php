@@ -570,7 +570,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      * Подсчёт количества
      * @return self
      */
-    public function count($field)
+    public function count($field = '*')
     {
         $this->getQuery($this->query())->addField($this->currentTable, $field);
         $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('count');
