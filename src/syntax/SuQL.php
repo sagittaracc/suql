@@ -772,7 +772,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     }
     /**
      * Получить скаляр
-     * @return mixed
+     * @return int
      */
     public function fetchScalar()
     {
