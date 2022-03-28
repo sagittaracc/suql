@@ -42,6 +42,7 @@ class Entity extends SuQL
     public function setConnection($connection)
     {
         $this->connection = $connection;
+        parent::init();
         $this->setBuilder($this->getDb()->getBuilder());
     }
     /**

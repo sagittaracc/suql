@@ -90,15 +90,15 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $fields;
     }
     /**
-     * Конструктор
+     * Инициализация
+     * Задание схемы
+     * Задание билдера
      */
-    function __construct()
+    protected function init()
     {
         if (!static::$schemeClass) {
             throw new SchemeNotDefined;
         }
-
-        parent::__construct();
 
         $this->setScheme(static::$schemeClass);
         
@@ -151,6 +151,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function save()
     {
+        $this->init();
         $this->addInsert($this->query());
         $this->getQuery($this->query())->addInto($this->table());
         foreach ($this->getPublicProperties() as $property) {
@@ -189,6 +190,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public static function all()
     {
         $instance = new static();
+        $instance->init();
 
         $instance->lastRequestedModel = static::class;
         $instance->currentAnnotatedModel = static::class;
