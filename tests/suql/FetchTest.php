@@ -98,4 +98,15 @@ final class FetchTest extends TestCase
     {
         $this->assertEquals('f1', Query10::all()->getPrimaryKey());
     }
+    /**
+     * Example:
+     * 
+     * select
+     *     count(*)
+     * from table_1
+     */
+    public function testSimpleCount(): void
+    {
+        $this->assertEquals(6, Query10::all()->count());
+    }
 }

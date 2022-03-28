@@ -575,6 +575,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $this->getQuery($this->query())->addField($this->currentTable, $field);
         $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('count');
 
+        if ($field === '*') {
+            return $this->fetchScalar();
+        }
+
         return $this;
     }
     /**
@@ -765,6 +769,15 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public function fetchOne()
     {
         return $this->fetch('one');
+    }
+    /**
+     * Получить скаляр
+     * @return mixed
+     */
+    public function fetchScalar()
+    {
+        $result = $this->fetchOne();
+        return reset($result);
     }
     /**
      * Query
