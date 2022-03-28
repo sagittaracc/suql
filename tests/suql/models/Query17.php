@@ -17,11 +17,6 @@ class Query17 extends ActiveRecord
         return 'view_17';
     }
 
-    public function real()
-    {
-        return true;
-    }
-
     public function view()
     {
         return <<<SQL

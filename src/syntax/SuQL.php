@@ -718,11 +718,11 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         $result = [];
 
         // TODO: Сериализацию необходимо проверить
-        if ($this->serializeResult && $this->lastRequestedModel) {
+        if ($this->lastRequestedModel) {
             $lastRequestedModelName = $this->lastRequestedModel;
             $lastRequestedModel = $lastRequestedModelName::getTempInstance();
             $publicProperties = $lastRequestedModel->getPublicProperties();
-            if (count($publicProperties) > 0) {
+            if ($this->serializeResult && count($publicProperties) > 0) {
                 if ($method === 'all') {
                     foreach ($data as $row) {
                         $instance = $lastRequestedModel::getTempInstance();
@@ -790,14 +790,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public function query()
     {
         return $this->queryName ? $this->queryName : str_replace('\\', '_', static::class);
-    }
-    /**
-     * Создавать ли вьюху реальной в базе данных
-     * @return boolean
-     */
-    public function real()
-    {
-        return false;
     }
     /**
      * View
