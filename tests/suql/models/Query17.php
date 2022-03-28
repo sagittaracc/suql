@@ -17,11 +17,6 @@ class Query17 extends ActiveRecord
         return 'view_17';
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function real()
     {
         return true;

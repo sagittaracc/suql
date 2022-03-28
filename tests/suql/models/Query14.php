@@ -18,9 +18,4 @@ class Query14 extends ActiveRecord
 
         return $query1->and([$query2])->as('query_14');
     }
-
-    public function fields()
-    {
-        return [];
-    }
 }

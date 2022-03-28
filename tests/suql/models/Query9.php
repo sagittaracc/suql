@@ -20,11 +20,6 @@ class Query9 extends ActiveRecord
         ];
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function getDb()
     {
         return Container::get('db_test');

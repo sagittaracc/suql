@@ -17,11 +17,6 @@ class Query13 extends ActiveRecord
         return 'table_13';
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function view()
     {
         return $this->select([

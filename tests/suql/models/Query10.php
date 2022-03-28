@@ -12,11 +12,6 @@ class Query10 extends ActiveRecord
         return 'table_10';
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function commandCastF1ToInt($data)
     {
         return array_map(function($row) {

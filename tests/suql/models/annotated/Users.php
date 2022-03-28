@@ -13,9 +13,4 @@ class Users extends ActiveRecord
     {
         return 'users';
     }
-
-    public function fields()
-    {
-        return [];
-    }
 }

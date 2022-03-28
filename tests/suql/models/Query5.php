@@ -12,11 +12,6 @@ class Query5 extends ActiveRecord
         return null;
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function view()
     {
         return $this->select([

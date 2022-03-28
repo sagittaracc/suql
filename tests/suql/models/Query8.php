@@ -11,11 +11,6 @@ class Query8 extends ActiveRecord
         return null;
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function view()
     {
         return

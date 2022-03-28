@@ -10,9 +10,4 @@ class Query12 extends ActiveRecord
     {
         return '{{t1}}';
     }
-
-    public function fields()
-    {
-        return [];
-    }
 }

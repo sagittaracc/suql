@@ -29,11 +29,6 @@ class Query19 extends SuQL
                 
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function getDb()
     {
         return Container::get('db_test');

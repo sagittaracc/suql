@@ -13,9 +13,4 @@ class Products extends ActiveRecord
     {
         return 'products';
     }
-
-    public function fields()
-    {
-        return [];
-    }
 }

@@ -10,9 +10,4 @@ class Categories extends ActiveRecord
     {
         return 'categories';
     }
-
-    public function fields()
-    {
-        return [];
-    }
 }

@@ -15,11 +15,6 @@ class Query11 extends ActiveRecord
         return 'table_10';
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function getDb()
     {
         return Container::get('db_test');

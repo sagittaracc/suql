@@ -17,11 +17,6 @@ class Query18 extends SuQL
         return [];
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function getDb()
     {
         return Container::get('db-sqlite');

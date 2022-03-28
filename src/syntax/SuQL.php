@@ -78,9 +78,17 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     private $serializeResult = true;
     /**
-     * Модель должна содержать перечень полей
+     * По умолчанию нас интересуют все открытые поля модели
+     * @return array
      */
-    abstract public function fields();
+    public function fields()
+    {
+        $fields = [];
+        foreach ($this->getPublicProperties() as $property) {
+            $fields[] = $property->getName();
+        }
+        return $fields;
+    }
     /**
      * Конструктор
      */

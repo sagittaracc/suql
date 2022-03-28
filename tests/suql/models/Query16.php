@@ -17,11 +17,6 @@ class Query16 extends ActiveRecord
         return 'table_16';
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function real()
     {
         return true;

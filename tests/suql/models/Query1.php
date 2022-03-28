@@ -10,9 +10,4 @@ class Query1 extends ActiveRecord
     {
         return 'table_1';
     }
-
-    public function fields()
-    {
-        return [];
-    }
 }

@@ -16,11 +16,6 @@ class Query15 extends ActiveRecord
         return 'table_15';
     }
 
-    public function fields()
-    {
-        return [];
-    }
-
     public function view()
     {
         return
