@@ -90,6 +90,14 @@ class Field
         return $this->fieldNameObject->alias;
     }
     /**
+     * Задает алиас поля
+     * @param string $alias
+     */
+    public function setAlias($alias)
+    {
+        $this->fieldNameObject->alias = $alias;
+    }
+    /**
      * Вернуть название поля
      * @return string
      */

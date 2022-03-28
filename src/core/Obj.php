@@ -3,6 +3,7 @@
 namespace suql\core;
 
 use Exception;
+use suql\modifier\field\SQLAsModifier;
 use suql\modifier\field\SQLCaseModifier;
 use suql\modifier\field\SQLFunctionModifier;
 use suql\modifier\field\SQLGroupModifier;
@@ -92,6 +93,7 @@ class Obj
             SQLGroupModifier::class,
             SQLFunctionModifier::class,
             SQLCaseModifier::class,
+            SQLAsModifier::class,
         ];
     }
     /**
