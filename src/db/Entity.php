@@ -42,6 +42,7 @@ class Entity extends SuQL
     public function setConnection($connection)
     {
         $this->connection = $connection;
+        $this->setBuilder($this->getDb()->getBuilder());
     }
     /**
      * @inheritdoc

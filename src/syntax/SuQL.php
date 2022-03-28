@@ -151,8 +151,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         $db = $this->getDb();
 
-        $this->setBuilder($db->getBuilder());
-
         $config = $db->getConfig();
         $table = $this->table();
 
@@ -676,8 +674,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         ];
 
         $db = $this->getDb();
-
-        $this->setBuilder($db->getBuilder());
 
         if ($this->dataInitiative()) {
             $db->getPdo()->query($this->getBuilder()->createTemporaryTable($this));
