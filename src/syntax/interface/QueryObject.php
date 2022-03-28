@@ -29,4 +29,9 @@ interface QueryObject
      * @return self
      */
     public function view();
+    /**
+     * Задание связей с другими моделями
+     * @return array
+     */
+    public function relations();
 }

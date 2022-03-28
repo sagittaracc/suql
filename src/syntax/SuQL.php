@@ -784,20 +784,25 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return reset($result);
     }
     /**
-     * Query
-     * @return string
+     * @inheritdoc
      */
     public function query()
     {
         return $this->queryName ? $this->queryName : str_replace('\\', '_', static::class);
     }
     /**
-     * View
-     * @return self
+     * @inheritdoc
      */
     public function view()
     {
         return $this;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function relations()
+    {
+        return [];
     }
     /**
      * Проверяет если это вьюха
