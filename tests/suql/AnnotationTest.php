@@ -22,7 +22,7 @@ final class AnnotationTest extends TestCase
     public function testJoinByAnnotation(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q30.php'));
-        $actual = Users::all()->getProducts()->join('categories')->getRawSql();
+        $actual = Users::all()->join('products')->join('categories')->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }

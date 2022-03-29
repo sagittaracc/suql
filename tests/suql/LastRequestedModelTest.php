@@ -16,9 +16,8 @@ final class LastRequestedModelTest extends TestCase
     public function testLastRequestedModel(): void
     {
         $query = Query1::all()
-            ->getQuery2()
-            ->getQuery3();
+            ->getQuery2();
 
-        $this->assertEquals('test\suql\models\Query3', $query->getLastRequestedModel());
+        $this->assertEquals('test\suql\models\Query2', $query->getLastRequestedModel());
     }
 }

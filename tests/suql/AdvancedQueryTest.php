@@ -28,8 +28,8 @@ final class AdvancedQueryTest extends TestCase
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q22.php'));
         $actual = Query1::all()
-            ->getQuery2()
-            ->getQuery3()
+            ->join('table_2')
+            ->join('table_3')
                 ->select(['f1'])
             ->group('f1')
             ->count(['f1' => 'count'])
@@ -53,9 +53,7 @@ final class AdvancedQueryTest extends TestCase
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q23.php'));
         $actual1 = Query1::all()->join(Query13::all())->getRawSql();
-        $actual2 = Query1::all()->getQuery13()->getRawSql();
         $this->assertEquals($expected, $actual1);
-        $this->assertEquals($expected, $actual2);
     }
     /**
      * Example:
@@ -84,19 +82,8 @@ final class AdvancedQueryTest extends TestCase
                 ->join(Query15::all(), 'inner', 'smart')
                 ->getRawSql();
 
-        $actual2 =
-            Query1::all()
-                ->select([
-                    'f1',
-                ])
-                ->getQuery15([
-                    'algorithm' => 'smart',
-                ])
-                ->getRawSql();
-
         
         $this->assertEquals($expected, $actual1);
-        $this->assertEquals($expected, $actual2);
     }
     /**
      * Example:

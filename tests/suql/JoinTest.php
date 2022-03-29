@@ -70,59 +70,6 @@ final class JoinTest extends TestCase
      *     *
      * from table_1
      * join table_2 on table_1.id = table_2.id
-     * join table_3 on table_2.id = table_3.id
-     * 
-     */
-    public function testSimpleJoinWithMagicMethods(): void
-    {
-        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
-        $actual =
-            Query1::all()
-                ->select([
-                    'f1',
-                ])
-                ->getQuery2()
-                ->getQuery3()
-                    ->select([
-                        'f1' => 'af1',
-                        'f2' => 'af2',
-                    ])
-                ->getRawSql();
-        $this->assertEquals($expected, $actual);
-    }
-    /**
-     * Example:
-     * 
-     * select
-     *     *
-     * from table_1
-     * join table_2 on table_1.id = table_2.id
-     * join table_3 on table_2.id = table_3.id
-     * 
-     */
-    public function testSmartJoinWithMagicMethods(): void
-    {
-        $expected = StringHelper::trimSql(require('queries/mysql/q8.php'));
-        $actual =
-            Query1::all()
-                ->select([
-                    'f1',
-                ])
-                ->getQuery3(['algorithm' => 'smart'])
-                    ->select([
-                        'f1' => 'af1',
-                        'f2' => 'af2',
-                    ])
-                ->getRawSql();
-        $this->assertEquals($expected, $actual);
-    }
-    /**
-     * Example:
-     * 
-     * select
-     *     *
-     * from table_1
-     * join table_2 on table_1.id = table_2.id
      * join table_3 t3 on table_2.id = t3.id
      * 
      */
