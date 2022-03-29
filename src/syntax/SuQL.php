@@ -926,6 +926,13 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         unset($tempInstance);
 
+        // $data = $this->fetchAll();
+        // foreach ($data as $rec) {
+        //     $pk = $rec->getPrimaryKey();
+        //     $id = $rec->$pk;
+        //     $rec->suqlQuery = static::find([$pk => $id]);
+        // }
+
         return $this;
     }
 }
