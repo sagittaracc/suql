@@ -678,9 +678,16 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     public function getPrimaryKey()
     {
         $db = $this->getDb();
+
+        if (is_null($db)) {
+            return '';
+        }
+
         $pkQuery = $this->getBuilder()->getPrimaryKeyQuery($this->table());
         $result = $db->getPdo()->query($pkQuery->getQuery())->fetchAll();
-        return $pkQuery->getColumn('primary', $result);
+        return !empty($result)
+            ? $pkQuery->getColumn('primary', $result)
+            : '';
     }
     /**
      * Выполнение запроса
@@ -752,15 +759,19 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
             if ($this->serializeResult && count($publicProperties) > 0) {
                 if ($method === 'all') {
                     foreach ($data as $row) {
-                        $instance = $lastRequestedModel::getTempInstance();
+                        $instance = $lastRequestedModel::all();
                         foreach ($publicProperties as $property) {
                             $instance->{$property->getName()} = $row[$property->getName()];
+                        }
+                        $pk = $instance->getPrimaryKey();
+                        if ($pk) {
+                            $instance->where([$pk => $instance->$pk]);
                         }
                         $result[] = $instance;
                     }
                 }
                 else if ($method === 'one') {
-                    $instance = $lastRequestedModel::getTempInstance();
+                    $instance = $lastRequestedModel::all();
                     if ($data) {
                         foreach ($publicProperties as $property) {
                             $instance->{$property->getName()} = $data[$property->getName()];
@@ -926,13 +937,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         unset($tempInstance);
 
-        // $data = $this->fetchAll();
-        // foreach ($data as $rec) {
-        //     $pk = $rec->getPrimaryKey();
-        //     $id = $rec->$pk;
-        //     $rec->suqlQuery = static::find([$pk => $id]);
-        // }
+        $data = $this->fetchAll();
 
-        return $this;
+        return $data;
     }
 }

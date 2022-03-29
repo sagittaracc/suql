@@ -18,6 +18,10 @@
 
 [Аннотации методов](https://github.com/sagittaracc/suql/blob/master/tests/suql/AnnotationTest.php)
 
+### ORM
+
+[ORM](https://github.com/sagittaracc/suql/blob/master/tests/suql/OrmTest.php)
+
 ### Advanced Queries
 
 [Nested Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/NestedQueryTest.php)
