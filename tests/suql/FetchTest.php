@@ -98,6 +98,14 @@ final class FetchTest extends TestCase
     {
         $this->assertEquals('f1', Query10::all()->getPrimaryKey());
     }
+
+    public function testFindByPK(): void
+    {
+        $this->assertEquals([
+            'f1' => '3',
+            'f2' => '3',
+        ], Query10::one(3));
+    }
     /**
      * Example:
      * 

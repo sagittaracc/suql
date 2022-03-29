@@ -184,6 +184,31 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $instance;
     }
     /**
+     * Выборка по первичному ключу
+     * @param mixed $id
+     * @return self
+     */
+    public static function findByPK($id)
+    {
+        $instance = static::all();
+
+        $pk = $instance->getPrimaryKey();
+        if (!$pk) {
+            return null;
+        }
+
+        return $instance->find([$pk => $id]);
+    }
+    /**
+     * Выборка данных по первичному ключу
+     * @param mixed $id
+     * @return array
+     */
+    public static function one($id)
+    {
+        return static::findByPK($id)->fetchOne();
+    }
+    /**
      * Выборка всех данных из модели
      * @return self
      */
