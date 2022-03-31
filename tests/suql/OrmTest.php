@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\T1;
+use test\suql\models\T2;
 
 final class OrmTest extends TestCase
 {
@@ -44,6 +45,16 @@ final class OrmTest extends TestCase
                 $this->assertEquals(3, $t3Object->c1);
                 $this->assertEquals(3, $t3Object->c2);
             }
+        }
+        $this->assertTrue(true);
+    }
+
+    public function testOrmAfterJoin(): void
+    {
+        $t3Data = T1::all()->join(T2::class)->getT3();
+        foreach ($t3Data as $t3Object) {
+            $this->assertEquals(3, $t3Object->c1);
+            $this->assertEquals(3, $t3Object->c2);
         }
         $this->assertTrue(true);
     }

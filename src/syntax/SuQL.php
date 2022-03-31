@@ -248,6 +248,8 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
 
         $instance->select($instance->fields());
 
+        $instance->setRelations($instance->table(), $instance->relations());
+
         return $instance;
     }
     /**
@@ -332,19 +334,34 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return $this;
     }
     /**
+     * Разбор связей указанных в relations
+     * @param string $table
+     * @param array $relations
+     */
+    private function setRelations($table, $relations)
+    {
+        $firstTable = $table;
+        foreach ($relations as $secondClassModel => $on) {
+            foreach ($on as $secondField => $firstField) break;
+
+            $secondModel = new $secondClassModel();
+            $secondTable = $secondModel->table();
+
+            $on = $this->getBuilder()->buildJoinOn($firstTable, $firstField, $secondTable, $secondField);
+            $this->getScheme()->rel($firstTable, $secondTable, $on);
+        }
+    }
+    /**
      * Сцепление таблиц
      * @return self
      */
     public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
     {
         if (is_string($option)) {
-            if (class_exists($option) && is_subclass_of($option, NamedRel::class)) {
-                $namedRel = new $option;
-    
-                $scheme = $this->getScheme();
-                $scheme->rel($namedRel->leftTable(), $namedRel->rightTable(), $namedRel->on());
-        
-                $this->join($namedRel->rightTable(), $type, 'simple', $namedRel->on());
+            if (class_exists($option) && is_subclass_of($option, SuQL::class)) {
+                $model = $option::all();
+                $this->setRelations($model->table(), $model->relations());
+                $this->join($model->table(), $type, $algorithm);
             }
             else {
                 $table = $option;

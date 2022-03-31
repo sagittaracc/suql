@@ -5,8 +5,6 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use test\suql\models\Query1;
-use test\suql\schema\NamedRel1;
-use test\suql\schema\NamedRel2;
 
 final class JoinTest extends TestCase
 {
@@ -61,32 +59,6 @@ final class JoinTest extends TestCase
                         'f2' => 'af2',
                     ])
                 ->getRawSql();
-        $this->assertEquals($expected, $actual);
-    }
-    /**
-     * Example:
-     * 
-     * select
-     *     *
-     * from table_1
-     * join table_2 on table_1.id = table_2.id
-     * join table_3 t3 on table_2.id = t3.id
-     * 
-     */
-    public function testJoinByNamedRel(): void
-    {
-        $expected = StringHelper::trimSql(require('queries/mysql/q27.php'));
-        $actual = Query1::all()
-            ->select([
-                'f1'
-            ])
-            ->join(NamedRel1::class)
-            ->join(NamedRel2::class)
-                ->select([
-                    'f1' => 'af1',
-                    'f2' => 'af2',
-                ])
-            ->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 
