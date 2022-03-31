@@ -24,6 +24,7 @@
 
 ### Связи моделей
 [Связи](https://github.com/sagittaracc/suql/blob/master/tests/suql/models/relational/Users.php)
+
 [Выборка](https://github.com/sagittaracc/suql/blob/master/tests/suql/RelationTest.php)
 
 ### Advanced Queries
