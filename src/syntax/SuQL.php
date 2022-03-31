@@ -96,10 +96,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     protected function init()
     {
-        if (!static::$schemeClass) {
-            throw new SchemeNotDefined;
-        }
-
         $this->setScheme(static::$schemeClass);
         
 
