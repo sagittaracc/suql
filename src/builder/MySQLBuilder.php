@@ -5,7 +5,6 @@ namespace suql\builder;
 use sagittaracc\ArrayHelper;
 use sagittaracc\PlaceholderHelper;
 use sagittaracc\QMap;
-use sagittaracc\SimpleList;
 
 /**
  * MySQL сборщик
@@ -25,23 +24,12 @@ final class MySQLBuilder extends SQLBuilder
     /**
      * Генерация запроса создания таблицы
      * @param suql\syntax\SuQL $model
-     * @param boolean $temp
+     * @param boolean $temporary
      */
-    public function createTable($model, $temp = false)
+    public function createTable($model, $temporary = false)
     {
-        $table = $model->table();
-        $tableType = $temp ? 'TEMPORARY' : '';
-        $createTableQuery = "CREATE $tableType TABLE `$table` (#fieldList{`#key` #value}) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB";
-        $fieldList = ArrayHelper::join($model->create(), [
-            'integer' => "INT(10) NOT NULL",
-            'string' => "VARCHAR(255) NOT NULL COLLATE 'utf8mb4_general_ci'",
-        ]);
-
-        return (new PlaceholderHelper($createTableQuery))->bindObject(SimpleList::create([
-            'name' => 'fieldList',
-            'separator' => ",\n",
-            'list' => $fieldList,
-        ]));
+        $model->create();
+        return $this->buildModel($model, $temporary);
     }
     /**
      * Генерация запроса создания представления

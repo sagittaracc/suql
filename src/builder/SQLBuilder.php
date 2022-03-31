@@ -459,9 +459,10 @@ abstract class SQLBuilder
     /**
      * Сборка модели в запрос на create table
      * @param suql\syntax\Model $model
+     * @param boolean $temporary временная или нет
      * @return string
      */
-    public function buildModel($model)
+    public function buildModel($model, $temporary = false)
     {
         $columnList = [];
 
@@ -473,7 +474,11 @@ abstract class SQLBuilder
 
         $columnList = implode(', ', $columnList);
 
-        return "create table {$this->quote}{$model->table()}{$this->unquote} ($columnList);";
+        $createTable = $temporary
+            ? "create temporary table"
+            : "create table";
+
+        return "$createTable {$this->quote}{$model->table()}{$this->unquote} ($columnList);";
     }
     /**
      * Возвращает запрос получения primary key у таблицы

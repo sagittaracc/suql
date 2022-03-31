@@ -14,10 +14,15 @@ class Query9 extends ActiveRecord
 
     public function create()
     {
-        return [
-            'p1' => 'integer',
-            'p2' => 'string',
-        ];
+        return $this
+            ->column('p1')
+                ->setType('int')
+                ->setLength(11)
+                ->setDefault(0)
+            ->column('p2')
+                ->setType('varchar')
+                ->setLength(255)
+                ->setDefault('');
     }
 
     public function getDb()

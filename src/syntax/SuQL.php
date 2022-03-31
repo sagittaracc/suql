@@ -844,6 +844,13 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     /**
      * @inheritdoc
      */
+    public function create()
+    {
+        return $this;
+    }
+    /**
+     * @inheritdoc
+     */
     public function view()
     {
         return $this;
