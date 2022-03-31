@@ -202,7 +202,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     /**
      * Выборка данных по первичному ключу
      * @param mixed $id
-     * @return array
+     * @return mixed
      */
     public static function one($id)
     {
