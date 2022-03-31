@@ -23,7 +23,8 @@
 [ORM](https://github.com/sagittaracc/suql/blob/master/tests/suql/OrmTest.php)
 
 ### Связи моделей
-[Relations](https://github.com/sagittaracc/suql/blob/master/tests/suql/RelationTest.php)
+[Связи](https://github.com/sagittaracc/suql/blob/master/tests/suql/models/relational/Users.php)
+[Выборка](https://github.com/sagittaracc/suql/blob/master/tests/suql/RelationTest.php)
 
 ### Advanced Queries
 
