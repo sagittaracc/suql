@@ -22,6 +22,9 @@
 
 [ORM](https://github.com/sagittaracc/suql/blob/master/tests/suql/OrmTest.php)
 
+### Связи моделей
+[Relations](https://github.com/sagittaracc/suql/blob/master/tests/suql/RelationTest.php)
+
 ### Advanced Queries
 
 [Nested Query](https://github.com/sagittaracc/suql/blob/master/tests/suql/NestedQueryTest.php)
