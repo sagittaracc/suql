@@ -2,6 +2,8 @@
 
 namespace suql\manager;
 
+use suql\syntax\SuQL;
+
 /**
  * Действия выполняемые с сущностями
  * 
@@ -60,7 +62,15 @@ class EntityManager
         $entity->addInsert($entity->query());
         $entity->getQuery($entity->query())->addInto($entity->table());
         foreach ($entity->getPublicProperties() as $property) {
-            $entity->getQuery($entity->query())->addValue($property->getName(), $entity->{$property->getName()});
+            $propertyName = $property->getName();
+            if (is_subclass_of($entity->$propertyName, SuQL::class)) {
+                $subEntity = $entity->$propertyName;
+                $this->saveEntity($subEntity);
+                $entity->getQuery($entity->query())->addValue($propertyName, $subEntity->getLastInsertId());
+            }
+            else {
+                $entity->getQuery($entity->query())->addValue($propertyName, $entity->$propertyName);
+            }
         }
 
         $db = $entity->getDb();
