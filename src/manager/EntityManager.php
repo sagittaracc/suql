@@ -2,8 +2,6 @@
 
 namespace suql\manager;
 
-use suql\db\Entity;
-
 /**
  * Действия выполняемые с сущностями
  * 
@@ -12,57 +10,41 @@ use suql\db\Entity;
 class EntityManager
 {
     /**
-     * @var string используемая схема
+     * @var array перечень сущностей на сохранение
      */
-    private $schemeClass;
+    private $saveList = [];
     /**
-     * @var string используемый билдер
+     * @var array перечень сущностей на обновление
      */
-    private $builderClass;
+    private $updateList = [];
     /**
-     * Задать схему
-     * @param string $schemeClass
+     * Сохранение сущности
+     * @param suql\syntax\SuQL $entity
      */
-    public function setScheme($schemeClass)
+    public function save($entity)
     {
-        $this->schemeClass = $schemeClass;
+        $this->saveList[] = $entity;
     }
     /**
-     * Задать билдер
-     * @param string $builderClass
+     * Обновление сущности
+     * @param suql\syntax\SuQL $entity
      */
-    public function setBuilder($builderClass)
+    public function update($entity)
     {
-        $this->builderClass = $builderClass;
+        $this->updateList[] = $entity;
     }
     /**
-     * Получить объект из репозитория
-     * @param string имя класса объекта или таблицы в базе данных
-     * @return suql\syntax\SuQL
+     * Выполнение запрошенных действий над сущностями
      */
-    public function getRepository($repositoryQuery)
+    public function run()
     {
-        $repository = null;
-
-        if (is_string($repositoryQuery)) {
-            if (class_exists($repositoryQuery)) {
-                $repository = $repositoryQuery::all();
-
-                $repository->setScheme($this->schemeClass);
-                $repository->setBuilder($this->builderClass);
-            }
-            else {
-                $repository = new Entity($repositoryQuery);
-
-                $repository->setScheme($this->schemeClass);
-                $repository->setBuilder($this->builderClass);
-    
-                $repository->addSelect($repository->query());
-                $repository->getQuery($repository->query())->addFrom($repository->getName());
-                $repository->setCurrentTable($repository->getName());
-            }
+        foreach ($this->saveList as $entity) {
         }
 
-        return $repository;
+        foreach ($this->updateList as $entity) {
+        }
+
+        $this->saveList = [];
+        $this->updateList = [];
     }
 }
