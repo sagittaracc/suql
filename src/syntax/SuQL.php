@@ -15,6 +15,7 @@ use ReflectionProperty;
 use sagittaracc\ArrayHelper;
 use suql\core\Scheme;
 use suql\core\SmartDate;
+use suql\manager\EntityManager;
 use suql\syntax\field\Field;
 use suql\syntax\field\Raw;
 
@@ -92,7 +93,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      * Задание схемы
      * Задание билдера
      */
-    protected function init()
+    public function init()
     {
         $this->setScheme(static::$schemeClass);
         
@@ -145,26 +146,9 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     public function save()
     {
-        $this->init();
-        $this->addInsert($this->query());
-        $this->getQuery($this->query())->addInto($this->table());
-        foreach ($this->getPublicProperties() as $property) {
-            $this->getQuery($this->query())->addValue($property->getName(), $this->{$property->getName()});
-        }
-
-        $db = $this->getDb();
-
-        $config = $db->getConfig();
-        $table = $this->table();
-
-        $tableExistsQuery = $db->getPdo()->query($this->getBuilder()->tableExistsQuery($config, $table));
-        $tableExists = $tableExistsQuery && $table ? $tableExistsQuery->fetchColumn() : true;
-        if (!$tableExists) {
-            $this->create();
-            $db->getPdo()->query($this->getBuilder()->buildModel($this));
-        }
-
-        $this->exec($this->getRawSql());
+        $entityManager = new EntityManager();
+        $entityManager->persist($this);
+        $entityManager->run();
     }
     /**
      * Выборка с начально заданной фильтрацией
@@ -675,7 +659,7 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      * Получает public properties модели
      * @return array
      */
-    private function getPublicProperties()
+    public function getPublicProperties()
     {
         $reflector = new ReflectionClass($this);
         $properties = $reflector->getProperties(ReflectionProperty::IS_PUBLIC);
@@ -699,13 +683,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
         return !empty($result)
             ? $pkQuery->getColumn('primary', $result)
             : '';
-    }
-    /**
-     * Выполнение запроса
-     */
-    private function exec($query)
-    {
-        $this->getDb()->getPdo()->exec($query);
     }
     /**
      * Метод получения данных
