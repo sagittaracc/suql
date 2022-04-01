@@ -16,7 +16,7 @@ final class EntityManagerTest extends TestCase
         Container::create(require('config/db.php'));
         Query::create('create database db_test')->setConnection('connection')->exec();
         Container::add(require('config/db-test.php'));
-        Query::create('create table table_10(f1 int, f2 int, primary key (f1))')->setConnection('db_test')->exec();
+        Query::create('create table table_10(f1 int auto_increment, f2 int, primary key (f1))')->setConnection('db_test')->exec();
         Query::create('insert into table_10(f1, f2) values (1, 1), (2, 2), (3, 3)')->setConnection('db_test')->exec();
         Query::create('insert into table_10(f1, f2) values (?, ?), (?, ?), (?, ?)')->setConnection('db_test')->exec([4, 4, 5, 5, 6, 6]);
     }
@@ -31,14 +31,12 @@ final class EntityManagerTest extends TestCase
     public function testPersist(): void
     {
         $entity = new Query11();
-        $entity->f1 = 7;
         $entity->f2 = 7;
 
         $entityManager = new EntityManager();
         $entityManager->persist($entity);
         $entityManager->run();
 
-        $justAddedRow = Query11::all()->where(['f1' => 7])->fetchOne();
-        $this->assertEquals(7, $justAddedRow->f2);
+        $this->assertEquals(7, $entity->getLastInsertId());
     }
 }

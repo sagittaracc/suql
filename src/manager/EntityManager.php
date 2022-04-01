@@ -76,6 +76,8 @@ class EntityManager
         }
 
         $entity->getDb()->getPdo()->exec($entity->getRawSql());
+
+        $entity->setLastInsertId($entity->getDb()->getPdo()->lastInsertId());
     }
     /**
      * Удаление

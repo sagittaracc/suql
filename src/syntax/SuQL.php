@@ -73,6 +73,10 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
      */
     private $lastJoin = null;
     /**
+     * @var int идентификатор последней добавленной записи
+     */
+    protected $lastInsertId = null;
+    /**
      * @var boolean сериализовать результат?
      */
     private $serializeResult = true;
@@ -879,6 +883,22 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     private function addPostFunction($name)
     {
         $this->postFunctions[] = $this->getPostFunctionName($name);
+    }
+    /**
+     * Задает идентификатор последней добавленной записи
+     * @param int $id
+     */
+    public function setLastInsertId($id)
+    {
+        $this->lastInsertId = $id;
+    }
+    /**
+     * Получает идентификатор последней добавленной записи
+     * @return int
+     */
+    public function getLastInsertId()
+    {
+        return $this->lastInsertId;
     }
     /**
      * Получает последнюю запрошенную модель
