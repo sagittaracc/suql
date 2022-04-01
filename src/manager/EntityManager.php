@@ -10,41 +10,23 @@ namespace suql\manager;
 class EntityManager
 {
     /**
-     * @var array перечень сущностей на сохранение
-     */
-    private $saveList = [];
-    /**
-     * @var array перечень сущностей на обновление
-     */
-    private $updateList = [];
-    /**
-     * Сохранение сущности
+     * Сохранение или обновление сущности
      * @param suql\syntax\SuQL $entity
      */
-    public function save($entity)
+    public function persist($entity)
     {
-        $this->saveList[] = $entity;
     }
     /**
-     * Обновление сущности
+     * Удаление сущности
      * @param suql\syntax\SuQL $entity
      */
-    public function update($entity)
+    public function delete($entity)
     {
-        $this->updateList[] = $entity;
     }
     /**
      * Выполнение запрошенных действий над сущностями
      */
     public function run()
     {
-        foreach ($this->saveList as $entity) {
-        }
-
-        foreach ($this->updateList as $entity) {
-        }
-
-        $this->saveList = [];
-        $this->updateList = [];
     }
 }
