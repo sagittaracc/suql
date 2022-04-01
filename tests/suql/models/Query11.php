@@ -15,6 +15,20 @@ class Query11 extends ActiveRecord
         return 'table_10';
     }
 
+    public function create()
+    {
+        return
+            $this
+                ->column('f1')
+                    ->setType('int')
+                    ->setLength(11)
+                    ->autoIncrement()
+                    ->primaryKey()
+                ->column('f2')
+                    ->setType('int')
+                    ->setLength(11);
+    }
+
     public function getDb()
     {
         return Container::get('db_test');
