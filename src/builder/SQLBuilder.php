@@ -477,6 +477,11 @@ abstract class SQLBuilder
                 );
         }
 
+        $pkColumn = $model->getPrimaryKeyColumn();
+        if (!is_null($pkColumn)) {
+            $columnList[] = "primary key ({$this->quote}{$pkColumn->getName()}{$this->unquote})";
+        }
+
         $columnList = implode(', ', $columnList);
 
         $createTable = $temporary

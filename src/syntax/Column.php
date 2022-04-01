@@ -18,6 +18,10 @@ class Column
      */
     private $auto_increment = false;
     /**
+     * @var boolean PRIMARY_KEY
+     */
+    private $primary_key = false;
+    /**
      * @var string тип поля
      */
     private $type;
@@ -46,6 +50,14 @@ class Column
         return new static($name);
     }
     /**
+     * Получает имя поля
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    /**
      * Задает поле как AUTO_INCREMENT
      */
     public function autoIncrement()
@@ -59,6 +71,21 @@ class Column
     public function isAutoIncrement()
     {
         return $this->auto_increment;
+    }
+    /**
+     * Задает поле как PRIMARY_KEY
+     */
+    public function primaryKey()
+    {
+        $this->primary_key = true;
+    }
+    /**
+     * Проверяет поле на PRIMARY_KEY
+     * @return boolean
+     */
+    public function isPrimaryKey()
+    {
+        return $this->primary_key;
     }
     /**
      * Устанавливает тип поля

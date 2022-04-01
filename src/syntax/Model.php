@@ -55,6 +55,28 @@ trait Model
         return $this;
     }
     /**
+     * Задает поле как PRIMARY_KEY
+     */
+    public function primaryKey()
+    {
+        $this->columnList[$this->currentColumn]->primaryKey();
+        return $this;
+    }
+    /**
+     * Ищет в модели PRIMARY_KEY поле
+     * @return suql\syntax\Column|null
+     */
+    public function getPrimaryKeyColumn()
+    {
+        foreach ($this->columnList as $name => $column) {
+            if ($column->isPrimaryKey()) {
+                return $column;
+            }
+        }
+
+        return null;
+    }
+    /**
      * Устанавливаем тип текущего поля
      * @param string $type
      * @return self

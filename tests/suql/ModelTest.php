@@ -16,6 +16,7 @@ final class ModelTest extends TestCase
             ->column('t1')
                 ->setType('int')
                 ->autoIncrement()
+                ->primaryKey()
                 ->setLength(11)
                 ->setDefault(null)
             ->column('t2')
