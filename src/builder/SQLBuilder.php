@@ -469,7 +469,12 @@ abstract class SQLBuilder
         foreach ($model->getColumns() as $name => $column) {
             $columnList[] =
                 $this->quote . $name . $this->unquote . ' ' .
-                $column->getType($name) . '(' . $column->getLength($name) . ')';
+                $column->getType($name) . '(' . $column->getLength($name) . ')' .
+                (
+                    $column->isAutoIncrement()
+                        ? ' auto_increment'
+                        : ''
+                );
         }
 
         $columnList = implode(', ', $columnList);

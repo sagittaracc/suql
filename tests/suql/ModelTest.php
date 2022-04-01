@@ -15,6 +15,7 @@ final class ModelTest extends TestCase
         $this->model = Query1::all()
             ->column('t1')
                 ->setType('int')
+                ->autoIncrement()
                 ->setLength(11)
                 ->setDefault(null)
             ->column('t2')
@@ -35,10 +36,12 @@ final class ModelTest extends TestCase
         $this->assertEquals('t2', $this->model->getCurrentColumn());
 
         $this->assertEquals('int', $this->model->getColumn('t1')->getType());
+        $this->assertEquals(true, $this->model->getColumn('t1')->isAutoIncrement());
         $this->assertEquals(11, $this->model->getColumn('t1')->getLength());
         $this->assertEquals(null, $this->model->getColumn('t1')->getDefault());
 
         $this->assertEquals('varchar', $this->model->getColumn('t2')->getType());
+        $this->assertEquals(false, $this->model->getColumn('t2')->isAutoIncrement());
         $this->assertEquals(255, $this->model->getColumn('t2')->getLength());
         $this->assertEquals(0, $this->model->getColumn('t2')->getDefault());
     }

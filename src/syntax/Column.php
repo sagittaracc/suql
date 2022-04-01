@@ -14,6 +14,10 @@ class Column
      */
     private $name;
     /**
+     * @var boolean AUTO_INCREMENT
+     */
+    private $auto_increment = false;
+    /**
      * @var string тип поля
      */
     private $type;
@@ -40,6 +44,21 @@ class Column
     public static function create($name)
     {
         return new static($name);
+    }
+    /**
+     * Задает поле как AUTO_INCREMENT
+     */
+    public function autoIncrement()
+    {
+        $this->auto_increment = true;
+    }
+    /**
+     * Проверяет поле на AUTO_INCREMENT
+     * @return boolean
+     */
+    public function isAutoIncrement()
+    {
+        return $this->auto_increment;
     }
     /**
      * Устанавливает тип поля

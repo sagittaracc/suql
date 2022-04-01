@@ -47,6 +47,14 @@ trait Model
         return $this->currentColumn;
     }
     /**
+     * Задать поле как AUTO_INCREMENT
+     */
+    public function autoIncrement()
+    {
+        $this->columnList[$this->currentColumn]->autoIncrement();
+        return $this;
+    }
+    /**
      * Устанавливаем тип текущего поля
      * @param string $type
      * @return self
