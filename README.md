@@ -11,7 +11,7 @@
 </div>
 
 ### SuQL
-SuQL расшифровывается как Sugar SQL. Это PHP DataMapper, ORM.
+PHP ORM
 
 ### Установка
 `composer require sagittaracc/suql`
