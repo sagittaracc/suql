@@ -11,7 +11,7 @@
 </div>
 
 ### SuQL
-PHP ORM
+Обобщение представления ORM
 
 ### Установка
 `composer require sagittaracc/suql`
