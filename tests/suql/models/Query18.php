@@ -3,9 +3,9 @@
 namespace test\suql\models;
 
 use suql\db\Container;
-use suql\syntax\SuQL;
+use test\suql\records\ActiveRecord;
 
-class Query18 extends SuQL
+class Query18 extends ActiveRecord
 {
     public function table()
     {

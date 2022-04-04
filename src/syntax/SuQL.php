@@ -10,7 +10,6 @@ use suql\core\Condition;
 use suql\core\FieldName;
 use suql\core\Obj;
 use suql\core\SimpleParam;
-use \ReflectionMethod;
 use ReflectionProperty;
 use sagittaracc\ArrayHelper;
 use suql\core\Scheme;
@@ -24,7 +23,7 @@ use suql\syntax\field\Raw;
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-abstract class SuQL extends Obj implements QueryObject, DbObject
+abstract class SuQL extends Obj
 {
     use Model;
     /**
@@ -812,51 +811,6 @@ abstract class SuQL extends Obj implements QueryObject, DbObject
     {
         $result = $this->fetchOne();
         return reset($result);
-    }
-    /**
-     * @inheritdoc
-     */
-    public function query()
-    {
-        return $this->queryName ? $this->queryName : str_replace('\\', '_', static::class);
-    }
-    /**
-     * @inheritdoc
-     */
-    public function create()
-    {
-        return $this;
-    }
-    /**
-     * @inheritdoc
-     */
-    public function view()
-    {
-        return $this;
-    }
-    /**
-     * @inheritdoc
-     */
-    public function relations()
-    {
-        return [];
-    }
-    /**
-     * Проверяет если это вьюха
-     * @return boolean
-     */
-    private function isView()
-    {
-        return $this->viewHasBeenOverriden();
-    }
-    /**
-     * Проверяет если вьюха была переобъявлена
-     * @return boolean
-     */
-    private function viewHasBeenOverriden()
-    {
-        $reflector = new ReflectionMethod($this, 'view');
-        return $reflector->getDeclaringClass()->getName() === get_class($this);
     }
     /**
      * Название функции пост обработчика

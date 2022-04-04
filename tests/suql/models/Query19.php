@@ -3,9 +3,9 @@
 namespace test\suql\models;
 
 use suql\db\Container;
-use suql\syntax\SuQL;
+use test\suql\records\ActiveRecord;
 
-class Query19 extends SuQL
+class Query19 extends ActiveRecord
 {
     public $c1;
     public $c2;
