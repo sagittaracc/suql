@@ -1,5 +1,5 @@
 <div align="center"><img src="https://i.postimg.cc/bvpF0Xhd/suql.png" alt="suql-sugar-sql" border="0"></div>
-<h1 align="center">Sugar SQL</h1>
+<h1 align="center">Sugar Query Language</h1>
 <div align="center">
   <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
   <a href="https://github.com/sagittaracc/suql/blob/master/LICENSE">
