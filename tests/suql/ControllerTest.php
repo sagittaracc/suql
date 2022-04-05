@@ -9,7 +9,6 @@ final class ControllerTest extends TestCase
 {
     public function testRoute(): void
     {
-        // Query20::all()->select(['route1']);
-        $this->assertTrue(true);
+        $this->assertEquals(['foo' => 'bar'], Query20::all()->go('route1'));
     }
 }

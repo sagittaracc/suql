@@ -199,40 +199,43 @@ abstract class SuQL extends Obj
     public static function all()
     {
         $instance = new static();
-        $instance->init();
 
-        $instance->lastRequestedModel = static::class;
-        $instance->currentAnnotatedModel = static::class;
+        if ($instance instanceof TableInterface) {
+            $instance->init();
 
-        $instance->addSelect($instance->query());
+            $instance->lastRequestedModel = static::class;
+            $instance->currentAnnotatedModel = static::class;
 
-        $option = $instance->table();
-        if (is_string($option)) {
-            $table = $option;
-            $instance->getQuery($instance->query())->addFrom($table);
-            $instance->currentTable = $table;
+            $instance->addSelect($instance->query());
+
+            $option = $instance->table();
+            if (is_string($option)) {
+                $table = $option;
+                $instance->getQuery($instance->query())->addFrom($table);
+                $instance->currentTable = $table;
+            }
+            else if (is_array($option)) {
+                foreach ($option as $table => $alias) break;
+                $instance->getQuery($instance->query())->addFrom("$table@$alias");
+                $instance->currentTable = $alias;
+            }
+            else if ($option instanceof SuQL) {
+                $subquery = $option;
+                $instance->getQuery($instance->query())->addFrom($subquery->query());
+                $instance->extend($subquery->getQueries());
+                $instance->currentTable = $subquery->query();
+            }
+
+            $view = $instance->view();
+            if (is_string($view)) {
+                $viewQuery = $instance->getBuilder()->createView($instance);
+                $instance->getDb()->getPdo()->exec($viewQuery);
+            }
+
+            $instance->select($instance->fields());
+
+            $instance->setRelations($instance->table(), $instance->relations());
         }
-        else if (is_array($option)) {
-            foreach ($option as $table => $alias) break;
-            $instance->getQuery($instance->query())->addFrom("$table@$alias");
-            $instance->currentTable = $alias;
-        }
-        else if ($option instanceof SuQL) {
-            $subquery = $option;
-            $instance->getQuery($instance->query())->addFrom($subquery->query());
-            $instance->extend($subquery->getQueries());
-            $instance->currentTable = $subquery->query();
-        }
-
-        $view = $instance->view();
-        if (is_string($view)) {
-            $viewQuery = $instance->getBuilder()->createView($instance);
-            $instance->getDb()->getPdo()->exec($viewQuery);
-        }
-
-        $instance->select($instance->fields());
-
-        $instance->setRelations($instance->table(), $instance->relations());
 
         return $instance;
     }
@@ -294,6 +297,11 @@ abstract class SuQL extends Obj
         }
 
         return $this;
+    }
+    public function go($route)
+    {
+        // HACK: STUB
+        return $this->route1();
     }
     /**
      * OFFSET
