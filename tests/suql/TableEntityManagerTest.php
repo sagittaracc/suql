@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use suql\db\Container;
-use suql\manager\EntityManager;
+use suql\manager\TableEntityManager;
 use suql\syntax\Query;
 use test\suql\models\Query11;
 use test\suql\models\Query3;
 
-final class EntityManagerTest extends TestCase
+final class TableEntityManagerTest extends TestCase
 {
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ final class EntityManagerTest extends TestCase
         $entity = new Query11();
         $entity->f2 = 1;
 
-        $entityManager = new EntityManager();
+        $entityManager = new TableEntityManager();
         $entityManager->persist($entity);
         $entityManager->run();
 
@@ -45,7 +45,7 @@ final class EntityManagerTest extends TestCase
         $entity = new Query11();
         $entity->f2 = $subEntity;
 
-        $entityManager = new EntityManager();
+        $entityManager = new TableEntityManager();
         $entityManager->persist($entity);
         $entityManager->run();
 

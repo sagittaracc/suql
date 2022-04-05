@@ -14,7 +14,7 @@ use ReflectionProperty;
 use sagittaracc\ArrayHelper;
 use suql\core\Scheme;
 use suql\core\SmartDate;
-use suql\manager\EntityManager;
+use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
 use suql\syntax\field\Raw;
 
@@ -152,7 +152,7 @@ abstract class SuQL extends Obj
      */
     public function save()
     {
-        $entityManager = new EntityManager();
+        $entityManager = new TableEntityManager();
         $entityManager->persist($this);
         $entityManager->run();
     }
@@ -261,6 +261,10 @@ abstract class SuQL extends Obj
      */
     public function select($options)
     {
+        if (is_string($options)) {
+            $options = [$options];
+        }
+
         foreach ($options as $field => $option) {
             if ($option instanceof Raw) {
                 $expression = $option;

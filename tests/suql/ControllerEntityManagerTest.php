@@ -3,17 +3,17 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use suql\manager\Controller;
+use suql\manager\ControllerEntityManager;
 use test\suql\models\Query20;
 
-final class ControllerTest extends TestCase
+final class ControllerEntityManagerTest extends TestCase
 {
     public function testRoute(): void
     {
-        $query = Query20::all()->select(['route1']);
+        $route = Query20::all()->select('route1');
 
-        $manager = new Controller();
-        $manager->persist($query);
+        $manager = new ControllerEntityManager();
+        $manager->persist($route);
         $data = $manager->run();
 
         $this->assertEquals(['foo' => 'bar'], $data);
