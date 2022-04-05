@@ -200,13 +200,15 @@ abstract class SuQL extends Obj
     {
         $instance = new static();
 
+        $instance->lastRequestedModel = static::class;
+        $instance->currentAnnotatedModel = static::class;
+        $instance->currentTable = null;
+
+        $instance->setScheme(static::$schemeClass);
+        $instance->addSelect($instance->query());
+
         if ($instance instanceof TableInterface) {
             $instance->init();
-
-            $instance->lastRequestedModel = static::class;
-            $instance->currentAnnotatedModel = static::class;
-
-            $instance->addSelect($instance->query());
 
             $option = $instance->table();
             if (is_string($option)) {
@@ -297,11 +299,6 @@ abstract class SuQL extends Obj
         }
 
         return $this;
-    }
-    public function go($route)
-    {
-        // HACK: STUB
-        return $this->route1();
     }
     /**
      * OFFSET
