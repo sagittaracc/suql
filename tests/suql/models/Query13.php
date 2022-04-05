@@ -2,7 +2,7 @@
 
 namespace test\suql\models;
 
-use suql\syntax\entity\SuQLTable;
+use tests\suql\entity\SuQLTable;
 use suql\syntax\field\Field;
 
 class Query13 extends SuQLTable

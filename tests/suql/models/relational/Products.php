@@ -2,7 +2,7 @@
 
 namespace test\suql\models\relational;
 
-use suql\syntax\entity\SuQLTable;
+use tests\suql\entity\SuQLTable;
 
 class Products extends SuQLTable
 {

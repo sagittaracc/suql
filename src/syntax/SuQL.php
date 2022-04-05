@@ -25,15 +25,10 @@ use suql\syntax\field\Raw;
  */
 abstract class SuQL extends Obj
 {
-    use Model;
     /**
      * @var string класс реализующий схему
      */
     protected static $schemeClass = Scheme::class;
-    /**
-     * @var string используемый билдер
-     */
-    protected static $builderClass = null;
     /**
      * @var string префикс функции пост обработки
      */

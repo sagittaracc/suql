@@ -1,14 +1,20 @@
 <?php
 
-namespace suql\syntax\entity;
+namespace tests\suql\entity;
 
 use ReflectionMethod;
+use suql\syntax\Model;
 use suql\syntax\SuQL;
 use suql\syntax\TableInterface;
 use test\suql\modifiers\CustomModifier;
 
 abstract class SuQLTable extends SuQL implements TableInterface
 {
+    use Model;
+    /**
+     * @var string используемый билдер
+     */
+    protected static $builderClass = null;
     /**
      * @inheritdoc
      */

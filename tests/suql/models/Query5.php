@@ -3,7 +3,7 @@
 namespace test\suql\models;
 
 use suql\syntax\field\Raw;
-use suql\syntax\entity\SuQLTable;
+use tests\suql\entity\SuQLTable;
 
 class Query5 extends SuQLTable
 {

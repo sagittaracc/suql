@@ -2,14 +2,14 @@
 
 namespace suql\db;
 
-use suql\syntax\SuQL;
+use tests\suql\entity\SuQLTable;
 
 /**
  * Для тех кому лень создавать классы для таблиц
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Entity extends SuQL
+class Entity extends SuQLTable
 {
     /**
      * @var string имя сущности в базе данных
