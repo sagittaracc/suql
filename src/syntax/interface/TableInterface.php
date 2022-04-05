@@ -10,11 +10,6 @@ namespace suql\syntax;
 interface TableInterface
 {
     /**
-     * Запрос должен иметь имя запроса
-     * @return string
-     */
-    public function query();
-    /**
      * Запрос должен ссылаться на таблицу
      * @return string
      */

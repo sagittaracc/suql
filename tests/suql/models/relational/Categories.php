@@ -2,10 +2,13 @@
 
 namespace test\suql\models\relational;
 
-use test\suql\records\ActiveRecord;
+use suql\syntax\entity\SuQLTable;
 
-class Categories extends ActiveRecord
+class Categories extends SuQLTable
 {
+    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
+    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+
     public function table()
     {
         return 'categories';

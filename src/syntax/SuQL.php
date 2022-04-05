@@ -80,6 +80,14 @@ abstract class SuQL extends Obj
      */
     private $serializeResult = true;
     /**
+     * Запрос должен иметь имя запроса
+     * @return string
+     */
+    public function query()
+    {
+        return $this->queryName ? $this->queryName : str_replace('\\', '_', static::class);
+    }
+    /**
      * По умолчанию нас интересуют все открытые поля модели
      * @return array
      */

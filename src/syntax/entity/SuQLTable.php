@@ -1,23 +1,14 @@
 <?php
 
-namespace test\suql\records;
+namespace suql\syntax\entity;
 
 use ReflectionMethod;
 use suql\syntax\SuQL;
 use suql\syntax\TableInterface;
 use test\suql\modifiers\CustomModifier;
 
-abstract class ActiveRecord extends SuQL implements TableInterface
+abstract class SuQLTable extends SuQL implements TableInterface
 {
-    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
-    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
-    /**
-     * @inheritdoc
-     */
-    public function query()
-    {
-        return $this->queryName ? $this->queryName : str_replace('\\', '_', static::class);
-    }
     /**
      * @inheritdoc
      */

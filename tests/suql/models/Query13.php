@@ -2,11 +2,14 @@
 
 namespace test\suql\models;
 
-use test\suql\records\ActiveRecord;
+use suql\syntax\entity\SuQLTable;
 use suql\syntax\field\Field;
 
-class Query13 extends ActiveRecord
+class Query13 extends SuQLTable
 {
+    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
+    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+
     public function query()
     {
         return 'query_13';

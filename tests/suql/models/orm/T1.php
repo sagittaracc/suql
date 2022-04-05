@@ -3,10 +3,13 @@
 namespace test\suql\models;
 
 use suql\db\Container;
-use test\suql\records\ActiveRecord;
+use suql\syntax\entity\SuQLTable;
 
-class T1 extends ActiveRecord
+class T1 extends SuQLTable
 {
+    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
+    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+
     public $a1;
     public $a2;
 

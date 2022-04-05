@@ -2,10 +2,13 @@
 
 namespace test\suql\models;
 
-use test\suql\records\ActiveRecord;
+use suql\syntax\entity\SuQLTable;
 
-class Query14 extends ActiveRecord
+class Query14 extends SuQLTable
 {
+    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
+    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+
     public function table()
     {
         $query1 = Query1::all()
