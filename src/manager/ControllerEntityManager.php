@@ -10,25 +10,14 @@ namespace suql\manager;
 class ControllerEntityManager
 {
     /**
-     * @var array перечень сущностей на сохранение и удаление
+     * Запрос роута
+     * @return mixed
      */
-    private $persistList = [];
-    /**
-     * Сохранение или обновление сущности
-     * @param suql\syntax\SuQL $entity
-     */
-    public function persist($entity)
+    public function fetch($entity)
     {
-        $this->persistList[] = $entity;
-    }
-    /**
-     * Выполнение запрошенных действий над сущностями
-     */
-    public function run()
-    {
-        $entity = end($this->persistList);
-        $this->persistList = [];
-
+        $routes = $entity->getQuery($entity->query())->getSelect();
+        $route = array_shift($routes);
+        // $route->getName()
         return $entity->route1();
     }
 }

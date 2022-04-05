@@ -13,8 +13,7 @@ final class ControllerEntityManagerTest extends TestCase
         $route = Query20::all()->select('route1');
 
         $manager = new ControllerEntityManager();
-        $manager->persist($route);
-        $data = $manager->run();
+        $data = $manager->fetch($route);
 
         $this->assertEquals(['foo' => 'bar'], $data);
     }
