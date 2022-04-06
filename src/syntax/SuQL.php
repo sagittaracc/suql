@@ -360,7 +360,7 @@ abstract class SuQL extends Obj
                 $table = $option;
 
                 if ($this->currentAnnotatedModel) {
-                    $annotation = Annotation::from($this->currentAnnotatedModel)->for($table)->read();
+                    $annotation = RelationAnnotation::from($this->currentAnnotatedModel)->for($table)->read();
                     if ($annotation->relation) {
                         $on = $this->getBuilder()->buildJoinOn($this->currentTable, $annotation->first_field, $annotation->second_table, $annotation->second_field);
                         $this->getScheme()->rel($this->currentTable, $table, $on);

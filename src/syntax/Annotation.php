@@ -3,11 +3,11 @@
 namespace suql\syntax;
 
 /**
- * Разбор аннотаций
+ * Разбор аннотаций связей
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Annotation
+class RelationAnnotation
 {
     /**
      * @const string регулярное выражение для парсинга аннотации
