@@ -1,6 +1,6 @@
 <?php
 
-namespace suql\syntax;
+namespace suql\annotation;
 
 /**
  * Разбор аннотаций связей

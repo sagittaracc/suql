@@ -12,6 +12,7 @@ use suql\core\Obj;
 use suql\core\SimpleParam;
 use ReflectionProperty;
 use sagittaracc\ArrayHelper;
+use suql\annotation\RelationAnnotation;
 use suql\core\Scheme;
 use suql\core\SmartDate;
 use suql\manager\TableEntityManager;

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\syntax\RelationAnnotation;
+use suql\annotation\RelationAnnotation;
 use test\suql\models\Users;
 
 final class AnnotationTest extends TestCase
 {
-    public function testReadAnnotation(): void
+    public function testRelationAnnotation(): void
     {
         $annotation = RelationAnnotation::from(Users::class)->for('products')->read();
         $this->assertEquals('hasMany', $annotation->relation);
@@ -19,7 +19,7 @@ final class AnnotationTest extends TestCase
         $this->assertEquals('product_id', $annotation->first_field);
     }
 
-    public function testJoinByAnnotation(): void
+    public function testJoinByRelationAnnotation(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q30.php'));
         $actual = Users::all()->join('products')->join('categories')->getRawSql();
