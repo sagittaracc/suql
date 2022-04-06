@@ -12,7 +12,7 @@ class Annotation
     /**
      * @const string регулярное выражение для парсинга аннотации
      */
-    const REGEX = '/#\s*(?<relation>hasOne|hasMany|manyToMany)\[((?<second_model>[\w\\\\]+)\()?{SECOND_TABLE}\.(?<second_field>\w+)\)?\]\s+(protected|private|public)\s+\$(?<first_field>\w+);/msi';
+    const REGEX = '/#\s*(?<relation>hasOne|hasMany|manyToMany)\(((?<second_model>[\w\\\\]+)\[)?{SECOND_TABLE}\.(?<second_field>\w+)\]?\)\s+(protected|private|public)\s+\$(?<first_field>\w+);/msi';
     /**
      * @var string из какой модели читать аннотацию
      */
