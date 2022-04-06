@@ -2,6 +2,8 @@
 
 namespace suql\manager;
 
+use suql\annotation\RouteAnnotation;
+
 /**
  * Действия выполняемые при работе с контроллерами
  * 
@@ -17,7 +19,7 @@ class ControllerEntityManager
     {
         $routes = $entity->getQuery($entity->query())->getSelect();
         $route = array_shift($routes);
-        // $route->getName()
-        return $entity->route1();
+        $annotation = RouteAnnotation::from($entity)->for('GET', $route->getName())->read();
+        return $entity->{$annotation->function}();
     }
 }
