@@ -19,7 +19,7 @@ abstract class Param
     protected $params;
     /**
      * Constructor
-     * @param suql\core\FieldName $field поле для которого применяются параметры
+     * @param \suql\core\FieldName $field поле для которого применяются параметры
      * @param array $params параметры применения
      */
     function __construct($field, $params = [])
@@ -38,7 +38,7 @@ abstract class Param
     }
     /**
      * Получить поле
-     * @return suql\core\FieldName
+     * @return \suql\core\FieldName
      */
     public function getField()
     {

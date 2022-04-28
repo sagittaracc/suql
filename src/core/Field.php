@@ -10,7 +10,7 @@ namespace suql\core;
 class Field
 {
     /**
-     * @var siql\core\Select Ссылка на основной объект выборки
+     * @var \suql\core\Select|null Ссылка на основной объект выборки
      */
     private $oselect = null;
     /**
@@ -18,7 +18,7 @@ class Field
      */
     private $field;
     /**
-     * @var suql\core\FieldName поле с его настройками
+     * @var \suql\core\FieldName поле с его настройками
      */
     private $fieldNameObject;
     /**
@@ -37,8 +37,8 @@ class Field
     private $modifier = [];
     /**
      * Constructor
-     * @param suql\core\Select ссылка на основной объект выборки
-     * @param suql\core\FieldName $fieldNameObject объект с параметрами поля
+     * @param \suql\core\Select ссылка на основной объект выборки
+     * @param \suql\core\FieldName $fieldNameObject объект с параметрами поля
      * @param boolean $visible добавить поле в выборку или нет
      * @param boolean $raw флажок - сырое поле или нет
      */
@@ -51,7 +51,7 @@ class Field
     }
     /**
      * Вернуть ссылку на основной объект выборки
-     * @return suql\core\Select
+     * @return \suql\core\Select
      */
     public function getOSelect()
     {
@@ -118,7 +118,7 @@ class Field
     /**
      * Вернуть поле
      * TODO: Переименовать в getField когда избавимся от полей $table, $name, $alias
-     * @return suql\core\FieldName
+     * @return \suql\core\FieldName
      */
     public function getFieldNameObject()
     {
@@ -144,7 +144,7 @@ class Field
     }
     /**
      * Добавить инлайновый модификатор (типа callback Closure) полю
-     * @param Closure $callback инлайновый модификатор-обработчик
+     * @param \Closure $callback инлайновый модификатор-обработчик
      */
     public function addCallbackModifier($callback)
     {

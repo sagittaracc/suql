@@ -10,7 +10,7 @@ namespace suql\core;
 class Condition
 {
     /**
-     * @var suql\core\Param
+     * @var \suql\core\Param
      */
     private $param;
     /**
@@ -23,7 +23,7 @@ class Condition
     private $format;
     /**
      * Constructor
-     * @param suql\core\Param $param
+     * @param \suql\core\Param $param
      * @param string $condition условное выражение
      * @param string $format формат вывода поля
      */

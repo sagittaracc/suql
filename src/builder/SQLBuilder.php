@@ -451,14 +451,14 @@ abstract class SQLBuilder
     }
     /**
      * Сборка SmartDate
-     * @param suql\core\FieldName $fieldName
-     * @param suql\core\SmartDate $smartDate
+     * @param \suql\core\FieldName $fieldName
+     * @param \suql\core\SmartDate $smartDate
      * @return string
      */
     abstract protected function buildSmartDate($fieldName, $smartDate);
     /**
      * Сборка модели в запрос на create table
-     * @param suql\syntax\Model $model
+     * @param \suql\core\Obj $model
      * @param boolean $temporary временная или нет
      * @return string
      */
@@ -493,7 +493,7 @@ abstract class SQLBuilder
     /**
      * Возвращает запрос получения primary key у таблицы
      * @param string $table
-     * @return sagittaracc\QMap
+     * @return \sagittaracc\QMap
      */
     abstract public function getPrimaryKeyQuery($table);
     /**
