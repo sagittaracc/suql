@@ -23,7 +23,7 @@ final class MySQLBuilder extends SQLBuilder
     protected $unquote = '`';
     /**
      * Генерация запроса создания таблицы
-     * @param suql\syntax\SuQL $model
+     * @param \suql\syntax\SuQL $model
      * @param boolean $temporary
      */
     public function createTable($model, $temporary = false)
@@ -33,7 +33,7 @@ final class MySQLBuilder extends SQLBuilder
     }
     /**
      * Генерация запроса создания представления
-     * @param suql\syntax\SuQL $model
+     * @param \suql\syntax\SuQL $model
      * @return string
      */
     public function createView($model)
@@ -42,7 +42,7 @@ final class MySQLBuilder extends SQLBuilder
     }
     /**
      * Генерация запроса создания временной таблицы
-     * @param suql\syntax\SuQL $model
+     * @param \suql\syntax\SuQL $model
      */
     public function createTemporaryTable($model)
     {

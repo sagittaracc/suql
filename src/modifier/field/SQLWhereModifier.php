@@ -14,7 +14,7 @@ use suql\core\SimpleParam;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SQLWhereModifier
+class SQLWhereModifier extends SQLBaseModifier
 {
     /**
      * Основной обработчик параметризованного where запроса

@@ -7,7 +7,7 @@ namespace suql\modifier\field;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SQLAsModifier
+class SQLAsModifier extends SQLBaseModifier
 {
     /**
      * As модификатор

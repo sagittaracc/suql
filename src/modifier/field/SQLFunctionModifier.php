@@ -9,7 +9,7 @@ use sagittaracc\PlaceholderHelper;
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SQLFunctionModifier
+class SQLFunctionModifier extends SQLBaseModifier
 {
     /**
      * Основной обработчик функций

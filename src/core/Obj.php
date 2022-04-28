@@ -51,7 +51,7 @@ class Obj
     }
     /**
      * Получить схему
-     * @return suql\core\Scheme
+     * @return \suql\core\Scheme
      */
     public function getScheme()
     {
@@ -219,7 +219,7 @@ class Obj
     /**
      * Получить объект запроса по имени
      * @param string $name
-     * @return suql\core\Query
+     * @return \suql\core\Query
      */
     public function getQuery($name)
     {
@@ -269,7 +269,7 @@ class Obj
     /**
      * Ищет класс обработчика модификатора по имени
      * @param string $modifierHandler название модификатора
-     * @return класс модификатора
+     * @return \suql\modifier\field\SQLBaseModifier
      */
     public function getModifierClass($modifierHandler)
     {

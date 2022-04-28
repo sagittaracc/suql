@@ -16,7 +16,7 @@ use suql\modifier\field\SQLFunctionModifier;
 abstract class SQLBuilder
 {
     /**
-     * @var suql\core\SuQLObject основной объект хранящий всю структуру запроса
+     * @var \suql\core\Obj основной объект хранящий всю структуру запроса
      */
     private $osuql = null;
     /**
@@ -41,7 +41,7 @@ abstract class SQLBuilder
     protected $unquote = '';
     /**
      * Привязать объект OSuQL
-     * @param suql\core\SuQLObject $osuql основной объект хранящий всю структуру запроса переданный для преобразования в sql
+     * @param \suql\core\Obj $osuql основной объект хранящий всю структуру запроса переданный для преобразования в sql
      */
     public function assign($osuql)
     {
@@ -244,7 +244,7 @@ abstract class SQLBuilder
         }
         else {
             $name = $table
-                ? "{$quote}$table{$unquote}." . ($name === '*' ? $name : "{$quote}$name{$unquote}")
+                ? "{$quote}$table{$unquote}.{$quote}$name{$unquote}"
                 : "{$quote}$name{$unquote}";
         }
 

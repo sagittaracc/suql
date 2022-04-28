@@ -7,7 +7,7 @@ namespace suql\modifier\field;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SQLOrderModifier
+class SQLOrderModifier extends SQLBaseModifier
 {
     /**
      * Модификатор сортировки asc

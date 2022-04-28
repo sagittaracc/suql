@@ -7,7 +7,7 @@ namespace suql\modifier\field;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SQLGroupModifier
+class SQLGroupModifier extends SQLBaseModifier
 {
     /**
      * Group by

@@ -14,7 +14,7 @@ use suql\core\SimpleParam;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SQLCaseModifier
+class SQLCaseModifier extends SQLBaseModifier
 {
     /**
      * Основной обработчик перечня case условий
