@@ -44,7 +44,7 @@ class Obj
      * Установить схему
      * @param string $schemeClass класс описывающий схему
      */
-    public function setScheme(string $schemeClass)
+    public function setScheme(string $schemeClass): void
     {
         if (class_exists($schemeClass)) {
             $this->scheme = new $schemeClass;
@@ -57,7 +57,7 @@ class Obj
      * Получить схему
      * @return \suql\core\Scheme
      */
-    public function getScheme()
+    public function getScheme(): Scheme
     {
         return $this->scheme;
     }

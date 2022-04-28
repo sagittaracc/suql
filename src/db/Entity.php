@@ -48,7 +48,7 @@ class Entity extends SuQLTable
     /**
      * @inheritdoc
      */
-    public function setScheme($schemeClass)
+    public function setScheme($schemeClass): void
     {
         parent::setScheme($schemeClass);
 
