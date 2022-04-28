@@ -23,7 +23,7 @@
 Скачайте плагин [здесь](https://github.com/sagittaracc/suql-gen) и установите его с помощью команды `code --install-extension suql-gen.vsix`
 
 ### Системные требования
-PHP версии не ниже 5.6.
+PHP версии не ниже 7.3
 
 ### Тестирование
 Покрыто тестами [PHPUnit](https://phpunit.de/). Для запуска тестов выполните:

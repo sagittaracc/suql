@@ -3,6 +3,7 @@
 namespace suql\core;
 
 use Exception;
+use suql\exception\WrongSchemaException;
 use suql\modifier\field\SQLAsModifier;
 use suql\modifier\field\SQLCaseModifier;
 use suql\modifier\field\SQLFunctionModifier;
@@ -43,10 +44,13 @@ class Obj
      * Установить схему
      * @param string $schemeClass класс описывающий схему
      */
-    public function setScheme($schemeClass)
+    public function setScheme(string $schemeClass)
     {
         if (class_exists($schemeClass)) {
             $this->scheme = new $schemeClass;
+        }
+        else {
+            throw new WrongSchemaException($schemeClass);
         }
     }
     /**
