@@ -3,7 +3,7 @@
 namespace test\suql\models;
 
 use suql\db\Container;
-use tests\suql\entity\SuQLTable;
+use suql\syntax\entity\SuQLTable;
 
 class Query19 extends SuQLTable
 {

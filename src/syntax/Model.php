@@ -64,7 +64,7 @@ trait Model
     }
     /**
      * Ищет в модели PRIMARY_KEY поле
-     * @return suql\syntax\Column|null
+     * @return \suql\syntax\Column
      */
     public function getPrimaryKeyColumn()
     {
@@ -109,7 +109,7 @@ trait Model
     /**
      * Получает поле по его имени
      * @param string $column
-     * @return suql\syntax\Column
+     * @return \suql\syntax\Column
      */
     public function getColumn($column)
     {

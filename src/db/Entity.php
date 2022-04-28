@@ -2,7 +2,7 @@
 
 namespace suql\db;
 
-use tests\suql\entity\SuQLTable;
+use suql\syntax\entity\SuQLTable;
 
 /**
  * Для тех кому лень создавать классы для таблиц

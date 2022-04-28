@@ -2,10 +2,9 @@
 
 namespace test\suql\models;
 
-use suql\syntax\ControllerInterface;
-use suql\syntax\SuQL;
+use suql\syntax\entity\SuQLController;
 
-class Query20 extends SuQL implements ControllerInterface
+class Query20 extends SuQLController
 {
     # Route(route="some/route", method="GET")
     public function routeHandler()

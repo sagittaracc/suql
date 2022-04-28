@@ -2,7 +2,7 @@
 
 namespace test\suql\models\relational;
 
-use tests\suql\entity\SuQLTable;
+use suql\syntax\entity\SuQLTable;
 
 class Categories extends SuQLTable
 {

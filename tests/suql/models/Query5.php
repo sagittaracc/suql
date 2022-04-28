@@ -2,8 +2,8 @@
 
 namespace test\suql\models;
 
+use suql\syntax\entity\SuQLTable;
 use suql\syntax\field\Raw;
-use tests\suql\entity\SuQLTable;
 
 class Query5 extends SuQLTable
 {

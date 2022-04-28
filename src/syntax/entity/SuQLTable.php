@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\suql\entity;
+namespace suql\syntax\entity;
 
 use ReflectionMethod;
 use suql\syntax\Model;
