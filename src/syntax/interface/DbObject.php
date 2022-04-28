@@ -11,7 +11,7 @@ interface DbObject
 {
     /**
      * Ссылка на объект PDO
-     * @return suql\db\pdo\Connection
+     * @return \suql\db\pdo\Connection
      */
     public function getDb();
 }

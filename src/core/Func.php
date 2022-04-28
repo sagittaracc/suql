@@ -21,7 +21,7 @@ class Func extends Query implements FunctionQueryInterface, Buildable
     private $params;
     /**
      * Constructor
-     * @param suql\core\Obj $osuql ссылка на основной объект структуры запроса
+     * @param \suql\core\Obj $osuql ссылка на основной объект структуры запроса
      * @param string $name название хранимой процедуры
      */
     function __construct($osuql, $name)

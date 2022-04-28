@@ -64,7 +64,7 @@ abstract class SuQL extends Obj
      */
     private $lastRequestedModel = null;
     /**
-     * @var suql\core\Join последний выполненный join
+     * @var \suql\core\Join последний выполненный join
      */
     private $lastJoin = null;
     /**
@@ -336,6 +336,8 @@ abstract class SuQL extends Obj
     {
         $firstTable = $table;
         foreach ($relations as $secondClassModel => $on) {
+            if (!is_string($secondClassModel)) continue;
+
             foreach ($on as $secondField => $firstField) break;
 
             $secondModel = new $secondClassModel();

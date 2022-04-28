@@ -93,7 +93,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
      * @param boolean $visible некоторые поля нужны просто чтобы применить к ним модификатор
      * например поля сортировки или группировки или фильтрации но их не нужно выводить в результат
      * @param boolean $raw флажок - сырое поле или нет
-     * @return suql\core\FieldName
+     * @return \suql\core\FieldName
      */
     public function addField($table, $name, $visible = true, $raw = false)
     {
@@ -126,7 +126,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
      * Проверяет есть ли поле в текущей выборке
      * @param string $table имя таблицы
      * @param string|array имя поля в трех возможных форматах описанных ранее
-     * @return suql\core\Field|false возвращает объект поля если найдено
+     * @return \suql\core\Field|false возвращает объект поля если найдено
      */
     public function hasField($table, $name)
     {
@@ -148,7 +148,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
      * Возвращает поле по имени таблицы и имени поля
      * @param string $table имя таблицы
      * @param string|array $name имя поля в трех возможных форматах описанных ранее
-     * @return suql\core\Field|null возвращает null если не найдено
+     * @return \suql\core\Field|null возвращает null если не найдено
      */
     public function getField($table, $name)
     {
@@ -238,7 +238,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
     }
     /**
      * Добавляет условие where из expression
-     * @param suql\core\Expression $expression
+     * @param \suql\core\Expression $expression
      * @param array $stack
      */
     private function addExpressionWhere($expression, &$stack)
@@ -251,7 +251,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
     }
     /**
      * Добавляем простой condition
-     * @param suql\core\Condition $expression
+     * @param \suql\core\Condition $expression
      * @param array $stack
      */
     private function addConditionWhere($expression, &$stack)
@@ -272,7 +272,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
     }
     /**
      * Добавляет условие where 2.0
-     * @param suql\core\FieldName $fieldName
+     * @param \suql\core\FieldName $fieldName
      * @param mixed $condition
      */
     public function addWhere20($fieldName, $condition)
@@ -348,7 +348,7 @@ class Select extends Query implements SelectQueryInterface, Buildable
     }
     /**
      * Получает последний join
-     * @return suql\core\Join
+     * @return \suql\core\Join
      */
     public function getLastJoin()
     {

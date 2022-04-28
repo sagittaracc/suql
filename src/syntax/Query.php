@@ -14,7 +14,7 @@ class Query implements DbObject
 {
     /**
      * Db connection
-     * @var PDO
+     * @var \PDO
      */
     private $db;
     /**
@@ -95,7 +95,7 @@ class Query implements DbObject
     }
     /**
      * Реализация getDb
-     * @return PDO|null
+     * @return \PDO
      */
     public function getDb()
     {
@@ -103,7 +103,7 @@ class Query implements DbObject
     }
     /**
      * Задать подключение
-     * @param PDO $db
+     * @param \PDO $db
      */
     public function setDb($db)
     {

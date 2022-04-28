@@ -10,7 +10,7 @@ namespace suql\core;
 abstract class Param
 {
     /**
-     * @var suql\core\FieldName поле для которого применяются параметры
+     * @var \suql\core\FieldName поле для которого применяются параметры
      */
     protected $field;
     /**

@@ -14,7 +14,7 @@ class SQLFunctionModifier extends SQLBaseModifier
     /**
      * Основной обработчик функций
      * @param string $func название функции
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function func($func, $ofield, $params)
@@ -30,7 +30,7 @@ class SQLFunctionModifier extends SQLBaseModifier
     }
     /**
      * Group concat
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_implode($ofield, $params)

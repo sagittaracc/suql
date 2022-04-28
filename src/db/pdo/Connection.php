@@ -10,7 +10,7 @@ namespace suql\db\pdo;
 abstract class Connection
 {
     /**
-     * @var PDO $dbh интерфейс подключения к базе данных
+     * @var \PDO $dbh интерфейс подключения к базе данных
      */
     protected $dbh;
     /**
@@ -23,7 +23,7 @@ abstract class Connection
     protected $builder;
     /**
      * Конструктор
-     * @param PDO $dbh интерфейс подключения к базе данных
+     * @param \PDO $dbh интерфейс подключения к базе данных
      * @param array $config настройки подключения к базе данных
      */
     function __construct($dbh, $config)
@@ -33,7 +33,7 @@ abstract class Connection
     }
     /**
      * Получить интерфейс подключения к базе данных
-     * @return PDO
+     * @return \PDO
      */
     public function getPdo()
     {

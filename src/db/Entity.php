@@ -16,7 +16,7 @@ class Entity extends SuQLTable
      */
     private $name;
     /**
-     * @var PDO подключение к базе данных
+     * @var \PDO подключение к базе данных
      */
     private $connection;
     /**
@@ -91,7 +91,7 @@ class Entity extends SuQLTable
     }
     /**
      * Возвращает подключение к базе данных
-     * @return PDO
+     * @return \PDO
      */
     public function getDb()
     {

@@ -11,7 +11,7 @@ class SQLOrderModifier extends SQLBaseModifier
 {
     /**
      * Модификатор сортировки asc
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params не используется в данном модификаторе
      */
     public static function mod_asc($ofield, $params)
@@ -20,7 +20,7 @@ class SQLOrderModifier extends SQLBaseModifier
     }
     /**
      * Модификатор сортировки desc
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params не используется в данном модификаторе
      */
     public static function mod_desc($ofield, $params)
@@ -29,7 +29,7 @@ class SQLOrderModifier extends SQLBaseModifier
     }
     /**
      * Получение поля сортировки
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @return string имя поля - алиас если он задан или реальное имя поля в противном случае
      */
     private static function getFieldNameToOrderBy($ofield)

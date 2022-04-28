@@ -19,7 +19,7 @@ class SQLCaseModifier extends SQLBaseModifier
     /**
      * Основной обработчик перечня case условий
      * @param array $options перечень case условий
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params не используется в данном модификаторе
      */
     private static function case($options, $ofield, $params)
@@ -130,7 +130,7 @@ class SQLCaseModifier extends SQLBaseModifier
      *         <default>
      *     ]
      * ]
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function parse($options, $ofield, $params)

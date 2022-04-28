@@ -10,7 +10,7 @@ namespace suql\core;
 class Join
 {
     /**
-     * @var suql\core\Select
+     * @var \suql\core\Select|null
      */
     private $oselect = null;
     /**

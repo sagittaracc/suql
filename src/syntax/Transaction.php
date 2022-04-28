@@ -12,12 +12,12 @@ use PDO;
 class Transaction
 {
     /**
-     * @var suql\syntax\SuQL модель учавствующая в транзакции
+     * @var \suql\syntax\SuQL модель учавствующая в транзакции
      */
     private $model;
     /**
      * Constructor
-     * @param suql\syntax\SuQL|suql\syntax\Query $model
+     * @param \suql\syntax\SuQL|\suql\syntax\Query $model
      */
     function __construct($model)
     {

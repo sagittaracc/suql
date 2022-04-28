@@ -21,7 +21,7 @@ class TableEntityManager
     private $deleteList = [];
     /**
      * Сохранение или обновление сущности
-     * @param suql\syntax\SuQL $entity
+     * @param \suql\syntax\SuQL $entity
      */
     public function persist($entity)
     {
@@ -29,7 +29,7 @@ class TableEntityManager
     }
     /**
      * Удаление сущности
-     * @param suql\syntax\SuQL $entity
+     * @param \suql\syntax\SuQL $entity
      */
     public function delete($entity)
     {
@@ -54,7 +54,7 @@ class TableEntityManager
     }
     /**
      * Сохранение
-     * @param suql\syntax\SuQL $entity
+     * @param \suql\syntax\SuQL $entity
      */
     private function saveEntity($entity)
     {
@@ -91,7 +91,7 @@ class TableEntityManager
     }
     /**
      * Удаление
-     * @param suql\syntax\SuQL $entity
+     * @param \suql\syntax\SuQL $entity
      */
     private function deleteEntity($entity)
     {

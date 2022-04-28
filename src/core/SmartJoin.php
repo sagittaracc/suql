@@ -10,7 +10,7 @@ namespace suql\core;
 class SmartJoin
 {
     /**
-     * @var suql\core\Select
+     * @var \suql\core\Select
      */
     private $oselect = null;
     /**

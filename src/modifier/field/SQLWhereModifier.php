@@ -19,7 +19,7 @@ class SQLWhereModifier extends SQLBaseModifier
     /**
      * Основной обработчик параметризованного where запроса
      * @param string $compare условие сравнения
-     * @param suql\core\Param $suqlParam объект описания параметра запроса where
+     * @param \suql\core\Param $suqlParam объект описания параметра запроса where
      * @param boolean $isFilter фильтровое сравнение или нет. При фильтровом не применяется при пустом $suqlParam
      * Пустота $suqlParam определяется для каждого типа параметра отдельно
      */
@@ -55,7 +55,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор '>'
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -65,7 +65,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор '>='
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -75,7 +75,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор '<'
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -85,7 +85,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор '<='
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -95,7 +95,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор '='
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -105,7 +105,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор '<>'
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -115,7 +115,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор like
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -125,7 +125,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор between
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -135,7 +135,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор in
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $param параметры модификатора
      * @param boolean $isFilter фильтровое условие или нет
      */
@@ -145,7 +145,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор where
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_where($ofield, $params)
@@ -161,7 +161,7 @@ class SQLWhereModifier extends SQLBaseModifier
     }
     /**
      * Модификатор having
-     * @param suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params параметры модификатора
      */
     public static function mod_having($ofield, $params)

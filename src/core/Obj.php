@@ -22,11 +22,11 @@ class Obj
      */
     private $queries = [];
     /**
-     * @var suql\core\Scheme связи между таблицами и вьюхами
+     * @var \suql\core\Scheme связи между таблицами и вьюхами
      */
     protected $scheme;
     /**
-     * @var suql\builder\SQLBuilder экземпляр билдера
+     * @var \suql\builder\SQLBuilder экземпляр билдера
      */
     protected $builder;
     /**
@@ -69,7 +69,7 @@ class Obj
     }
     /**
      * Получить builder
-     * @return suql\builder\SQLBuilder
+     * @return \suql\builder\SQLBuilder
      */
     public function getBuilder()
     {
@@ -228,7 +228,7 @@ class Obj
     /**
      * Установить объект запроса по имени
      * @param string $name
-     * @param suql\core\Query $query
+     * @param \suql\core\Query $query
      */
     public function setQuery($name, $query)
     {

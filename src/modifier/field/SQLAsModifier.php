@@ -12,7 +12,7 @@ class SQLAsModifier extends SQLBaseModifier
     /**
      * As модификатор
      * Дополнительный вариант задания алиаса для поля
-     * @param suql\core\Field объект поля по которому выполняется группировка
+     * @param \suql\core\Field объект поля по которому выполняется группировка
      * @param array $param не используется в данном модификаторе
      */
     public static function mod_as($ofield, $params)
