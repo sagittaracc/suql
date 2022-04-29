@@ -18,8 +18,9 @@ class Raw
     private $expression;
     /**
      * Constructor
+     * @param string $expression
      */
-    function __construct($expression)
+    function __construct(string $expression)
     {
         $this->expression = $expression;
     }
@@ -28,15 +29,15 @@ class Raw
      * @param string $expression
      * @return self
      */
-    public static function expression($expression)
+    public static function expression(string $expression)
     {
-        return new static($expression);
+        return new self($expression);
     }
     /**
      * Получает сырое sql выражение
      * @return string
      */
-    public function getExpression()
+    public function getExpression(): string
     {
         return $this->expression;
     }

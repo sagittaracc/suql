@@ -16,9 +16,9 @@ trait Model
      */
     private $columnList = [];
     /**
-     * @var string|null $currentColumn текущее поле при построении модели в билдере
+     * @var string $currentColumn текущее поле при построении модели в билдере
      */
-    private $currentColumn = null;
+    private $currentColumn = '';
     /**
      * Объявление нового поля модели
      * @param string $column имя поля
@@ -42,7 +42,7 @@ trait Model
      * Получает текущее конфигурируемое поле
      * @return string
      */
-    public function getCurrentColumn()
+    public function getCurrentColumn(): string
     {
         return $this->currentColumn;
     }
