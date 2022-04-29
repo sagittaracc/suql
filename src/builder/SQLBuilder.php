@@ -503,4 +503,21 @@ abstract class SQLBuilder
      * @return boolean
      */
     abstract public function tableExistsQuery($config, $table);
+    /**
+     * Генерация запроса создания временной таблицы
+     * @param \suql\syntax\SuQL $model
+     */
+    abstract public function createTemporaryTable($model);
+    /**
+     * Загрузить массив в таблицу
+     * @param string $table
+     * @param array $data
+     */
+    abstract public function insertIntoTable($table, $data);
+    /**
+     * Генерация запроса создания представления
+     * @param \suql\syntax\SuQL $model
+     * @return string
+     */
+    abstract public function createView($model);
 }

@@ -372,10 +372,10 @@ abstract class SuQL extends Obj
                 }
     
                 if ($algorithm === 'simple') {
-                    $this->lastJoin = $this->getQuery($this->query())->addJoin($type, $table);
+                    $this->lastJoin = $this->getSelect($this->query())->addJoin($type, $table);
                 }
                 else if ($algorithm === 'smart') {
-                    $this->getQuery($this->query())->addSmartJoin($this->currentTable, $table, $type);
+                    $this->getSelect($this->query())->addSmartJoin($this->currentTable, $table, $type);
                 }
     
                 $this->currentTable = $table;
@@ -384,8 +384,8 @@ abstract class SuQL extends Obj
         else if (is_array($option)) {
             foreach ($option as $table => $alias) break;
 
-            $this->lastJoin = $this->getQuery($this->query())->addJoin($type, "$table@$alias");
-            $this->getQuery($this->query())->getLastJoin()->setOn($on);
+            $this->lastJoin = $this->getSelect($this->query())->addJoin($type, "$table@$alias");
+            $this->getSelect($this->query())->getLastJoin()->setOn($on);
 
             $this->currentTable = $alias;
         }
@@ -393,10 +393,10 @@ abstract class SuQL extends Obj
             $subquery = $option;
 
             if ($algorithm === 'simple') {
-                $this->lastJoin = $this->getQuery($this->query())->addJoin($type, $subquery->query());
+                $this->lastJoin = $this->getSelect($this->query())->addJoin($type, $subquery->query());
             }
             else if ($algorithm === 'smart') {
-                $this->getQuery($this->query())->addSmartJoin($this->currentTable, $subquery->query(), $type);
+                $this->getSelect($this->query())->addSmartJoin($this->currentTable, $subquery->query(), $type);
             }
 
             $this->extend($subquery->getQueries());
@@ -505,7 +505,7 @@ abstract class SuQL extends Obj
             $where = str_replace('?', "@$query", $where);
         }
 
-        $this->getQuery($this->query())->addWhere($where);
+        $this->getSelect($this->query())->addWhere($where);
 
         return $this;
     }
@@ -521,7 +521,7 @@ abstract class SuQL extends Obj
             $where = str_replace('?', "@$query", $where);
         }
 
-        $this->getQuery($this->query())->addWhere20($field, $where);
+        $this->getSelect($this->query())->addWhere20($field, $where);
 
         return $this;
     }

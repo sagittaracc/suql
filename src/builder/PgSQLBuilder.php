@@ -53,4 +53,22 @@ final class PgSQLBuilder extends SQLBuilder
     {
         return null;
     }
+    /**
+     * @inheritdoc
+     */
+    public function createTemporaryTable($model)
+    {
+    }
+    /**
+     * @inheritdoc
+     */
+    public function insertIntoTable($table, $data)
+    {
+    }
+    /**
+     * @inheritdoc
+     */
+    public function createView($model)
+    {
+    }
 }

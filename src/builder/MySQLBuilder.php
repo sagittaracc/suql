@@ -32,26 +32,21 @@ final class MySQLBuilder extends SQLBuilder
         return $this->buildModel($model, $temporary);
     }
     /**
-     * Генерация запроса создания представления
-     * @param \suql\syntax\SuQL $model
-     * @return string
+     * @inheritdoc
      */
     public function createView($model)
     {
         return "CREATE OR REPLACE VIEW `{$model->table()}` AS {$model->view()}";
     }
     /**
-     * Генерация запроса создания временной таблицы
-     * @param \suql\syntax\SuQL $model
+     * @inheritdoc
      */
     public function createTemporaryTable($model)
     {
         return $this->createTable($model, true);
     }
     /**
-     * Загрузить массив в таблицу
-     * @param string $table
-     * @param array $data
+     * @inheritdoc
      */
     public function insertIntoTable($table, $data)
     {
