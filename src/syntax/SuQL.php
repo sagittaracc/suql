@@ -214,17 +214,17 @@ abstract class SuQL extends Obj
             $option = $instance->table();
             if (is_string($option)) {
                 $table = $option;
-                $instance->getQuery($instance->query())->addFrom($table);
+                $instance->getSelect($instance->query())->addFrom($table);
                 $instance->currentTable = $table;
             }
             else if (is_array($option)) {
                 foreach ($option as $table => $alias) break;
-                $instance->getQuery($instance->query())->addFrom("$table@$alias");
+                $instance->getSelect($instance->query())->addFrom("$table@$alias");
                 $instance->currentTable = $alias;
             }
             else if ($option instanceof SuQL) {
                 $subquery = $option;
-                $instance->getQuery($instance->query())->addFrom($subquery->query());
+                $instance->getSelect($instance->query())->addFrom($subquery->query());
                 $instance->extend($subquery->getQueries());
                 $instance->currentTable = $subquery->query();
             }
@@ -248,7 +248,7 @@ abstract class SuQL extends Obj
      */
     public function distinct($options = [])
     {
-        $this->getQuery($this->query())->addModifier('distinct');
+        $this->getSelect($this->query())->addModifier('distinct');
 
         if (!empty($options)) {
             $this->select($options);
@@ -269,36 +269,36 @@ abstract class SuQL extends Obj
         foreach ($options as $field => $option) {
             if ($option instanceof Raw) {
                 $expression = $option;
-                $this->getQuery($this->query())->addRaw(
+                $this->getSelect($this->query())->addRaw(
                     str_replace('@', "{$this->currentTable}.", $expression->getExpression())
                 );
             }
             else if ($option instanceof Field) {
                 $field = $option;
-                $this->getQuery($this->query())->addField($this->currentTable, $field->getField());
+                $this->getSelect($this->query())->addField($this->currentTable, $field->getField());
                 foreach ($field->getModifiers() as $modifier => $options) {
                     if (is_string($modifier)) {
                         $params = $options;
-                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
+                        $this->getSelect($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier, $params);
                     }
                     else if (is_string($options)) {
                         $modifier = $options;
-                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
+                        $this->getSelect($this->query())->getField($this->currentTable, $field->getField())->addModifier($modifier);
                     }
                     else if ($options instanceof Closure) {
                         $callbackModifier = $options;
-                        $this->getQuery($this->query())->getField($this->currentTable, $field->getField())->addCallbackModifier($callbackModifier);
+                        $this->getSelect($this->query())->getField($this->currentTable, $field->getField())->addCallbackModifier($callbackModifier);
                     }
                 }
             }
             else {
                 if (is_integer($field)) {
                     $field = $option;
-                    $this->getQuery($this->query())->addField($this->currentTable, $field);
+                    $this->getSelect($this->query())->addField($this->currentTable, $field);
                 }
                 else {
                     $alias = $option;
-                    $this->getQuery($this->query())->addField($this->currentTable, [$field => $alias]);
+                    $this->getSelect($this->query())->addField($this->currentTable, [$field => $alias]);
                 }
             }
         }
@@ -312,7 +312,7 @@ abstract class SuQL extends Obj
      */
     public function offset($offset)
     {
-        $this->getQuery($this->query())->addOffset($offset);
+        $this->getSelect($this->query())->addOffset($offset);
 
         return $this;
     }
@@ -323,7 +323,7 @@ abstract class SuQL extends Obj
      */
     public function limit($limit)
     {
-        $this->getQuery($this->query())->addLimit($limit);
+        $this->getSelect($this->query())->addLimit($limit);
 
         return $this;
     }
@@ -589,8 +589,8 @@ abstract class SuQL extends Obj
                 $direction = $options;
             }
 
-            $this->getQuery($this->query())->addField($this->currentTable, $field, false);
-            $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier($direction);
+            $this->getSelect($this->query())->addField($this->currentTable, $field, false);
+            $this->getSelect($this->query())->getField($this->currentTable, $field)->addModifier($direction);
         }
 
         return $this;
@@ -606,8 +606,8 @@ abstract class SuQL extends Obj
         }
 
         foreach ($fields as $field) {
-            $this->getQuery($this->query())->addField($this->currentTable, $field, false);
-            $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('group');
+            $this->getSelect($this->query())->addField($this->currentTable, $field, false);
+            $this->getSelect($this->query())->getField($this->currentTable, $field)->addModifier('group');
         }
 
         return $this;
@@ -618,8 +618,8 @@ abstract class SuQL extends Obj
      */
     public function count($field = '*')
     {
-        $this->getQuery($this->query())->addField($this->currentTable, $field);
-        $this->getQuery($this->query())->getField($this->currentTable, $field)->addModifier('count');
+        $this->getSelect($this->query())->addField($this->currentTable, $field);
+        $this->getSelect($this->query())->getField($this->currentTable, $field)->addModifier('count');
 
         if ($field === '*') {
             return $this->fetchScalar();

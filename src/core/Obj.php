@@ -230,6 +230,22 @@ class Obj
         return $this->queries[$name];
     }
     /**
+     * Получить перечень полей в select
+     * @param string $name
+     * @return \suql\core\Select
+     */
+    public function getSelect($name)
+    {
+        $query = $this->getQuery($name);
+
+        if ($query instanceof Select) {
+            return $query;
+        }
+        else {
+            // TODO: дописать обработку
+        }
+    }
+    /**
      * Установить объект запроса по имени
      * @param string $name
      * @param \suql\core\Query $query
