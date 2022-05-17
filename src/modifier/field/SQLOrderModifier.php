@@ -10,6 +10,15 @@ namespace suql\modifier\field;
 class SQLOrderModifier extends SQLBaseModifier
 {
     /**
+     * Общий модификатор сортировки
+     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
+     * @param array $params направление сортировки
+     */
+    public static function mod_order($ofield, $params)
+    {
+        $ofield->getOSelect()->addOrder(self::getFieldNameToOrderBy($ofield), $params);
+    }
+    /**
      * Модификатор сортировки asc
      * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
      * @param array $params не используется в данном модификаторе

@@ -2,6 +2,8 @@
 
 namespace suql\syntax;
 
+use suql\syntax\field\Field;
+
 class JsonSuQL
 {
     public static function parse($file)
@@ -13,7 +15,14 @@ class JsonSuQL
             $instance = $root::all();
 
             foreach ($data as $key => $value) {
-                $instance->select([$key => $value]);
+                if (is_array($value)) {
+                    $instance->select([
+                        new Field($key, $value)
+                    ]);
+                }
+                else {
+                    $instance->select([$key => $value]);
+                }
             }
         }
 

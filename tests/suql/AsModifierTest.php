@@ -15,10 +15,10 @@ final class AsModifierTest extends TestCase
         $actual = Query1::all()
             ->select([
                 new Field('f1', [
-                    'as' => ['af1'],
+                    'as' => 'af1',
                 ]),
                 new Field('f2', [
-                    'as' => ['af2'],
+                    'as' => 'af2',
                 ]),
             ])
             ->getRawSql();

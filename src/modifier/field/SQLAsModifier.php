@@ -17,6 +17,6 @@ class SQLAsModifier extends SQLBaseModifier
      */
     public static function mod_as($ofield, $params)
     {
-        $ofield->setAlias($params[0]);
+        $ofield->setAlias($params);
     }
 }

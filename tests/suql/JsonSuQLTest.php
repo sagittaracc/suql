@@ -10,7 +10,7 @@ final class JsonSuQLTest extends TestCase
 {
     public function testJsonSuQLParse(): void
     {
-        $expected = StringHelper::trimSql(require('queries/mysql/q4.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q34.php'));
         $actual = JsonSuQL::parse('tests/suql/json/Query1.json')->getRawSql();
         $this->assertEquals($expected, $actual);
     }
