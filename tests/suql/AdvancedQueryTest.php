@@ -63,6 +63,13 @@ final class AdvancedQueryTest extends TestCase
         $actual1 = Query1::all()->join(YamlSuQL::parse('tests/suql/yaml/Query5.yaml'))->getRawSql();
         $this->assertEquals($expected, $actual1);
     }
+
+    public function testJoinYamlWithYaml(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q37.php'));
+        $actual1 = YamlSuQL::parse('tests/suql/yaml/Query6.yaml')->join(YamlSuQL::parse('tests/suql/yaml/Query5.yaml'))->getRawSql();
+        $this->assertEquals($expected, $actual1);
+    }
     /**
      * Example:
      * 
