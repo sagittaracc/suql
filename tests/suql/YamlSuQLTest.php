@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\syntax\JsonSuQL;
+use suql\syntax\YamlSuQL;
 
-final class JsonSuQLTest extends TestCase
+final class YamlSuQLTest extends TestCase
 {
     public function testJsonSuQLParse(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q34.php'));
-        $actual = JsonSuQL::parse('tests/suql/json/Query1.json')->getRawSql();
+        $actual = YamlSuQL::parse('tests/suql/yaml/Query1.yml')->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }

@@ -3,13 +3,13 @@
 namespace suql\syntax;
 
 use suql\syntax\field\Field;
+use Symfony\Component\Yaml\Yaml;
 
-class JsonSuQL
+class YamlSuQL
 {
     public static function parse($file)
     {
-        $content = file_get_contents($file);
-        $json = json_decode($content, true);
+        $json = Yaml::parseFile($file);
 
         foreach ($json as $root => $data) {
             $instance = $root::all();
