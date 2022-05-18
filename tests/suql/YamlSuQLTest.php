@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\syntax\Yaml;
+use test\suql\models\Query1;
 
 final class YamlSuQLTest extends TestCase
 {
@@ -27,5 +28,19 @@ final class YamlSuQLTest extends TestCase
         $expected = StringHelper::trimSql(require('queries/mysql/q36.php'));
         $actual = Yaml::query('tests/suql/yaml/Query3.yaml')->getRawSql();
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testJoinWithYaml(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q23.php'));
+        $actual1 = Query1::all()->join(Yaml::query('tests/suql/yaml/Query5.yaml'))->getRawSql();
+        $this->assertEquals($expected, $actual1);
+    }
+
+    public function testJoinYamlWithYaml(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q37.php'));
+        $actual1 = Yaml::query('tests/suql/yaml/Query6.yaml')->join(Yaml::query('tests/suql/yaml/Query5.yaml'))->getRawSql();
+        $this->assertEquals($expected, $actual1);
     }
 }

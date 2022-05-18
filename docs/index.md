@@ -73,6 +73,8 @@
 
 [Last requested model](https://github.com/sagittaracc/suql/blob/master/tests/suql/LastRequestedModelTest.php)
 
+[Yaml query](https://github.com/sagittaracc/suql/blob/master/tests/suql/YamlSuQLTest.php)
+
 ### Sqlite
 
 [Sqlite](https://github.com/sagittaracc/suql/blob/master/tests/suql/SqliteTest.php)
