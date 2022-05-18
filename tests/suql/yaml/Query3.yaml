@@ -3,6 +3,6 @@ test\suql\models\Query1:
     test\suql\models\Query2:
         test\suql\models\Query3:
             f2: af2
-            f3:
+            f3@af3:
                 - group
                 - count
