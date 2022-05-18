@@ -1,5 +1,11 @@
 # Change log
 
+## v7.2.7 - May 18, 2022
+
+- Refactor
+
+---
+
 ## v7.2.5 - May 18, 2022
 
 - Добавил YamlSuQL синтакс

@@ -3,28 +3,28 @@
 namespace suql\syntax;
 
 use suql\syntax\field\Field;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Yaml as YamlYaml;
 
 /**
  * Yaml синтакс
  * 
  * @author Yuriy Arutyunyan <sagittaracc@gmail.com>
  */
-class YamlSuQL
+class Yaml
 {
     /**
      * Разбор yaml запроса
      * @param string $file имя файла с запросом
      * @return \suql\syntax\SuQL
      */
-    public static function parse($file)
+    public static function query($file)
     {
-        $json = Yaml::parseFile($file);
+        $json = YamlYaml::parseFile($file);
 
         foreach ($json as $root => $data) {
             $instance = $root::all();
 
-            self::parseData($instance, $data);
+            self::parse($instance, $data);
         }
 
         return $instance;
@@ -34,7 +34,7 @@ class YamlSuQL
      * @param \suql\syntax\SuQL $instance текущий запрос
      * @param array $data данные по ключу
      */
-    private static function parseData($instance, $data)
+    private static function parse($instance, $data)
     {
         foreach ($data as $key => $value) {
             if (class_exists($key)) {
@@ -43,7 +43,7 @@ class YamlSuQL
                 $instance->join($table);
                 $instance->setCurrentTable($table);
 
-                self::parseData($instance, $value);
+                self::parse($instance, $value);
             }
             else if (is_array($value)) {
                 $instance->select([
