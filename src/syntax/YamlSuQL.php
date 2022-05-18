@@ -5,8 +5,18 @@ namespace suql\syntax;
 use suql\syntax\field\Field;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Yaml синтакс
+ * 
+ * @author Yuriy Arutyunyan <sagittaracc@gmail.com>
+ */
 class YamlSuQL
 {
+    /**
+     * Разбор yaml запроса
+     * @param string $file имя файла с запросом
+     * @return \suql\syntax\SuQL
+     */
     public static function parse($file)
     {
         $json = Yaml::parseFile($file);
@@ -19,7 +29,11 @@ class YamlSuQL
 
         return $instance;
     }
-
+    /**
+     * Разбор значения данных в yaml запросе
+     * @param \suql\syntax\SuQL $instance текущий запрос
+     * @param array $data данные по ключу
+     */
     private static function parseData($instance, $data)
     {
         foreach ($data as $key => $value) {
