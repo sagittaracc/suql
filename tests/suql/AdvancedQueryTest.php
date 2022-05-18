@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use suql\syntax\YamlSuQL;
 use test\suql\models\Query1;
 use test\suql\models\Query13;
 use test\suql\models\Query14;
@@ -53,6 +54,13 @@ final class AdvancedQueryTest extends TestCase
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q23.php'));
         $actual1 = Query1::all()->join(Query13::all())->getRawSql();
+        $this->assertEquals($expected, $actual1);
+    }
+
+    public function testJoinWithYaml(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q23.php'));
+        $actual1 = Query1::all()->join(YamlSuQL::parse('tests/suql/yaml/Query5.yaml'))->getRawSql();
         $this->assertEquals($expected, $actual1);
     }
     /**
