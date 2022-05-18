@@ -8,10 +8,17 @@ use suql\syntax\YamlSuQL;
 
 final class YamlSuQLTest extends TestCase
 {
-    public function testJsonSuQLParse(): void
+    public function testYamlSuQLParse(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q34.php'));
         $actual = YamlSuQL::parse('tests/suql/yaml/Query1.yml')->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testYamlSuQLAfterParsing(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q35.php'));
+        $actual = YamlSuQL::parse('tests/suql/yaml/Query2.yml')->order(['f2' => 'asc'])->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }
