@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use test\suql\models\Query22;
 use test\suql\models\Query6;
 
 final class NestedQueryTest extends TestCase
@@ -26,6 +27,13 @@ final class NestedQueryTest extends TestCase
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q14.php'));
         $actual = Query6::all()->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testNestedQueryOverYaml(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/mysql/q14.php'));
+        $actual = Query22::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }
