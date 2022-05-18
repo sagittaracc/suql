@@ -24,7 +24,10 @@ class YamlSuQL
     {
         foreach ($data as $key => $value) {
             if (class_exists($key)) {
-                $instance->join($key);
+                $tmp = $key::getTempInstance();
+                $table = $tmp->table();
+                $instance->join($table);
+                $instance->setCurrentTable($table);
 
                 self::parseData($instance, $value);
             }

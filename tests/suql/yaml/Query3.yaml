@@ -1,0 +1,8 @@
+test\suql\models\Query1:
+    f1: af1
+    test\suql\models\Query2:
+        test\suql\models\Query3:
+            f2: af2
+            f3:
+                - group
+                - count
