@@ -14,18 +14,28 @@ class YamlSuQL
         foreach ($json as $root => $data) {
             $instance = $root::all();
 
-            foreach ($data as $key => $value) {
-                if (is_array($value)) {
-                    $instance->select([
-                        new Field($key, $value)
-                    ]);
-                }
-                else {
-                    $instance->select([$key => $value]);
-                }
-            }
+            self::parseData($instance, $data);
         }
 
         return $instance;
+    }
+
+    private static function parseData($instance, $data)
+    {
+        foreach ($data as $key => $value) {
+            if (class_exists($key)) {
+                $instance->join($key);
+
+                self::parseData($instance, $value);
+            }
+            else if (is_array($value)) {
+                $instance->select([
+                    new Field($key, $value)
+                ]);
+            }
+            else {
+                $instance->select([$key => $value]);
+            }
+        }
     }
 }
