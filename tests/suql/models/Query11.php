@@ -5,6 +5,7 @@ namespace test\suql\models;
 use suql\db\Container;
 use suql\syntax\entity\SuQLTable;
 
+# [Table(name="table_10")]
 class Query11 extends SuQLTable
 {
     protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
@@ -12,11 +13,6 @@ class Query11 extends SuQLTable
 
     public $f1;
     public $f2;
-
-    public function table()
-    {
-        return 'table_10';
-    }
 
     public function create()
     {

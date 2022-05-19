@@ -4,6 +4,7 @@ namespace test\suql\models;
 
 use suql\syntax\entity\SuQLTable;
 
+# [Table(name="users")]
 class Users extends SuQLTable
 {
     protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
@@ -11,9 +12,4 @@ class Users extends SuQLTable
 
     # hasMany(test\suql\models\Products[products.id])
     protected $product_id;
-
-    public function table()
-    {
-        return 'users';
-    }
 }

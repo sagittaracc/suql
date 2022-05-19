@@ -5,6 +5,7 @@ namespace test\suql\models;
 use suql\syntax\entity\SuQLTable;
 use suql\syntax\field\Field;
 
+# [Table(name="table_13")]
 class Query13 extends SuQLTable
 {
     protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
@@ -13,11 +14,6 @@ class Query13 extends SuQLTable
     public function query()
     {
         return 'query_13';
-    }
-
-    public function table()
-    {
-        return 'table_13';
     }
 
     public function view()
