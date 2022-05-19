@@ -8,6 +8,7 @@ use suql\annotation\RelationAnnotation;
 use suql\annotation\RouteAnnotation;
 use suql\annotation\TableAnnotation;
 use test\suql\models\Groups;
+use test\suql\models\GroupsNullTable;
 use test\suql\models\Query20;
 use test\suql\models\Users;
 
@@ -17,6 +18,9 @@ final class AnnotationTest extends TestCase
     {
         $annotation = TableAnnotation::from(Groups::class)->read();
         $this->assertEquals('groups', $annotation->table);
+
+        $annotation = TableAnnotation::from(GroupsNullTable::class)->read();
+        $this->assertNull($annotation->table);
     }
 
     public function testRelationAnnotation(): void
