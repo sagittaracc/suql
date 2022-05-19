@@ -10,11 +10,6 @@ namespace suql\syntax;
 interface TableInterface
 {
     /**
-     * Запрос должен ссылаться на таблицу
-     * @return string
-     */
-    public function table();
-    /**
      * Создание модели
      * @return array
      */

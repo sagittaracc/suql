@@ -6,11 +6,19 @@ use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\annotation\RelationAnnotation;
 use suql\annotation\RouteAnnotation;
+use suql\annotation\TableAnnotation;
+use test\suql\models\Groups;
 use test\suql\models\Query20;
 use test\suql\models\Users;
 
 final class AnnotationTest extends TestCase
 {
+    public function testTableAnnotation(): void
+    {
+        $annotation = TableAnnotation::from(Groups::class)->read();
+        $this->assertEquals('groups', $annotation->table);
+    }
+
     public function testRelationAnnotation(): void
     {
         $annotation = RelationAnnotation::from(Users::class)->for('products')->read();
