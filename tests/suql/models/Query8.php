@@ -9,11 +9,6 @@ class Query8 extends SuQLTable
     protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
     protected static $builderClass = 'suql\\builder\\MySQLBuilder';
 
-    public function table()
-    {
-        return null;
-    }
-
     public function view()
     {
         return

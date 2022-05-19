@@ -3,6 +3,7 @@
 namespace suql\syntax\entity;
 
 use ReflectionMethod;
+use suql\annotation\TableAnnotation;
 use suql\syntax\Model;
 use suql\syntax\SuQL;
 use suql\syntax\TableInterface;
@@ -15,6 +16,14 @@ abstract class SuQLTable extends SuQL implements TableInterface
      * @var string используемый билдер
      */
     protected static $builderClass = null;
+    /**
+     * @inheritdoc
+     */
+    public function table()
+    {
+        $annotation = TableAnnotation::from(get_class($this))->read();
+        return $annotation->alias ? [$annotation->table => $annotation->alias] : $annotation->table;
+    }
     /**
      * @inheritdoc
      */
