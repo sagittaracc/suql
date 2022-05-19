@@ -12,7 +12,7 @@ class TableAnnotation
     /**
      * @const string регулярное выражение для парсинга аннотации
      */
-    const REGEX = '/#\s*\[Table\(name="(?<table>\w+)"\)\]/msi';
+    const REGEX = '/#\s*\[Table\(name="(?<table>\w+)"(\s*,\s*alias="(?<alias>\w+)")?\)\]/msi';
     /**
      * @var string из какой модели читать аннотацию
      */
@@ -21,6 +21,10 @@ class TableAnnotation
      * @var string имя таблицы
      */
     public $table;
+    /**
+     * @var string алиас таблицы
+     */
+    public $alias;
     /**
      * Задает из какой модели читать аннотацию
      * @param string $modelName имя класса модели
@@ -45,6 +49,10 @@ class TableAnnotation
 
         if (!empty($matches)) {
             $this->table = $matches['table'];
+
+            if (isset($matches['alias']) && !empty($matches['alias'])) {
+                $this->alias = $matches['alias'];
+            }
         }
 
         return $this;
