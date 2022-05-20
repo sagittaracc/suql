@@ -5,12 +5,10 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\annotation\RelationAnnotation;
-use suql\annotation\RouteAnnotation;
 use suql\annotation\TableAnnotation;
 use test\suql\models\Groups;
 use test\suql\models\GroupsAliasTable;
 use test\suql\models\GroupsNullTable;
-use test\suql\models\Query20;
 use test\suql\models\Users;
 
 final class AnnotationTest extends TestCase
