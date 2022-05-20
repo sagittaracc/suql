@@ -39,8 +39,6 @@
 
 [Db Manager](https://github.com/sagittaracc/suql/blob/master/tests/suql/TableEntityManagerTest.php)
 
-[Controller Manager](https://github.com/sagittaracc/suql/blob/master/tests/suql/ControllerEntityManagerTest.php)
-
 ### Execute Raw Queries
 
 [Raw Queries](https://github.com/sagittaracc/suql/blob/master/tests/suql/RawQueryTest.php)
