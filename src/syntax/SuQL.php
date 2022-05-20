@@ -398,6 +398,14 @@ abstract class SuQL extends Obj
         return $this;
     }
     /**
+     * INNER JOIN
+     * @return self
+     */
+    public function bound($option, $algorithm = 'simple')
+    {
+        return $this->join($option, 'inner', $algorithm);
+    }
+    /**
      * LEFT JOIN
      * @return self
      */
