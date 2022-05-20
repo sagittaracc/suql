@@ -1,0 +1,7 @@
+test\suql\models\resource\Consumption:
+    counterId@counter:
+        - group
+    tarifId@tarif:
+        - group
+    time@time:
+        - max
