@@ -40,12 +40,6 @@ final class AnnotationTest extends TestCase
         $this->assertEquals('product_id', $annotation->first_field);
     }
 
-    public function testRouteAnnotation(): void
-    {
-        $annotation = RouteAnnotation::from(Query20::class)->for('GET', 'some/route')->read();
-        $this->assertEquals('routeHandler', $annotation->function);
-    }
-
     public function testJoinByRelationAnnotation(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q30.php'));
