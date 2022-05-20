@@ -9,7 +9,11 @@ final class ArrayTest extends TestCase
 {
     public function testArray(): void
     {
-        // $data = Query24::all()->fetchAll();
-        $this->assertTrue(true);
+        $expected = [
+            ['id' => 1, 'user' => 'user1', 'pass' => 'pass1'],
+            ['id' => 2, 'user' => 'user2', 'pass' => 'pass2'],
+        ];
+        $actual = Query24::all();
+        $this->assertEquals($expected, $actual);
     }
 }

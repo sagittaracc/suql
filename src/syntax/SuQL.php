@@ -62,7 +62,7 @@ abstract class SuQL extends Obj
     /**
      * @var string последняя запрошенная модель
      */
-    private $lastRequestedModel = null;
+    protected $lastRequestedModel = null;
     /**
      * @var \suql\core\Join последний выполненный join
      */
@@ -199,48 +199,7 @@ abstract class SuQL extends Obj
      */
     public static function all()
     {
-        $instance = new static();
-
-        $instance->lastRequestedModel = static::class;
-        $instance->currentAnnotatedModel = static::class;
-        $instance->currentTable = null;
-
-        $instance->setScheme(static::$schemeClass);
-        $instance->addSelect($instance->query());
-
-        if ($instance instanceof TableInterface) {
-            $instance->init();
-
-            $option = $instance->table();
-            if (is_string($option)) {
-                $table = $option;
-                $instance->getSelect($instance->query())->addFrom($table);
-                $instance->currentTable = $table;
-            }
-            else if (is_array($option)) {
-                foreach ($option as $table => $alias) break;
-                $instance->getSelect($instance->query())->addFrom("$table@$alias");
-                $instance->currentTable = $alias;
-            }
-            else if ($option instanceof SuQL) {
-                $subquery = $option;
-                $instance->getSelect($instance->query())->addFrom($subquery->query());
-                $instance->extend($subquery->getQueries());
-                $instance->currentTable = $subquery->query();
-            }
-
-            $view = $instance->view();
-            if (is_string($view)) {
-                $viewQuery = $instance->getBuilder()->createView($instance);
-                $instance->getDb()->getPdo()->exec($viewQuery);
-            }
-
-            $instance->select($instance->fields());
-
-            $instance->setRelations($instance->table(), $instance->relations());
-        }
-
-        return $instance;
+        return new static();
     }
     /**
      * Distinct
@@ -332,7 +291,7 @@ abstract class SuQL extends Obj
      * @param string $table
      * @param array $relations
      */
-    private function setRelations($table, $relations)
+    protected function setRelations($table, $relations)
     {
         $firstTable = $table;
         foreach ($relations as $secondClassModel => $on) {

@@ -7,4 +7,12 @@ use suql\syntax\SuQL;
 
 abstract class SuQLArray extends SuQL implements ArrayInterface
 {
+    /**
+     * @inheritdoc
+     */
+    public static function all()
+    {
+        $instance = parent::all();
+        return $instance->data();
+    }
 }
