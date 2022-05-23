@@ -32,7 +32,7 @@ final class NestedQueryTest extends TestCase
 
     public function testNestedQueryOverYaml(): void
     {
-        $expected = StringHelper::trimSql(require('queries/mysql/q14.php'));
+        $expected = StringHelper::trimSql(require('queries/mysql/q38.php'));
         $actual = Query22::all()->getRawSql();
         $this->assertEquals($expected, $actual);
     }

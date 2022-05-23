@@ -27,6 +27,8 @@ class Yaml
             self::parse($instance, $data);
         }
 
+        $instance->as(basename($file, ".yaml"));
+
         return $instance;
     }
     /**
