@@ -50,15 +50,15 @@ abstract class SuQL extends Obj
     /**
      * @var string|array группировка или индексация данных
      */
-    private $index = null;
+    protected $index = null;
     /**
      * @var array перечень функций пост обработки данных
      */
-    private $postFunctions = [];
+    protected $postFunctions = [];
     /**
      * @var array прогружаемый в модель массив
      */
-    private $data = [];
+    protected $data = [];
     /**
      * @var string последняя запрошенная модель
      */
@@ -66,7 +66,7 @@ abstract class SuQL extends Obj
     /**
      * @var \suql\core\Join последний выполненный join
      */
-    private $lastJoin = null;
+    protected $lastJoin = null;
     /**
      * @var int идентификатор последней добавленной записи
      */
@@ -74,7 +74,7 @@ abstract class SuQL extends Obj
     /**
      * @var boolean сериализовать результат?
      */
-    private $serializeResult = true;
+    protected $serializeResult = true;
     /**
      * Запрос должен иметь имя запроса
      * @return string
@@ -201,6 +201,11 @@ abstract class SuQL extends Obj
     {
         return new static();
     }
+    /**
+     * Метод получения данных
+     * @return mixed
+     */
+    abstract public function fetch($method);
     /**
      * Distinct
      * @return self
@@ -668,106 +673,6 @@ abstract class SuQL extends Obj
         return !empty($result)
             ? $pkQuery->getColumn('primary', $result)
             : '';
-    }
-    /**
-     * Метод получения данных
-     * @return mixed
-     */
-    private function fetch($method)
-    {
-        $pdoTypes = [
-            'integer' => PDO::PARAM_INT,
-            'boolean' => PDO::PARAM_BOOL,
-            'NULL'    => PDO::PARAM_NULL,
-            'double'  => PDO::PARAM_STR,
-            'string'  => PDO::PARAM_STR,
-        ];
-
-        $methodList = [
-            'all' => 'fetchAll',
-            'one' => 'fetch',
-        ];
-
-        $db = $this->getDb();
-
-        if ($this->dataInitiative()) {
-            $db->getPdo()->query($this->getBuilder()->createTemporaryTable($this));
-            $db->getPdo()->query($this->getBuilder()->insertIntoTable($this->table(), $this->data));
-        }
-        else {
-            $config = $db->getConfig();
-            $table = $this->table();
-
-            $tableExistsQuery = $db->getPdo()->query($this->getBuilder()->tableExistsQuery($config, $table));
-            $tableExists = $tableExistsQuery && $table ? $tableExistsQuery->fetchColumn() : true;
-            if (!$tableExists) {
-                $this->create();
-                $db->getPdo()->query($this->getBuilder()->buildModel($this));
-            }
-        }
-
-        $sth = $db->getPdo()->prepare($this->getRawSql());
-
-        foreach ($this->getParamList() as $param => $value) {
-            if (isset($pdoTypes[gettype($value)])) {
-                $sth->bindValue($param, $value, $pdoTypes[gettype($value)]);
-            }
-        }
-
-        $sth->execute();
-
-        $data = $sth->{$methodList[$method]}(PDO::FETCH_ASSOC);
-
-        if ($this->index) {
-            $data = ArrayHelper::group($this->index, $data);
-        }
-
-        $result = [];
-
-        // TODO: Сериализацию необходимо проверить
-        if ($this->lastRequestedModel) {
-            $lastRequestedModelName = $this->lastRequestedModel;
-            $lastRequestedModel = $lastRequestedModelName::getTempInstance();
-            $publicProperties = $lastRequestedModel->getPublicProperties();
-            if ($this->serializeResult && count($publicProperties) > 0) {
-                if ($method === 'all') {
-                    foreach ($data as $row) {
-                        $instance = $lastRequestedModel::all();
-                        foreach ($publicProperties as $property) {
-                            $instance->{$property->getName()} = $row[$property->getName()];
-                        }
-                        $pk = $instance->getPrimaryKey();
-                        if ($pk) {
-                            $instance->where([$pk => $instance->$pk]);
-                        }
-                        $result[] = $instance;
-                    }
-                }
-                else if ($method === 'one') {
-                    $instance = $lastRequestedModel::all();
-                    if ($data) {
-                        foreach ($publicProperties as $property) {
-                            $instance->{$property->getName()} = $data[$property->getName()];
-                        }
-                    }
-                    $result = $instance;
-                }
-            }
-            else {
-                $result = $data;
-            }
-        }
-        else {
-            $result = $data;
-        }
-
-        if (!empty($this->postFunctions)) {
-            foreach ($this->postFunctions as $function) {
-                $result = $this->$function($result);
-            }
-        }
-
-        return $result;
     }
     /**
      * Получение всех данных запроса

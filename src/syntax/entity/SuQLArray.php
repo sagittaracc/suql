@@ -12,7 +12,13 @@ abstract class SuQLArray extends SuQL implements ArrayInterface
      */
     public static function all()
     {
-        $instance = parent::all();
-        return $instance->data();
+        return parent::all();
+    }
+    /**
+     * @inheritdoc
+     */
+    public function fetch($method)
+    {
+        return $this->data();
     }
 }
