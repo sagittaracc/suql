@@ -317,16 +317,54 @@ abstract class SuQL extends Obj
      */
     abstract public function join($option, $type, $algorithm, $on);
     /**
-     * Пробный вариант
+     * Условие сцепления таблиц
      * @return self
      */
-    public function on($leftTableField, $rightTableField)
+    public function on()
+    {
+        if (func_num_args() === 2) {
+            $leftTableField = func_get_arg(0);
+            $rightTableField = func_get_arg(1);
+            $this->onSimple($leftTableField, $rightTableField);
+        }
+        else if (func_num_args() === 1) {
+            $onList = func_get_arg(0);
+            $this->onComplex($onList);
+        }
+
+        return $this;
+    }
+    /**
+     * @return self
+     */
+    private function onSimple($leftTableField, $rightTableField)
     {
         if ($this->lastJoin) {
             list($leftTable, $leftField) = explode('.', $leftTableField);
             list($rightTable, $rightField) = explode('.', $rightTableField);
 
             $this->lastJoin->setOn($this->getBuilder()->buildJoinOn($leftTable, $leftField, $rightTable, $rightField));
+        }
+
+        return $this;
+    }
+    /**
+     * @return self
+     */
+    private function onComplex($onList)
+    {
+        $complexOn = [];
+
+        if ($this->lastJoin) {
+            foreach ($onList as $leftTableField => $rightTableField)
+            {
+                list($leftTable, $leftField) = explode('.', $leftTableField);
+                list($rightTable, $rightField) = explode('.', $rightTableField);
+
+                $complexOn[] = $this->getBuilder()->buildJoinOn($leftTable, $leftField, $rightTable, $rightField);
+            }
+
+            $this->lastJoin->setOn(implode(' and ', $complexOn));
         }
 
         return $this;
