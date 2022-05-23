@@ -337,6 +337,20 @@ abstract class SuQL extends Obj
     /**
      * @return self
      */
+    public function andOn()
+    {
+        // ...
+    }
+    /**
+     * @return self
+     */
+    public function orOn()
+    {
+        // ...
+    }
+    /**
+     * @return self
+     */
     private function onSimple($leftTableField, $rightTableField)
     {
         if ($this->lastJoin) {
