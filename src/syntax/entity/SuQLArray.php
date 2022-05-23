@@ -17,6 +17,13 @@ abstract class SuQLArray extends SuQL implements ArrayInterface
     /**
      * @inheritdoc
      */
+    public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
+    {
+        return $this;
+    }
+    /**
+     * @inheritdoc
+     */
     public function fetch($method)
     {
         return $this->data();

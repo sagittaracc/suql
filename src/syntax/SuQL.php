@@ -315,60 +315,7 @@ abstract class SuQL extends Obj
      * Сцепление таблиц
      * @return self
      */
-    public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
-    {
-        if (is_string($option)) {
-            if (class_exists($option) && is_subclass_of($option, SuQL::class)) {
-                $model = $option::all();
-                $this->setRelations($model->table(), $model->relations());
-                $this->join($model->table(), $type, $algorithm);
-            }
-            else {
-                $table = $option;
-
-                if ($this->currentAnnotatedModel) {
-                    $annotation = RelationAnnotation::from($this->currentAnnotatedModel)->for($table)->read();
-                    if ($annotation->relation) {
-                        $on = $this->getBuilder()->buildJoinOn($this->currentTable, $annotation->first_field, $annotation->second_table, $annotation->second_field);
-                        $this->getScheme()->rel($this->currentTable, $table, $on);
-                        $this->currentAnnotatedModel = $annotation->second_model;
-                    }
-                }
-    
-                if ($algorithm === 'simple') {
-                    $this->lastJoin = $this->getSelect($this->query())->addJoin($type, $table);
-                }
-                else if ($algorithm === 'smart') {
-                    $this->getSelect($this->query())->addSmartJoin($this->currentTable, $table, $type);
-                }
-    
-                $this->currentTable = $table;
-            }
-        }
-        else if (is_array($option)) {
-            foreach ($option as $table => $alias) break;
-
-            $this->lastJoin = $this->getSelect($this->query())->addJoin($type, "$table@$alias");
-            $this->getSelect($this->query())->getLastJoin()->setOn($on);
-
-            $this->currentTable = $alias;
-        }
-        else if ($option instanceof SuQL) {
-            $subquery = $option;
-
-            if ($algorithm === 'simple') {
-                $this->lastJoin = $this->getSelect($this->query())->addJoin($type, $subquery->query());
-            }
-            else if ($algorithm === 'smart') {
-                $this->getSelect($this->query())->addSmartJoin($this->currentTable, $subquery->query(), $type);
-            }
-
-            $this->extend($subquery->getQueries());
-            $this->currentTable = $subquery->query();
-        }
-
-        return $this;
-    }
+    abstract public function join($option, $type, $algorithm, $on);
     /**
      * Пробный вариант
      * @return self
