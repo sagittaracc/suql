@@ -3,7 +3,7 @@ return <<<SQL
     select
         `consumption`.`counterId` as `counter`,
         `consumption`.`tarifId` as `tarif`,
-        `consumption`.`consumption`
+        `consumption`.`consumption` as `consumption`
     from `consumption`
     inner join (
         select

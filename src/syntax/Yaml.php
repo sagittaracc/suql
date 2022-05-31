@@ -47,6 +47,9 @@ class Yaml
 
                 self::parse($instance, $value);
             }
+            else if (file_exists($key)) {
+                $instance->join(Yaml::query($key));
+            }
             else if (is_array($value)) {
                 $instance->select([
                     new Field($key, $value)

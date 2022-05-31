@@ -16,10 +16,17 @@ final class ResourceTest extends TestCase
             ->select([
                 'counterId' => 'counter',
                 'tarifId' => 'tarif',
-                'consumption',
+                'consumption' => 'consumption',
             ])
             ->bound(Yaml::query('tests/suql/yaml/resource/LastConsumptionTime.yaml'))
             ->getRawSql();
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testInnerYaml(): void
+    {
+        $expected = StringHelper::trimSql(require('queries/resource/q1.php'));
+        $actual = Yaml::query('tests/suql/yaml/resource/LastConsumption.yaml')->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }
