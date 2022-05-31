@@ -310,12 +310,23 @@ abstract class SuQL extends Obj
                 $secondTable = $secondClassModel;
             }
 
-            $onList = [];
-            foreach ($on as $secondField => $firstField) {
-                $onList[] = $this->getBuilder()->buildJoinOn($firstTable, $firstField, $secondTable, $secondField);
+            if (is_array($on)) {
+                $onList = [];
+                foreach ($on as $secondField => $firstField) {
+                    $onList[] = $this->getBuilder()->buildJoinOn($firstTable, $firstField, $secondTable, $secondField);
+                }
+                $on = implode(' and ', $onList);
             }
-            $on = implode(' and ', $onList);
-            $this->getScheme()->rel($firstTable, $secondTable, $on);
+            else if (is_string($on)) {
+
+            }
+            else {
+                $on = null;
+            }
+
+            if (!is_null($on)) {
+                $this->getScheme()->rel($firstTable, $secondTable, $on);
+            }
         }
     }
     /**

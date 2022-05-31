@@ -13,7 +13,7 @@ class Users extends SuQLTable
     public function relations()
     {
         return [
-            Products::class => ['id' => 'product_id'],
+            Products::class => '`users`.`product_id` = `products`.`id`',
         ];
     }
 }
