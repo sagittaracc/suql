@@ -302,12 +302,19 @@ abstract class SuQL extends Obj
         foreach ($relations as $secondClassModel => $on) {
             if (!is_string($secondClassModel)) continue;
 
-            foreach ($on as $secondField => $firstField) break;
+            if (class_exists($secondClassModel)) {
+                $secondModel = new $secondClassModel();
+                $secondTable = $secondModel->table();
+            }
+            else {
+                $secondTable = $secondClassModel;
+            }
 
-            $secondModel = new $secondClassModel();
-            $secondTable = $secondModel->table();
-
-            $on = $this->getBuilder()->buildJoinOn($firstTable, $firstField, $secondTable, $secondField);
+            $onList = [];
+            foreach ($on as $secondField => $firstField) {
+                $onList[] = $this->getBuilder()->buildJoinOn($firstTable, $firstField, $secondTable, $secondField);
+            }
+            $on = implode(' and ', $onList);
             $this->getScheme()->rel($firstTable, $secondTable, $on);
         }
     }
