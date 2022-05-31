@@ -388,15 +388,26 @@ abstract class SuQL extends Obj
         $complexOn = [];
 
         if ($this->lastJoin) {
-            foreach ($onList as $leftTableField => $rightTableField)
-            {
-                list($leftTable, $leftField) = explode('.', $leftTableField);
-                list($rightTable, $rightField) = explode('.', $rightTableField);
+            if (is_string($onList)) {
+                $on = $onList;
+            }
+            else if (is_array($onList)) {
+                foreach ($onList as $leftTableField => $rightTableField)
+                {
+                    list($leftTable, $leftField) = explode('.', $leftTableField);
+                    list($rightTable, $rightField) = explode('.', $rightTableField);
 
-                $complexOn[] = $this->getBuilder()->buildJoinOn($leftTable, $leftField, $rightTable, $rightField);
+                    $complexOn[] = $this->getBuilder()->buildJoinOn($leftTable, $leftField, $rightTable, $rightField);
+                }
+                $on = implode(' and ', $complexOn);
+            }
+            else {
+                $on = null;
             }
 
-            $this->lastJoin->setOn(implode(' and ', $complexOn));
+            if (!is_null($on)) {
+                $this->lastJoin->setOn($on);
+            }
         }
 
         return $this;
