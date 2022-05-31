@@ -10,8 +10,7 @@ namespace suql\core;
 class SimpleParam extends Param
 {
     /**
-     * Получить только первый параметр фильтрации
-     * @return mixed
+     * @inheritdoc
      */
     public function getPlaceholder()
     {

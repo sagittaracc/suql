@@ -83,6 +83,10 @@ abstract class Param
         return $placeholderList;
     }
     /**
+     * @return mixed
+     */
+    abstract public function getPlaceholder();
+    /**
      * Проверяет если параметр не нулевой (все значения переданных параметров не нулевые)
      * Определяется для каждого класса параметра
      * @return boolean

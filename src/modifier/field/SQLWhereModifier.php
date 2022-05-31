@@ -23,19 +23,13 @@ class SQLWhereModifier extends SQLBaseModifier
      * @param boolean $isFilter фильтровое сравнение или нет. При фильтровом не применяется при пустом $suqlParam
      * Пустота $suqlParam определяется для каждого типа параметра отдельно
      */
-    private static function where($compare, $suqlParam, $isFilter)
+    private static function where($compare, $ofield, $suqlParam, $isFilter)
     {
-        $ofield = $suqlParam->getField();
         $placeholder = $suqlParam->getPlaceholder();
         $paramKey = $suqlParam->getParamKey();
-
-        $fieldName = new FieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
+        $fieldName = $suqlParam->getField();
+        $params = $suqlParam->getParams();
         $condition = new Condition($fieldName, "$ $compare $placeholder");
-
-        if (!$ofield->getOSelect()->getOSuQL()->hasParam($paramKey))
-        {
-            $ofield->getOSelect()->getOSuQL()->setParam($paramKey, $suqlParam);
-        }
 
         if ($ofield->hasAlias())
         {
@@ -49,7 +43,7 @@ class SQLWhereModifier extends SQLBaseModifier
             }
             else
             {
-                $ofield->getOSelect()->addWhere($condition);
+                $ofield->getOSelect()->addWhere(new Condition(new SimpleParam($fieldName, $params), "$ $compare $placeholder"));
             }
         }
     }
@@ -61,7 +55,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_greater($ofield, $params, $isFilter = false)
     {
-        self::where('>', new SimpleParam($ofield, $params), $isFilter);
+        self::where('>', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '>='
@@ -71,7 +65,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_greaterOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('>=', new SimpleParam($ofield, $params), $isFilter);
+        self::where('>=', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '<'
@@ -81,7 +75,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_less($ofield, $params, $isFilter = false)
     {
-        self::where('<', new SimpleParam($ofield, $params), $isFilter);
+        self::where('<', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '<='
@@ -91,7 +85,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_lessOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<=', new SimpleParam($ofield, $params), $isFilter);
+        self::where('<=', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '='
@@ -101,7 +95,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_equal($ofield, $params, $isFilter = false)
     {
-        self::where('=', new SimpleParam($ofield, $params), $isFilter);
+        self::where('=', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '<>'
@@ -111,7 +105,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_notEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<>', new SimpleParam($ofield, $params), $isFilter);
+        self::where('<>', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор like
@@ -121,7 +115,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_like($ofield, $params, $isFilter = false)
     {
-        self::where('like', new LikeParam($ofield, $params), $isFilter);
+        self::where('like', $ofield, new LikeParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор between
@@ -131,7 +125,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_between($ofield, $params, $isFilter = false)
     {
-        self::where('between', new BetweenParam($ofield, $params), $isFilter);
+        self::where('between', $ofield, new BetweenParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор in
@@ -141,7 +135,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_in($ofield, $params, $isFilter = false)
     {
-        self::where('in', new InParam($ofield, $params), $isFilter);
+        self::where('in', $ofield, new InParam($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор where
@@ -150,14 +144,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_where($ofield, $params)
     {
-        $fieldName = new FieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
-        $condition = new Condition($fieldName, $params[0]);
-
-        if ($ofield->hasAlias()) {
-            $ofield->getOSelect()->addHaving($condition->setFormat('%a'));
-        } else {
-            $ofield->getOSelect()->addWhere($condition);
-        }
+        $ofield->getOSelect()->addWhere($params);
     }
     /**
      * Модификатор having
@@ -166,9 +153,6 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_having($ofield, $params)
     {
-        $fieldName = new FieldName($ofield->getTable(), [$ofield->getField() => $ofield->getAlias()]);
-        $condition = new Condition($fieldName, $params[0], '%a');
-
-        $ofield->getOSelect()->addHaving($condition);
+        $ofield->getOSelect()->addHaving($params);
     }
 }
