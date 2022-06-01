@@ -11,13 +11,23 @@
 </div>
 
 ### SuQL
-Example
+Данный синтаксический сахар реализует один из собственных форматов [TSML](https://github.com/sagittaracc/tsml)
+#### Tsml
 ```sql
 test\suql\models\Query1
     f1 af1
     f2
         order asc
         as af2
+```
+Также поддерживается YAML
+#### Yaml
+```yaml
+test\suql\models\Query1:
+    f1: af1
+    f2:
+        order: asc
+        as: af2
 ```
 
 ### Установка
