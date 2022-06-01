@@ -12,7 +12,7 @@
 
 ### SuQL
 Example
-```
+```sql
 test\suql\models\Query1
     f1 af1
     f2
