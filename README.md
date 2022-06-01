@@ -11,7 +11,14 @@
 </div>
 
 ### SuQL
-Обобщение представления ORM
+Example
+```
+test\suql\models\Query1
+    f1 af1
+    f2
+        order asc
+        as af2
+```
 
 ### Установка
 `composer require sagittaracc/suql`

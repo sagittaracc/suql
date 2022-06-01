@@ -1,5 +1,11 @@
 ## Documentation
 
+### Синтаксисы
+
+[Yaml](https://github.com/sagittaracc/suql/blob/master/tests/suql/YamlSuQLTest.php)
+
+[Tsml](https://github.com/sagittaracc/suql/blob/master/tests/suql/TsmlSuQLTest.php)
+
 ### Clauses
 
 [Select Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/SelectTest.php)
@@ -70,8 +76,6 @@
 [Table Placeholder](https://github.com/sagittaracc/suql/blob/master/tests/suql/TablePlaceholderTest.php)
 
 [Last requested model](https://github.com/sagittaracc/suql/blob/master/tests/suql/LastRequestedModelTest.php)
-
-[Yaml query](https://github.com/sagittaracc/suql/blob/master/tests/suql/YamlSuQLTest.php)
 
 ### Sqlite
 
