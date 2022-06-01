@@ -9,5 +9,9 @@ namespace suql\syntax;
  */
 interface SuQLParser
 {
+    /**
+     * @param string $file имя файла запроса
+     * @return array
+     */
     public function parseFile($file);
 }

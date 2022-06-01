@@ -3,6 +3,7 @@
 namespace suql\syntax;
 
 use suql\syntax\field\Field;
+use suql\syntax\parser\Tsml;
 
 /**
  * SuQL синтакс
@@ -14,12 +15,16 @@ class SuQL1
     /**
      * Разбор запроса
      * @param string файл с запросом
-     * @param string используемый парсер
+     * @param \syql\syntax\SuQLParser парсер
      * @return \suql\syntax\SuQL
      */
-    public static function query($file, $parser)
+    public static function query($file, SuQLParser $parser = null)
     {
-        $json = $parser::parseFile($file);
+        if (is_null($parser)) {
+            $parser = new Tsml;
+        }
+
+        $json = $parser->parseFile($file);
 
         foreach ($json as $root => $data) {
             $instance = $root::all();
@@ -35,7 +40,7 @@ class SuQL1
      * Разбор значения данных в yaml запросе
      * @param \suql\syntax\SuQL $instance текущий запрос
      * @param array $data данные по ключу
-     * @param string парсер
+     * @param \suql\syntax\SuQLParser парсер
      */
     private static function parse($instance, $data, $parser)
     {

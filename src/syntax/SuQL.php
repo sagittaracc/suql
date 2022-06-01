@@ -4,15 +4,12 @@ namespace suql\syntax;
 
 use Closure;
 use Exception;
-use PDO;
 use ReflectionClass;
 use suql\core\Condition;
 use suql\core\FieldName;
 use suql\core\Obj;
 use suql\core\SimpleParam;
 use ReflectionProperty;
-use sagittaracc\ArrayHelper;
-use suql\annotation\RelationAnnotation;
 use suql\core\Scheme;
 use suql\core\SmartDate;
 use suql\manager\TableEntityManager;

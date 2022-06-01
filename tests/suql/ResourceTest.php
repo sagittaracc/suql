@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
+use suql\syntax\parser\Yaml;
 use suql\syntax\SuQL1;
-use Symfony\Component\Yaml\Yaml;
 use test\suql\models\resource\Consumption;
 
 final class ResourceTest extends TestCase
@@ -19,7 +19,7 @@ final class ResourceTest extends TestCase
                 'tarifId' => 'tarif',
                 'consumption' => 'consumption',
             ])
-            ->bound(SuQL1::query('tests/suql/yaml/resource/LastConsumptionTime.yaml', Yaml::class))
+            ->bound(SuQL1::query('tests/suql/yaml/resource/LastConsumptionTime.yaml', new Yaml))
             ->getRawSql();
         $this->assertEquals($expected, $actual);
     }
@@ -27,7 +27,7 @@ final class ResourceTest extends TestCase
     public function testInnerYaml(): void
     {
         $expected = StringHelper::trimSql(require('queries/resource/q1.php'));
-        $actual = SuQL1::query('tests/suql/yaml/resource/LastConsumption.yaml', Yaml::class)->getRawSql();
+        $actual = SuQL1::query('tests/suql/yaml/resource/LastConsumption.yaml', new Yaml)->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }
