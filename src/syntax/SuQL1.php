@@ -32,7 +32,7 @@ class SuQL1
             self::parse($instance, $data, $parser);
         }
 
-        $instance->as(basename($file, ".yaml"));
+        $instance->as(pathinfo($file, PATHINFO_FILENAME));
 
         return $instance;
     }
