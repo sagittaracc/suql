@@ -3,28 +3,28 @@
 namespace suql\syntax;
 
 use suql\syntax\field\Field;
-use Symfony\Component\Yaml\Yaml as YamlYaml;
 
 /**
- * Yaml синтакс
+ * SuQL синтакс
  * 
  * @author Yuriy Arutyunyan <sagittaracc@gmail.com>
  */
-class Yaml
+class SuQL1
 {
     /**
-     * Разбор yaml запроса
-     * @param string $file имя файла с запросом
+     * Разбор запроса
+     * @param string файл с запросом
+     * @param string используемый парсер
      * @return \suql\syntax\SuQL
      */
-    public static function query($file)
+    public static function query($file, $parser)
     {
-        $json = YamlYaml::parseFile($file);
+        $json = $parser::parseFile($file);
 
         foreach ($json as $root => $data) {
             $instance = $root::all();
 
-            self::parse($instance, $data);
+            self::parse($instance, $data, $parser);
         }
 
         $instance->as(basename($file, ".yaml"));
@@ -35,8 +35,9 @@ class Yaml
      * Разбор значения данных в yaml запросе
      * @param \suql\syntax\SuQL $instance текущий запрос
      * @param array $data данные по ключу
+     * @param string парсер
      */
-    private static function parse($instance, $data)
+    private static function parse($instance, $data, $parser)
     {
         foreach ($data as $key => $value) {
             if (class_exists($key)) {
@@ -45,10 +46,10 @@ class Yaml
                 $instance->join($table);
                 $instance->setCurrentTable($table);
 
-                self::parse($instance, $value);
+                self::parse($instance, $value, $parser);
             }
             else if (file_exists($key)) {
-                $instance->join(Yaml::query($key));
+                $instance->join(SuQL1::query($key, $parser));
             }
             else if (is_array($value)) {
                 $instance->select([

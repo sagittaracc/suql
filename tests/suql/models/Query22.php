@@ -3,7 +3,8 @@
 namespace test\suql\models;
 
 use suql\syntax\entity\SuQLTable;
-use suql\syntax\Yaml;
+use suql\syntax\SuQL1;
+use Symfony\Component\Yaml\Yaml;
 
 class Query22 extends SuQLTable
 {
@@ -12,7 +13,7 @@ class Query22 extends SuQLTable
 
     public function table()
     {
-        return Yaml::query('tests/suql/yaml/Query4.yaml');
+        return SuQL1::query('tests/suql/yaml/Query4.yaml', Yaml::class);
     }
 
     public function fields()
