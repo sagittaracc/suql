@@ -49,7 +49,6 @@ class SuQL1
                 $tmp = $key::getTempInstance();
                 $table = $tmp->table();
                 $instance->join($table);
-                $instance->setCurrentTable($table);
 
                 self::parse($instance, $value, $parser);
             }
