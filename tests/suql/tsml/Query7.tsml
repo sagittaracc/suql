@@ -1,0 +1,3 @@
+test\suql\models\relational\Users
+    test\suql\models\relational\Products
+        test\suql\models\relational\Categories

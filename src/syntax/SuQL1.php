@@ -42,14 +42,11 @@ class SuQL1
      * @param array $data данные по ключу
      * @param \suql\syntax\SuQLParser парсер
      */
-    private static function parse($instance, $data, $parser)
+    private static function parse(&$instance, $data, $parser)
     {
         foreach ($data as $key => $value) {
             if (class_exists($key)) {
-                $tmp = $key::getTempInstance();
-                $table = $tmp->table();
-                $instance->join($table);
-
+                $instance = $instance->join($key);
                 self::parse($instance, $value, $parser);
             }
             else if (file_exists($key)) {
