@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\syntax\SuQL1;
+use suql\syntax\SuQL;
 use test\suql\models\relational\Categories;
 use test\suql\models\relational\Products;
 use test\suql\models\relational\Users;
@@ -21,7 +21,7 @@ final class RelationTest extends TestCase
     public function testRelationalWithTsml(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q30.php'));
-        $actual = SuQL1::query('tests/suql/tsml/Query7.tsml')->getRawSql();
+        $actual = SuQL::query('tests/suql/tsml/Query7.tsml')->getRawSql();
         $this->assertEquals($expected, $actual);
     }
 }

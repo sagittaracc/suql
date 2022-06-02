@@ -10,11 +10,11 @@ use suql\annotation\TableAnnotation;
 use suql\syntax\DbObject;
 use suql\syntax\Model;
 use suql\syntax\QueryObject;
-use suql\syntax\SuQL;
+use suql\syntax\ActiveRecord;
 use suql\syntax\TableInterface;
 use test\suql\modifiers\CustomModifier;
 
-abstract class SuQLTable extends SuQL implements TableInterface, DbObject, QueryObject
+abstract class SuQLTable extends ActiveRecord implements TableInterface, DbObject, QueryObject
 {
     use Model;
     /**
@@ -49,7 +49,7 @@ abstract class SuQLTable extends SuQL implements TableInterface, DbObject, Query
                 $instance->getSelect($instance->query())->addFrom("$table@$alias");
                 $instance->currentTable = $alias;
             }
-            else if ($option instanceof SuQL) {
+            else if ($option instanceof ActiveRecord) {
                 $subquery = $option;
                 $instance->getSelect($instance->query())->addFrom($subquery->query());
                 $instance->extend($subquery->getQueries());
@@ -75,7 +75,7 @@ abstract class SuQLTable extends SuQL implements TableInterface, DbObject, Query
     public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
     {
         if (is_string($option)) {
-            if (class_exists($option) && is_subclass_of($option, SuQL::class)) {
+            if (class_exists($option) && is_subclass_of($option, ActiveRecord::class)) {
                 $model = $option::all();
                 $this->setRelations($model->table(), $model->relations());
                 $this->join($model->table(), $type, $algorithm);
@@ -110,7 +110,7 @@ abstract class SuQLTable extends SuQL implements TableInterface, DbObject, Query
 
             $this->currentTable = $alias;
         }
-        else if ($option instanceof SuQL) {
+        else if ($option instanceof ActiveRecord) {
             $subquery = $option;
 
             if ($algorithm === 'simple') {

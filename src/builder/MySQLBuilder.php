@@ -23,7 +23,7 @@ final class MySQLBuilder extends SQLBuilder
     protected $unquote = '`';
     /**
      * Генерация запроса создания таблицы
-     * @param \suql\syntax\SuQL $model
+     * @param \suql\syntax\ActiveRecord $model
      * @param boolean $temporary
      */
     public function createTable($model, $temporary = false)

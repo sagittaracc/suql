@@ -3,9 +3,9 @@
 namespace suql\syntax\entity;
 
 use suql\syntax\ArrayInterface;
-use suql\syntax\SuQL;
+use suql\syntax\ActiveRecord;
 
-abstract class SuQLArray extends SuQL implements ArrayInterface
+abstract class SuQLArray extends ActiveRecord implements ArrayInterface
 {
     /**
      * @inheritdoc
@@ -21,7 +21,7 @@ abstract class SuQLArray extends SuQL implements ArrayInterface
      */
     public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
     {
-        if (class_exists($option) && is_subclass_of($option, SuQL::class)) {
+        if (class_exists($option) && is_subclass_of($option, ActiveRecord::class)) {
             $model = $option::all();
             // $this->getSelect($this->query())->addJoin('data', 'tmp');
         }

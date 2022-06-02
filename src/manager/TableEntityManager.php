@@ -2,7 +2,7 @@
 
 namespace suql\manager;
 
-use suql\syntax\SuQL;
+use suql\syntax\ActiveRecord;
 
 /**
  * Действия выполняемые с сущностями-таблицами
@@ -21,7 +21,7 @@ class TableEntityManager
     private $deleteList = [];
     /**
      * Сохранение или обновление сущности
-     * @param \suql\syntax\SuQL $entity
+     * @param \suql\syntax\ActiveRecord $entity
      */
     public function persist($entity)
     {
@@ -29,7 +29,7 @@ class TableEntityManager
     }
     /**
      * Удаление сущности
-     * @param \suql\syntax\SuQL $entity
+     * @param \suql\syntax\ActiveRecord $entity
      */
     public function delete($entity)
     {
@@ -54,7 +54,7 @@ class TableEntityManager
     }
     /**
      * Сохранение
-     * @param \suql\syntax\SuQL $entity
+     * @param \suql\syntax\ActiveRecord $entity
      */
     private function saveEntity($entity)
     {
@@ -63,7 +63,7 @@ class TableEntityManager
         $entity->getQuery($entity->query())->addInto($entity->table());
         foreach ($entity->getPublicProperties() as $property) {
             $propertyName = $property->getName();
-            if (is_subclass_of($entity->$propertyName, SuQL::class)) {
+            if (is_subclass_of($entity->$propertyName, ActiveRecord::class)) {
                 $subEntity = $entity->$propertyName;
                 $this->saveEntity($subEntity);
                 $entity->getQuery($entity->query())->addValue($propertyName, $subEntity->getLastInsertId());
@@ -91,7 +91,7 @@ class TableEntityManager
     }
     /**
      * Удаление
-     * @param \suql\syntax\SuQL $entity
+     * @param \suql\syntax\ActiveRecord $entity
      */
     private function deleteEntity($entity)
     {
