@@ -729,6 +729,16 @@ abstract class ActiveRecord extends Obj
         $this->postFunctions[] = $this->getPostFunctionName($name);
     }
     /**
+     * Функции пост обработчика с разбивкой по столбцам
+     * @param array $options
+     */
+    public function columns($options)
+    {
+        foreach ($options as $column => $function) {
+            // ...
+        }
+    }
+    /**
      * Задает идентификатор последней добавленной записи
      * @param int $id
      */
