@@ -146,20 +146,14 @@ abstract class SuQLTable extends ActiveRecord implements TableInterface, DbObjec
 
         $db = $this->getDb();
 
-        if ($this->dataInitiative()) {
-            $db->getPdo()->query($this->getBuilder()->createTemporaryTable($this));
-            $db->getPdo()->query($this->getBuilder()->insertIntoTable($this->table(), $this->data));
-        }
-        else {
-            $config = $db->getConfig();
-            $table = $this->table();
+        $config = $db->getConfig();
+        $table = $this->table();
 
-            $tableExistsQuery = $db->getPdo()->query($this->getBuilder()->tableExistsQuery($config, $table));
-            $tableExists = $tableExistsQuery && $table ? $tableExistsQuery->fetchColumn() : true;
-            if (!$tableExists) {
-                $this->create();
-                $db->getPdo()->query($this->getBuilder()->buildModel($this));
-            }
+        $tableExistsQuery = $db->getPdo()->query($this->getBuilder()->tableExistsQuery($config, $table));
+        $tableExists = $tableExistsQuery && $table ? $tableExistsQuery->fetchColumn() : true;
+        if (!$tableExists) {
+            $this->create();
+            $db->getPdo()->query($this->getBuilder()->buildModel($this));
         }
 
         $sth = $db->getPdo()->prepare($this->getRawSql());

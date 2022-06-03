@@ -31,23 +31,6 @@ final class ProcessDataFeatureTest extends TestCase
         Query::create('drop database db_test')->setConnection('db_test')->exec();
     }
 
-    public function testJoinWithPhpArray(): void
-    {
-        $phpArray = [
-            ['p1' => 1, 'p2' => 'string 1'],
-            ['p1' => 2, 'p2' => 'string 2'],
-            ['p1' => 3, 'p2' => 'string 3'],
-        ];
-
-        $query = Query9::load($phpArray)->join('table_10');
-
-        $this->assertEquals([
-            ['p1' => '1', 'p2' => 'string 1', 'f1' => '1', 'f2' => '1'],
-            ['p1' => '2', 'p2' => 'string 2', 'f1' => '2', 'f2' => '2'],
-            ['p1' => '3', 'p2' => 'string 3', 'f1' => '3', 'f2' => '3'],
-        ], $query->fetchAll());
-    }
-
     public function testPostProcessFunction(): void
     {
         // не используя функцию пост обработки

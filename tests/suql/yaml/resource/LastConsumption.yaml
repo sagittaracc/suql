@@ -1,5 +1,0 @@
-test\suql\models\resource\Consumption:
-    counterId: counter
-    tarifId: tarif
-    consumption: consumption
-    tests/suql/yaml/resource/LastConsumptionTime.yaml:

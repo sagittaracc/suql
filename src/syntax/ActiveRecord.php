@@ -53,10 +53,6 @@ abstract class ActiveRecord extends Obj
      */
     protected $postFunctions = [];
     /**
-     * @var array прогружаемый в модель массив
-     */
-    protected $data = [];
-    /**
      * @var string последняя запрошенная модель
      */
     protected $lastRequestedModel = null;
@@ -134,16 +130,6 @@ abstract class ActiveRecord extends Obj
     {
         parent::setBuilder($builderClass);
         return $this;
-    }
-    /**
-     * Загрузить массив в модель
-     * @param array $data
-     */
-    public static function load($data)
-    {
-        $instance = static::all();
-        $instance->data = $data;
-        return $instance;
     }
     /**
      * Сохранить модель
@@ -661,14 +647,6 @@ abstract class ActiveRecord extends Obj
     {
         $this->serializeResult = false;
         return $this;
-    }
-    /**
-     * Проверяет прогружены ли в модель данные
-     * @return boolean
-     */
-    public function dataInitiative()
-    {
-        return !empty($this->data);
     }
     /**
      * Получает public properties модели
