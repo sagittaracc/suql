@@ -29,6 +29,7 @@ class Query24 extends SuQLArray
     {
         return [
             Query25::class => ['user_id' => 'id'],
+            Query26::class => ['f1' => 'id'],
         ];
     }
 }
