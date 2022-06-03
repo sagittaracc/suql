@@ -24,4 +24,11 @@ class Query24 extends SuQLArray
     {
         return Container::get('db_test');
     }
+
+    public function relations()
+    {
+        return [
+            Query25::class => ['user_id' => 'id'],
+        ];
+    }
 }

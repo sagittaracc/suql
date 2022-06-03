@@ -33,4 +33,14 @@ final class ArrayTest extends TestCase
         $actual = Query24::all()->fetchAll();
         $this->assertEquals($expected, $actual);
     }
+
+    public function testJoinArrayWithArray(): void
+    {
+        $expected = [
+            ['id' => '1', 'user' => 'user1', 'pass' => 'pass1', 'user_id' => '1', 'login' => 'login1'],
+            ['id' => '2', 'user' => 'user2', 'pass' => 'pass2', 'user_id' => '2', 'login' => 'login2'],
+        ];
+        $actual = Query24::all()->join(Query25::class)->fetchAll();
+        $this->assertEquals($expected, $actual);
+    }
 }
