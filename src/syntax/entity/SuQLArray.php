@@ -3,27 +3,43 @@
 namespace suql\syntax\entity;
 
 use suql\syntax\ArrayInterface;
-use suql\syntax\ActiveRecord;
 
-abstract class SuQLArray extends ActiveRecord implements ArrayInterface
+abstract class SuQLArray extends SuQLTable implements ArrayInterface
 {
     /**
      * @inheritdoc
      */
-    public static function all()
+    public function table()
     {
-        $instance = parent::all();
-        $instance->addSelect($instance->query());
-        return $instance;
+        return 'temporary_' . $this->query();
     }
     /**
      * @inheritdoc
      */
-    public function join($option, $type = 'inner', $algorithm = 'simple', $on = '')
+    public function create()
     {
-        if (class_exists($option) && is_subclass_of($option, ActiveRecord::class)) {
-            $model = $option::all();
-            // $this->getSelect($this->query())->addJoin('data', 'tmp');
+        $data = $this->data();
+
+        if (isset($data[0])) {
+            $row = $data[0];
+
+            foreach ($row as $key => $value) {
+                switch (gettype($value)) {
+                    case "integer":
+                        $type = "int";
+                        $length = 11;
+                        break;
+                    case "string":
+                        $type = "varchar";
+                        $length = 255;
+                        break;
+                    default:
+                        $type = "varchar";
+                        $length = 255;
+                }
+
+                $this->column($key)->setType($type)->setLength($length);
+            }
         }
 
         return $this;
@@ -31,9 +47,12 @@ abstract class SuQLArray extends ActiveRecord implements ArrayInterface
     /**
      * @inheritdoc
      */
-    public function fetch($method)
+    public static function all()
     {
-        // var_dump($this->getSelect($this->query())->getJoin());
-        return $this->data();
+        $instance = parent::all();
+        $db = $instance->getDb();
+        $db->getPdo()->query($instance->getBuilder()->createTemporaryTable($instance));
+        $db->getPdo()->query($instance->getBuilder()->insertIntoTable($instance->table(), $instance->data()));
+        return $instance;
     }
 }
