@@ -11,12 +11,15 @@ class Query10 extends SuQLTable
     protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
     protected static $builderClass = 'suql\\builder\\MySQLBuilder';
 
-    public function commandCastF1ToInt($data)
+    public function commandSomePostProcess($data)
     {
-        return array_map(function($row) {
+        foreach ($data as &$row) {
             $row['f1'] = intval($row['f1']);
-            return $row;
-        }, $data);
+            $row['f2'] = intval($row['f2']);
+        }
+        unset($row);
+
+        return $data;
     }
 
     public function getDb()

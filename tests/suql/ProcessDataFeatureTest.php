@@ -35,7 +35,7 @@ final class ProcessDataFeatureTest extends TestCase
     {
         // не используя функцию пост обработки
         $data = Query10::all()->fetchAll();
-        $this->assertEquals([
+        $this->assertSame([
             ['f1' => '1', 'f2' => '1'],
             ['f1' => '2', 'f2' => '2'],
             ['f1' => '3', 'f2' => '3'],
@@ -45,14 +45,14 @@ final class ProcessDataFeatureTest extends TestCase
         ], $data);
 
         // используя функцию пост обработки
-        $data = Query10::all()->castF1ToInt()->fetchAll();
-        $this->assertEquals([
-            ['f1' => 1, 'f2' => '1'],
-            ['f1' => 2, 'f2' => '2'],
-            ['f1' => 3, 'f2' => '3'],
-            ['f1' => 4, 'f2' => '4'],
-            ['f1' => 5, 'f2' => '5'],
-            ['f1' => 6, 'f2' => '6'],
+        $data = Query10::all()->somePostProcess()->fetchAll();
+        $this->assertSame([
+            ['f1' => 1, 'f2' => 1],
+            ['f1' => 2, 'f2' => 2],
+            ['f1' => 3, 'f2' => 3],
+            ['f1' => 4, 'f2' => 4],
+            ['f1' => 5, 'f2' => 5],
+            ['f1' => 6, 'f2' => 6],
         ], $data);
     }
 }
