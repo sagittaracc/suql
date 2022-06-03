@@ -55,4 +55,26 @@ final class ProcessDataFeatureTest extends TestCase
             ['f1' => 6, 'f2' => 6],
         ], $data);
     }
+
+    public function testColumnPostProcessFunction(): void
+    {
+        $data = Query10::all()
+            ->columns([
+                'f1' => function($row) {
+                    return intval($row['f1']);
+                },
+                'f2' => function($row) {
+                    return intval($row['f2']);
+                }
+            ])
+            ->fetchAll();
+        $this->assertSame([
+            ['f1' => 1, 'f2' => 1],
+            ['f1' => 2, 'f2' => 2],
+            ['f1' => 3, 'f2' => 3],
+            ['f1' => 4, 'f2' => 4],
+            ['f1' => 5, 'f2' => 5],
+            ['f1' => 6, 'f2' => 6],
+        ], $data);
+    }
 }

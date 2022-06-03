@@ -53,6 +53,10 @@ abstract class ActiveRecord extends Obj
      */
     protected $postFunctions = [];
     /**
+     * @var array перечень функций пост обработки данных по столбцам
+     */
+    protected $columnPostFunctions = [];
+    /**
      * @var string последняя запрошенная модель
      */
     protected $lastRequestedModel = null;
@@ -729,14 +733,28 @@ abstract class ActiveRecord extends Obj
         $this->postFunctions[] = $this->getPostFunctionName($name);
     }
     /**
+     * Общая функция пост обработки по столбцам
+     */
+    public function commandColumnPostFunctions($data)
+    {
+        foreach ($data as &$row) {
+            foreach ($this->columnPostFunctions as $field => $function) {
+                $row[$field] = $function($row);
+            }
+        }
+        unset($row);
+
+        return $data;
+    }
+    /**
      * Функции пост обработчика с разбивкой по столбцам
      * @param array $options
      */
     public function columns($options)
     {
-        foreach ($options as $column => $function) {
-            // ...
-        }
+        $this->columnPostFunctions = $options;
+        $this->addPostFunction('columnPostFunctions');
+        return $this;
     }
     /**
      * Задает идентификатор последней добавленной записи
