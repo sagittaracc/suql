@@ -8,6 +8,7 @@ use suql\syntax\Query;
 use test\suql\models\Query24;
 use test\suql\models\Query25;
 use test\suql\models\Query26;
+use test\suql\models\Query27;
 
 final class ArrayTest extends TestCase
 {
@@ -65,5 +66,16 @@ final class ArrayTest extends TestCase
         ];
         $actual = Query26::all()->join(Query24::class)->fetchAll();
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testTempService(): void
+    {
+        // Этим тестом я просто проверяю возможность задания конструкции используемой в SuQLService
+        $expected = Query27::find()->fetchAll();
+        $actual = [
+            ['user_id' => '1', 'login' => 'login1'],
+            ['user_id' => '2', 'login' => 'login2'],
+        ];
+        $this->assertSame($expected, $actual);
     }
 }

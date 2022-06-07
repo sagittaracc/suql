@@ -2,9 +2,10 @@
 
 namespace suql\syntax\entity;
 
+use suql\db\Container;
 use suql\syntax\ServiceInterface;
 
-abstract class SuQLService extends SuQLArray implements ServiceInterface
+abstract class SuQLService implements ServiceInterface
 {
     /**
      * @var string ссылка сервиса
@@ -19,32 +20,6 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
      */
     public $body;
     /**
-     * @var mixed данные сервиса
-     */
-    private $data;
-    /**
-     * @inheritdoc
-     */
-    public function table()
-    {
-        return 'service_' . $this->query();
-    }
-    /**
-     * Задание данные сервиса
-     * @param mixed $data данные сервиса
-     */
-    public function setData($data)
-    {
-        $this->data = $data;
-    }
-    /**
-     * @inheritdoc
-     */
-    public function data()
-    {
-        return $this->data;
-    }
-    /**
      * @inheritdoc
      */
     public static function find()
@@ -53,7 +28,31 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
         // Задание метода
         // Задание тела запроса
         // Получение данных по запросу
-        // Установка данных
-        // Вызов родительского parent::all();
+        // Возвращение экземпляра SuQL Array
+        return (new class extends SuQLArray
+        {
+            protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+
+            public function query()
+            {
+                return 'temp_query';
+            }
+
+            public function data()
+            {
+                /**
+                 * Допустим храню пароли в массиве а не в базе данных
+                 */
+                return [
+                    ['user_id' => 1, 'login' => 'login1'],
+                    ['user_id' => 2, 'login' => 'login2'],
+                ];
+            }
+
+            public function getDb()
+            {
+                return Container::get('db_test');
+            }
+        })::all();
     }
 }
