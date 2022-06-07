@@ -7,6 +7,18 @@ use suql\syntax\ServiceInterface;
 abstract class SuQLService extends SuQLArray implements ServiceInterface
 {
     /**
+     * @var string ссылка сервиса
+     */
+    public $href;
+    /**
+     * @var string метод сервиса
+     */
+    public $method;
+    /**
+     * @var array тело запроса
+     */
+    public $body;
+    /**
      * @var mixed данные сервиса
      */
     private $data;
@@ -31,5 +43,17 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
     public function data()
     {
         return $this->data;
+    }
+    /**
+     * @inheritdoc
+     */
+    public static function find()
+    {
+        // Задание ссылки
+        // Задание метода
+        // Задание тела запроса
+        // Получение данных по запросу
+        // Установка данных
+        // Вызов родительского parent::all();
     }
 }
