@@ -29,7 +29,7 @@ abstract class SuQLService implements ServiceInterface
         // Задание тела запроса
         // Получение данных по запросу
         // Возвращение экземпляра SuQL Array
-        return (new class extends SuQLArray
+        $instance = new class extends SuQLArray
         {
             protected static $builderClass = 'suql\\builder\\MySQLBuilder';
 
@@ -53,6 +53,8 @@ abstract class SuQLService implements ServiceInterface
             {
                 return Container::get('db_test');
             }
-        })::all();
+        };
+
+        return $instance->all();
     }
 }
