@@ -3,6 +3,7 @@
 namespace suql\syntax\entity;
 
 use GuzzleHttp\Client;
+use suql\annotation\ServiceAnnotation;
 use suql\syntax\ServiceInterface;
 
 abstract class SuQLService extends SuQLArray implements ServiceInterface
@@ -32,8 +33,9 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
     {
         $instance = new static();
 
-        // $instance->uri = read from annotation
-        // $instance->method = read from annotation
+        $annotation = ServiceAnnotation::from($instance)->read();
+        $instance->uri = $annotation->uri;
+        $instance->method = $annotation->method;
         $instance->uri = $instance->method === 'GET' ? $instance->uri . '?' . http_build_query($body) : $instance->uri;
         $instance->body = $instance->method === 'POST' ? $body : [];
 
