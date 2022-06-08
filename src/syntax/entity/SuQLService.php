@@ -2,23 +2,22 @@
 
 namespace suql\syntax\entity;
 
-use suql\db\Container;
 use suql\syntax\ServiceInterface;
 
-abstract class SuQLService implements ServiceInterface
+abstract class SuQLService extends SuQLArray implements ServiceInterface
 {
     /**
      * @var string ссылка сервиса
      */
-    public $href;
+    private $href;
     /**
      * @var string метод сервиса
      */
-    public $method;
+    private $method;
     /**
      * @var array тело запроса
      */
-    public $body;
+    private $body;
     /**
      * @inheritdoc
      */
@@ -33,21 +32,7 @@ abstract class SuQLService implements ServiceInterface
             ['user_id' => 2, 'login' => 'login2'],
         ];
         // Возвращение экземпляра SuQL Array
-        $instance = new class extends SuQLArray
-        {
-            protected static $builderClass = 'suql\\builder\\MySQLBuilder';
-
-            public function query()
-            {
-                return 'temp_query';
-            }
-
-            public function getDb()
-            {
-                return Container::get('db_test');
-            }
-        };
-
-        return $instance->all($data);
+        static::$data = $data;
+        return parent::all();
     }
 }
