@@ -7,8 +7,6 @@ use suql\syntax\entity\SuQLArray;
 
 class Query24 extends SuQLArray
 {
-    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
-
     public function data()
     {
         /**

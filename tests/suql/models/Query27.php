@@ -7,8 +7,6 @@ use suql\syntax\entity\SuQLService;
 
 class Query27 extends SuQLService
 {
-    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
-
     public function query()
     {
         return 'temp_query';
