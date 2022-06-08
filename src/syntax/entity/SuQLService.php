@@ -16,35 +16,32 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
     /**
      * @var string ссылка сервиса
      */
-    private $uri;
+    protected $uri;
     /**
      * @var string метод сервиса
      */
-    private $method;
+    protected $method;
     /**
      * @var array тело запроса
      */
-    private $body;
+    protected $body;
     /**
      * @inheritdoc
      */
-    public static function find()
+    public static function find($body = [])
     {
         $instance = new static();
 
-        $instance->uri = '';
-        $instance->method = 'POST';
-        $instance->body = [];
+        // $instance->uri = read from annotation
+        // $instance->method = read from annotation
+        $instance->uri = $instance->method === 'GET' ? $instance->uri . '?' . http_build_query($body) : $instance->uri;
+        $instance->body = $instance->method === 'POST' ? $body : [];
 
         $client = new Client();
-        // $response = $client->request($instance->method, $instance->uri, $instance->body);
-        // $data = $response->getBody();
-        $data = [
-            ['user_id' => 1, 'login' => 'login1'],
-            ['user_id' => 2, 'login' => 'login2'],
-        ];
+        $response = $client->request($instance->method, $instance->uri, $instance->body);
+        $content = $response->getBody()->getContents();
 
-        static::$data = $data;
+        static::$data = json_decode($content, true);
 
         return parent::all();
     }
