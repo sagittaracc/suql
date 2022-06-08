@@ -7,6 +7,26 @@ use suql\syntax\ArrayInterface;
 abstract class SuQLArray extends SuQLTable implements ArrayInterface
 {
     /**
+     * @var array данные
+     */
+    private $data;
+    /**
+     * Конструктор
+     * @param array $data
+     */
+    public function __construct($data = [])
+    {
+        $this->data = $data;
+    }
+    /**
+     * Получает данные
+     * @return array
+     */
+    public function data()
+    {
+        return $this->data;
+    }
+    /**
      * @inheritdoc
      */
     public function table()
