@@ -31,8 +31,9 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
             ['user_id' => 1, 'login' => 'login1'],
             ['user_id' => 2, 'login' => 'login2'],
         ];
-        // Возвращение экземпляра SuQL Array
+
         static::$data = $data;
+
         return parent::all();
     }
 }
