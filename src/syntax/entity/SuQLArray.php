@@ -19,6 +19,17 @@ abstract class SuQLArray extends SuQLTable implements ArrayInterface
         $this->data = $data;
     }
     /**
+     * Задает данные
+     * @param array $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+        $db = $this->getDb();
+        $db->getPdo()->query($this->getBuilder()->createTemporaryTable($this));
+        $db->getPdo()->query($this->getBuilder()->insertIntoTable($this->table(), $this->data()));
+    }
+    /**
      * Получает данные
      * @return array
      */
@@ -70,9 +81,7 @@ abstract class SuQLArray extends SuQLTable implements ArrayInterface
     public static function all()
     {
         $instance = parent::all();
-        $db = $instance->getDb();
-        $db->getPdo()->query($instance->getBuilder()->createTemporaryTable($instance));
-        $db->getPdo()->query($instance->getBuilder()->insertIntoTable($instance->table(), $instance->data()));
+        $instance->setData($instance->data());
         return $instance;
     }
 }
