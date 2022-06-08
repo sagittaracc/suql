@@ -7,16 +7,12 @@ namespace suql\annotation;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class RelationAnnotation
+class RelationAnnotation extends Annotation
 {
     /**
      * @const string регулярное выражение для парсинга аннотации
      */
     const REGEX = '/#\s*(?<relation>hasOne|hasMany|manyToMany)\(((?<second_model>[\w\\\\]+)\[)?{SECOND_TABLE}\.(?<second_field>\w+)\]?\)\s+(protected|private|public)\s+\$(?<first_field>\w+);/msi';
-    /**
-     * @var string из какой модели читать аннотацию
-     */
-    private $modelNameToReadFrom;
     /**
      * @var string для какой таблицы прочитать аннотацию
      */
@@ -50,17 +46,6 @@ class RelationAnnotation
      */
     public $second_field;
     /**
-     * Задает из какой модели читать аннотацию
-     * @param string $modelName имя класса модели
-     * @return self
-     */
-    public static function from($modelName)
-    {
-        $instance = new static();
-        $instance->modelNameToReadFrom = $modelName;
-        return $instance;
-    }
-    /**
      * Задает какую таблицу искать в аннотации
      * @param string $tableName имя таблицы
      * @return self
@@ -71,16 +56,13 @@ class RelationAnnotation
         return $this;
     }
     /**
-     * Разбор запрошенной аннотации
-     * @return self
+     * @inheritdoc
      */
     public function read()
     {
-        $model = new \ReflectionClass($this->modelNameToReadFrom);
-        $file = file_get_contents($model->getFileName());
         $regex = str_replace('{SECOND_TABLE}', $this->tableNameToReadFor, static::REGEX);
-
-        preg_match($regex, $file, $matches);
+        
+        $matches = parent::readBy($regex);
 
         if (!empty($matches)) {
             $this->relation = $matches['relation'];

@@ -7,7 +7,7 @@ namespace suql\annotation;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class ServiceAnnotation
+class ServiceAnnotation extends Annotation
 {
     /**
      * @const string регулярное выражение для парсинга аннотации
@@ -22,30 +22,11 @@ class ServiceAnnotation
      */
     public $method;
     /**
-     * @var string из какой модели читать аннотацию
-     */
-    private $modelNameToReadFrom;
-    /**
-     * Задает из какой модели читать аннотацию
-     * @param string $modelName имя класса модели
-     * @return self
-     */
-    public static function from($modelName)
-    {
-        $instance = new static();
-        $instance->modelNameToReadFrom = $modelName;
-        return $instance;
-    }
-    /**
-     * Разбор запрошенной аннотации
-     * @return self
+     * @inheritdoc
      */
     public function read()
     {
-        $model = new \ReflectionClass($this->modelNameToReadFrom);
-        $file = file_get_contents($model->getFileName());
-
-        preg_match(static::REGEX, $file, $matches);
+        $matches = parent::readBy(self::REGEX);
 
         if (!empty($matches)) {
             $this->uri = $matches['uri'];
