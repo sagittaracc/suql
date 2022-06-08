@@ -78,10 +78,10 @@ abstract class SuQLArray extends SuQLTable implements ArrayInterface
     /**
      * @inheritdoc
      */
-    public static function all()
+    public static function all($data = [])
     {
         $instance = parent::all();
-        $instance->setData($instance->data());
+        $instance->setData(empty($data) ? $instance->data() : $data);
         return $instance;
     }
 }

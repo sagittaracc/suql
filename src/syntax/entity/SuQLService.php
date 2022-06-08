@@ -28,6 +28,10 @@ abstract class SuQLService implements ServiceInterface
         // Задание метода
         // Задание тела запроса
         // Получение данных по запросу
+        $data = [
+            ['user_id' => 1, 'login' => 'login1'],
+            ['user_id' => 2, 'login' => 'login2'],
+        ];
         // Возвращение экземпляра SuQL Array
         $instance = new class extends SuQLArray
         {
@@ -38,23 +42,12 @@ abstract class SuQLService implements ServiceInterface
                 return 'temp_query';
             }
 
-            public function data()
-            {
-                /**
-                 * Допустим храню пароли в массиве а не в базе данных
-                 */
-                return [
-                    ['user_id' => 1, 'login' => 'login1'],
-                    ['user_id' => 2, 'login' => 'login2'],
-                ];
-            }
-
             public function getDb()
             {
                 return Container::get('db_test');
             }
         };
 
-        return $instance->all();
+        return $instance->all($data);
     }
 }
