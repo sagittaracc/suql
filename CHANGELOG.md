@@ -1,6 +1,6 @@
 # Change log
 
-## v7.3.4 - June 7, 2022
+## v7.3.4 - June 8, 2022
 
 - Добавил поддержку SuQL Service
 
