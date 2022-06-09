@@ -45,7 +45,10 @@ class SuQL
     private static function parse(&$instance, $data, $parser)
     {
         foreach ($data as $key => $value) {
-            if (class_exists($key)) {
+            if ($key === '!buff') {
+                $instance = $instance->buff();
+            }
+            else if (class_exists($key)) {
                 $instance = $instance->join($key);
                 self::parse($instance, $value, $parser);
             }

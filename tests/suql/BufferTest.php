@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
+use suql\syntax\SuQL;
 use test\suql\models\Query10;
 use test\suql\models\Query18;
 
@@ -40,6 +41,18 @@ final class BufferTest extends TestCase
             ->select(['f1'])
             ->fetchAll();
         
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testBufferTsml(): void
+    {
+        $expected = [
+            ['f1' => '1'],
+            ['f1' => '2'],
+        ];
+
+        $actual = SuQL::query('tests/suql/tsml/Query8.tsml')->fetchAll();
+
         $this->assertSame($expected, $actual);
     }
 }

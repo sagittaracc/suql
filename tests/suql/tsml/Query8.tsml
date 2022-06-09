@@ -1,0 +1,6 @@
+test\suql\models\Query18
+    f1
+    f2
+    !buff
+    test\suql\models\Query10
+        f1
