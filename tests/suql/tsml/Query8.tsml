@@ -4,3 +4,4 @@ test\suql\models\Query18
     !buff
     test\suql\models\Query10
         f1
+            order desc

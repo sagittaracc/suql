@@ -47,8 +47,8 @@ final class BufferTest extends TestCase
     public function testBufferTsml(): void
     {
         $expected = [
-            ['f1' => '1'],
             ['f1' => '2'],
+            ['f1' => '1'],
         ];
 
         $actual = SuQL::query('tests/suql/tsml/Query8.tsml')->fetchAll();
