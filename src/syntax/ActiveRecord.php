@@ -25,6 +25,10 @@ use test\suql\models\buffers\Buffer;
 abstract class ActiveRecord extends Obj
 {
     /**
+     * @var string класс используемого буфера
+     */
+    protected static $bufferClass = null;
+    /**
      * @var string класс реализующий схему
      */
     protected static $schemeClass = Scheme::class;
@@ -835,8 +839,14 @@ abstract class ActiveRecord extends Obj
      */
     public function buff()
     {
-        $data = $this->fetchAll();
-        Buffer::load($data);
-        return Buffer::all();
+        if (static::$bufferClass) {
+            $bufferClass = static::$bufferClass;
+            $data = $this->fetchAll();
+            $bufferClass::load($data);
+
+            return $bufferClass::all();
+        }
+
+        return $this;
     }
 }
