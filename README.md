@@ -20,14 +20,14 @@ test\suql\models\Query1
         order asc
         as af2
 ```
-Также поддерживается YAML
-#### Yaml
-```yaml
-test\suql\models\Query1:
-    f1: af1
-    f2:
-        order: asc
-        as: af2
+Возможно использование ORM связывания в один запрос таблиц из различных СУБД
+```php
+Query18::all()              // Этот запрос делает выборку из БД Sqlite
+  ->select(['f1', 'f2'])
+  ->buff()
+  ->join(Query10::class)    // Этот запрос выполняется уже в БД MySQL
+    ->select(['f1'])
+  ->fetchAll();
 ```
 
 ### Установка
