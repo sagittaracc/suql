@@ -15,6 +15,7 @@ use suql\core\SmartDate;
 use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
 use suql\syntax\field\Raw;
+use test\suql\models\buffers\Buffer;
 
 /**
  * ActiveRecord
@@ -827,5 +828,15 @@ abstract class ActiveRecord extends Obj
         $data = $this->fetchAll();
 
         return $data;
+    }
+    /**
+     * Связывание запроса при работе с различными СУБД
+     * @return \suql\syntax\entity\SuQLArray;
+     */
+    public function buff()
+    {
+        $data = $this->fetchAll();
+        Buffer::load($data);
+        return Buffer::all();
     }
 }

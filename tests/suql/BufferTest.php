@@ -5,9 +5,10 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use suql\db\Container;
 use suql\syntax\Query;
+use test\suql\models\Query10;
 use test\suql\models\Query18;
 
-final class SqliteTest extends TestCase
+final class BufferTest extends TestCase
 {
     public function setUp(): void
     {
@@ -25,20 +26,20 @@ final class SqliteTest extends TestCase
         Query::create('drop database db_test')->setConnection('db_test')->exec();
     }
 
-    public function testRealSqliteDb(): void
+    public function testBuffer(): void
     {
         $expected = [
-            ['af1' => '1', 'af2' => '1'],
-            ['af1' => '2', 'af2' => '2'],
-            ['af1' => '3', 'af2' => '3'],
+            ['f1' => '1'],
+            ['f1' => '2'],
         ];
-        $actual = Query18::all()
-            ->select([
-                'f1' => 'af1',
-                'f2' => 'af2',
-            ])
-            ->fetchAll();
 
-        $this->assertEquals($expected, $actual);
+        $actual = Query18::all()
+            ->select(['f1', 'f2'])
+            ->buff()
+            ->join(Query10::class)
+            ->select(['f1'])
+            ->fetchAll();
+        
+        $this->assertSame($expected, $actual);
     }
 }
