@@ -4,10 +4,10 @@ namespace test\suql\connections;
 
 use suql\db\Container;
 
-trait TestConnection
+trait TestSqliteConnection
 {
     public function getDb()
     {
-        return Container::get('db_test');
+        return Container::get('db-sqlite');
     }
 }

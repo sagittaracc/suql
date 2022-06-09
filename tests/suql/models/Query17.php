@@ -2,10 +2,10 @@
 
 namespace test\suql\models;
 
-use test\suql\models\tables\TestTable;
+use test\suql\models\tables\TestMySQLTable;
 
 # [Table(name="view_17")]
-class Query17 extends TestTable
+class Query17 extends TestMySQLTable
 {
     protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
     protected static $builderClass = 'suql\\builder\\MySQLBuilder';
