@@ -11,6 +11,14 @@ abstract class SuQLArray extends SuQLTable implements ArrayInterface
      */
     protected static $data;
     /**
+     * Устанавливает данные
+     * @param array $data
+     */
+    public static function load($data)
+    {
+        static::$data = $data;
+    }
+    /**
      * Получает данные
      * @return array
      */
