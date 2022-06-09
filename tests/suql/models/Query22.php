@@ -2,14 +2,16 @@
 
 namespace test\suql\models;
 
+use suql\builder\MySQLBuilder;
 use suql\syntax\entity\SuQLTable;
 use suql\syntax\parser\Yaml;
 use suql\syntax\SuQL;
+use test\suql\schema\AppScheme;
 
 class Query22 extends SuQLTable
 {
-    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
-    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+    protected static $schemeClass = AppScheme::class;
+    protected static $builderClass = MySQLBuilder::class;
 
     public function table()
     {

@@ -2,11 +2,13 @@
 
 namespace test\suql\models;
 
+use suql\builder\MySQLBuilder;
 use suql\syntax\entity\SuQLTable;
+use test\suql\schema\AppScheme;
 
 # [Table(name="table_13")]
 class Query23 extends SuQLTable
 {
-    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
-    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+    protected static $schemeClass = AppScheme::class;
+    protected static $builderClass = MySQLBuilder::class;
 }

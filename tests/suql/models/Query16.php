@@ -3,12 +3,12 @@
 namespace test\suql\models;
 
 use test\suql\models\tables\TestMySQLTable;
+use test\suql\schema\AppScheme;
 
 # [Table(name="table_16")]
 class Query16 extends TestMySQLTable
 {
-    protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
-    protected static $builderClass = 'suql\\builder\\MySQLBuilder';
+    protected static $schemeClass = AppScheme::class;
 
     public function query()
     {
