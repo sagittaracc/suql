@@ -2,10 +2,9 @@
 
 namespace test\suql\models;
 
-use suql\db\Container;
-use suql\syntax\entity\SuQLArray;
+use test\suql\models\arrays\TestArray;
 
-class Query25 extends SuQLArray
+class Query25 extends TestArray
 {
     public function data()
     {
@@ -16,10 +15,5 @@ class Query25 extends SuQLArray
             ['user_id' => 1, 'login' => 'login1'],
             ['user_id' => 2, 'login' => 'login2'],
         ];
-    }
-
-    public function getDb()
-    {
-        return Container::get('db_test');
     }
 }

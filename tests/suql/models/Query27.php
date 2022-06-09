@@ -2,17 +2,11 @@
 
 namespace test\suql\models;
 
-use suql\db\Container;
-use suql\syntax\entity\SuQLService;
+use test\suql\models\services\TestService;
 
 # [Request(uri="http://jsonplaceholder.typicode.com/posts", method="GET")]
-class Query27 extends SuQLService
+class Query27 extends TestService
 {
-    public function getDb()
-    {
-        return Container::get('db_test');
-    }
-
     public function relations()
     {
         return [

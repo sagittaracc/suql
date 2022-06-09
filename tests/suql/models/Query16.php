@@ -2,11 +2,10 @@
 
 namespace test\suql\models;
 
-use suql\db\Container;
-use suql\syntax\entity\SuQLTable;
+use test\suql\models\tables\TestTable;
 
 # [Table(name="table_16")]
-class Query16 extends SuQLTable
+class Query16 extends TestTable
 {
     protected static $schemeClass = 'test\\suql\\schema\\AppScheme';
     protected static $builderClass = 'suql\\builder\\MySQLBuilder';
@@ -24,10 +23,5 @@ class Query16 extends SuQLTable
             from table_16
             where f1 % 2 = 0
 SQL;
-    }
-
-    public function getDb()
-    {
-        return Container::get('db_test');
     }
 }
