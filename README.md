@@ -11,7 +11,7 @@
 </div>
 
 ### SuQL
-SuQL - это обобщение понятия ORM. Данная технология позволяет связывать в одном запросе таблицы из разных СУБД, а также с внутренними PHP массивами и внешними сервисами, а после выполнять пост-обработку.
+SuQL is the ORM technology in a wider way. This lets you operate not only with tables, but also tables from different DBMS, php arrays and external services and put them all together like they are the real objects in just one database. After all you can do some post processing within the same technology.
 #### Tsml
 ```sql
 test\suql\models\Query18         -- Эта выборка происходит из таблицы Sqlite
