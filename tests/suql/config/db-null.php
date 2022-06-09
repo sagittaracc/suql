@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'db_test' => [
+    'connection' => [
         'driver' => 'mysql',
         'host' => 'localhost',
-        'dbname' => 'db_test',
+        'dbname' => '',
         'user' => 'root',
         'pass' => '',
     ],

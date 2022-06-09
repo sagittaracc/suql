@@ -13,9 +13,9 @@ final class ServiceTest extends TestCase
     public function setUp(): void
     {
         // Create a database
-        Container::create(require('config/db.php'));
+        Container::create(require('config/db-null.php'));
         Query::create('create database db_test')->setConnection('connection')->exec();
-        Container::add(require('config/db-test.php'));
+        Container::add(require('config/db.php'));
         Query::create('create table table_26(f1 int, f2 int, primary key (f1))')->setConnection('db_test')->exec();
         Query::create('insert into table_26 (f1, f2) values (1, 1), (2, 2), (3, 3)')->setConnection('db_test')->exec();
     }

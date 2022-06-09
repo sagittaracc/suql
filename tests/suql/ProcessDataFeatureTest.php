@@ -13,10 +13,10 @@ final class ProcessDataFeatureTest extends TestCase
     public function setUp(): void
     {
         // Создаем базу данных db_test
-        Container::create(require('config/db.php'));
+        Container::create(require('config/db-null.php'));
         Query::create('create database db_test')->setConnection('connection')->exec();
         // Создаем таблицу table_1
-        Container::add(require('config/db-test.php'));
+        Container::add(require('config/db.php'));
         Query::create('create table table_10(f1 int, f2 int)')->setConnection('db_test')->exec();
         // Добавляем в неё три записи
         Query::create('insert into table_10 (f1, f2) values (1, 1), (2, 2), (3, 3)')->setConnection('db_test')->exec();

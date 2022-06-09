@@ -13,9 +13,9 @@ final class OrmTest extends TestCase
     public function setUp(): void
     {
         // Create a database
-        Container::create(require('config/db.php'));
+        Container::create(require('config/db-null.php'));
         Query::create('create database db_test')->setConnection('connection')->exec();
-        Container::add(require('config/db-test.php'));
+        Container::add(require('config/db.php'));
 
         Query::create('create table ot1(a1 int, a2 int, primary key (a1))')->setConnection('db_test')->exec();
         Query::create('insert into ot1(a1, a2) values (1, 1), (2, 2), (3, 3)')->setConnection('db_test')->exec();

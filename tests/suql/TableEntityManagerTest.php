@@ -14,9 +14,9 @@ final class TableEntityManagerTest extends TestCase
     public function setUp(): void
     {
         // Create a database
-        Container::create(require('config/db.php'));
+        Container::create(require('config/db-null.php'));
         Query::create('create database db_test')->setConnection('connection')->exec();
-        Container::add(require('config/db-test.php'));
+        Container::add(require('config/db.php'));
     }
 
     public function tearDown(): void
