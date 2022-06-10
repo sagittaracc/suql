@@ -30,7 +30,7 @@ final class FileTest extends TestCase
             ['f1' => '2'],
             ['f1' => '3'],
         ];
-        $actual = Query28::find(['f1'])->fetchAll();
+        $actual = Query28::find(['f1', 'f2'])->fetchAll();
         $this->assertSame($expected, $actual);
     }
 }
