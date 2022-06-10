@@ -22,7 +22,7 @@ test\suql\models\Query18         -- This model works with an Sqlite table
         f1
             order desc
 ```
-Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources store in just one database.
+Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that store in just one database.
 
 ### Установка
 `composer require sagittaracc/suql`
