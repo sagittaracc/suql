@@ -24,24 +24,22 @@ test\suql\models\Query18         -- This model works with an Sqlite table
 ```
 Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that store in just one database.
 
-### Установка
+### Installation
 `composer require sagittaracc/suql`
 
-### Документация
-Прочитать можно [здесь](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
+### Documentation
+You can read the documentation [here](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
 
-### Сниппеты для VS Code
-Скачайте плагин [здесь](https://github.com/sagittaracc/suql-gen) и установите его с помощью команды `code --install-extension suql-gen.vsix`
+### Snippets for VS Code
+Download the plugin [here](https://github.com/sagittaracc/suql-gen) and install it by running this command `code --install-extension suql-gen.vsix`
 
-### Системные требования
-PHP версии не ниже 7.3
+### Requirements
+PHP >= 7.3
 
-### Тестирование
-Покрыто тестами [PHPUnit](https://phpunit.de/). Для запуска тестов выполните:
+### Tests
+To run tests:
 
 `./vendor/bin/phpunit tests`
 
 ### Psalm
-Данный код проанализирован с помощью Psalm. Для запуска статического анализа выполните:
-
 `./vendor/bin/psalm`
