@@ -1,6 +1,6 @@
 ## Documentation
 
-### Синтаксисы
+### Syntax
 
 [Yaml](https://github.com/sagittaracc/suql/blob/master/tests/suql/YamlSuQLTest.php)
 
@@ -20,18 +20,18 @@
 
 [Where Clause](https://github.com/sagittaracc/suql/blob/master/tests/suql/WhereTest.php)
 
-### Аннотации методов
+### Annotation
 
-[Аннотации методов](https://github.com/sagittaracc/suql/blob/master/tests/suql/AnnotationTest.php)
+[Annotation](https://github.com/sagittaracc/suql/blob/master/tests/suql/AnnotationTest.php)
 
 ### ORM
 
 [ORM](https://github.com/sagittaracc/suql/blob/master/tests/suql/OrmTest.php)
 
-### Связи моделей
-[Связи](https://github.com/sagittaracc/suql/blob/master/tests/suql/models/relational/Users.php)
+### Model relations
+[Relations](https://github.com/sagittaracc/suql/blob/master/tests/suql/models/relational/Users.php)
 
-[Выборка](https://github.com/sagittaracc/suql/blob/master/tests/suql/RelationTest.php)
+[Tests](https://github.com/sagittaracc/suql/blob/master/tests/suql/RelationTest.php)
 
 ### Advanced Queries
 
@@ -66,8 +66,6 @@
 [Transaction](https://github.com/sagittaracc/suql/blob/master/tests/suql/TransactionTest.php)
 
 ### Features
-
-[Join php array with a db table](https://github.com/sagittaracc/suql/blob/master/tests/suql/ProcessDataFeatureTest.php)
 
 [Post process functions](https://github.com/sagittaracc/suql/blob/master/tests/suql/ProcessDataFeatureTest.php)
 
