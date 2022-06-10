@@ -24,4 +24,11 @@ class Query28 extends SuQLFile
     {
         return array_column($ini, 'f2');
     }
+
+    public function relations()
+    {
+        return [
+            Query26::class => ['f1' => 'f1'],
+        ];
+    }
 }
