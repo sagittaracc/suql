@@ -17,19 +17,11 @@ class Query28 extends SuQLFile
 
     public function getF1($file, $ini)
     {
-        $list = [];
-        foreach ($ini as $record) {
-            $list[] = $record['f1'];
-        }
-        return $list;
+        return array_column($ini, 'f1');
     }
 
     public function getF2($file, $ini)
     {
-        $list = [];
-        foreach ($ini as $record) {
-            $list[] = $record['f2'];
-        }
-        return $list;
+        return array_column($ini, 'f2');
     }
 }
