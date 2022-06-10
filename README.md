@@ -24,7 +24,7 @@ test\suql\models\Query18       -- This model works with an Sqlite table
     test\suql\models\Query28   -- And finally this one gets some data from the ini file
       f1
 ```
-Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that store in just one database.
+Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that be stored in just one database.
 
 ### Installation
 `composer require sagittaracc/suql`
