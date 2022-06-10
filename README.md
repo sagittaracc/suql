@@ -14,14 +14,15 @@
 SuQL (pronounced "suckle") is the ORM technology in a wider way. This lets you operate not only with tables, but also with tables from different DBMS, php arrays and external services and put them all together like they are the real objects in just one database. After all you can do some post processing within the same technology.
 #### Tsml
 ```sql
-test\suql\models\Query18         -- Эта выборка происходит из таблицы Sqlite
+test\suql\models\Query18         -- This model works with an Sqlite table
     f1
     f2
     !buff
-    test\suql\models\Query10     -- Эта происходит уже из таблицы MySQL
+    test\suql\models\Query10     -- And this one works with a MySQL table
         f1
             order desc
 ```
+Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources store in just one database.
 
 ### Установка
 `composer require sagittaracc/suql`
