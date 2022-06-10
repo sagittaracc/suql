@@ -15,13 +15,14 @@ SuQL (pronounced "suckle") is the ORM technology in a wider way. This lets you o
 You may have heard of LINQ (Language Integrated Query). This is a counterpart in PHP.
 #### Tsml
 ```sql
-test\suql\models\Query18         -- This model works with an Sqlite table
+test\suql\models\Query18       -- This model works with an Sqlite table
+  f1
+  f2
+  test\suql\models\Query10     -- And this one works with a MySQL table
     f1
-    f2
-    !buff
-    test\suql\models\Query10     -- And this one works with a MySQL table
-        f1
-            order desc
+      order desc
+    test\suql\models\Query28   -- And finally this one gets some data from the ini file
+      f1
 ```
 Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that store in just one database.
 
