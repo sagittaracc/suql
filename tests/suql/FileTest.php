@@ -26,9 +26,9 @@ final class FileTest extends TestCase
     public function testFile(): void
     {
         $expected = [
-            ['f1' => '1'],
-            ['f1' => '2'],
-            ['f1' => '3'],
+            ['f1' => '1', 'f2' => '1'],
+            ['f1' => '2', 'f2' => '2'],
+            ['f1' => '3', 'f2' => '3'],
         ];
         $actual = Query28::find(['f1', 'f2'])->fetchAll();
         $this->assertSame($expected, $actual);

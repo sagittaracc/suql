@@ -22,12 +22,23 @@ abstract class SuQLFile extends SuQLArray implements FileInterface
     {
     }
     /**
+     * Функция предобработки содержимого файла
+     * @return mixed
+     */
+    protected function beforeRead($file)
+    {
+    }
+    /**
      * Выбирает поля из перечня
      * @param array $options перечень полей для выборки
      * @return \suql\syntax\entity\SuQLArray
      */
     public static function find($options = [])
     {
+        if (!is_array($options)) {
+            return;
+        }
+        
         $data = [];
         $columns = [];
 
@@ -36,25 +47,24 @@ abstract class SuQLFile extends SuQLArray implements FileInterface
         $annotation = FileAnnotation::from($instance)->read();
         $instance->filename = $annotation->location;
         $instance->content = file_get_contents($instance->filename);
+        $beforeRead = $instance->beforeRead($instance);
 
-        if (is_array($options)) {
-            foreach ($options as $field) {
-                $getMethod = 'get' . ucfirst($field);
-                if (method_exists($instance, $getMethod)) {
-                    $columns[$field] = $instance->$getMethod($instance);
-                }
+        foreach ($options as $field) {
+            $getMethod = 'get' . ucfirst($field);
+            if (method_exists($instance, $getMethod)) {
+                $columns[$field] = $instance->$getMethod($instance, $beforeRead);
             }
-            
-            foreach ($columns as $field => $list) {
-                foreach ($list as $index => $value) {
-                    $data[$index][$field] = $value;
-                }
-            }
-
-            static::$data = $data;
-    
-            return parent::all();
         }
+        
+        foreach ($columns as $field => $list) {
+            foreach ($list as $index => $value) {
+                $data[$index][$field] = $value;
+            }
+        }
+
+        static::$data = $data;
+
+        return parent::all();
     }
     /**
      * Получает имя файла

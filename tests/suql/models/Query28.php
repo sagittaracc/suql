@@ -10,11 +10,25 @@ class Query28 extends SuQLFile
 {
     use TestMySQLConnection;
 
-    public function getF1($file)
+    protected function beforeRead($file)
+    {
+        return parse_ini_string($file->getContent(), true);
+    }
+
+    public function getF1($file, $ini)
     {
         $list = [];
-        foreach (parse_ini_string($file->getContent(), true) as $record) {
+        foreach ($ini as $record) {
             $list[] = $record['f1'];
+        }
+        return $list;
+    }
+
+    public function getF2($file, $ini)
+    {
+        $list = [];
+        foreach ($ini as $record) {
+            $list[] = $record['f2'];
         }
         return $list;
     }
