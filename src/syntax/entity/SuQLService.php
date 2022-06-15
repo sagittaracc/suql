@@ -51,6 +51,8 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
     }
     /**
      * Обработка полученного из сервиса контента
+     * @param string $content
+     * @return mixed
      */
     protected function processContent($content)
     {
