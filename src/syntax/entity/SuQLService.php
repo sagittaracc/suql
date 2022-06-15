@@ -27,6 +27,10 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
      */
     protected $body;
     /**
+     * @var string proxy
+     */
+    protected $proxy = null;
+    /**
      * @inheritdoc
      */
     public static function find($body = [])
@@ -39,12 +43,18 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
         $instance->uri = $instance->method === 'GET' ? $instance->uri . '?' . http_build_query($body) : $instance->uri;
         $instance->body = $instance->method === 'POST' ? $body : [];
 
-        $client = new Client();
+        $client = new Client(['proxy' => $instance->proxy, 'headers' => ['Content-Type' => 'application/json']]);
         $response = $client->request($instance->method, $instance->uri, $instance->body);
         $content = $response->getBody()->getContents();
 
+        return $instance->processContent($content);
+    }
+    /**
+     * Обработка полученного из сервиса контента
+     */
+    protected function processContent($content)
+    {
         static::$data = json_decode($content, true);
-
         return parent::all();
     }
 }
