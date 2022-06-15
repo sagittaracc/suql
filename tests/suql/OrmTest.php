@@ -59,6 +59,16 @@ final class OrmTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testOrmSmartJoin(): void
+    {
+        $t3Data = T1::all()->getT3();
+        foreach ($t3Data as $t3Object) {
+            $this->assertEquals(3, $t3Object->c1);
+            $this->assertEquals(3, $t3Object->c2);
+        }
+        $this->assertTrue(true);
+    }
+
     public function testMainLastRequestedModel(): void
     {
         $query = T1::all();

@@ -807,7 +807,7 @@ abstract class ActiveRecord extends Obj
         $this->lastRequestedModel = $model;
 
         $type = isset($arguments[0]) && isset($arguments[0]['join']) ? $arguments[0]['join'] : 'inner';
-        $algorithm = isset($arguments[0]) && isset($arguments[0]['algorithm']) ? $arguments[0]['algorithm'] : 'simple';
+        $algorithm = isset($arguments[0]) && isset($arguments[0]['algorithm']) ? $arguments[0]['algorithm'] : 'smart';
 
         $tempInstance = $model::getTempInstance();
 
