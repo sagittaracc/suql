@@ -3,6 +3,7 @@
 namespace suql\syntax\entity;
 
 use GuzzleHttp\Client;
+use suql\annotation\ProxyAnnotation;
 use suql\annotation\ServiceAnnotation;
 use suql\syntax\ServiceInterface;
 
@@ -37,11 +38,21 @@ abstract class SuQLService extends SuQLArray implements ServiceInterface
     {
         $instance = new static();
 
-        $annotation = ServiceAnnotation::from($instance)->read();
-        $instance->uri = $annotation->uri;
-        $instance->method = $annotation->method;
+        $serviceAnnotation = ServiceAnnotation::from($instance)->read();
+        $proxyAnnotation = ProxyAnnotation::from($instance)->read();
+        $instance->uri = $serviceAnnotation->uri;
+        $instance->method = $serviceAnnotation->method;
         $instance->uri = $instance->method === 'GET' ? $instance->uri . '?' . http_build_query($body) : $instance->uri;
         $instance->body = $instance->method === 'POST' ? $body : [];
+        if (!is_null($proxyAnnotation->url)) {
+            $url = $proxyAnnotation->url;
+            $port = $proxyAnnotation->port;
+            if (!is_null($proxyAnnotation->user)) {
+                $proxyAuth = "$proxyAnnotation->user:$proxyAnnotation->pass";
+                $url = str_replace('://', '://' . $proxyAuth . '@', $url);
+            }
+            $instance->proxy = "$url:$port";
+        }
 
         $client = new Client(['proxy' => $instance->proxy, 'headers' => ['Content-Type' => 'application/json']]);
         $response = $client->request($instance->method, $instance->uri, $instance->body);
