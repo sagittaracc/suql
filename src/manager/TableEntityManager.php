@@ -41,8 +41,12 @@ class TableEntityManager
     public function run()
     {
         foreach ($this->persistList as $entity) {
-            // TODO: Пока только сохранение
-            $this->saveEntity($entity);
+            if ($entity->isNewOne()) {
+                $this->saveEntity($entity);
+            }
+            else {
+                $this->updateEntity($entity);
+            }
         }
 
         foreach ($this->deleteList as $entity) {
@@ -88,6 +92,14 @@ class TableEntityManager
         $entity->getDb()->getPdo()->exec($entity->getRawSql());
 
         $entity->setLastInsertId($entity->getDb()->getPdo()->lastInsertId());
+    }
+    /**
+     * Обновление
+     * @param \suql\syntax\ActiveRecord $entity
+     */
+    private function updateEntity($entity)
+    {
+        // TODO: ...
     }
     /**
      * Удаление

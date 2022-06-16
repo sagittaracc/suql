@@ -15,7 +15,6 @@ use suql\core\SmartDate;
 use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
 use suql\syntax\field\Raw;
-use test\suql\models\buffers\Buffer;
 
 /**
  * ActiveRecord
@@ -24,6 +23,10 @@ use test\suql\models\buffers\Buffer;
  */
 abstract class ActiveRecord extends Obj
 {
+    /**
+     * @var boolean указывает новая эта запись или существующая
+     */
+    protected $isNewRecord = true;
     /**
      * @var string класс используемого буфера
      */
@@ -77,6 +80,22 @@ abstract class ActiveRecord extends Obj
      * @var boolean сериализовать результат?
      */
     protected $serializeResult = true;
+    /**
+     * Проверяет новая ли это запись
+     * @return boolean
+     */
+    public function isNewOne()
+    {
+        return $this->isNewRecord;
+    }
+    /**
+     * Задает новая запись или нет
+     * @param boolean $isNewOne
+     */
+    public function setIfNewOne($isNewOne)
+    {
+        $this->isNewRecord = $isNewOne;
+    }
     /**
      * Запрос должен иметь имя запроса
      * @return string
@@ -183,7 +202,9 @@ abstract class ActiveRecord extends Obj
      */
     public static function one($id)
     {
-        return static::findByPK($id)->fetchOne();
+        $instance = static::findByPK($id);
+        $instance->isNewRecord = false;
+        return $instance->fetchOne();
     }
     /**
      * Выборка всех данных из модели
