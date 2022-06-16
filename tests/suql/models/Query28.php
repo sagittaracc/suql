@@ -10,7 +10,7 @@ class Query28 extends SuQLFile
 {
     use TestMySQLConnection;
 
-    protected function beforeRead($file)
+    protected function beforeRead($file, $field)
     {
         return parse_ini_string($file->getContent(), true);
     }

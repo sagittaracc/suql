@@ -25,7 +25,7 @@ abstract class SuQLFile extends SuQLArray implements FileInterface
      * Функция предобработки содержимого файла
      * @return mixed
      */
-    protected function beforeRead($file)
+    protected function beforeRead($file, $field)
     {
     }
     /**
@@ -47,11 +47,11 @@ abstract class SuQLFile extends SuQLArray implements FileInterface
         $annotation = FileAnnotation::from($instance)->read();
         $instance->filename = $annotation->location;
         $instance->content = file_get_contents($instance->filename);
-        $beforeRead = $instance->beforeRead($instance);
 
         foreach ($options as $field) {
             $getMethod = 'get' . ucfirst($field);
             if (method_exists($instance, $getMethod)) {
+                $beforeRead = $instance->beforeRead($instance, $field);
                 $columns[$field] = $instance->$getMethod($instance, $beforeRead);
             }
         }
