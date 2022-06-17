@@ -6,6 +6,7 @@ use suql\syntax\entity\SuQLJsonService;
 use test\suql\connections\TestMySQLConnection;
 
 # [Request(uri="https://api.random.org/json-rpc/2/invoke", method="POST")]
+# [ProxyConfig(file="C:\Users\arutyunyan\.npmrc", parser="\parser\Npmrc")]
 class Query29 extends SuQLJsonService
 {
     use TestMySQLConnection;

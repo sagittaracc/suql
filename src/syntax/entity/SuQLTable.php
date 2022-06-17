@@ -217,7 +217,9 @@ abstract class SuQLTable extends ActiveRecord implements TableInterface, DbObjec
             }
         }
 
-        $result->setIfNewOne($this->isNewOne());
+        if (is_object($result)) {
+            $result->setIfNewOne($this->isNewOne());
+        }
 
         return $result;
     }

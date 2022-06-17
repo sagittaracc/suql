@@ -13,6 +13,7 @@ class ProxyAnnotation extends Annotation
      * @const string регулярное выражение для парсинга аннотации
      */
     const REGEX = '/#\s*\[Proxy\(url="(?<url>.*?)"\s*,\s*port=(?<port>\d+)\s*(,\s*user="(?<user>\w+)"\s*,\s*pass="(?<pass>\w+)")?\)\]/msi';
+    const REGEX_CONFIG = '/#\s*\[ProxyConfig\(file="(?<file>.*?)"\s*,\s*parser="(?<parser>.*?)"\)\]/msi';
     /**
      * @var string
      */
@@ -46,6 +47,23 @@ class ProxyAnnotation extends Annotation
 
             if (!empty($matches['pass'])) {
                 $this->pass = $matches['pass'];
+            }
+        }
+        else {
+            $matches = parent::readBy(self::REGEX_CONFIG);
+
+            if (!empty($matches)) {
+                $file = $matches['file'];
+                $parserClass = $matches['parser'];
+                $parser = new $parserClass($file);
+                $config = $parser->getProxy();
+
+                if (!empty($config)) {
+                    $this->url = "{$config['protocol']}://{$config['host']}";
+                    $this->port = $config['port'];
+                    $this->user = $config['user'];
+                    $this->pass = $config['pass'];
+                }
             }
         }
 
