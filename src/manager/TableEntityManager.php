@@ -110,7 +110,8 @@ class TableEntityManager
 
         $pk = $entity->getPrimaryKey();
         $entity->getQuery($entity->query())->addWhere($pk, $entity->$pk);
-        // var_dump($entity->getRawSql());
+
+        $entity->getDb()->getPdo()->exec($entity->getRawSql());
     }
     /**
      * Удаление

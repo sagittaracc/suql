@@ -102,6 +102,14 @@ final class MySQLBuilder extends SQLBuilder
     /**
      * @inheritdoc
      */
+    public function buildCondition($fieldName, $condition)
+    {
+        $value = array_values($condition->getParams())[0];
+        return "`$fieldName->table`.`$fieldName->name` = $value";
+    }
+    /**
+     * @inheritdoc
+     */
     public function getPrimaryKeyQuery($table)
     {
         $qmap = new QMap();

@@ -60,9 +60,14 @@ class Update extends Query implements UpdateQueryInterface, Buildable
     /**
      * 
      */
-    public function addWhere($field, $condition)
+    public function addWhere($field, $value)
     {
-        $this->where[] = "$field = $condition";
+        $fieldName = new FieldName($this->table, $field);
+        $condition = new Condition(new SimpleParam($fieldName, [$value]), "$ = ?");
+        $this->where[] = [
+            'fieldName' => $fieldName,
+            'condition' => $condition,
+        ];
     }
     /**
      * Получить таблицу
@@ -88,20 +93,20 @@ class Update extends Query implements UpdateQueryInterface, Buildable
      */
     public function getWhere()
     {
-        return $this->where;
+        return [];
     }
     /**
      * 
      */
     public function getWhere20()
     {
-        return [];
+        return $this->where;
     }
     /**
      * 
      */
     public function getFieldList()
     {
-        return ['f1' => 'f1'];
+        return [];
     }
 }

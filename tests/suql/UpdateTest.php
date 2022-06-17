@@ -33,6 +33,7 @@ final class UpdateTest extends TestCase
         $record->f2 = 7;
         $record->save();
 
-        $this->assertTrue(true);
+        $record = Query11::one(6);
+        $this->assertEquals(7, $record->f2);
     }
 }

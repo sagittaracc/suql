@@ -5,6 +5,7 @@ namespace suql\builder;
 use sagittaracc\ArrayHelper;
 use sagittaracc\Map;
 use sagittaracc\PlaceholderHelper;
+use suql\core\Condition;
 use suql\core\Name;
 use suql\modifier\field\SQLFunctionModifier;
 
@@ -399,7 +400,12 @@ abstract class SQLBuilder
 
         $extraWhere = [];
         foreach ($whereList20 as $where20) {
-            $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
+            if ($where20['condition'] instanceof Condition) {
+                $extraWhere[] = $this->buildCondition($where20['fieldName'], $where20['condition']);
+            }
+            else {
+                $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
+            }
         }
 
         $fullWhereList = array_merge($whereList, $extraWhere);

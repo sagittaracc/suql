@@ -60,6 +60,10 @@ class Condition
             $this->condition
         );
     }
+    public function getRawCondition()
+    {
+        return $this->condition;
+    }
     /**
      * Получает параметры
      * @return array
