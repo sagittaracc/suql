@@ -21,6 +21,10 @@ class Update extends Query implements UpdateQueryInterface, Buildable
      */
     private $values = [];
     /**
+     * 
+     */
+    private $where;
+    /**
      * @inheritdoc
      */
     public function getBuilderFunction()
@@ -31,7 +35,7 @@ class Update extends Query implements UpdateQueryInterface, Buildable
      * Задать таблицу в которой обновляем
      * @param string $table название таблицы
      */
-    public function addUpdate($table)
+    public function setTable($table)
     {
         $this->table = $table;
     }
@@ -54,6 +58,13 @@ class Update extends Query implements UpdateQueryInterface, Buildable
         $this->values[$field] = $placeholder;
     }
     /**
+     * 
+     */
+    public function addWhere($field, $condition)
+    {
+        $this->where[] = "$field = $condition";
+    }
+    /**
      * Получить таблицу
      * @return string
      */
@@ -66,6 +77,31 @@ class Update extends Query implements UpdateQueryInterface, Buildable
      */
     public function getValues()
     {
-        return '';
+        $updateList = [];
+        foreach ($this->values as $field => $value) {
+            $updateList[] = "$field = $value";
+        }
+        return implode(',', $updateList);
+    }
+    /**
+     * 
+     */
+    public function getWhere()
+    {
+        return $this->where;
+    }
+    /**
+     * 
+     */
+    public function getWhere20()
+    {
+        return [];
+    }
+    /**
+     * 
+     */
+    public function getFieldList()
+    {
+        return ['f1' => 'f1'];
     }
 }

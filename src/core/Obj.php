@@ -197,6 +197,14 @@ class Obj
         $this->queries[$name] = new Insert($this);
     }
     /**
+     * Добавляет update запрос по названию
+     * @param string $name название нового запроса
+     */
+    public function addUpdate($name)
+    {
+        $this->queries[$name] = new Update($this);
+    }
+    /**
      * Добавляет union запрос по названию
      * @param string $name название запроса
      * @param string $query запрос объединения например @query1 union @query2

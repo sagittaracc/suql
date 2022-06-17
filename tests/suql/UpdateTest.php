@@ -30,7 +30,6 @@ final class UpdateTest extends TestCase
     public function testUpdate(): void
     {
         $record = Query11::one(6);
-        $record->f1 = 7;
         $record->f2 = 7;
         $record->save();
 

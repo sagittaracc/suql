@@ -99,7 +99,18 @@ class TableEntityManager
      */
     private function updateEntity($entity)
     {
-        // TODO: ...
+        $entity->init();
+        $entity->addUpdate($entity->query());
+        $entity->getQuery($entity->query())->setTable($entity->table());
+
+        foreach ($entity->getPublicProperties() as $property) {
+            $propertyName = $property->getName();
+            $entity->getQuery($entity->query())->addValue($propertyName, $entity->$propertyName);
+        }
+
+        $pk = $entity->getPrimaryKey();
+        $entity->getQuery($entity->query())->addWhere($pk, $entity->$pk);
+        // var_dump($entity->getRawSql());
     }
     /**
      * Удаление

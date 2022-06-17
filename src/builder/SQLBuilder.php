@@ -34,7 +34,7 @@ abstract class SQLBuilder
     /**
      * @const
      */
-    const UPDATE_TEMPLATE = "update {table} set {values} where {where}";
+    const UPDATE_TEMPLATE = "update {table} set {values} {where}";
     /**
      * @var string $quote
      */
