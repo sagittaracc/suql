@@ -61,4 +61,11 @@ class Update extends Query implements UpdateQueryInterface, Buildable
     {
         return $this->table;
     }
+    /**
+     * @return string
+     */
+    public function getValues()
+    {
+        return '';
+    }
 }

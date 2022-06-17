@@ -32,6 +32,10 @@ abstract class SQLBuilder
      */
     const INSERT_TEMPLATE = "insert into {table} ({fields}) values ({values})";
     /**
+     * @const
+     */
+    const UPDATE_TEMPLATE = "update {table} set {values} where {where}";
+    /**
      * @var string $quote
      */
     protected $quote = '';
@@ -174,6 +178,21 @@ abstract class SQLBuilder
         $insertTemplate = str_replace('{values}', $this->osuql->getQuery($query)->getValues(), $insertTemplate);
 
         return $insertTemplate;
+    }
+    /**
+     * Конвертирует update запрос
+     * @param string $query
+     * @return string
+     */
+    private function buildUpdateQuery($query)
+    {
+        $updateTemplate = self::UPDATE_TEMPLATE;
+
+        $updateTemplate = str_replace('{table}', $this->osuql->getQuery($query)->getTable(), $updateTemplate);
+        $updateTemplate = str_replace('{values}', $this->osuql->getQuery($query)->getValues(), $updateTemplate);
+        $updateTemplate = str_replace('{where}', $this->buildWhere($query), $updateTemplate);
+
+        return $updateTemplate;
     }
     /**
      * Выполняет декомпозицию вложенных запросов
