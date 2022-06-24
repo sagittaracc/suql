@@ -840,9 +840,8 @@ abstract class ActiveRecord extends Obj
     private function runMacros($name, $arguments)
     {
         $macros = require_once($this->getMacrosName($name));
-        $param = $arguments[0];
-        $query = $macros[$param];
-        $query($this);
+        $query = $macros['main'];
+        call_user_func_array($query, array_merge([$this], $arguments));
     }
     /**
      * Обработка ORM алиасов
