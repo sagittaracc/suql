@@ -24,6 +24,14 @@ use suql\syntax\field\Raw;
 abstract class ActiveRecord extends Obj
 {
     /**
+     * @var boolean
+     */
+    protected $useMacros = false;
+    /**
+     * @var string
+     */
+    protected $macrosPath = null;
+    /**
      * @var boolean указывает новая эта запись или существующая
      */
     protected $isNewRecord = true;
@@ -807,11 +815,46 @@ abstract class ActiveRecord extends Obj
         return $this->lastRequestedModel;
     }
     /**
+     * Получает путь макроса
+     * @param string $name имя макроса
+     * @return string
+     */
+    private function getMacrosName($name)
+    {
+        return $this->macrosPath . '/' . $name . '.php';
+    }
+    /**
+     * Проверяет если это макрос
+     * @param string $name имя макроса предположительного
+     * @return boolean
+     */
+    private function isMacros($name)
+    {
+        return file_exists($this->getMacrosName($name));
+    }
+    /**
+     * Запуск макроса
+     * @param string $name имя макроса
+     * @param mixed $arguments аргументы макроса
+     */
+    private function runMacros($name, $arguments)
+    {
+        $macros = require_once($this->getMacrosName($name));
+        $param = $arguments[0];
+        $query = $macros[$param];
+        $query($this);
+    }
+    /**
      * Обработка ORM алиасов
      * @return self
      */
     public function __call($name, $arguments)
     {
+        if ($this->useMacros && $this->isMacros($name)) {
+            $this->runMacros($name, $arguments);
+            return $this;
+        }
+
         if ($this->isPostFunction($name)) {
             // TODO: Возможно нужно будет передать аргументы
             $this->addPostFunction($name);
