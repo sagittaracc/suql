@@ -19,13 +19,13 @@ Also you can write database triggers in PHP like this:
 Consumption::trigger('insert',
   function ($row) {
 
-    $lastOne = LastConsumption::find([
+    $cons = LastConsumption::find([
       'user' => $row['user']
     ]);
 
-    $lastOne->value = $row['value'];
-    $lastOne->time = $row['time'];
-    $lastOne->save();
+    $cons->value = $row['value'];
+    $cons->time = $row['time'];
+    $cons->save();
 
     }
 );
