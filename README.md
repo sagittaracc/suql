@@ -13,18 +13,21 @@
 ### SuQL
 SuQL (pronounced "suckle") is the ORM technology in a wider way. This lets you operate not only with tables, but also with tables from different DBMS, php arrays, external services, local files and put them all together like they are the real objects in just one database. After all you can do some post processing within the same technology.
 You may have heard of LINQ (Language Integrated Query). This is a counterpart in PHP.
-#### Tsml
-```sql
-test\suql\models\Query18       -- This model works with an Sqlite table
-  f1
-  f2
-  test\suql\models\Query10     -- And this one works with a MySQL table
-    f1
-      order desc
-    test\suql\models\Query28   -- And finally this one gets some data from the ini file
-      f1
-```
 Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that be stored in just one database.
+Also you can write database triggers in PHP like this:
+```php
+Consumption::trigger('insert', function ($row) {
+    
+    $lastOne = LastConsumption::find(['user' => $row['user']);
+    $lastOne->value = $row['value'];
+    $lastOne->save();
+    
+});
+
+$consumption = new Consumption();
+$consumption->load($request);
+$consumption->save();
+```
 
 ### Installation
 `composer require sagittaracc/suql`
