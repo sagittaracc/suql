@@ -20,6 +20,7 @@ Consumption::trigger('insert', function ($row) {
     
     $lastOne = LastConsumption::find(['user' => $row['user']);
     $lastOne->value = $row['value'];
+    $lastOne->time = $row['time'];
     $lastOne->save();
     
 });
