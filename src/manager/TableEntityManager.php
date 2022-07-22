@@ -65,6 +65,7 @@ class TableEntityManager
         $entity->init();
         $entity->addInsert($entity->query());
         $entity->getQuery($entity->query())->addInto($entity->table());
+        $row = [];
         foreach ($entity->getPublicProperties() as $property) {
             $propertyName = $property->getName();
             if (is_subclass_of($entity->$propertyName, ActiveRecord::class)) {
@@ -74,6 +75,7 @@ class TableEntityManager
             }
             else {
                 $entity->getQuery($entity->query())->addValue($propertyName, $entity->$propertyName);
+                $row[$propertyName] = $entity->$propertyName;
             }
         }
 
@@ -90,6 +92,10 @@ class TableEntityManager
         }
 
         $entity->getDb()->getPdo()->exec($entity->getRawSql());
+
+        if ($entity->hasTrigger('insert')) {
+            $entity->runTrigger('insert', $row);
+        }
 
         $entity->setLastInsertId($entity->getDb()->getPdo()->lastInsertId());
     }

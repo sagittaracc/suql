@@ -12,6 +12,7 @@ use suql\core\SimpleParam;
 use ReflectionProperty;
 use suql\core\Scheme;
 use suql\core\SmartDate;
+use suql\db\Container;
 use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
 use suql\syntax\field\Raw;
@@ -175,6 +176,38 @@ abstract class ActiveRecord extends Obj
         $entityManager = new TableEntityManager();
         $entityManager->persist($this);
         $entityManager->run();
+    }
+    /**
+     * Вешает триггер
+     * @param string $type
+     * @param \Closure $callback
+     */
+    public static function trigger($type, $callback)
+    {
+        Container::addTrigger(static::class, $type, $callback);
+    }
+    /**
+     * Проверяет есть ли какой-нибудь триггер
+     * @param string $type
+     * @return boolean
+     */
+    public function hasTrigger($type)
+    {
+        if (!is_null(Container::getTrigger(static::class, $type))) {
+            return true;
+        }
+
+        return false;
+    }
+    /**
+     * Запускает триггер
+     * @param string $type
+     * @param array $row
+     */
+    public function runTrigger($type, $row)
+    {
+        $trigger = Container::getTrigger(static::class, $type);
+        $trigger($row);
     }
     /**
      * Выборка с начально заданной фильтрацией

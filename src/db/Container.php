@@ -14,6 +14,10 @@ class Container
      */
     private static $items;
     /**
+     * @var array контейнер триггеров
+     */
+    private static $triggers;
+    /**
      * Создает контейнер с подключениями
      * @param array $dbList
      */
@@ -37,5 +41,25 @@ class Container
     public static function get($connection)
     {
         return isset(self::$items[$connection]) ? self::$items[$connection] : null;
+    }
+    /**
+     * Добавляет триггер
+     * @param string $modelClass
+     * @param string $type
+     * @param \Closure $callback
+     */
+    public static function addTrigger($modelClass, $type, $callback)
+    {
+        self::$triggers[$modelClass][$type] = $callback;
+    }
+    /**
+     * Получает триггер
+     * @param string $modelClass
+     * @param string $type
+     * @return \Closure|null
+     */
+    public static function getTrigger($modelClass, $type)
+    {
+        return isset(self::$triggers[$modelClass][$type]) ? self::$triggers[$modelClass][$type] : null;
     }
 }
