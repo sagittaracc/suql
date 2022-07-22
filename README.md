@@ -17,15 +17,15 @@ Basically the models don't have to be tables in database. It could be anything. 
 Also you can write database triggers in PHP like this:
 ```php
 Consumption::trigger('insert',
-    function ($row) {
+  function ($row) {
 
-        $lastOne = LastConsumption::find([
-            'user' => $row['user']
-        ]);
+    $lastOne = LastConsumption::find([
+      'user' => $row['user']
+    ]);
 
-        $lastOne->value = $row['value'];
-        $lastOne->time = $row['time'];
-        $lastOne->save();
+    $lastOne->value = $row['value'];
+    $lastOne->time = $row['time'];
+    $lastOne->save();
 
     }
 );
