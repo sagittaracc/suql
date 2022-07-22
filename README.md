@@ -16,14 +16,18 @@ You may have heard of LINQ (Language Integrated Query). This is a counterpart in
 Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that be stored in just one database.
 Also you can write database triggers in PHP like this:
 ```php
-Consumption::trigger('insert', function ($row) {
-    
-    $lastOne = LastConsumption::find(['user' => $row['user']);
-    $lastOne->value = $row['value'];
-    $lastOne->time = $row['time'];
-    $lastOne->save();
-    
-});
+Consumption::trigger('insert',
+    function ($row) {
+
+        $lastOne = LastConsumption::find([
+            'user' => $row['user']
+        ]);
+        $lastOne->value = $row['value'];
+        $lastOne->time = $row['time'];
+        $lastOne->save();
+
+    }
+);
 
 $consumption = new Consumption();
 $consumption->load($request);
