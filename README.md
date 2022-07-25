@@ -41,11 +41,11 @@ div(@app)
         suql-click likeIt
 </pre>
 ```js
-(function(){
-    app.likeIt = function () {
+(function(scope){
+    scope.likeIt = function () {
         assign(likes, likes + 1)
     }
-})()
+})(window.app)
 ```
 
 ### Installation
