@@ -43,7 +43,7 @@ div(@app)
 ```js
 (function(scope){
     scope.likeIt = function () {
-        assign(likes, likes + 1)
+        assign(scope.likes, scope.likes + 1)
     }
 })(window.app)
 ```
