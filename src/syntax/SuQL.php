@@ -29,7 +29,7 @@ class SuQL
         foreach ($json as $root => $data) {
             $instance = $root::all();
 
-            self::parse($instance, $data, $parser);
+            self::parseQuery($instance, $data, $parser);
         }
 
         $instance->as(pathinfo($file, PATHINFO_FILENAME));
@@ -42,7 +42,7 @@ class SuQL
      * @param array $data данные по ключу
      * @param \suql\syntax\SuQLParser парсер
      */
-    private static function parse(&$instance, $data, $parser)
+    private static function parseQuery(&$instance, $data, $parser)
     {
         foreach ($data as $key => $value) {
             if ($key === '!buff') {
@@ -50,7 +50,7 @@ class SuQL
             }
             else if (class_exists($key)) {
                 $instance = $instance->join($key);
-                self::parse($instance, $value, $parser);
+                self::parseQuery($instance, $value, $parser);
             }
             else if (file_exists($key)) {
                 $instance->join(self::query($key, $parser));
