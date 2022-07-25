@@ -11,7 +11,7 @@
 </div>
 
 ### SuQL
-SuQL (pronounced "suckle") is the fullstack framework. This lets you operate not only with tables, but also with tables from different DBMS, php arrays, external services, local files and put them all together like they are the real objects in just one database. After all you can do some post processing within the same technology.
+SuQL (pronounced "suckle") is a fullstack framework. On the backend side this lets you operate not only with tables, but also with tables from different DBMS, php arrays, external services, local files and put them all together like they are the real objects in just one database. After all you can do some post processing within the same technology.
 You may have heard of LINQ (Language Integrated Query). This is a counterpart in PHP.
 Basically the models don't have to be tables in database. It could be anything. The point is we work with different datasources using SQL like all these datasources are tables that be stored in just one database.
 Also you can write database triggers in PHP like this:
@@ -31,7 +31,8 @@ $consumption->load($request);
 $consumption->save();
 ```
 
-it is also a frontend framework which lets you do everything what modern frontend frameworks can do.
+On the frontend side this lets you do everything what modern frontend frameworks can do.
+
 <pre>
 div(@app)
     label
