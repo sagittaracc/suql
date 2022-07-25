@@ -65,4 +65,23 @@ class SuQL
             }
         }
     }
+    /**
+     * Разбор шаблона
+     * @param string файл с шаблоном
+     * @param \syql\syntax\SuQLParser парсер
+     * @return \suql\syntax\ActiveRecord
+     */
+    public static function template($file, SuQLParser $parser = null)
+    {
+        if (is_null($parser)) {
+            $parser = new Tsml;
+        }
+
+        $json = $parser->parseFile($file);
+
+        return $json;
+
+        foreach ($json as $root => $data) {
+        }
+    }
 }

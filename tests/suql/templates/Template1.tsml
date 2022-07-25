@@ -1,0 +1,5 @@
+div@app
+    label
+        {{$likes}}
+    button
+        sg-click likeIt
