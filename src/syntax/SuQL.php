@@ -79,9 +79,12 @@ class SuQL
 
         $json = $parser->parseFile($file);
 
-        return $json;
-
         foreach ($json as $root => $data) {
+            $parts = explode('@', $root);
+            $tag = $parts[0];
+            $namespace = isset($parts[1]) ? $parts[1] : 'main';
         }
+
+        return $json;
     }
 }
