@@ -10,7 +10,6 @@ final class TemplateTest extends TestCase
 {
     public function testTsmlSuQLParse(): void
     {
-        // $expected = StringHelper::trimSql(require('queries/mysql/q34.php'));
         $expected = [
             'div@app' => [
                 'label' => [
