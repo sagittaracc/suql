@@ -34,7 +34,7 @@ $consumption->save();
 On the frontend side this lets you do everything what modern frontend frameworks can do.
 
 <pre>
-div(@app)
+div@app
     label
         {{$likes}}
     button
