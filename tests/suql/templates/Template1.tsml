@@ -1,5 +1,7 @@
 div@app
     label
+        id count
         {{$likes}}
     button
-        sg-click likeIt
+        sg-click likeIt()
+        Like

@@ -7,27 +7,17 @@ use suql\syntax\SuQL;
 
 final class TemplateTest extends TestCase
 {
-    public function testTsmlSuQLParse(): void
+    public function testSuQLTemplate(): void
     {
-        // $expected = [
-        //     'div@app' => [
-        //         'label' => [
-        //             '{{$likes}}' => []
-        //         ],
-        //         'button' => [
-        //             'sg-click' => 'likeIt'
-        //         ]
-        //     ]
-        // ];
         $expected =
             '<div id="app">'.
-                '<label id="label-1"></label>'.
-                '<button id="button-2"></button>'.
+                '<label id="count"></label>'.
+                '<button onclick="app.likeIt()">Like</button>'.
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.
                     'likes: {'.
-                        'path: \'#label-1\','.
+                        'path: \'count\','.
                         'value: undefined'.
                     '}'.
                 '}'.

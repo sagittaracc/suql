@@ -88,61 +88,72 @@ class SuQL
             $parts = explode('@', $root);
             $tag = $parts[0];
             $namespace = isset($parts[1]) ? $parts[1] : 'main';
-
-            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($namespace, $namespace, $data, $jsConfig));
-            $js = Html::tag('script', ['type' => 'text/javascript'], self::generateJs($namespace, $jsConfig));
+            $data['id'] = $namespace;
+            $html = self::parseTemplate($namespace, $tag, $data, $jsConfig);
+            $js = self::generateJs($namespace, $jsConfig);
         }
 
         return $html . $js;
     }
-    /**
-     * Разбор данных в шаблоне
-     * @param string $namespace
-     * @param string $parentId
-     * @param array $children
-     * @param array $jsConfig
-     * @param integer $index
-     * @return string
-     */
-    private static function parseTemplate($namespace, $parentId, $children, &$jsConfig, $index = 1)
+    private static function parseTemplate($namespace, $tag, $children, &$jsConfig)
+    {
+        $content = self::getContent($namespace, $children, $jsConfig);
+        $attributes = self::getAttributes($namespace, $children);
+        return Html::tag($tag, $attributes, $content);
+    }
+    private static function getAttributes($namespace, $children)
+    {
+        $list = [];
+        $sgAttributes = [
+            'sg-click' => 'onclick',
+        ];
+
+        foreach ($children as $key => $value) {
+            if (is_string($value)) {
+                $attribute = $key;
+                if (isset($sgAttributes[$key])) {
+                    $attribute = $sgAttributes[$key];
+                    $value = "$namespace.$value";
+                }
+
+                $list[$attribute] = $value;
+            }
+        }
+
+        return $list;
+    }
+    private static function getContent($namespace, &$children, &$jsConfig)
     {
         $html = '';
 
         foreach ($children as $key => $value) {
-            if (preg_match('/\{\{\$\w+\}\}/', $key)) {
-                // $key - переменная
-                $jsConfig[$parentId] = $key;
-            }
-            else if (is_array($value)) {
-                // $key - тэг
-                $id = $key . '-' . $index++;
-                $html .= Html::tag($key, ['id' => $id], self::parseTemplate($namespace, $id, $value, $jsConfig, $id));
-            }
-            else if (is_string($value)) {
-                // $key - атрибут
-                $possibleAttributes = [
-                    'sg-click' => 'onclick',
-                ];
+            if (is_array($value)) {
+                if (empty($value)) {
+                    if (preg_match('/\{\{\$\w+\}\}/', $key)) {
+                        if (!isset($children['id'])) {
+                            $id = uniqid();
+                            $children['id'] = $id;
+                        }
+                        $jsConfig[str_replace(['{{$', '}}'], '', $key)] = $children['id'];
+                    }
+                    else {
+                        $html .= $key;
+                    }
+                }
+                else {
+                    $html .= self::parseTemplate($namespace, $key, $value, $jsConfig);
+                }
             }
         }
 
         return $html;
     }
-    /**
-     * Генерация js
-     * @param string $namespace
-     * @param array $jsConfig
-     * @return string
-     */
     private static function generateJs($namespace, $jsConfig)
     {
-        $js = [];
-
-        foreach ($jsConfig as $id => $variable) {
-            $variable = str_replace(['{{$', '}}'], '', $variable);
-            $js[] = "$variable: {path: '#$id',value: undefined}";
+        $list = [];
+        foreach ($jsConfig as $variable => $path) {
+            $list[] = "$variable: {path: '$path',value: undefined}";
         }
-
-        return "window.$namespace = {" . implode(',', $js) . '}';
+        return Html::tag('script', ['type' => 'text/javascript'], "window.$namespace = {" . implode(',', $list) . "}");
     }
 }
