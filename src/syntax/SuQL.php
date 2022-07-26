@@ -89,7 +89,7 @@ class SuQL
             $tag = $parts[0];
             $namespace = isset($parts[1]) ? $parts[1] : 'main';
 
-            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($namespace, $root, $data, $jsConfig));
+            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($namespace, $namespace, $data, $jsConfig));
             $js = Html::tag('script', ['type' => 'text/javascript'], self::generateJs($namespace, $jsConfig));
         }
 
@@ -98,25 +98,31 @@ class SuQL
     /**
      * Разбор данных в шаблоне
      * @param string $namespace
-     * @param string $parent
+     * @param string $parentId
      * @param array $children
      * @param array $jsConfig
+     * @param integer $index
      * @return string
      */
-    private static function parseTemplate($namespace, $parent, $children, &$jsConfig)
+    private static function parseTemplate($namespace, $parentId, $children, &$jsConfig, $index = 1)
     {
         $html = '';
 
         foreach ($children as $key => $value) {
             if (preg_match('/\{\{\$\w+\}\}/', $key)) {
                 // $key - переменная
+                $jsConfig[$parentId] = $key;
             }
             else if (is_array($value)) {
                 // $key - тэг
-                $html .= Html::tag($key, [], self::parseTemplate($namespace, $key, $value, $jsConfig));
+                $id = $key . '-' . $index++;
+                $html .= Html::tag($key, ['id' => $id], self::parseTemplate($namespace, $id, $value, $jsConfig, $id));
             }
             else if (is_string($value)) {
                 // $key - атрибут
+                $possibleAttributes = [
+                    'sg-click' => 'onclick',
+                ];
             }
         }
 
@@ -130,6 +136,13 @@ class SuQL
      */
     private static function generateJs($namespace, $jsConfig)
     {
-        return '';
+        $js = [];
+
+        foreach ($jsConfig as $id => $variable) {
+            $variable = str_replace(['{{$', '}}'], '', $variable);
+            $js[] = "$variable: {path: '#$id',value: undefined}";
+        }
+
+        return "window.$namespace = {" . implode(',', $js) . '}';
     }
 }
