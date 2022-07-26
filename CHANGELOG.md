@@ -1,5 +1,11 @@
 # Change log
 
+## v7.3.15 - July 26, 2022
+
+- Теперь SuQL - это fullstack framework. Добавил поддержку SuQL Template
+
+---
+
 ## v7.3.14 - July 22, 2022
 
 - Добавил триггеры на добавление записей
