@@ -698,16 +698,16 @@
         },
         {
             "name": "sagittaracc/tsml",
-            "version": "v0.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sagittaracc/tsml.git",
-                "reference": "5f06bb46fcde5c2019166e4d8e62cf2ecfb097a0"
+                "reference": "be486c75e2f457945837188f54fae18307ac17ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sagittaracc/tsml/zipball/5f06bb46fcde5c2019166e4d8e62cf2ecfb097a0",
-                "reference": "5f06bb46fcde5c2019166e4d8e62cf2ecfb097a0",
+                "url": "https://api.github.com/repos/sagittaracc/tsml/zipball/be486c75e2f457945837188f54fae18307ac17ec",
+                "reference": "be486c75e2f457945837188f54fae18307ac17ec",
                 "shasum": ""
             },
             "require-dev": {
@@ -733,9 +733,9 @@
             "description": "The Simplest Markup Language",
             "support": {
                 "issues": "https://github.com/sagittaracc/tsml/issues",
-                "source": "https://github.com/sagittaracc/tsml/tree/v0.1"
+                "source": "https://github.com/sagittaracc/tsml/tree/v0.1.2"
             },
-            "time": "2022-06-01T08:34:39+00:00"
+            "time": "2022-07-26T15:00:45+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

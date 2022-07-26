@@ -12,7 +12,7 @@ final class TemplateTest extends TestCase
         $expected =
             '<div id="app">'.
                 '<label id="count"></label>'.
-                '<button onclick="app.likeIt()">Like</button>'.
+                '<button onclick="app.likeIt()">Like Button</button>'.
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.

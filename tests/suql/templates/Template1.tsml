@@ -4,4 +4,4 @@ div@app
         {{$likes}}
     button
         sg-click likeIt()
-        Like
+        ((Like Button))
