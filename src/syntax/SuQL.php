@@ -2,6 +2,7 @@
 
 namespace suql\syntax;
 
+use sagittaracc\Html;
 use suql\syntax\field\Field;
 use suql\syntax\parser\Tsml;
 
@@ -73,6 +74,8 @@ class SuQL
      */
     public static function template($file, SuQLParser $parser = null)
     {
+        $html = '';
+
         if (is_null($parser)) {
             $parser = new Tsml;
         }
@@ -83,8 +86,19 @@ class SuQL
             $parts = explode('@', $root);
             $tag = $parts[0];
             $namespace = isset($parts[1]) ? $parts[1] : 'main';
+
+            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($data));
         }
 
-        return $json;
+        return $html;
+    }
+    /**
+     * Разбор данных в шаблоне
+     * @param array $data
+     * @return string
+     */
+    private static function parseTemplate($data)
+    {
+        return '';
     }
 }
