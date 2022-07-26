@@ -87,17 +87,18 @@ class SuQL
             $tag = $parts[0];
             $namespace = isset($parts[1]) ? $parts[1] : 'main';
 
-            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($data));
+            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($namespace, $data));
         }
 
         return $html;
     }
     /**
      * Разбор данных в шаблоне
+     * @param string $namespace
      * @param array $data
      * @return string
      */
-    private static function parseTemplate($data)
+    private static function parseTemplate($namespace, $data)
     {
         return '';
     }
