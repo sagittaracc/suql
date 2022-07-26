@@ -100,6 +100,22 @@ class SuQL
      */
     private static function parseTemplate($namespace, $data)
     {
-        return '';
+        $html = '';
+
+        foreach ($data as $key => $value) {
+            if (preg_match('/\{\{\$\w+\}\}/', $key)) {
+                // $key - переменная
+                $html .= $key;
+            }
+            else if (is_array($value)) {
+                // $key - тэг
+                $html .= Html::tag($key, [], self::parseTemplate($namespace, $value));
+            }
+            else if (is_string($value)) {
+                // $key - атрибут
+            }
+        }
+
+        return $html;
     }
 }

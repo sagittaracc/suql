@@ -19,7 +19,7 @@ final class TemplateTest extends TestCase
         //         ]
         //     ]
         // ];
-        $expected = '<div id="app"></div>';
+        $expected = '<div id="app"><label>{{$likes}}</label><button></button></div>';
         $actual = SuQL::template('tests/suql/templates/Template1.tsml');
         $this->assertEquals($expected, $actual);
     }
