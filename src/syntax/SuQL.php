@@ -75,6 +75,8 @@ class SuQL
     public static function template($file, SuQLParser $parser = null)
     {
         $html = '';
+        $js = '';
+        $jsConfig = [];
 
         if (is_null($parser)) {
             $parser = new Tsml;
@@ -87,29 +89,31 @@ class SuQL
             $tag = $parts[0];
             $namespace = isset($parts[1]) ? $parts[1] : 'main';
 
-            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($namespace, $data));
+            $html = Html::tag($tag, ['id' => $namespace], self::parseTemplate($namespace, $root, $data, $jsConfig));
+            $js = Html::tag('script', ['type' => 'text/javascript'], self::generateJs($namespace, $jsConfig));
         }
 
-        return $html;
+        return $html . $js;
     }
     /**
      * Разбор данных в шаблоне
      * @param string $namespace
-     * @param array $data
+     * @param string $parent
+     * @param array $children
+     * @param array $jsConfig
      * @return string
      */
-    private static function parseTemplate($namespace, $data)
+    private static function parseTemplate($namespace, $parent, $children, &$jsConfig)
     {
         $html = '';
 
-        foreach ($data as $key => $value) {
+        foreach ($children as $key => $value) {
             if (preg_match('/\{\{\$\w+\}\}/', $key)) {
                 // $key - переменная
-                $html .= $key;
             }
             else if (is_array($value)) {
                 // $key - тэг
-                $html .= Html::tag($key, [], self::parseTemplate($namespace, $value));
+                $html .= Html::tag($key, [], self::parseTemplate($namespace, $key, $value, $jsConfig));
             }
             else if (is_string($value)) {
                 // $key - атрибут
@@ -117,5 +121,15 @@ class SuQL
         }
 
         return $html;
+    }
+    /**
+     * Генерация js
+     * @param string $namespace
+     * @param array $jsConfig
+     * @return string
+     */
+    private static function generateJs($namespace, $jsConfig)
+    {
+        return '';
     }
 }
