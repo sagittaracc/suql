@@ -10,6 +10,6 @@ function assign(a, b)
         // ...
     }
     else {
-        document.getElementById(elementId).text = a.value
+        document.getElementById(elementId).textContent = a.value
     }
 }
