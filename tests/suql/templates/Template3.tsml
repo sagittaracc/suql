@@ -1,6 +1,6 @@
 div@app
     ul
-        sg-foreach taskList
+        {{taskList}}
             li
                 span
                     [[id]]
