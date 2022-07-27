@@ -153,21 +153,22 @@ class SuQL
         $html = '';
 
         foreach ($children as $key => $value) {
-            if (is_array($value)) {
-                if (empty($value)) {
-                    if (preg_match('/\{\{\w+\}\}/', $key)) {
-                        if (!isset($children['class'])) {
-                            $class = uniqid();
-                            $children['class'] = $class;
-                        }
-                        $jsConfig[str_replace(['{{', '}}'], '', $key)] = $namespace . '>' . $children['class'];
-                    }
-                    else {
+            if (preg_match('/\{\{\w+\}\}/', $key)) {
+                if (!isset($children['class'])) {
+                    $class = uniqid();
+                    $children['class'] = $class;
+                }
+                $jsConfig[str_replace(['{{', '}}'], '', $key)] = $namespace . '>' . $children['class'];
+                $html = '';
+            }
+            else {
+                if (is_array($value)) {
+                    if (empty($value)) {
                         $html .= $key;
                     }
-                }
-                else {
-                    $html .= self::parseTemplate($namespace, $key, $value, $jsConfig);
+                    else {
+                        $html .= self::parseTemplate($namespace, $key, $value, $jsConfig);
+                    }
                 }
             }
         }

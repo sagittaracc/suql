@@ -1,5 +1,6 @@
 div@app
     ul
+        class task-list
         {{taskList}}
             li
                 span

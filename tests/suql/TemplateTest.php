@@ -44,4 +44,22 @@ final class TemplateTest extends TestCase
         $actual = SuQL::template('tests/suql/templates/Template2.tsml');
         $this->assertEquals($expected, $actual);
     }
+
+    public function testSgForeach(): void
+    {
+        $expected =
+            '<div id="app">'.
+                '<ul class="task-list"></ul>'.
+            '</div>'.
+            '<script type="text/javascript">'.
+                'window.app = {'.
+                    'taskList: {'.
+                        'path: \'app>task-list\','.
+                        'value: undefined'.
+                    '}'.
+                '}'.
+            '</script>';
+        $actual = SuQL::template('tests/suql/templates/Template3.tsml');
+        $this->assertEquals($expected, $actual);
+    }
 }
