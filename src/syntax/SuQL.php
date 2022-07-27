@@ -109,6 +109,12 @@ class SuQL
         $attributes = self::getAttributes($namespace, $children);
         return Html::tag($parent, $attributes, $content);
     }
+    /**
+     * Получает все атрибуты
+     * @param string $namespace
+     * @param array $children вложенные элементы (атрибуты и контент вместе)
+     * @return array массив атрибутов (сырых и конвертированных из спец атрибутов sg)
+     */
     private static function getAttributes($namespace, $children)
     {
         $list = [];

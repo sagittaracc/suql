@@ -8,7 +8,7 @@ function assign(a, b)
         for(var i = 0, n = a.value.length; i < n; i++) {
             var template = a.template;
             for (variable in a.value[i]) {
-                template = template.replace("{{" + variable + "}}", a.value[i][variable])
+                template = template.replace("[[" + variable + "]]", a.value[i][variable])
             }
             content += template
         }

@@ -3,6 +3,6 @@ div@app
         sg-foreach taskList
             li
                 span
-                    {{id}}
+                    [[id]]
                 span
-                    {{name}}
+                    [[name]]
