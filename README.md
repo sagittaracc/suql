@@ -36,9 +36,18 @@ On the frontend side this lets you do everything what modern frontend frameworks
 <pre>
 div@app
     label
+        id input
+        {{text}}
+    input
+        sg-model text
+</pre>
+
+<pre>
+div@app
+    label
         {{likes}}
     button
-        suql-click likeIt
+        sg-click likeIt
 </pre>
 ```js
 (function(scope){
