@@ -1,5 +1,11 @@
 # Change log
 
+## v7.3.21 - July 27, 2022
+
+- Завершение с sg-foreach
+
+---
+
 ## v7.3.20 - July 27, 2022
 
 - Поддержка sg-foreach
