@@ -161,10 +161,12 @@ class SuQL
                     $class = uniqid();
                     $children['class'] = $class;
                 }
-                $jsConfig[str_replace(['{{', '}}'], '', $key)] = $namespace . '>' . $children['class'];
+                $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
+                $jsConfig[str_replace(['{{', '}}'], '', $key)] = [
+                    'path' => $namespace . '>' . $children['class'],
+                    'template' => $template,
+                ];
                 $html = '';
-                // $tmp = self::parseTemplate($namespace, null, $value, $jsConfig);
-                // var_dump($tmp);
             }
             else {
                 if (is_array($value)) {
@@ -189,8 +191,10 @@ class SuQL
     private static function generateJs($namespace, $jsConfig)
     {
         $list = [];
-        foreach ($jsConfig as $variable => $path) {
-            $list[] = "$variable: {path: '$path',value: undefined}";
+        foreach ($jsConfig as $variable => $options) {
+            $path = $options['path'];
+            $template = $options['template'];
+            $list[] = "$variable: {path: '$path',value: undefined,template: '$template'}";
         }
         return Html::tag('script', ['type' => 'text/javascript'], "window.$namespace = {" . implode(',', $list) . "}");
     }

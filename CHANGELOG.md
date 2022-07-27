@@ -1,6 +1,12 @@
 # Change log
 
-# v7.3.19 - July 27, 2022
+## v7.3.20 - July 27, 2022
+
+- Поддержка sg-foreach
+
+---
+
+## v7.3.19 - July 27, 2022
 
 - Refactor
 

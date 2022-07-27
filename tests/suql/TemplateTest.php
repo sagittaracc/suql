@@ -18,7 +18,8 @@ final class TemplateTest extends TestCase
                 'window.app = {'.
                     'likes: {'.
                         'path: \'app>count\','.
-                        'value: undefined'.
+                        'value: undefined,'.
+                        'template: \'\''.
                     '}'.
                 '}'.
             '</script>';
@@ -37,7 +38,8 @@ final class TemplateTest extends TestCase
                 'window.app = {'.
                     'text: {'.
                         'path: \'app>input\','.
-                        'value: undefined'.
+                        'value: undefined,'.
+                        'template: \'\''.
                     '}'.
                 '}'.
             '</script>';
@@ -55,7 +57,8 @@ final class TemplateTest extends TestCase
                 'window.app = {'.
                     'taskList: {'.
                         'path: \'app>task-list\','.
-                        'value: undefined'.
+                        'value: undefined,'.
+                        'template: \'<li><span>[[id]]</span>[[name]]</li>\''.
                     '}'.
                 '}'.
             '</script>';
