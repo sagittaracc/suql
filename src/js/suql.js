@@ -1,3 +1,10 @@
+function getElementsByQuery(query) {
+    var queryParts = query.split('>')
+    var id = queryParts[0]
+    var className = queryParts[1]
+    return document.getElementById(id).getElementsByClassName(className)
+}
+
 function assign(a, b)
 {
     a.value = typeof b === "function" ? b(a.value) : b
@@ -12,7 +19,7 @@ function assign(a, b)
             }
             content += template
         }
-        document.getElementById(elementId).innerHTML = content;
+        document.getElementById(elementId).innerHTML = content
     }
     else {
         document.getElementById(elementId).textContent = a.value
