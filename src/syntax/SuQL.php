@@ -113,15 +113,20 @@ class SuQL
     {
         $list = [];
         $sgAttributes = [
-            'sg-click' => 'onclick',
+            'sg-click' => function ($namespace, $value) {
+                return ['onclick', "$namespace.$value"];
+            },
+            'sg-model' => function ($namespace, $value) {
+                return ['onkeyup', "assign($namespace.$value, this.value)"];
+            },
         ];
 
         foreach ($children as $key => $value) {
             if (is_string($value)) {
                 $attribute = $key;
+
                 if (isset($sgAttributes[$key])) {
-                    $attribute = $sgAttributes[$key];
-                    $value = "$namespace.$value";
+                    list($attribute, $value) = $sgAttributes[$key]($namespace, $value);
                 }
 
                 $list[$attribute] = $value;
