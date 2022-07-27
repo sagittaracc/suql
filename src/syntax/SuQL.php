@@ -141,6 +141,13 @@ class SuQL
 
         return $list;
     }
+    /**
+     * Генерирует html контент
+     * @param string $namespace основной namespace
+     * @param array $children все дочерние элементы из которых генерируем
+     * @param array $jsConfig будущая конфигурация для генерации js
+     * @return string html
+     */
     private static function getContent($namespace, &$children, &$jsConfig)
     {
         $html = '';
@@ -167,6 +174,12 @@ class SuQL
 
         return $html;
     }
+    /**
+     * Генерация дополнительного js
+     * @param string $namespace основной namespace
+     * @param array $jsConfig конфигурация для js
+     * @return string script tag
+     */
     private static function generateJs($namespace, $jsConfig)
     {
         $list = [];
