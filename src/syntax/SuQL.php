@@ -129,12 +129,12 @@ class SuQL
         foreach ($children as $key => $value) {
             if (is_array($value)) {
                 if (empty($value)) {
-                    if (preg_match('/\{\{\$\w+\}\}/', $key)) {
+                    if (preg_match('/\{\{\w+\}\}/', $key)) {
                         if (!isset($children['id'])) {
                             $id = uniqid();
                             $children['id'] = $id;
                         }
-                        $jsConfig[str_replace(['{{$', '}}'], '', $key)] = $children['id'];
+                        $jsConfig[str_replace(['{{', '}}'], '', $key)] = $children['id'];
                     }
                     else {
                         $html .= $key;
