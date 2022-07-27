@@ -107,7 +107,10 @@ class SuQL
     {
         $content = self::getContent($namespace, $children, $jsConfig);
         $attributes = self::getAttributes($namespace, $children);
-        return Html::tag($parent, $attributes, $content);
+        return
+            is_null($parent)
+                ? $content
+                : Html::tag($parent, $attributes, $content);
     }
     /**
      * Получает все атрибуты
@@ -160,6 +163,8 @@ class SuQL
                 }
                 $jsConfig[str_replace(['{{', '}}'], '', $key)] = $namespace . '>' . $children['class'];
                 $html = '';
+                // $tmp = self::parseTemplate($namespace, null, $value, $jsConfig);
+                // var_dump($tmp);
             }
             else {
                 if (is_array($value)) {

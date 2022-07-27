@@ -5,5 +5,4 @@ div@app
             li
                 span
                     [[id]]
-                span
-                    [[name]]
+                [[name]]
