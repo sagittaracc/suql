@@ -36,7 +36,6 @@ On the frontend side this lets you do everything what modern frontend frameworks
 <pre>
 div@app
     label
-        id input
         {{text}}
     input
         sg-model text
