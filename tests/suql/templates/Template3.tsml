@@ -1,0 +1,8 @@
+div@app
+    ul
+        sg-foreach taskList
+            li
+                span
+                    {{id}}
+                span
+                    {{name}}
