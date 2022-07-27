@@ -70,7 +70,7 @@ class SuQL
      * Разбор шаблона
      * @param string файл с шаблоном
      * @param \syql\syntax\SuQLParser парсер
-     * @return \suql\syntax\ActiveRecord
+     * @return string шаблон преобразованный в html
      */
     public static function template($file, SuQLParser $parser = null)
     {
@@ -95,11 +95,19 @@ class SuQL
 
         return $html . $js;
     }
-    private static function parseTemplate($namespace, $tag, $children, &$jsConfig)
+    /**
+     * Генерирует html из массива по схеме tsml
+     * @param string $namespace заданная пользователем namespace блока
+     * @param string $parent html tag родителя
+     * @param array $children вложенные элементы в parent
+     * @param array $jsConfig генерируемые по ходу связи между используемыми переменными шаблона и участками их в DOM
+     * @return string html
+     */
+    private static function parseTemplate($namespace, $parent, $children, &$jsConfig)
     {
         $content = self::getContent($namespace, $children, $jsConfig);
         $attributes = self::getAttributes($namespace, $children);
-        return Html::tag($tag, $attributes, $content);
+        return Html::tag($parent, $attributes, $content);
     }
     private static function getAttributes($namespace, $children)
     {
