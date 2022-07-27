@@ -36,7 +36,7 @@ On the frontend side this lets you do everything what modern frontend frameworks
 <pre>
 div@app
     label
-        {{$likes}}
+        {{likes}}
     button
         suql-click likeIt
 </pre>
