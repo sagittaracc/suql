@@ -8,6 +8,7 @@ function getElementsByQuery(query) {
 function assign(a, b)
 {
     a.value = typeof b === "function" ? b(a.value) : b
+    var elements = getElementsByQuery(a.path)
     
     if (typeof a.value === "object") {
         var content = "";
@@ -18,9 +19,12 @@ function assign(a, b)
             }
             content += template
         }
+
+        for (var i = 0, n = elements.length; i < n; i++) {
+            elements[i].innerHTML = content
+        }
     }
     else {
-        var elements = getElementsByQuery(a.path)
         for (var i = 0, n = elements.length; i < n; i++) {
             elements[i].textContent = a.value
         }
