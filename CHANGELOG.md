@@ -1,5 +1,11 @@
 # Change log
 
+## v7.3.18 - July 27, 2022
+
+- Поддержка sg-model
+
+---
+
 ## v7.3.17 - July 26, 2022
 
 - Bug fixes
