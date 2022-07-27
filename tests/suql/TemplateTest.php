@@ -11,13 +11,13 @@ final class TemplateTest extends TestCase
     {
         $expected =
             '<div id="app">'.
-                '<label id="count"></label>'.
+                '<label class="count"></label>'.
                 '<button onclick="app.likeIt()">Like Button</button>'.
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.
                     'likes: {'.
-                        'path: \'count\','.
+                        'path: \'app>count\','.
                         'value: undefined'.
                     '}'.
                 '}'.
@@ -30,13 +30,13 @@ final class TemplateTest extends TestCase
     {
         $expected =
             '<div id="app">'.
-                '<label id="input"></label>'.
+                '<label class="input"></label>'.
                 '<input onkeyup="assign(app.text, this.value)"></input>'.
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.
                     'text: {'.
-                        'path: \'input\','.
+                        'path: \'app>input\','.
                         'value: undefined'.
                     '}'.
                 '}'.

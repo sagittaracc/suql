@@ -9,7 +9,6 @@ function assign(a, b)
 {
     a.value = typeof b === "function" ? b(a.value) : b
     
-    var elementId = a.path
     if (typeof a.value === "object") {
         var content = "";
         for(var i = 0, n = a.value.length; i < n; i++) {
@@ -19,9 +18,11 @@ function assign(a, b)
             }
             content += template
         }
-        document.getElementById(elementId).innerHTML = content
     }
     else {
-        document.getElementById(elementId).textContent = a.value
+        var elements = getElementsByQuery(a.path)
+        for (var i = 0, n = elements.length; i < n; i++) {
+            elements[i].textContent = a.value
+        }
     }
 }

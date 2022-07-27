@@ -1,6 +1,6 @@
 div@app
     label
-        id input
+        class input
         {{text}}
     input
         sg-model text

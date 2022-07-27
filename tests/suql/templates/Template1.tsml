@@ -1,6 +1,6 @@
 div@app
     label
-        id count
+        class count
         {{likes}}
     button
         sg-click likeIt()

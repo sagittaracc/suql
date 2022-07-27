@@ -149,11 +149,11 @@ class SuQL
             if (is_array($value)) {
                 if (empty($value)) {
                     if (preg_match('/\{\{\w+\}\}/', $key)) {
-                        if (!isset($children['id'])) {
-                            $id = uniqid();
-                            $children['id'] = $id;
+                        if (!isset($children['class'])) {
+                            $class = uniqid();
+                            $children['class'] = $class;
                         }
-                        $jsConfig[str_replace(['{{', '}}'], '', $key)] = $children['id'];
+                        $jsConfig[str_replace(['{{', '}}'], '', $key)] = $namespace . '>' . $children['class'];
                     }
                     else {
                         $html .= $key;
