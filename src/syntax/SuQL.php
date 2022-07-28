@@ -156,6 +156,7 @@ class SuQL
         $html = '';
 
         foreach ($children as $key => $value) {
+            // Template variable
             if (preg_match('/\{\{\w+\}\}/', $key)) {
                 if (!isset($children['class'])) {
                     $class = uniqid();
@@ -167,6 +168,10 @@ class SuQL
                     'template' => $template,
                 ];
                 $html = '';
+            }
+            // Template function
+            else if (preg_match('/\{\{\w+\(\)\}\}/', $key)) {
+                // ...
             }
             else {
                 if (is_array($value)) {
