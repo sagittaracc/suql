@@ -56,6 +56,9 @@ div@app
 })(window.app)
 ```
 
+### Demo
+You can try demo [here](https://github.com/sagittaracc/suql-demo)
+
 ### Installation
 `composer require sagittaracc/suql`
 
