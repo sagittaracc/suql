@@ -29,4 +29,25 @@ function assign(a, b)
             elements[i].textContent = a.value
         }
     }
+
+    // TODO: обновить все связи по template functions которые используют данную переменную
+}
+
+function append(a, b)
+{
+    var elements = getElementsByQuery(a.path);
+
+    if (typeof a.value === "object") {
+        a.value.push(b)
+        var template = a.template
+        for (variable in b) {
+            template = template.replace("[[" + variable + "]]", b[variable])
+        }
+
+        for (var i = 0, n = elements.length; i < n; i++) {
+            elements[i].innerHTML += template;
+        }
+    }
+
+    // TODO: обновить все связи по template functions которые используют данную переменную
 }
