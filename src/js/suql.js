@@ -51,8 +51,3 @@ function append(a, b)
 
     // TODO: обновить все связи по template functions которые используют данную переменную
 }
-
-function get(a)
-{
-    return a.value;
-}
