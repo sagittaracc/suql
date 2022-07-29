@@ -2,7 +2,7 @@ function getElementsByQuery(query) {
     var queryParts = query.split('>')
     var id = queryParts[0]
     if (id === "") {
-        return
+        return []
     }
     var className = queryParts[1]
     return document.getElementById(id).getElementsByClassName(className)
@@ -12,6 +12,10 @@ function assign(a, b)
 {
     a.value = typeof b === "function" ? b(a.value) : b
     var elements = getElementsByQuery(a.path)
+
+    if (elements.length === 0) {
+        return
+    }
     
     if (typeof a.value === "object") {
         var content = "";

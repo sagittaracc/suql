@@ -1,5 +1,11 @@
 # Change log
 
+## v7.3.23 - July 29, 2022
+
+- Bug fixes
+
+---
+
 ## v7.3.22 - July 29, 2022
 
 - Bug fixes
