@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f73a4d9acb5a631098ee33da0e5ecf78",
+    "content-hash": "e9c902c3f61f9cf269033ecfc0db7415",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -698,16 +698,16 @@
         },
         {
             "name": "sagittaracc/tsml",
-            "version": "v0.1.2",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sagittaracc/tsml.git",
-                "reference": "be486c75e2f457945837188f54fae18307ac17ec"
+                "reference": "b976f952c4135f7d1c5ea4a3f69243c668a7fbd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sagittaracc/tsml/zipball/be486c75e2f457945837188f54fae18307ac17ec",
-                "reference": "be486c75e2f457945837188f54fae18307ac17ec",
+                "url": "https://api.github.com/repos/sagittaracc/tsml/zipball/b976f952c4135f7d1c5ea4a3f69243c668a7fbd4",
+                "reference": "b976f952c4135f7d1c5ea4a3f69243c668a7fbd4",
                 "shasum": ""
             },
             "require-dev": {
@@ -733,9 +733,9 @@
             "description": "The Simplest Markup Language",
             "support": {
                 "issues": "https://github.com/sagittaracc/tsml/issues",
-                "source": "https://github.com/sagittaracc/tsml/tree/v0.1.2"
+                "source": "https://github.com/sagittaracc/tsml/tree/v0.2"
             },
-            "time": "2022-07-26T15:00:45+00:00"
+            "time": "2022-07-29T10:58:02+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

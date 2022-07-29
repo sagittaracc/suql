@@ -21,7 +21,7 @@
         "sagittaracc/strings": "^0.1",
         "sagittaracc/qmap": "^0.1",
         "symfony/yaml": "^5.4",
-        "sagittaracc/tsml": "^0.1.0",
+        "sagittaracc/tsml": "^0.2.0",
         "guzzlehttp/guzzle": "7.4.5",
         "sagittaracc/html": "^0.1"
     },
