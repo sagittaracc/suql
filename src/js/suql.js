@@ -1,11 +1,17 @@
-function getElementsByQuery(query) {
+function getElementsByQuery(query, add = false) {
     var queryParts = query.split('>')
     var id = queryParts[0]
     if (id === "") {
         return []
     }
     var className = queryParts[1]
-    return document.getElementById(id).getElementsByClassName(className)
+    var elements = document.getElementById(id).getElementsByClassName(className)
+    if (elements.length === 0 && add) {
+        var element = document.createElement('div')
+        element.classList = className
+        elements = [document.getElementById(id).appendChild(element)]
+    }
+    return elements
 }
 
 function assign(a, b)
@@ -42,7 +48,7 @@ function assign(a, b)
 
 function append(a, b)
 {
-    var elements = getElementsByQuery(a.path);
+    var elements = getElementsByQuery(a.path, true);
 
     if (typeof a.value === "object") {
         a.value.push(b)

@@ -170,7 +170,11 @@ class SuQL
             }
             // Template function
             else if (preg_match('/\{\{\w+\(\)\}\}/', $key)) {
-                // ...
+                if (!isset($children['class'])) {
+                    $class = uniqid();
+                    $children['class'] = $class;
+                }
+                $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
             }
             else {
                 if (is_array($value)) {

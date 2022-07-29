@@ -1,5 +1,11 @@
 # Change log
 
+## v7.3.26 - July 29, 2022
+
+- bug fixes
+
+---
+
 ## v7.3.25 - July 29, 2022
 
 - add get method in suql js
