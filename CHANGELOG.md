@@ -1,5 +1,11 @@
 # Change log
 
+## v7.3.24 - July 29, 2022
+
+- Update TSML
+
+---
+
 ## v7.3.23 - July 29, 2022
 
 - Bug fixes
