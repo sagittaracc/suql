@@ -1,5 +1,11 @@
 # Change log
 
+## v7.3.25 - July 29, 2022
+
+- add get method in suql js
+
+---
+
 ## v7.3.24 - July 29, 2022
 
 - Update TSML
