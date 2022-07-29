@@ -106,7 +106,7 @@ class SuQL
     private static function parseTemplate($namespace, $parent, $children, &$jsConfig)
     {
         $content = self::getContent($namespace, $children, $jsConfig);
-        $attributes = self::getAttributes($namespace, $children);
+        $attributes = self::getAttributes($namespace, $children, $jsConfig);
         return
             is_null($parent)
                 ? $content
@@ -116,16 +116,18 @@ class SuQL
      * Получает все атрибуты
      * @param string $namespace
      * @param array $children вложенные элементы (атрибуты и контент вместе)
+     * @param array $jsConfig генерируемые по ходу связи между используемыми переменными шаблона и участками их в DOM
      * @return array массив атрибутов (сырых и конвертированных из спец атрибутов sg)
      */
-    private static function getAttributes($namespace, $children)
+    private static function getAttributes($namespace, $children, &$jsConfig)
     {
         $list = [];
         $sgAttributes = [
             'sg-click' => function ($namespace, $value) {
                 return ['onclick', "$namespace.$value"];
             },
-            'sg-model' => function ($namespace, $value) {
+            'sg-model' => function ($namespace, $value) use (&$jsConfig) {
+                self::addJsVariable($jsConfig, $value);
                 return ['onkeyup', "assign($namespace.$value, this.value)"];
             },
         ];
@@ -163,10 +165,7 @@ class SuQL
                     $children['class'] = $class;
                 }
                 $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
-                $jsConfig[str_replace(['{{', '}}'], '', $key)] = [
-                    'path' => $namespace . '>' . $children['class'],
-                    'template' => $template,
-                ];
+                self::addJsVariable($jsConfig, str_replace(['{{', '}}'], '', $key), $namespace . '>' . $children['class'], $template);
                 $html = '';
             }
             // Template function
@@ -186,6 +185,30 @@ class SuQL
         }
 
         return $html;
+    }
+    /**
+     * Добавляет js template variable
+     * @param array $jsConfig будущая конфигурация для генерации js
+     * @param string $variable
+     * @param string $path
+     * @param string $template
+     */
+    private static function addJsVariable(&$jsConfig, $variable, $path = null, $template = null)
+    {
+        if (!isset($jsConfig[$variable])) {
+            $jsConfig[$variable] = [
+                'path' => null,
+                'template' => null,
+            ];
+        }
+
+        if (!is_null($path)) {
+            $jsConfig[$variable]['path'] = $path;
+        }
+
+        if (!is_null($template)) {
+            $jsConfig[$variable]['template'] = $template;
+        }
     }
     /**
      * Генерация дополнительного js

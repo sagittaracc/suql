@@ -1,6 +1,9 @@
 function getElementsByQuery(query) {
     var queryParts = query.split('>')
     var id = queryParts[0]
+    if (id === "") {
+        return
+    }
     var className = queryParts[1]
     return document.getElementById(id).getElementsByClassName(className)
 }
