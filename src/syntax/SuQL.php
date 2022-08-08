@@ -82,14 +82,12 @@ class SuQL
             $parser = new Tsml;
         }
 
-        $json = $parser->parseFile($file);
+        $template = $parser->parseFile($file);
 
-        foreach ($json as $root => $data) {
-            $parts = explode('@', $root);
-            $tag = $parts[0];
-            $namespace = isset($parts[1]) ? $parts[1] : 'main';
-            $data['id'] = $namespace;
-            $html = self::parseTemplate($namespace, $tag, $data, $jsConfig);
+        foreach ($template as $root => $view) {
+            list($rootElement, $namespace) = explode('@', $root);
+            $view['id'] = $namespace;
+            $html = self::parseTemplate($namespace, $rootElement, $view, $jsConfig);
             $js = self::generateJs($namespace, $jsConfig);
         }
 
@@ -113,6 +111,17 @@ class SuQL
                 : Html::tag($parent, $attributes, $content);
     }
     /**
+     * Получает класс html элемента в dom
+     * @param array $dom
+     * @return string
+     */
+    private static function attachClassToElement(&$dom)
+    {
+        $class = isset($dom['class']) ? $dom['class'] : uniqid();
+        $dom['class'] = $class;
+        return $class;
+    }
+    /**
      * Получает все атрибуты
      * @param string $namespace
      * @param array $children вложенные элементы (атрибуты и контент вместе)
@@ -124,23 +133,26 @@ class SuQL
         $list = [];
         $sgAttributes = [
             'sg-click' => function ($namespace, $value) {
-                return ['onclick', "$namespace.$value"];
+                return ['onclick' => "$namespace.$value"];
             },
-            'sg-model' => function ($namespace, $value) use (&$jsConfig) {
-                self::addJsVariable($jsConfig, $value);
-                return ['onkeyup', "assign($namespace.$value, this.value)"];
+            'sg-model' => function ($namespace, $value) use ($children, &$jsConfig) {
+                $class = self::attachClassToElement($children);
+                self::addJsVariable($jsConfig, $value, "$namespace>$class");
+                return [
+                    'onkeyup' => "assign($namespace.$value, this.value)",
+                    'class' => $class,
+                ];
             },
         ];
 
         foreach ($children as $key => $value) {
             if (is_string($value)) {
-                $attribute = $key;
-
                 if (isset($sgAttributes[$key])) {
-                    list($attribute, $value) = $sgAttributes[$key]($namespace, $value);
+                    $list = array_merge($list, $sgAttributes[$key]($namespace, $value));
                 }
-
-                $list[$attribute] = $value;
+                else {
+                    $list[$key] = $value;
+                }
             }
         }
 
@@ -160,20 +172,14 @@ class SuQL
         foreach ($children as $key => $value) {
             // Template variable
             if (preg_match('/\{\{\w+\}\}/', $key)) {
-                if (!isset($children['class'])) {
-                    $class = uniqid();
-                    $children['class'] = $class;
-                }
+                $class = self::attachClassToElement($children);
                 $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
-                self::addJsVariable($jsConfig, str_replace(['{{', '}}'], '', $key), $namespace . '>' . $children['class'], $template);
+                self::addJsVariable($jsConfig, str_replace(['{{', '}}'], '', $key), "$namespace>$class", $template);
                 $html = '';
             }
             // Template function
             else if (preg_match('/\{\{\w+\(\)\}\}/', $key)) {
-                if (!isset($children['class'])) {
-                    $class = uniqid();
-                    $children['class'] = $class;
-                }
+                $class = self::attachClassToElement($children);
                 $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
             }
             else {

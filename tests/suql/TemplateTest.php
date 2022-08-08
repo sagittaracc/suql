@@ -32,12 +32,12 @@ final class TemplateTest extends TestCase
         $expected =
             '<div id="app">'.
                 '<label class="input"></label>'.
-                '<input onkeyup="assign(app.text, this.value)"></input>'.
+                '<input onkeyup="assign(app.text, this.value)" class="my-input"></input>'.
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.
                     'text: {'.
-                        'path: \'app>input\','.
+                        'path: \'app>my-input\','.
                         'value: undefined,'.
                         'template: \'\''.
                     '}'.

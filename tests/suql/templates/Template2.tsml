@@ -4,3 +4,4 @@ div@app
         {{text}}
     input
         sg-model text
+        class my-input
