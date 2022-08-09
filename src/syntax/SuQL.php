@@ -171,10 +171,11 @@ class SuQL
 
         foreach ($children as $key => $value) {
             // Template variable
-            if (preg_match('/\{\{\w+\}\}/', $key)) {
+            if (preg_match('/\{\{(\w+)\}\}/', $key, $matches)) {
                 $class = self::attachClassToElement($children);
                 $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
-                self::addJsVariable($jsConfig, str_replace(['{{', '}}'], '', $key), "$namespace>$class", $template);
+                $variable = $matches[1];
+                self::addJsVariable($jsConfig, $variable, "$namespace>$class", $template);
                 $html = '';
             }
             // Template function
@@ -207,17 +208,22 @@ class SuQL
     {
         if (!isset($jsConfig[$variable])) {
             $jsConfig[$variable] = [
-                'path' => null,
-                'template' => null,
+                'value' => null,
+                'paths' => [],
             ];
         }
 
         if (!is_null($path)) {
-            $jsConfig[$variable]['path'] = $path;
+            $jsConfig[$variable]['paths'][$path] = [
+                'format' => 'raw',
+            ];
         }
 
         if (!is_null($template)) {
-            $jsConfig[$variable]['template'] = $template;
+            $jsConfig[$variable]['paths'][$path] = [
+                'format' => 'html',
+                'template' => $template,
+            ];
         }
     }
     /**
@@ -229,11 +235,6 @@ class SuQL
     private static function generateJs($namespace, $jsConfig)
     {
         $list = [];
-        foreach ($jsConfig as $variable => $options) {
-            $path = $options['path'];
-            $template = $options['template'];
-            $list[] = "$variable: {path: '$path',value: undefined,template: '$template'}";
-        }
-        return Html::tag('script', ['type' => 'text/javascript'], "window.$namespace = {" . implode(',', $list) . "}");
+        return Html::tag('script', ['type' => 'text/javascript'], "window.$namespace = " . json_encode($jsConfig));
     }
 }

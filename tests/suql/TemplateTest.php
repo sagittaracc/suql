@@ -16,10 +16,13 @@ final class TemplateTest extends TestCase
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.
-                    'likes: {'.
-                        'path: \'app>count\','.
-                        'value: undefined,'.
-                        'template: \'\''.
+                    '"likes":{'.
+                        '"value":null,'.
+                        '"paths":{'.
+                            '"app>count":{'.
+                                '"format":"raw"'.
+                            '}'.
+                        '}'.
                     '}'.
                 '}'.
             '</script>';
@@ -36,10 +39,16 @@ final class TemplateTest extends TestCase
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.
-                    'text: {'.
-                        'path: \'app>my-input\','.
-                        'value: undefined,'.
-                        'template: \'\''.
+                    '"text":{'.
+                        '"value":null,'.
+                        '"paths":{'.
+                            '"app>input":{'.
+                                '"format":"raw"'.
+                            '},'.
+                            '"app>my-input":{'.
+                                '"format":"raw"'.
+                            '}'.
+                        '}'.
                     '}'.
                 '}'.
             '</script>';
@@ -55,10 +64,14 @@ final class TemplateTest extends TestCase
             '</div>'.
             '<script type="text/javascript">'.
                 'window.app = {'.
-                    'taskList: {'.
-                        'path: \'app>task-list\','.
-                        'value: undefined,'.
-                        'template: \'<li><span>[[id]]</span>[[name]]</li>\''.
+                    '"taskList":{'.
+                        '"value":null,'.
+                        '"paths":{'.
+                            '"app>task-list":{'.
+                                '"format":"html",'.
+                                '"template":"<li><span>[[id]]<\/span>[[name]]<\/li>"'.
+                            '}'.
+                        '}'.
                     '}'.
                 '}'.
             '</script>';
