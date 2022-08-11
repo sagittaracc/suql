@@ -14,6 +14,10 @@ class Variable
      */
     private $name;
     /**
+     * @var mixed значение
+     */
+    private $value;
+    /**
      * Constructor
      * @param string $name имя переменной
      */
@@ -28,5 +32,21 @@ class Variable
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Устанавливает значение
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+    /**
+     * Получает значение
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 }
