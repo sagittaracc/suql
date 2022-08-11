@@ -51,4 +51,11 @@ class Variable
     {
         $this->paths[$path->getPath()] = $path;
     }
+    /**
+     * 
+     */
+    public function getPath()
+    {
+        return $this->paths;
+    }
 }

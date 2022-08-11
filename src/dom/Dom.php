@@ -19,7 +19,14 @@ class Dom
      */
     public function addVariable(Variable $variable)
     {
-        $this->variables[$variable->getName()] = $variable;
+        if (isset($this->variables[$variable->getName()])) {
+            foreach ($variable->getPath() as $path) {
+                $this->variables[$variable->getName()]->addPath($path);
+            }
+        }
+        else {
+            $this->variables[$variable->getName()] = $variable;
+        }
     }
     /**
      * @return array

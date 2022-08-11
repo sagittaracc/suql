@@ -3,6 +3,9 @@
 namespace suql\syntax;
 
 use sagittaracc\Html;
+use suql\dom\Dom;
+use suql\dom\Path;
+use suql\dom\Variable;
 use suql\syntax\field\Field;
 use suql\syntax\parser\Tsml;
 
@@ -77,6 +80,7 @@ class SuQL
         $html = '';
         $js = '';
         $jsConfig = [];
+        $dom = new Dom();
 
         if (is_null($parser)) {
             $parser = new Tsml;
@@ -87,8 +91,8 @@ class SuQL
         foreach ($template as $root => $view) {
             list($rootElement, $namespace) = explode('@', $root);
             $view['id'] = $namespace;
-            $html = self::parseTemplate($namespace, $rootElement, $view, $jsConfig);
-            $js = self::generateJs($namespace, $jsConfig);
+            $html = self::parseTemplate($namespace, $rootElement, $view, $dom);
+            $js = self::generateJs($namespace, $dom);
         }
 
         return $html . $js;
@@ -98,13 +102,13 @@ class SuQL
      * @param string $namespace заданная пользователем namespace блока
      * @param string $parent html tag родителя
      * @param array $children вложенные элементы в parent
-     * @param array $jsConfig генерируемые по ходу связи между используемыми переменными шаблона и участками их в DOM
+     * @param \suql\dom\Dom $dom генерируемые по ходу связи между используемыми переменными шаблона и участками их в DOM
      * @return string html
      */
-    private static function parseTemplate($namespace, $parent, $children, &$jsConfig)
+    private static function parseTemplate($namespace, $parent, $children, $dom)
     {
-        $content = self::getContent($namespace, $children, $jsConfig);
-        $attributes = self::getAttributes($namespace, $children, $jsConfig);
+        $content = self::getContent($namespace, $children, $dom);
+        $attributes = self::getAttributes($namespace, $children, $dom);
         return
             is_null($parent)
                 ? $content
@@ -125,21 +129,25 @@ class SuQL
      * Получает все атрибуты
      * @param string $namespace
      * @param array $children вложенные элементы (атрибуты и контент вместе)
-     * @param array $jsConfig генерируемые по ходу связи между используемыми переменными шаблона и участками их в DOM
+     * @param \suql\dom\Dom $dom генерируемые по ходу связи между используемыми переменными шаблона и участками их в DOM
      * @return array массив атрибутов (сырых и конвертированных из спец атрибутов sg)
      */
-    private static function getAttributes($namespace, $children, &$jsConfig)
+    private static function getAttributes($namespace, $children, $dom)
     {
         $list = [];
         $sgAttributes = [
             'sg-click' => function ($namespace, $value) {
                 return ['onclick' => "$namespace.$value"];
             },
-            'sg-model' => function ($namespace, $value) use ($children, &$jsConfig) {
+            'sg-model' => function ($namespace, $varName) use ($children, $dom) {
                 $class = self::attachClassToElement($children);
-                self::addJsVariable($jsConfig, $value, "$namespace>$class");
+                $format = 'value';
+                $var = new Variable($varName);
+                $path = new Path("$namespace>$class", $format);
+                $var->addPath($path);
+                $dom->addVariable($var);
                 return [
-                    'onkeyup' => "assign($namespace.$value, this.value)",
+                    'onkeyup' => "assign($namespace.$varName, this.value)",
                     'class' => $class,
                 ];
             },
@@ -162,10 +170,10 @@ class SuQL
      * Генерирует html контент
      * @param string $namespace основной namespace
      * @param array $children все дочерние элементы из которых генерируем
-     * @param array $jsConfig будущая конфигурация для генерации js
+     * @param \suql\dom\Dom $dom будущая конфигурация для генерации js
      * @return string html
      */
-    private static function getContent($namespace, &$children, &$jsConfig)
+    private static function getContent($namespace, &$children, $dom)
     {
         $html = '';
 
@@ -173,15 +181,19 @@ class SuQL
             // Template variable
             if (preg_match('/\{\{(\w+)\}\}/', $key, $matches)) {
                 $class = self::attachClassToElement($children);
-                $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
-                $variable = $matches[1];
-                self::addJsVariable($jsConfig, $variable, "$namespace>$class", $template);
+                $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $dom) : null;
+                $format = is_null($template) ? 'raw' : 'html';
+                $varName = $matches[1];
+                $var = new Variable($varName);
+                $path = new Path("$namespace>$class", $format, $template);
+                $var->addPath($path);
+                $dom->addVariable($var);
                 $html = '';
             }
             // Template function
             else if (preg_match('/\{\{\w+\(\)\}\}/', $key)) {
                 $class = self::attachClassToElement($children);
-                $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $jsConfig) : null;
+                $template = !empty($value) ? self::parseTemplate($namespace, null, $value, $dom) : null;
             }
             else {
                 if (is_array($value)) {
@@ -189,7 +201,7 @@ class SuQL
                         $html .= $key;
                     }
                     else {
-                        $html .= self::parseTemplate($namespace, $key, $value, $jsConfig);
+                        $html .= self::parseTemplate($namespace, $key, $value, $dom);
                     }
                 }
             }
@@ -198,43 +210,14 @@ class SuQL
         return $html;
     }
     /**
-     * Добавляет js template variable
-     * @param array $jsConfig будущая конфигурация для генерации js
-     * @param string $variable
-     * @param string $path
-     * @param string $template
-     */
-    private static function addJsVariable(&$jsConfig, $variable, $path = null, $template = null)
-    {
-        if (!isset($jsConfig[$variable])) {
-            $jsConfig[$variable] = [
-                'value' => null,
-                'paths' => [],
-            ];
-        }
-
-        if (!is_null($path)) {
-            $jsConfig[$variable]['paths'][$path] = [
-                'format' => 'raw',
-            ];
-        }
-
-        if (!is_null($template)) {
-            $jsConfig[$variable]['paths'][$path] = [
-                'format' => 'html',
-                'template' => $template,
-            ];
-        }
-    }
-    /**
      * Генерация дополнительного js
      * @param string $namespace основной namespace
-     * @param array $jsConfig конфигурация для js
+     * @param \suql\dom\Dom $dom конфигурация для js
      * @return string script tag
      */
-    private static function generateJs($namespace, $jsConfig)
+    private static function generateJs($namespace, $dom)
     {
         $list = [];
-        return Html::tag('script', ['type' => 'text/javascript'], "window.$namespace = " . json_encode($jsConfig));
+        return Html::tag('script', ['type' => 'text/javascript'], "window.$namespace = " . json_encode($dom->getVariables()));
     }
 }

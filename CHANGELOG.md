@@ -1,5 +1,11 @@
 # Change log
 
+## v8.0.0 - August 11, 2022
+
+- Fronted side refactor
+
+---
+
 ## v7.3.26 - July 29, 2022
 
 - bug fixes

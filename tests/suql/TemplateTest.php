@@ -20,7 +20,8 @@ final class TemplateTest extends TestCase
                         '"value":null,'.
                         '"paths":{'.
                             '"app>count":{'.
-                                '"format":"raw"'.
+                                '"format":"raw",'.
+                                '"template":null'.
                             '}'.
                         '}'.
                     '}'.
@@ -43,10 +44,12 @@ final class TemplateTest extends TestCase
                         '"value":null,'.
                         '"paths":{'.
                             '"app>input":{'.
-                                '"format":"raw"'.
+                                '"format":"raw",'.
+                                '"template":null'.
                             '},'.
                             '"app>my-input":{'.
-                                '"format":"raw"'.
+                                '"format":"value",'.
+                                '"template":null'.
                             '}'.
                         '}'.
                     '}'.
