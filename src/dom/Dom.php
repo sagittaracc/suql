@@ -15,7 +15,7 @@ class Dom
     private $variables = [];
     /**
      * Добавляет переменную
-     * @param Variable $variable
+     * @param \suql\dom\Variable $variable
      */
     public function addVariable(Variable $variable)
     {
