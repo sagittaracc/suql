@@ -21,4 +21,12 @@ class Variable
     {
         $this->name = $name;
     }
+    /**
+     * Получает имя переменной
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }
