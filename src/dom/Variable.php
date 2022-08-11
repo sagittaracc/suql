@@ -18,6 +18,10 @@ class Variable
      */
     private $value;
     /**
+     * @var array пути в шаблоне
+     */
+    private $pathList = [];
+    /**
      * Constructor
      * @param string $name имя переменной
      */
@@ -48,5 +52,12 @@ class Variable
     public function getValue()
     {
         return $this->value;
+    }
+    /**
+     * Добавляет путь
+     */
+    public function addPath(Path $path)
+    {
+        $this->pathList[] = $path;
     }
 }
