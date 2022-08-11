@@ -12,13 +12,20 @@ class Dom
     /**
      * @var array
      */
-    private $variableList = [];
+    private $variables = [];
     /**
      * Добавляет переменную
      * @param Variable $variable
      */
     public function addVariable(Variable $variable)
     {
-        $this->variableList[] = $variable;
+        $this->variables[$variable->getName()] = $variable;
+    }
+    /**
+     * @return array
+     */
+    public function getVariables()
+    {
+        return $this->variables;
     }
 }

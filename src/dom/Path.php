@@ -16,11 +16,11 @@ class Path
     /**
      * @var string
      */
-    private $format;
+    public $format;
     /**
      * @var string
      */
-    private $template;
+    public $template;
     /**
      * @Constructor
      */
@@ -29,5 +29,12 @@ class Path
         $this->path = $path;
         $this->format = $format;
         $this->template = $template;
+    }
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 }

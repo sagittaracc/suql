@@ -16,11 +16,11 @@ class Variable
     /**
      * @var mixed значение
      */
-    private $value;
+    public $value;
     /**
      * @var array пути в шаблоне
      */
-    private $pathList = [];
+    public $paths = [];
     /**
      * Constructor
      * @param string $name имя переменной
@@ -30,7 +30,6 @@ class Variable
         $this->name = $name;
     }
     /**
-     * Получает имя переменной
      * @return string
      */
     public function getName()
@@ -46,18 +45,10 @@ class Variable
         $this->value = $value;
     }
     /**
-     * Получает значение
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-    /**
      * Добавляет путь
      */
     public function addPath(Path $path)
     {
-        $this->pathList[] = $path;
+        $this->paths[$path->getPath()] = $path;
     }
 }
