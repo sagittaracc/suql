@@ -1,5 +1,11 @@
 # Change log
 
+## v8.0.1 - August 12, 2022
+
+- Первый переделанный вариант SuQL Js
+
+---
+
 ## v8.0.0 - August 11, 2022
 
 - Fronted side refactor
