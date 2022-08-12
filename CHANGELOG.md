@@ -1,5 +1,11 @@
 # Change log
 
+## v8.0.3 - August 12, 2022
+
+- Доработки SuQL Js
+
+---
+
 ## v8.0.2 - August 12, 2022
 
 - Доработки SuQL Js

@@ -51,6 +51,8 @@ function assign(a, b) {
 }
 
 function append(a, b) {
+    a.value.push(b)
+
     for (var path in a.paths) {
         var elements = getElementsByQuery(path)
 
