@@ -49,3 +49,37 @@ function assign(a, b) {
 
     // TODO: обновить все связи по template functions которые используют данную переменную
 }
+
+function append(a, b) {
+    for (var path in a.paths) {
+        var elements = getElementsByQuery(path)
+
+        if (elements.length === 0) {
+            return
+        }
+
+        var config = a.paths[path]
+
+        for (var i = 0, n = elements.length; i < n; i++) {
+            switch (config.format) {
+                case "html":
+                    var content = "";
+                    var template = config.template;
+                    for (variable in b) {
+                        template = template.replace("[[" + variable + "]]", b[variable])
+                    }
+                    content += template
+
+                    for (var i = 0, n = elements.length; i < n; i++) {
+                        elements[i].innerHTML += content
+                    }
+                    break
+            }
+        }
+    }
+}
+
+function get(a)
+{
+    return a.value
+}
