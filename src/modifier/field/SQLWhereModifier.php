@@ -3,9 +3,6 @@
 namespace suql\modifier\field;
 
 use suql\core\Condition;
-use suql\core\param\Between;
-use suql\core\param\In;
-use suql\core\param\Like;
 use suql\core\param\Simple;
 
 /**
@@ -105,36 +102,6 @@ class SQLWhereModifier extends SQLBaseModifier
     public static function mod_notEqual($ofield, $params, $isFilter = false)
     {
         self::where('<>', $ofield, new Simple($ofield->getFieldNameObject(), $params), $isFilter);
-    }
-    /**
-     * Модификатор like
-     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
-     * @param array $param параметры модификатора
-     * @param boolean $isFilter фильтровое условие или нет
-     */
-    public static function mod_like($ofield, $params, $isFilter = false)
-    {
-        self::where('like', $ofield, new Like($ofield->getFieldNameObject(), $params), $isFilter);
-    }
-    /**
-     * Модификатор between
-     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
-     * @param array $param параметры модификатора
-     * @param boolean $isFilter фильтровое условие или нет
-     */
-    public static function mod_between($ofield, $params, $isFilter = false)
-    {
-        self::where('between', $ofield, new Between($ofield->getFieldNameObject(), $params), $isFilter);
-    }
-    /**
-     * Модификатор in
-     * @param \suql\core\Field $ofield объект поля к которому применяется модификатор
-     * @param array $param параметры модификатора
-     * @param boolean $isFilter фильтровое условие или нет
-     */
-    public static function mod_in($ofield, $params, $isFilter = false)
-    {
-        self::where('in', $ofield, new In($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор where

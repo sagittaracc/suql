@@ -2,15 +2,90 @@
 
 namespace suql\core\param;
 
+use suql\core\Placeholder;
+
 /**
- * Параметр с одним значением
+ * Абстрактный класс параметров запроса
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Simple extends Param
+class Simple
 {
     /**
-     * @inheritdoc
+     * @var \suql\core\FieldName поле для которого применяются параметры
+     */
+    protected $field;
+    /**
+     * @var array параметры применения
+     */
+    protected $params;
+    /**
+     * Constructor
+     * @param \suql\core\FieldName $field поле для которого применяются параметры
+     * @param array $params параметры применения
+     */
+    function __construct($field, $params = [])
+    {
+        $this->field = $field;
+        $this->params = $params;
+    }
+    /**
+     * Получает хэш поля
+     * @param mixed $value значение параметра
+     * @return string
+     */
+    public function getFieldHash($value = 0)
+    {
+        return md5("{$this->field->table}.{$this->field->name}:$value");
+    }
+    /**
+     * Получить поле
+     * @return \suql\core\FieldName
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+    /**
+     * Получить параметры поля
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+    /**
+     * Получить ключ параметры
+     * @return string
+     */
+    public function getParamKey()
+    {
+        return "pk_{$this->getFieldHash()}";
+    }
+    /**
+     * Полный перечень параметрам по плейсхолдерам
+     * @return array
+     */
+    public function getParamList()
+    {
+        return array_combine($this->getPlaceholderList(), $this->params);
+    }
+    /**
+     * Получить список автосгенерированных плейсхолдеров
+     * @return array
+     */
+    public function getPlaceholderList()
+    {
+        $placeholderList = [];
+
+        foreach ($this->params as $index => $param) {
+            $placeholderList[] = $param instanceof Placeholder ? $param->getPlaceholder() : ":ph{$index}_{$this->getFieldHash($param)}";
+        }
+
+        return $placeholderList;
+    }
+    /**
+     * @return mixed
      */
     public function getPlaceholder()
     {
@@ -19,5 +94,20 @@ class Simple extends Param
         return isset($placeholderList[0])
             ? $placeholderList[0]
             : '';
+    }
+    /**
+     * Проверяет если параметр не нулевой (все значения переданных параметров не нулевые)
+     * Определяется для каждого класса параметра
+     * @return boolean
+     */
+    public function isValuable()
+    {
+        foreach ($this->params as $param) {
+            if (is_null($param)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
