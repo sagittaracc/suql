@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\core\SimpleParam;
+use suql\core\param\Simple;
 use suql\core\SmartDate;
 use suql\syntax\Expression;
 use test\suql\models\Query1;
@@ -111,9 +111,9 @@ final class WhereTest extends TestCase
             Expression::create(
                 '$1 and ($2 or $3)',
                 [
-                    [SimpleParam::class, ['table_1', 'f1'], '$ > ?', [1]],
-                    [SimpleParam::class, ['table_1', 'f2'], '$ > ?', [2]],
-                    [SimpleParam::class, ['table_1', 'f2'], '$ < ?', [3]],
+                    [Simple::class, ['table_1', 'f1'], '$ > ?', [1]],
+                    [Simple::class, ['table_1', 'f2'], '$ > ?', [2]],
+                    [Simple::class, ['table_1', 'f2'], '$ < ?', [3]],
                 ]
             )
         );

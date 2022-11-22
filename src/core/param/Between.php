@@ -1,13 +1,13 @@
 <?php
 
-namespace suql\core;
+namespace suql\core\param;
 
 /**
  * Фильтрация типа BETWEEN
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class BetweenParam extends Param
+class Between extends Param
 {
     /**
      * {@inheritdoc}

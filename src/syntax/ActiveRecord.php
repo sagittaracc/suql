@@ -8,8 +8,8 @@ use ReflectionClass;
 use suql\core\Condition;
 use suql\core\FieldName;
 use suql\core\Obj;
-use suql\core\SimpleParam;
 use ReflectionProperty;
+use suql\core\param\Simple;
 use suql\core\Scheme;
 use suql\core\SmartDate;
 use suql\db\Container;
@@ -597,7 +597,7 @@ abstract class ActiveRecord extends Obj
                     }
                     else {
                         $this->whereExpression(
-                            new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ = ?")
+                            new Condition(new Simple(new FieldName($this->currentTable, $field), [$value]), "$ = ?")
                         );
                     }
                 }
@@ -613,7 +613,7 @@ abstract class ActiveRecord extends Obj
             $compare = func_get_arg(1);
             $value = func_get_arg(2);
             $this->whereExpression(
-                new Condition(new SimpleParam(new FieldName($this->currentTable, $field), [$value]), "$ $compare ?")
+                new Condition(new Simple(new FieldName($this->currentTable, $field), [$value]), "$ $compare ?")
             );
         }
 

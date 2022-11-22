@@ -2,12 +2,11 @@
 
 namespace suql\modifier\field;
 
-use suql\core\LikeParam;
-use suql\core\BetweenParam;
 use suql\core\Condition;
-use suql\core\FieldName;
-use suql\core\InParam;
-use suql\core\SimpleParam;
+use suql\core\param\Between;
+use suql\core\param\In;
+use suql\core\param\Like;
+use suql\core\param\Simple;
 
 /**
  * Where Clause
@@ -43,7 +42,7 @@ class SQLWhereModifier extends SQLBaseModifier
             }
             else
             {
-                $ofield->getOSelect()->addWhere(new Condition(new SimpleParam($fieldName, $params), "$ $compare $placeholder"));
+                $ofield->getOSelect()->addWhere(new Condition(new Simple($fieldName, $params), "$ $compare $placeholder"));
             }
         }
     }
@@ -55,7 +54,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_greater($ofield, $params, $isFilter = false)
     {
-        self::where('>', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('>', $ofield, new Simple($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '>='
@@ -65,7 +64,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_greaterOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('>=', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('>=', $ofield, new Simple($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '<'
@@ -75,7 +74,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_less($ofield, $params, $isFilter = false)
     {
-        self::where('<', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('<', $ofield, new Simple($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '<='
@@ -85,7 +84,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_lessOrEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<=', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('<=', $ofield, new Simple($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '='
@@ -95,7 +94,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_equal($ofield, $params, $isFilter = false)
     {
-        self::where('=', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('=', $ofield, new Simple($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор '<>'
@@ -105,7 +104,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_notEqual($ofield, $params, $isFilter = false)
     {
-        self::where('<>', $ofield, new SimpleParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('<>', $ofield, new Simple($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор like
@@ -115,7 +114,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_like($ofield, $params, $isFilter = false)
     {
-        self::where('like', $ofield, new LikeParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('like', $ofield, new Like($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор between
@@ -125,7 +124,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_between($ofield, $params, $isFilter = false)
     {
-        self::where('between', $ofield, new BetweenParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('between', $ofield, new Between($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор in
@@ -135,7 +134,7 @@ class SQLWhereModifier extends SQLBaseModifier
      */
     public static function mod_in($ofield, $params, $isFilter = false)
     {
-        self::where('in', $ofield, new InParam($ofield->getFieldNameObject(), $params), $isFilter);
+        self::where('in', $ofield, new In($ofield->getFieldNameObject(), $params), $isFilter);
     }
     /**
      * Модификатор where

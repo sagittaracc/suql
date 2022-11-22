@@ -7,7 +7,7 @@ use sagittaracc\PlaceholderHelper;
 use suql\core\Condition;
 use suql\core\Expression;
 use suql\core\FieldName;
-use suql\core\SimpleParam;
+use suql\core\param\Simple;
 
 /**
  * Модификатор case when
@@ -67,7 +67,7 @@ class SQLCaseModifier extends SQLBaseModifier
         $field = $when[0];
         $condition = $when[1];
 
-        return [new Condition(new SimpleParam($field), $condition), $then];
+        return [new Condition(new Simple($field), $condition), $then];
     }
     /**
      * Составное условие в case
@@ -98,7 +98,7 @@ class SQLCaseModifier extends SQLBaseModifier
                 foreach ($value as $condition)
                 {
                     $field = $condition[0];
-                    $condition[0] = new SimpleParam($field);
+                    $condition[0] = new Simple($field);
 
                     $reflector = new ReflectionClass(Condition::class);
                     $conditionList[] = $reflector->newInstanceArgs($condition);

@@ -1,13 +1,13 @@
 <?php
 
-namespace suql\core;
+namespace suql\core\param;
 
 /**
  * Параметр типа like
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class LikeParam extends SimpleParam
+class Like extends Simple
 {
     /**
      * {@inheritdoc}

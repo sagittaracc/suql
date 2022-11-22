@@ -7,7 +7,7 @@ use sagittaracc\StringHelper;
 use suql\core\Condition;
 use suql\core\Expression;
 use suql\core\FieldName;
-use suql\core\SimpleParam;
+use suql\core\param\Simple;
 use suql\syntax\field\Field;
 use test\suql\models\Query1;
 
@@ -29,7 +29,7 @@ final class FieldModifierTest extends TestCase
                             
                             $ofield->getOSelect()->addWhere(
                                 new Expression('$1', [
-                                    new Condition(new SimpleParam(new FieldName($ofield->getTable(), $ofield->getField()), [1]), '$ > ?'),
+                                    new Condition(new Simple(new FieldName($ofield->getTable(), $ofield->getField()), [1]), '$ > ?'),
                                 ])
                             );
                         }

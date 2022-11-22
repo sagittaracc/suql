@@ -1,6 +1,8 @@
 <?php
 
-namespace suql\core;
+namespace suql\core\param;
+
+use suql\core\Placeholder;
 
 /**
  * Абстрактный класс параметров запроса

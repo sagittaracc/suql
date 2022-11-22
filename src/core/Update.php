@@ -3,6 +3,7 @@
 namespace suql\core;
 
 use sagittaracc\PlaceholderHelper;
+use suql\core\param\Simple;
 use suql\core\UpdateQueryInterface;
 
 /**
@@ -63,7 +64,7 @@ class Update extends Query implements UpdateQueryInterface, Buildable
     public function addWhere($field, $value)
     {
         $fieldName = new FieldName($this->table, $field);
-        $condition = new Condition(new SimpleParam($fieldName, [$value]), "$ = ?");
+        $condition = new Condition(new Simple($fieldName, [$value]), "$ = ?");
         $this->where[] = [
             'fieldName' => $fieldName,
             'condition' => $condition,

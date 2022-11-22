@@ -1,23 +1,23 @@
 <?php
 
-namespace suql\core;
+namespace suql\core\param;
 
 /**
- * Параметр с одним значением
+ * Фильтрация типа IN
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class SimpleParam extends Param
+class In extends Param
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPlaceholder()
     {
         $placeholderList = $this->getPlaceholderList();
 
-        return isset($placeholderList[0])
-            ? $placeholderList[0]
+        return !empty($placeholderList)
+            ? '(' . implode(',', $placeholderList) . ')'
             : '';
     }
 }
