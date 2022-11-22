@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
 use suql\core\param\Simple;
 use suql\core\SmartDate;
+use suql\core\where\Greater;
 use suql\syntax\Expression;
 use test\suql\models\Query1;
 
@@ -77,14 +78,13 @@ final class WhereTest extends TestCase
 
         $query =
             Query1::all()
-                ->where('f1', '>', 1)
+                ->where([
+                    'f1' => Greater::integer(1),
+                ])
                 ->andWhere('f2', '<', 2);
 
         $actualSQL = $query->getRawSql();
-        $actualParams = $query->getParamList();
-
         $this->assertEquals($expectedSQL, $actualSQL);
-        $this->assertEquals($expectedParams, $actualParams);
     }
     /**
      * Example:
