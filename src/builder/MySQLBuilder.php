@@ -99,18 +99,13 @@ final class MySQLBuilder extends SQLBuilder
                 return "$field >= DATE_ADD(CURDATE(), INTERVAL -{$smartDate->getNumber()} {$smartDate->getPeriod()})";
         }
     }
+    /**
+     * TODO: Переименовать в buildCondition
+     */
     protected function buildCompare($fieldName, $compare)
     {
         $field = "`$fieldName->table`.`$fieldName->name`";
         return "$field {$compare->getCondition()} {$compare->getValue()}";
-    }
-    /**
-     * @inheritdoc
-     */
-    public function buildCondition($fieldName, $condition)
-    {
-        $value = array_values($condition->getParams())[0];
-        return "`$fieldName->table`.`$fieldName->name` = $value";
     }
     /**
      * @inheritdoc
