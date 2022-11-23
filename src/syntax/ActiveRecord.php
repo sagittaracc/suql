@@ -5,14 +5,12 @@ namespace suql\syntax;
 use Closure;
 use Exception;
 use ReflectionClass;
-use suql\core\Condition;
 use suql\core\FieldName;
 use suql\core\Obj;
 use ReflectionProperty;
-use suql\core\param\Simple;
 use suql\core\Scheme;
 use suql\core\SmartDate;
-use suql\core\where\Condition as WhereCondition;
+use suql\core\where\Condition;
 use suql\core\where\Equal;
 use suql\db\Container;
 use suql\manager\TableEntityManager;
@@ -595,13 +593,8 @@ abstract class ActiveRecord extends Obj
             else if (is_array($where)) {
                 foreach ($where as $field => $value) {
                     if ($value instanceof SmartDate
-                    || $value instanceof WhereCondition) {
+                    || $value instanceof Condition) {
                         $this->whereExpression20(new FieldName($this->currentTable, $field), $value);
-                    }
-                    else {
-                        $this->whereExpression(
-                            new Condition(new Simple(new FieldName($this->currentTable, $field), [$value]), "$ = ?")
-                        );
                     }
                 }
             }
@@ -615,9 +608,7 @@ abstract class ActiveRecord extends Obj
             $field = func_get_arg(0);
             $compare = func_get_arg(1);
             $value = func_get_arg(2);
-            $this->whereExpression(
-                new Condition(new Simple(new FieldName($this->currentTable, $field), [$value]), "$ $compare ?")
-            );
+            // TODO: Доделать
         }
 
         return $this;
