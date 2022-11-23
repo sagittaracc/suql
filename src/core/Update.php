@@ -59,19 +59,7 @@ class Update extends Query implements UpdateQueryInterface, Buildable
         $this->values[$field] = $placeholder;
     }
     /**
-     * 
-     */
-    public function addWhere($field, $value)
-    {
-        $fieldName = new FieldName($this->table, $field);
-        $condition = new Condition(new Simple($fieldName, [$value]), "$ = ?");
-        $this->where[] = [
-            'fieldName' => $fieldName,
-            'condition' => $condition,
-        ];
-    }
-    /**
-     * Добавляет условие where 2.0
+     * Добавляет условие where 2.0 TODO: Переименовать в addWhere (без 2.0)
      * @param \suql\core\FieldName $fieldName
      * @param mixed $condition
      */
