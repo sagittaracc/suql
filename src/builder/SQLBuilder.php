@@ -5,6 +5,7 @@ namespace suql\builder;
 use sagittaracc\ArrayHelper;
 use sagittaracc\Map;
 use sagittaracc\PlaceholderHelper;
+use suql\core\FieldName;
 use suql\core\SmartDate;
 use suql\core\where\Condition;
 use suql\modifier\field\SQLFunctionModifier;
@@ -473,6 +474,14 @@ abstract class SQLBuilder
         $bound = implode(', ', $bound);
 
         return " limit $bound";
+    }
+    abstract protected function buildFieldName(FieldName $fieldName);
+    /**
+     * @inheritdoc
+     */
+    protected function buildCondition($fieldName, $compare)
+    {
+        return "{$this->buildFieldName($fieldName)} {$compare->getCondition()} {$compare->getValue()}";
     }
     /**
      * Сборка SmartDate

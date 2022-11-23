@@ -80,7 +80,7 @@ final class MySQLBuilder extends SQLBuilder
      */
     protected function buildSmartDate($fieldName, $smartDate)
     {
-        $field = "`$fieldName->table`.`$fieldName->name`";
+        $field = $this->buildFieldName($fieldName);
 
         switch ($smartDate->getType()) {
             case 'simple':
@@ -99,13 +99,9 @@ final class MySQLBuilder extends SQLBuilder
                 return "$field >= DATE_ADD(CURDATE(), INTERVAL -{$smartDate->getNumber()} {$smartDate->getPeriod()})";
         }
     }
-    /**
-     * @inheritdoc
-     */
-    protected function buildCondition($fieldName, $compare)
+    protected function buildFieldName($fieldName)
     {
-        $field = "`$fieldName->table`.`$fieldName->name`";
-        return "$field {$compare->getCondition()} {$compare->getValue()}";
+        return "`$fieldName->table`.`$fieldName->name`";
     }
     /**
      * @inheritdoc

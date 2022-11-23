@@ -33,6 +33,10 @@ final class PgSQLBuilder extends SQLBuilder
     {
         return '';
     }
+    protected function buildFieldName($fieldName)
+    {
+        return '';
+    }
     /**
      * @inheritdoc
      */

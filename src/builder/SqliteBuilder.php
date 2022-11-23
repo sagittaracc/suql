@@ -33,6 +33,10 @@ final class SqliteBuilder extends SQLBuilder
     {
         return '';
     }
+    protected function buildFieldName($fieldName)
+    {
+        return '';
+    }
     /**
      * @inheritdoc
      */
