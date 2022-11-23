@@ -5,13 +5,6 @@ namespace suql\core\where;
 use suql\core\FieldName;
 
 /**
- * Example:
- * 
- * Expression::create('$1 and ($2 or $3)')
- *     ->addCondition(new FieldName('t1', 'f1'), Equal::integer(1))
- *     ->addCondition(new FieldName('t1', 'f2'), Greater::integer(2))
- *     ->addCondition(new FieldName('t1', 'f3'), Less::integer(3))
- * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
 class Expression
@@ -35,8 +28,18 @@ class Expression
         return $this;
     }
 
+    public function getConditions()
+    {
+        return $this->conditions;
+    }
+
     public static function string(string $expression)
     {
         return new static($expression);
+    }
+
+    public function getExpression()
+    {
+        return $this->expression;
     }
 }

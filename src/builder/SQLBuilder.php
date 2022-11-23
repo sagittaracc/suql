@@ -8,6 +8,7 @@ use sagittaracc\PlaceholderHelper;
 use suql\core\FieldName;
 use suql\core\SmartDate;
 use suql\core\where\Condition;
+use suql\core\where\Expression;
 use suql\modifier\field\SQLFunctionModifier;
 
 /**
@@ -404,6 +405,9 @@ abstract class SQLBuilder
             if ($where20['condition'] instanceof Condition) {
                 $extraWhere[] = $this->buildCondition($where20['fieldName'], $where20['condition']);
             }
+            else if ($where20['condition'] instanceof Expression) {
+                $extraWhere[] = $this->buildExpression($where20['condition']);
+            }
             elseif ($where20['condition'] instanceof SmartDate) {
                 $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
             }
@@ -482,6 +486,21 @@ abstract class SQLBuilder
     protected function buildCondition($fieldName, $compare)
     {
         return "{$this->buildFieldName($fieldName)} {$compare->getCondition()} {$compare->getValue()}";
+    }
+    /**
+     * @inheritdoc
+     */
+    protected function buildExpression(Expression $expression)
+    {
+        $expressionString = $expression->getExpression();
+
+        foreach ($expression->getConditions() as $i => $condition) {
+            $index = $i + 1;
+            $condition = $this->buildCondition($condition['fieldName'], $condition['condition']);
+            $expressionString = str_replace("$$index", $condition, $expressionString);
+        }
+
+        return $expressionString;
     }
     /**
      * Сборка SmartDate

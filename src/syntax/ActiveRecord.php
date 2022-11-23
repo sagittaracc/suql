@@ -12,6 +12,7 @@ use suql\core\Scheme;
 use suql\core\SmartDate;
 use suql\core\where\Condition;
 use suql\core\where\Equal;
+use suql\core\where\Expression;
 use suql\db\Container;
 use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
@@ -589,6 +590,9 @@ abstract class ActiveRecord extends Obj
             $where = func_get_arg(0);
             if (is_string($where)) {
                 $this->whereExpression($where);
+            }
+            else if ($where instanceof Expression) {
+                $this->whereExpression20(null, $where);
             }
             else if (is_array($where)) {
                 foreach ($where as $field => $value) {

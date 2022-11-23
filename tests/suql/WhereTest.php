@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\core\param\Simple;
+use suql\core\FieldName;
 use suql\core\SmartDate;
 use suql\core\where\Equal;
+use suql\core\where\Expression;
 use suql\core\where\Greater;
 use suql\core\where\Less;
-use suql\syntax\Expression;
 use test\suql\models\Query1;
 
 final class WhereTest extends TestCase
@@ -87,42 +87,23 @@ final class WhereTest extends TestCase
         $this->assertEquals($expectedSQL, $actualSQL);
     }
     /**
-     * Example:
-     * 
-     * select
-     *     *
-     * from table
-     * where
-     *     f1 > :ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b and
-     *     (
-     *         f2 > :ph0_52b577f9a00337a21f2f63d83847c058 or
-     *         f2 < :ph0_df41dd88e94a1d6f56fb80165480688b
-     *     )
      * 
      */
     public function testCustomExpression(): void
     {
-        $sql = require('queries/mysql/q19.php');
+        $sql = require('queries/mysql/q43.php');
 
         $expectedSQL = StringHelper::trimSql($sql['query']);
-        $expectedParams = $sql['params'];
 
-        $query = Query1::all()->whereExpression(
-            Expression::create(
-                '$1 and ($2 or $3)',
-                [
-                    [Simple::class, ['table_1', 'f1'], '$ > ?', [1]],
-                    [Simple::class, ['table_1', 'f2'], '$ > ?', [2]],
-                    [Simple::class, ['table_1', 'f2'], '$ < ?', [3]],
-                ]
-            )
+        $query = Query1::all()->where(
+            Expression::string('$1 and ($2 or $3)')
+                ->addCondition(new FieldName('table_1', 'f1'), Greater::integer(1))
+                ->addCondition(new FieldName('table_1', 'f2'), Greater::integer(2))
+                ->addCondition(new FieldName('table_1', 'f2'), Less::integer(3))
         );
 
         $actualSQL = $query->getRawSql();
-        $actualParams = $query->getParamList();
-
         $this->assertEquals($expectedSQL, $actualSQL);
-        $this->assertEquals($expectedParams, $actualParams);
     }
     /**
      * Example:
