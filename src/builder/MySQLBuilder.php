@@ -100,9 +100,9 @@ final class MySQLBuilder extends SQLBuilder
         }
     }
     /**
-     * TODO: Переименовать в buildCondition
+     * @inheritdoc
      */
-    protected function buildCompare($fieldName, $compare)
+    protected function buildCondition($fieldName, $compare)
     {
         $field = "`$fieldName->table`.`$fieldName->name`";
         return "$field {$compare->getCondition()} {$compare->getValue()}";

@@ -6,7 +6,7 @@ use sagittaracc\ArrayHelper;
 use sagittaracc\Map;
 use sagittaracc\PlaceholderHelper;
 use suql\core\SmartDate;
-use suql\core\where\Condition as WhereCondition;
+use suql\core\where\Condition;
 use suql\modifier\field\SQLFunctionModifier;
 
 /**
@@ -400,8 +400,8 @@ abstract class SQLBuilder
 
         $extraWhere = [];
         foreach ($whereList20 as $where20) {
-            if ($where20['condition'] instanceof WhereCondition) {
-                $extraWhere[] = $this->buildCompare($where20['fieldName'], $where20['condition']);
+            if ($where20['condition'] instanceof Condition) {
+                $extraWhere[] = $this->buildCondition($where20['fieldName'], $where20['condition']);
             }
             elseif ($where20['condition'] instanceof SmartDate) {
                 $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
