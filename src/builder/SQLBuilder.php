@@ -401,14 +401,14 @@ abstract class SQLBuilder
 
         $extraWhere = [];
         foreach ($whereList20 as $where20) {
-            if ($where20['condition'] instanceof Condition) {
-                $extraWhere[] = $this->buildCondition($where20['fieldName'], $where20['condition']);
+            if ($where20['condition'] instanceof Compare) {
+                $extraWhere[] = $this->buildCompare($where20['fieldName'], $where20['condition']);
             }
             elseif ($where20['condition'] instanceof SmartDate) {
                 $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
             }
-            else if ($where20['condition'] instanceof Compare) {
-                $extraWhere[] = $this->buildCompare($where20['fieldName'], $where20['condition']);
+            elseif ($where20['condition'] instanceof Condition) {
+                $extraWhere[] = $this->buildCondition($where20['fieldName'], $where20['condition']);
             }
         }
 
