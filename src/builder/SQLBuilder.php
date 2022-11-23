@@ -6,9 +6,8 @@ use sagittaracc\ArrayHelper;
 use sagittaracc\Map;
 use sagittaracc\PlaceholderHelper;
 use suql\core\Condition;
-use suql\core\Name;
 use suql\core\SmartDate;
-use suql\core\where\Greater;
+use suql\core\where\Compare;
 use suql\modifier\field\SQLFunctionModifier;
 
 /**
@@ -408,8 +407,8 @@ abstract class SQLBuilder
             elseif ($where20['condition'] instanceof SmartDate) {
                 $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
             }
-            else if ($where20['condition'] instanceof Greater) {
-                $extraWhere[] = $this->buildGreater($where20['fieldName'], $where20['condition']);
+            else if ($where20['condition'] instanceof Compare) {
+                $extraWhere[] = $this->buildCompare($where20['fieldName'], $where20['condition']);
             }
         }
 

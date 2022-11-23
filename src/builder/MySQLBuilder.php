@@ -99,10 +99,10 @@ final class MySQLBuilder extends SQLBuilder
                 return "$field >= DATE_ADD(CURDATE(), INTERVAL -{$smartDate->getNumber()} {$smartDate->getPeriod()})";
         }
     }
-    protected function buildGreater($fieldName, $greater)
+    protected function buildCompare($fieldName, $compare)
     {
         $field = "`$fieldName->table`.`$fieldName->name`";
-        return "$field > {$greater->getValue()}";
+        return "$field {$compare->getCompare()} {$compare->getValue()}";
     }
     /**
      * @inheritdoc

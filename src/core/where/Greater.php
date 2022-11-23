@@ -7,27 +7,10 @@ namespace suql\core\where;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Greater
+class Greater extends Compare
 {
-    /**
-     * @var
-     */
-    private $value;
-    /**
-     * 
-     * @return
-     */
-    public function getValue()
+    public function getCompare()
     {
-        return $this->value;
-    }
-    /**
-     * 
-     */
-    public static function integer(int $value)
-    {
-        $instance = new static();
-        $instance->value = $value;
-        return $instance;
+        return '>';
     }
 }
