@@ -189,6 +189,7 @@ abstract class SQLBuilder
     private function buildUpdateQuery($query)
     {
         $updateTemplate = self::UPDATE_TEMPLATE;
+        $whereList20 = $this->osuql->getQuery($query)->getWhere20();
 
         $updateTemplate = str_replace('{table}', $this->osuql->getQuery($query)->getTable(), $updateTemplate);
         $updateTemplate = str_replace('{values}', $this->osuql->getQuery($query)->getValues(), $updateTemplate);

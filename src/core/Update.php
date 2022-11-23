@@ -71,6 +71,20 @@ class Update extends Query implements UpdateQueryInterface, Buildable
         ];
     }
     /**
+     * Добавляет условие where 2.0
+     * @param \suql\core\FieldName $fieldName
+     * @param mixed $condition
+     */
+    public function addWhere20($field, $condition)
+    {
+        $fieldName = new FieldName($this->table, $field);
+
+        $this->where20[] = [
+            'fieldName' => $fieldName,
+            'condition' => $condition,
+        ];
+    }
+    /**
      * Получить таблицу
      * @return string
      */
@@ -101,7 +115,7 @@ class Update extends Query implements UpdateQueryInterface, Buildable
      */
     public function getWhere20()
     {
-        return $this->where;
+        return $this->where20;
     }
     /**
      * 

@@ -13,6 +13,7 @@ use suql\core\param\Simple;
 use suql\core\Scheme;
 use suql\core\SmartDate;
 use suql\core\where\Condition as WhereCondition;
+use suql\core\where\Equal;
 use suql\db\Container;
 use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
@@ -235,7 +236,7 @@ abstract class ActiveRecord extends Obj
             return null;
         }
 
-        return $instance->find([$pk => $id]);
+        return $instance->find([$pk => Equal::integer($id)]);
     }
     /**
      * Выборка данных по первичному ключу

@@ -2,6 +2,7 @@
 
 namespace suql\manager;
 
+use suql\core\where\Equal;
 use suql\syntax\ActiveRecord;
 
 /**
@@ -115,9 +116,9 @@ class TableEntityManager
         }
 
         $pk = $entity->getPrimaryKey();
-        $entity->getQuery($entity->query())->addWhere($pk, $entity->$pk);
-
-        $entity->getDb()->getPdo()->exec($entity->getRawSql());
+        $entity->getQuery($entity->query())->addWhere20($pk, Equal::integer($entity->$pk));
+        $query = $entity->getRawSql();
+        $entity->getDb()->getPdo()->exec($query);
     }
     /**
      * Удаление
