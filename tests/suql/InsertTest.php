@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use suql\core\where\Equal;
 use suql\db\Container;
 use suql\syntax\Query;
 use test\suql\models\Query11;
@@ -34,7 +35,7 @@ final class InsertTest extends TestCase
         $record->f2 = 7;
         $record->save();
 
-        $justAddedRow = Query11::all()->where(['f1' => 7])->fetchOne();
+        $justAddedRow = Query11::all()->where(['f1' => Equal::integer(7)])->fetchOne();
         $this->assertEquals(7, $justAddedRow->f2);
 
         $data = Query11::all()->fetchAll();

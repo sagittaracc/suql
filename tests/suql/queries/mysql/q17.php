@@ -6,8 +6,8 @@ return [
             *
         from `table_1`
         where
-            f1 = :ph0_8008c0fb0d9e45eeab00d02d4dc6bf1b
-        and f2 = :ph0_52b577f9a00337a21f2f63d83847c058
+            `table_1`.`f1` = 1
+        and `table_1`.`f2` = 2
 SQL,
 
     'params' => [

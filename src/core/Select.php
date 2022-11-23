@@ -223,8 +223,6 @@ class Select extends Query implements SelectQueryInterface, Buildable
             $this->addStringWhere($expression, $stack);
         } else if ($expression instanceof Expression) {
             $this->addExpressionWhere($expression, $stack);
-        } else if ($expression instanceof Condition) {
-            $this->addConditionWhere($expression, $stack);
         }
     }
     /**
@@ -244,19 +242,6 @@ class Select extends Query implements SelectQueryInterface, Buildable
     private function addExpressionWhere($expression, &$stack)
     {
         $stack[] = $expression->getExpression();
-
-        foreach ($expression->getParams() as $param => $value) {
-            $this->getOSuQL()->setParam($param, $value);
-        }
-    }
-    /**
-     * Добавляем простой condition
-     * @param \suql\core\Condition $expression
-     * @param array $stack
-     */
-    private function addConditionWhere($expression, &$stack)
-    {
-        $stack[] = $expression->getCondition();
 
         foreach ($expression->getParams() as $param => $value) {
             $this->getOSuQL()->setParam($param, $value);
