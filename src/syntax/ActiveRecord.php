@@ -12,7 +12,7 @@ use ReflectionProperty;
 use suql\core\param\Simple;
 use suql\core\Scheme;
 use suql\core\SmartDate;
-use suql\core\where\Greater;
+use suql\core\where\Condition as WhereCondition;
 use suql\db\Container;
 use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
@@ -594,7 +594,7 @@ abstract class ActiveRecord extends Obj
             else if (is_array($where)) {
                 foreach ($where as $field => $value) {
                     if ($value instanceof SmartDate
-                    || $value instanceof Greater) {
+                    || $value instanceof WhereCondition) {
                         $this->whereExpression20(new FieldName($this->currentTable, $field), $value);
                     }
                     else {

@@ -7,10 +7,10 @@ namespace suql\core\where;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-class Greater extends Condition
+class Less extends Condition
 {
     public function getCondition()
     {
-        return '>';
+        return '<';
     }
 }

@@ -7,7 +7,7 @@ namespace suql\core\where;
  * 
  * @author sagittaracc <sagittaracc@gmail.com>
  */
-abstract class Compare
+abstract class Condition
 {
     /**
      * @var
@@ -33,5 +33,5 @@ abstract class Compare
     /**
      * 
      */
-    abstract public function getCompare();
+    abstract public function getCondition();
 }

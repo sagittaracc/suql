@@ -6,8 +6,8 @@ return [
             *
         from `table_1`
         where
-            f2 < :ph0_52b577f9a00337a21f2f63d83847c058
-        and `table_1`.`f1` > 1
+            `table_1`.`f1` > 1
+        and `table_1`.`f2` < 2
 SQL,
 
     'params' => [

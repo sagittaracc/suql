@@ -7,7 +7,7 @@ use sagittaracc\Map;
 use sagittaracc\PlaceholderHelper;
 use suql\core\Condition;
 use suql\core\SmartDate;
-use suql\core\where\Compare;
+use suql\core\where\Condition as WhereCondition;
 use suql\modifier\field\SQLFunctionModifier;
 
 /**
@@ -401,7 +401,7 @@ abstract class SQLBuilder
 
         $extraWhere = [];
         foreach ($whereList20 as $where20) {
-            if ($where20['condition'] instanceof Compare) {
+            if ($where20['condition'] instanceof WhereCondition) {
                 $extraWhere[] = $this->buildCompare($where20['fieldName'], $where20['condition']);
             }
             elseif ($where20['condition'] instanceof SmartDate) {

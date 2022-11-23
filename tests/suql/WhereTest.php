@@ -7,6 +7,7 @@ use sagittaracc\StringHelper;
 use suql\core\param\Simple;
 use suql\core\SmartDate;
 use suql\core\where\Greater;
+use suql\core\where\Less;
 use suql\syntax\Expression;
 use test\suql\models\Query1;
 
@@ -74,14 +75,15 @@ final class WhereTest extends TestCase
         $sql = require('queries/mysql/q18.php');
 
         $expectedSQL = StringHelper::trimSql($sql['query']);
-        $expectedParams = $sql['params'];
 
         $query =
             Query1::all()
                 ->where([
                     'f1' => Greater::integer(1),
                 ])
-                ->andWhere('f2', '<', 2);
+                ->andWhere([
+                    'f2' => Less::integer(2),
+                ]);
 
         $actualSQL = $query->getRawSql();
         $this->assertEquals($expectedSQL, $actualSQL);

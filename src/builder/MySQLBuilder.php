@@ -102,7 +102,7 @@ final class MySQLBuilder extends SQLBuilder
     protected function buildCompare($fieldName, $compare)
     {
         $field = "`$fieldName->table`.`$fieldName->name`";
-        return "$field {$compare->getCompare()} {$compare->getValue()}";
+        return "$field {$compare->getCondition()} {$compare->getValue()}";
     }
     /**
      * @inheritdoc
