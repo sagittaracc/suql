@@ -67,8 +67,13 @@ class Query implements DbObject
     {
         $placeholder = (new PlaceholderHelper())->setQuote('');
 
-        foreach ($queries as $query) {
-            $this->query = $placeholder->setString($this->query)->bind("({$query->getRawSql()})");
+        foreach ($queries as $queryName => $query) {
+            $rawQuery = $query->getRawSql();
+            $placeholder->setString($this->query);
+
+            $this->query = is_string($queryName)
+                ? $placeholder->bind([$queryName => '('.$rawQuery.')'])
+                : $placeholder->bind('('.$rawQuery.')');
         }
 
         return $this;

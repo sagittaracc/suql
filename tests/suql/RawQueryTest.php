@@ -41,7 +41,11 @@ final class RawQueryTest extends TestCase
     public function testQueryBindMethod(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q20.php'));
+
         $actual = Query::create('select * from ?')->bind([Query10::all()])->getQuery();
+        $this->assertEquals($expected, $actual);
+
+        $actual = Query::create('select * from :query')->bind([':query' => Query10::all()])->getQuery();
         $this->assertEquals($expected, $actual);
     }
 
