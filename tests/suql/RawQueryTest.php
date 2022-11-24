@@ -38,7 +38,7 @@ final class RawQueryTest extends TestCase
         $this->assertEquals(6, $count);
     }
 
-    public function testQueryInjection(): void
+    public function testQueryBindMethod(): void
     {
         $expected = StringHelper::trimSql(require('queries/mysql/q20.php'));
         $actual = Query::create('select * from ?')->bind([Query10::all()])->getQuery();

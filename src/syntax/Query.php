@@ -44,7 +44,6 @@ class Query implements DbObject
         return $this;
     }
     /**
-     * Реализация getDb
      * @return \suql\db\pdo\Connection
      */
     public function getDb()
@@ -52,7 +51,7 @@ class Query implements DbObject
         return $this->db;
     }
     /**
-     * Установить подключение к бд
+     * Задать подключение по имени
      * @param string $connection
      */
     public function setConnection($connection)
@@ -66,10 +65,10 @@ class Query implements DbObject
      */
     public function bind($queries)
     {
-        $suqlStringPlaceholder = (new PlaceholderHelper())->setQuote('');
+        $placeholder = (new PlaceholderHelper())->setQuote('');
 
         foreach ($queries as $query) {
-            $this->query = $suqlStringPlaceholder->setString($this->query)->bind("({$query->getRawSql()})");
+            $this->query = $placeholder->setString($this->query)->bind("({$query->getRawSql()})");
         }
 
         return $this;
