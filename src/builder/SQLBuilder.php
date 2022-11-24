@@ -9,6 +9,7 @@ use suql\core\FieldName;
 use suql\core\SmartDate;
 use suql\core\where\Condition;
 use suql\core\where\Expression;
+use suql\core\where\Raw;
 use suql\modifier\field\SQLFunctionModifier;
 
 /**
@@ -402,13 +403,20 @@ abstract class SQLBuilder
 
         $extraWhere = [];
         foreach ($whereList20 as $where20) {
-            if ($where20['condition'] instanceof Condition) {
+            if ($where20['condition'] instanceof Raw)
+            {
+                $extraWhere[] = $where20['condition']->getWhere();
+            }
+            if ($where20['condition'] instanceof Condition)
+            {
                 $extraWhere[] = $this->buildCondition($where20['fieldName'], $where20['condition']);
             }
-            else if ($where20['condition'] instanceof Expression) {
+            else if ($where20['condition'] instanceof Expression)
+            {
                 $extraWhere[] = $this->buildExpression($where20['condition']);
             }
-            elseif ($where20['condition'] instanceof SmartDate) {
+            elseif ($where20['condition'] instanceof SmartDate)
+            {
                 $extraWhere[] = $this->buildSmartDate($where20['fieldName'], $where20['condition']);
             }
         }

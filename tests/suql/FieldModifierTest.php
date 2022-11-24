@@ -7,6 +7,7 @@ use sagittaracc\StringHelper;
 use suql\core\FieldName;
 use suql\core\where\Expression;
 use suql\core\where\Greater;
+use suql\core\where\Raw;
 use suql\syntax\field\Field;
 use test\suql\models\Query1;
 
@@ -24,9 +25,9 @@ final class FieldModifierTest extends TestCase
                 ->select([
                     new Field('f1', [
                         function($ofield) {
-                            $ofield->getOSelect()->addWhere('`table_1`.`f1` % 2 = 0');
+                            $ofield->getOSelect()->addWhere(null, new Raw('`table_1`.`f1` % 2 = 0'));
 
-                            $ofield->getOSelect()->addWhere20(
+                            $ofield->getOSelect()->addWhere(
                                 null,
                                 Expression::string('$1')
                                     ->addCondition(new FieldName($ofield->getTable(), $ofield->getName()), Greater::integer(1))

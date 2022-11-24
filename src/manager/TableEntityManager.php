@@ -116,7 +116,7 @@ class TableEntityManager
         }
 
         $pk = $entity->getPrimaryKey();
-        $entity->getQuery($entity->query())->addWhere20($pk, Equal::integer($entity->$pk));
+        $entity->getQuery($entity->query())->addWhere($pk, Equal::integer($entity->$pk));
         $query = $entity->getRawSql();
         $entity->getDb()->getPdo()->exec($query);
     }

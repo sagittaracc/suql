@@ -13,6 +13,7 @@ use suql\core\SmartDate;
 use suql\core\where\Condition;
 use suql\core\where\Equal;
 use suql\core\where\Expression;
+use suql\core\where\Raw as WhereRaw;
 use suql\db\Container;
 use suql\manager\TableEntityManager;
 use suql\syntax\field\Field;
@@ -559,6 +560,8 @@ abstract class ActiveRecord extends Obj
             $query = $subquery->query();
             $where = str_replace('?', "@$query", $where);
         }
+        var_dump($where);
+        die();
 
         $this->getSelect($this->query())->addWhere($where);
 
@@ -576,7 +579,11 @@ abstract class ActiveRecord extends Obj
             $where = str_replace('?', "@$query", $where);
         }
 
-        $this->getSelect($this->query())->addWhere20($field, $where);
+        if (is_string($where)) {
+            $where = new WhereRaw($where);
+        }
+
+        $this->getSelect($this->query())->addWhere($field, $where);
 
         return $this;
     }
@@ -589,7 +596,7 @@ abstract class ActiveRecord extends Obj
         if (func_num_args() === 1) {
             $where = func_get_arg(0);
             if (is_string($where)) {
-                $this->whereExpression($where);
+                $this->whereExpression20(null, new WhereRaw($where));
             }
             else if ($where instanceof Expression) {
                 $this->whereExpression20(null, $where);
@@ -606,7 +613,7 @@ abstract class ActiveRecord extends Obj
         else if (func_num_args() === 2) {
             $where = func_get_arg(0);
             $subqueries = func_get_arg(1);
-            $this->whereExpression($where, $subqueries);
+            $this->whereExpression20(null, $where, $subqueries);
         }
         else if (func_num_args() === 3) {
             $field = func_get_arg(0);

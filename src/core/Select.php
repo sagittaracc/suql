@@ -249,18 +249,10 @@ class Select extends Query implements SelectQueryInterface, Buildable
     }
     /**
      * Добавляет условие where
-     * @param string $where
-     */
-    public function addWhere($where)
-    {
-        $this->addExpression($where, $this->where);
-    }
-    /**
-     * Добавляет условие where 2.0
      * @param \suql\core\FieldName $fieldName
      * @param mixed $condition
      */
-    public function addWhere20($fieldName, $condition)
+    public function addWhere($fieldName, $condition)
     {
         $this->where20[] = [
             'fieldName' => $fieldName,
