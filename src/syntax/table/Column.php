@@ -1,6 +1,6 @@
 <?php
 
-namespace suql\syntax;
+namespace suql\syntax\table;
 
 /**
  * Конфигурация поля модели

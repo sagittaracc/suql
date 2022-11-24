@@ -8,7 +8,7 @@ use sagittaracc\ArrayHelper;
 use suql\annotation\RelationAnnotation;
 use suql\annotation\TableAnnotation;
 use suql\syntax\DbObject;
-use suql\syntax\Model;
+use suql\syntax\table\Model;
 use suql\syntax\QueryObject;
 use suql\syntax\ActiveRecord;
 use suql\syntax\TableInterface;
