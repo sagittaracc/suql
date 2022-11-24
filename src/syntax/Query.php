@@ -6,15 +6,14 @@ use sagittaracc\PlaceholderHelper;
 use suql\db\Container;
 
 /**
- * Execute Raw sql
+ * Выполнение сырого SQL
  *
  * @author sagittaracc <sagittaracc@gmail.com>
  */
 class Query implements DbObject
 {
     /**
-     * Db connection
-     * @var \PDO
+     * @var \suql\db\pdo\Connection
      */
     private $db;
     /**
@@ -35,14 +34,29 @@ class Query implements DbObject
         return $instance;
     }
     /**
+     * Задать подключение
+     * @param \suql\db\pdo\Connection $db
+     */
+    public function setDb($db)
+    {
+        $this->db = $db;
+        return $this;
+    }
+    /**
+     * Реализация getDb
+     * @return \suql\db\pdo\Connection
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+    /**
      * Установить подключение к бд
      * @param string $connection
      */
     public function setConnection($connection)
     {
-        $this->db = Container::get($connection);
-
-        return $this;
+        return $this->setDb(Container::get($connection));
     }
     /**
      * Внедрить запрос в сырой sql
@@ -67,7 +81,6 @@ class Query implements DbObject
     public function query($query)
     {
         $this->query = $query;
-
         return $this;
     }
     /**
@@ -92,23 +105,5 @@ class Query implements DbObject
         return empty($params)
             ? $this->db->getPdo()->exec($this->query)
             : $this->db->getPdo()->prepare($this->query)->execute($params);
-    }
-    /**
-     * Реализация getDb
-     * @return \PDO
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-    /**
-     * Задать подключение
-     * @param \PDO $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
-
-        return $this;
     }
 }
