@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use sagittaracc\StringHelper;
-use suql\core\Condition;
-use suql\core\Expression;
 use suql\core\FieldName;
-use suql\core\param\Simple;
+use suql\core\where\Expression;
+use suql\core\where\Greater;
 use suql\syntax\field\Field;
 use test\suql\models\Query1;
 
@@ -25,21 +24,18 @@ final class FieldModifierTest extends TestCase
                 ->select([
                     new Field('f1', [
                         function($ofield) {
-                            $ofield->getOSelect()->addWhere('table_1.f1 % 2 = 0');
-                            
-                            $ofield->getOSelect()->addWhere(
-                                new Expression('$1', [
-                                    new Condition(new Simple(new FieldName($ofield->getTable(), $ofield->getField()), [1]), '$ > ?'),
-                                ])
+                            $ofield->getOSelect()->addWhere('`table_1`.`f1` % 2 = 0');
+
+                            $ofield->getOSelect()->addWhere20(
+                                null,
+                                Expression::string('$1')
+                                    ->addCondition(new FieldName($ofield->getTable(), $ofield->getName()), Greater::integer(1))
                             );
                         }
                     ])
                 ]);
 
         $actualSQL = $query->getRawSql();
-        $actualParams = $query->getParamList();
-        
         $this->assertEquals($expectedSQL, $actualSQL);
-        $this->assertEquals($expectedParams, $actualParams);
     }
 }
