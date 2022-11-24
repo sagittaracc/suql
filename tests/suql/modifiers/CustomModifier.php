@@ -2,9 +2,9 @@
 
 namespace test\suql\modifiers;
 
-use suql\modifier\field\SQLCaseModifier;
+use suql\modifier\field\SQLBaseModifier;
 
-class CustomModifier extends SQLCaseModifier
+class CustomModifier extends SQLBaseModifier
 {
     public static function mod_custom_one($ofield, $params)
     {
