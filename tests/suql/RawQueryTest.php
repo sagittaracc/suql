@@ -44,4 +44,10 @@ final class RawQueryTest extends TestCase
         $actual = Query::create('select * from ?')->bind([Query10::all()])->getQuery();
         $this->assertEquals($expected, $actual);
     }
+
+    public function testNotSetConnection(): void
+    {
+        $this->expectExceptionMessage('Connection is not set!');
+        Query::create('delete from table_10')->exec();
+    }
 }

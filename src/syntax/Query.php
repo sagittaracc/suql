@@ -4,6 +4,7 @@ namespace suql\syntax;
 
 use sagittaracc\PlaceholderHelper;
 use suql\db\Container;
+use suql\syntax\exception\ConnectionIsNotSet;
 
 /**
  * Выполнение сырого SQL
@@ -98,10 +99,10 @@ class Query implements DbObject
      */
     public function exec($params = [])
     {
-        // TODO: Добавить проверку установлено ли соединение
-        // if (!$this->db) {
-        //     throw new ...
-        // }
+        if (!$this->db) {
+            throw new ConnectionIsNotSet;
+        }
+
         return empty($params)
             ? $this->db->getPdo()->exec($this->query)
             : $this->db->getPdo()->prepare($this->query)->execute($params);
