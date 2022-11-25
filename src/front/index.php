@@ -7,8 +7,10 @@
     <title>Document</title>
 </head>
 <body>
+    <?php require_once 'Value.php'; ?>
     <?php require_once 'Element.php'; ?>
     <?php require_once 'Input.php'; ?>
+    <?php require_once 'Button.php'; ?>
     <?php require_once 'View.php'; ?>
     <?php require_once 'Scope.php'; ?>
     <?php require_once 'Component.php'; ?>

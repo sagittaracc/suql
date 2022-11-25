@@ -67,5 +67,10 @@ abstract class Component
         return $input;
     }
 
+    public function button()
+    {
+        return new Button;
+    }
+
     abstract public function view();
 }

@@ -14,6 +14,12 @@ class HelloMessage extends Component
                 ->bind('onkeyup', function () {
                     return $this->setState('name', Input::currentValue());
                 })
+                ->render() .
+            $this->button()
+                ->setCaption('Click')
+                ->bind('onclick', function () {
+                    return $this->setState('name', Value::string('ddd'));
+                })
                 ->render()
         ;
     }
