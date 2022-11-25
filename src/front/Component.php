@@ -14,6 +14,11 @@ abstract class Component
         $this->scope = new Scope;
     }
 
+    public function setState($property, $value)
+    {
+        return static::class.'.setState("'.$property.'",'.$value.')';
+    }
+
     public function render()
     {
         $view = $this->view();
@@ -56,7 +61,10 @@ abstract class Component
 
         $this->scope->addVariable($name)->setCallback($id, 'function (el, value) { el.value = value }');
 
-        return '<input type="text" value="{{'.$name.'}}" id="'.$id.'">';
+        $input = new Input;
+        $input->setName($name)->setId($id);
+
+        return $input;
     }
 
     abstract public function view();
