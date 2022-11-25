@@ -1,11 +1,14 @@
 var component = {
-    setState: function (variable, value) {
-        this.scope[variable].value = value
-        var callbackList = this.scope[variable].callbackList
-        for (var id in callbackList) {
-            var callback = callbackList[id]
-            var el = document.getElementById(id)
-            eval('(' + callback + ')(el, value)')
+    setState: function (obj) {
+        for (prop in obj) {
+            this[prop] = obj[prop]
+            var callbackList = this.scope[prop].callbackList
+            for (var id in callbackList) {
+                var callback = callbackList[id]
+                var el = document.getElementById(id)
+                var value = obj[prop]
+                eval('(' + callback + ')(el, value)')
+            }
         }
     }
 }

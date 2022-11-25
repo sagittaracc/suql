@@ -14,9 +14,13 @@ abstract class Component
         $this->scope = new Scope;
     }
 
-    public function setState($property, $value)
+    public function setState($obj)
     {
-        return static::class.'.setState("'.$property.'",'.$value.')';
+        $s = [];
+        foreach ($obj as $prop => $value) {
+            $s[] = "$prop:$value";
+        }
+        return static::class.'.setState({'.implode(',', $s).'})';
     }
 
     public function render()
@@ -38,12 +42,14 @@ abstract class Component
     {
         return '
             <script>
-                var '.static::class.' = {
-                    setState: component.setState,
-                    scope: '.$this->scope->serialize().'
-                }
+                var '.static::class.' = '.$this->scope->serialize().'
             </script>
         ';
+    }
+
+    public function javascript($js)
+    {
+        return str_replace('this', static::class, $js);
     }
 
     public function variable($name)

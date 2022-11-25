@@ -17,6 +17,6 @@
     <?php require_once 'HelloMessage.php'; ?>
     <script src="component.js"></script>
 
-    <?=View::render(HelloMessage::class, ['name' => 'Mike'])?>
+    <?=View::render(HelloMessage::class, ['name' => 'Mike', 'count' => 0])?>
 </body>
 </html>

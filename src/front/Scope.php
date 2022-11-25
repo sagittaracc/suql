@@ -2,6 +2,7 @@
 
 class Scope
 {
+    private $values = [];
     private $variables = [];
 
     private $currentVariable = null;
@@ -9,8 +10,8 @@ class Scope
     public function addVariable($name)
     {
         if (!isset($this->variables[$name])) {
+            $this->values[$name] = null;
             $this->variables[$name] = [
-                'value' => null,
                 'callbackList' => [],
             ];
         }
@@ -27,6 +28,11 @@ class Scope
 
     public function serialize()
     {
-        return json_encode($this->variables);
+        $this->values['setState'] = '%function';
+        $this->values['scope'] = '%scope';
+        $scope = json_encode($this->values);
+        $scope = str_replace('"%function"', 'component.setState', $scope);
+        $scope = str_replace('"%scope"', json_encode($this->variables), $scope);
+        return $scope;
     }
 }

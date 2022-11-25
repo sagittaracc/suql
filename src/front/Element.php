@@ -1,12 +1,19 @@
 <?php
 
-class Element
+abstract class Element
 {
     protected $name;
 
     protected $id;
 
     protected $eventList = [];
+
+    abstract public function render();
+
+    public function __toString()
+    {
+        return $this->render();
+    }
 
     public function setId($id)
     {
