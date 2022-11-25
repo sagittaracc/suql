@@ -35,7 +35,7 @@ abstract class Component
             <script>
                 var '.static::class.' = {
                     setState: component.setState,
-                    scope: '.json_encode($this->scope->getVariables()).'
+                    scope: '.$this->scope->serialize().'
                 }
             </script>
         ';
@@ -45,8 +45,7 @@ abstract class Component
     {
         $id = uniqid();
 
-        $this->scope->addVariable($name);
-        $this->scope->findVariable($name)->setCallback($id, 'function (el, value) { el.textContent = value }');
+        $this->scope->addVariable($name)->setCallback($id, 'function (el, value) { el.textContent = value }');
 
         return '<span id="'.$id.'">{{'.$name.'}}</span>';
     }
@@ -55,8 +54,7 @@ abstract class Component
     {
         $id = uniqid();
 
-        $this->scope->addVariable($name);
-        $this->scope->findVariable($name)->setCallback($id, 'function (el, value) { el.value = value }');
+        $this->scope->addVariable($name)->setCallback($id, 'function (el, value) { el.value = value }');
 
         return '<input type="text" value="{{'.$name.'}}" id="'.$id.'">';
     }

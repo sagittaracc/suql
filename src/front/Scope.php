@@ -4,7 +4,7 @@ class Scope
 {
     private $variables = [];
 
-    private $search = null;
+    private $currentVariable = null;
 
     public function addVariable($name)
     {
@@ -14,21 +14,19 @@ class Scope
                 'callbackList' => [],
             ];
         }
-    }
 
-    public function findVariable($name)
-    {
-        $this->search = $name;
+        $this->currentVariable = $name;
+
         return $this;
     }
 
     public function setCallback($id, $callback)
     {
-        $this->variables[$this->search]['callbackList'][$id] = $callback;
+        $this->variables[$this->currentVariable]['callbackList'][$id] = $callback;
     }
 
-    public function getVariables()
+    public function serialize()
     {
-        return $this->variables;
+        return json_encode($this->variables);
     }
 }
