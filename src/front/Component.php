@@ -4,8 +4,12 @@ abstract class Component
 {
     private $scope;
 
+    private $uid;
+
     function __construct($properties)
     {
+        $this->uid = uniqid();
+
         foreach ($properties as $property => $value)
         {
             $this->$property = $value;
@@ -14,13 +18,18 @@ abstract class Component
         $this->scope = new Scope;
     }
 
+    private function className()
+    {
+        return static::class . $this->uid;
+    }
+
     public function setState($obj)
     {
         $s = [];
         foreach ($obj as $prop => $value) {
             $s[] = "$prop:$value";
         }
-        return static::class.'.setState({'.implode(',', $s).'})';
+        return $this->className().'.setState({'.implode(',', $s).'})';
     }
 
     public function render()
@@ -42,21 +51,21 @@ abstract class Component
     {
         return '
             <script>
-                var '.static::class.' = '.$this->scope->serialize().'
+                var '.$this->className().' = '.$this->scope->serialize().'
             </script>
         ';
     }
 
     public function javascript($js)
     {
-        return str_replace('this', static::class, $js);
+        return str_replace('this', $this->className(), $js);
     }
 
     public function variable($name)
     {
         $id = uniqid();
 
-        $this->scope->addVariable($name)->setCallback($id, 'function (el, value) { el.textContent = value }');
+        $this->scope->addVariable($name)->setValue($name, $this->$name)->setCallback($id, 'function (el, value) { el.textContent = value }');
 
         return '<span id="'.$id.'">{{'.$name.'}}</span>';
     }

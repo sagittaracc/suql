@@ -4,8 +4,6 @@ class HelloMessage extends Component
 {
     public $name;
 
-    public $count;
-
     public function view()
     {
         return
@@ -16,15 +14,9 @@ class HelloMessage extends Component
                 ->bind('onkeyup', function () {
                     return $this->setState(['name' => Input::currentValue()]);
                 }) .
-            $this->button()
-                ->setCaption('Click')
-                ->bind('onclick', function () {
-                    return $this->setState([
-                        'count' => $this->javascript('this.count + 1'),
-                        'name' => Value::string('Clicked')
-                    ]);
-                }) .
-            $this->variable('count')
+            Each::range(0, 4, function ($i) {
+                return View::render(CountComponent::class, ['count' => $i]);
+            })
         ;
     }
 }

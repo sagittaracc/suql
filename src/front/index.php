@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
+    <?php require_once 'Each.php'; ?>
     <?php require_once 'Value.php'; ?>
     <?php require_once 'Element.php'; ?>
     <?php require_once 'Input.php'; ?>
@@ -15,8 +16,9 @@
     <?php require_once 'Scope.php'; ?>
     <?php require_once 'Component.php'; ?>
     <?php require_once 'HelloMessage.php'; ?>
+    <?php require_once 'CountComponent.php'; ?>
     <script src="component.js"></script>
 
-    <?=View::render(HelloMessage::class, ['name' => 'Mike', 'count' => 0])?>
+    <?=View::render(HelloMessage::class, ['name' => 'Mike'])?>
 </body>
 </html>

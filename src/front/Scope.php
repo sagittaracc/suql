@@ -21,9 +21,16 @@ class Scope
         return $this;
     }
 
+    public function setValue($name, $value)
+    {
+        $this->values[$name] = $value;
+        return $this;
+    }
+
     public function setCallback($id, $callback)
     {
         $this->variables[$this->currentVariable]['callbackList'][$id] = $callback;
+        return $this;
     }
 
     public function serialize()
