@@ -15,7 +15,7 @@ class TodoList extends Component
                     return View::render(Todo::class, $this->todoList[$i]);
                 }).
             '</ul>'.
-            $this->computed('todoUndoneCount', [$this, 'getTodoUndoneCount']).
+            $this->computed('todoDoneCount', [$this, 'getTodoDoneCount']).
             ' of '.
             $this->computed('todoCount', [$this, 'getTodoCount']).
             ' tasks done'
@@ -27,10 +27,10 @@ class TodoList extends Component
         return count($this->todoList);
     }
 
-    public function getTodoUndoneCount()
+    public function getTodoDoneCount()
     {
         return count(array_filter($this->todoList, function ($todo) {
-            return !$todo['done'];
+            return $todo['done'] === true;
         }));
     }
 }
