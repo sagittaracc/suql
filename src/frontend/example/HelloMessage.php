@@ -1,5 +1,9 @@
 <?php
 
+use suql\frontend\html\component\Component;
+use suql\frontend\html\element\Input;
+use suql\frontend\html\view\View;
+
 class HelloMessage extends Component
 {
     public $name;
@@ -14,7 +18,7 @@ class HelloMessage extends Component
                 ->bind('onkeyup', function () {
                     return $this->setState(['name' => Input::currentValue()]);
                 }) .
-            Each::range(0, 4, function ($i) {
+            $this->range(0, 4, function ($i) {
                 return View::render(CountComponent::class, ['count' => $i]);
             })
         ;

@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\frontend\html\element;
+
 abstract class Element
 {
     protected $name;

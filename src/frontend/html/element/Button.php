@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\frontend\html\element;
+
 class Button extends Element
 {
     private $caption;

@@ -1,5 +1,7 @@
 <?php
 
+use suql\frontend\html\component\Component;
+
 class CountComponent extends Component
 {
     public $count;

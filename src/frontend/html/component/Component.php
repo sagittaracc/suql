@@ -1,5 +1,10 @@
 <?php
 
+namespace suql\frontend\html\component;
+
+use suql\frontend\html\element\Button;
+use suql\frontend\html\element\Input;
+
 abstract class Component
 {
     private $scope;
@@ -20,7 +25,8 @@ abstract class Component
 
     private function className()
     {
-        return static::class . $this->uid;
+        $className = (new \ReflectionClass($this))->getShortName();
+        return $className . $this->uid;
     }
 
     public function setState($obj)
@@ -36,7 +42,7 @@ abstract class Component
     {
         $view = $this->view();
 
-        $properties = (new ReflectionObject($this))->getProperties(ReflectionProperty::IS_PUBLIC);
+        $properties = (new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC);
         foreach ($properties as $property) {
             $propertyName = $property->name;
             $view = str_replace('{{'.$propertyName.'}}', $this->$propertyName, $view);
@@ -85,6 +91,17 @@ abstract class Component
     public function button()
     {
         return new Button;
+    }
+
+    public function range($start, $end, $callback)
+    {
+        $str = '';
+
+        for ($i = $start; $i <= $end; $i++) {
+            $str .= $callback($i);
+        }
+
+        return $str;
     }
 
     abstract public function view();

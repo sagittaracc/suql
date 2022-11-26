@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\frontend\html\element;
+
 class Input extends Element
 {
     public static function currentValue()

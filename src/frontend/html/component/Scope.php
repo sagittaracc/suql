@@ -1,5 +1,7 @@
 <?php
 
+namespace suql\frontend\html\component;
+
 class Scope
 {
     private $values = [];
