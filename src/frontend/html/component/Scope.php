@@ -23,9 +23,9 @@ class Scope
         return $this;
     }
 
-    public function setValue($name, $value)
+    public function setValue($value)
     {
-        $this->values[$name] = $value;
+        $this->values[$this->currentVariable] = $value;
         return $this;
     }
 

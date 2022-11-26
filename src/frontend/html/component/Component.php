@@ -72,9 +72,20 @@ abstract class Component
     {
         $id = uniqid();
 
-        $this->scope->addVariable($name)->setValue($name, $this->$name)->setCallback($id, 'function (el, value) { el.textContent = value }');
+        $this->scope->addVariable($name)->setValue($this->$name)->setCallback($id, 'function (el, value) { el.textContent = value }');
 
         return '<span id="'.$id.'">{{'.$name.'}}</span>';
+    }
+
+    public function computed($name, $callback)
+    {
+        $id = uniqid();
+
+        $value = call_user_func_array([$callback[0], $callback[1]], []);
+
+        $this->scope->addVariable($name)->setValue($value)->setCallback($id, 'function (el, value) { el.textContent = value }');
+
+        return '<span id="'.$id.'">'.$value.'</span>';
     }
 
     public function textInput($name)

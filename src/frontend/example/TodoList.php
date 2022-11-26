@@ -7,19 +7,6 @@ class TodoList extends Component
 {
     public $todoList;
 
-    public $todoCount;
-
-    public $todoUndoneCount;
-
-    function __construct($properties)
-    {
-        parent::__construct($properties);
-        $this->todoCount = count($this->todoList);
-        $this->todoUndoneCount = count(array_filter($this->todoList, function ($todo) {
-            return !$todo['done'];
-        }));
-    }
-
     public function view()
     {
         return
@@ -28,7 +15,22 @@ class TodoList extends Component
                     return View::render(Todo::class, $this->todoList[$i]);
                 }).
             '</ul>'.
-            $this->variable('todoUndoneCount').' of '.$this->variable('todoCount').' tasks done'
+            $this->computed('todoUndoneCount', [$this, 'getTodoUndoneCount']).
+            ' of '.
+            $this->computed('todoCount', [$this, 'getTodoCount']).
+            ' tasks done'
         ;
+    }
+
+    public function getTodoCount()
+    {
+        return count($this->todoList);
+    }
+
+    public function getTodoUndoneCount()
+    {
+        return count(array_filter($this->todoList, function ($todo) {
+            return !$todo['done'];
+        }));
     }
 }
