@@ -1,7 +1,6 @@
 <?php
 
 use suql\frontend\html\component\Component;
-use suql\frontend\html\view\View;
 
 class TodoList extends Component
 {
@@ -20,15 +19,12 @@ class TodoList extends Component
                         aria-describedby="button-add">
                     <button
                         type="button"
-                        class="btn btn-primary"
-                        id="button-id">
+                        class="btn btn-primary">
                         <i class="bi bi-plus"></i>
                     </button>
                 </div>
                 <div class="list-group mb-3">'.
-                    $this->range(0, count($this->todoList) - 1, function ($i) {
-                        return View::render(Todo::class, $this->todoList[$i]);
-                    }).
+                    $this->repeat(Todo::class, $this->todoList).
                 '</div>
                 <div class="row">
                     <div class="col text-start">
@@ -36,16 +32,12 @@ class TodoList extends Component
                             <div
                                 class="progress-bar bg-warning"
                                 role="progressbar"
-                                style="width: 50%"
-                                aria-valuenow="50"
+                                style="width: '.$this->getProgress().'%"
+                                aria-valuenow="33"
                                 aria-valuemin="0"
-                                aria-valuemax="100">
-                                '.
-                                $this->computed('todoDoneCount', [$this, 'getTodoDoneCount']).
-                                ' of '.
-                                $this->computed('todoCount', [$this, 'getTodoCount']).
-                                ' tasks done
-                            </div>
+                                aria-valuemax="100">'.
+                                $this->computed('progressString', [$this, 'getProgressString']).
+                            '</div>
                         </div>
                     </div>
                     <div class="col text-end">
@@ -66,5 +58,15 @@ class TodoList extends Component
         return count(array_filter($this->todoList, function ($todo) {
             return $todo['done'] === true;
         }));
+    }
+
+    public function getProgress()
+    {
+        return round($this->getTodoDoneCount() / $this->getTodoCount() * 100);
+    }
+
+    public function getProgressString()
+    {
+        return $this->getTodoDoneCount() . ' of ' . $this->getTodoCount() . ' tasks done';
     }
 }

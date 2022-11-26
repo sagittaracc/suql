@@ -35,7 +35,8 @@
     <?=View::render(TodoList::class, [
         'todoList' => [
             ['id' => 1, 'todo' => 'do work', 'done' => true],
-            ['id' => 2, 'todo' => 'sleep enough', 'done' => false],
+            ['id' => 2, 'todo' => 'sleep enough', 'done' => true],
+            ['id' => 3, 'todo' => 'wake up early', 'done' => false],
         ],
     ])?>
     <script src="../../../vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>

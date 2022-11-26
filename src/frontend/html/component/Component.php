@@ -4,12 +4,15 @@ namespace suql\frontend\html\component;
 
 use suql\frontend\html\element\Button;
 use suql\frontend\html\element\Input;
+use suql\frontend\html\view\View;
 
 abstract class Component
 {
     private $scope;
 
     private $uid;
+
+    private $useJs;
 
     function __construct($properties)
     {
@@ -21,6 +24,12 @@ abstract class Component
         }
 
         $this->scope = new Scope;
+    }
+
+    public function useJs($useJs)
+    {
+        return $this->useJs = $useJs;
+        return $this;
     }
 
     private function className()
@@ -49,7 +58,7 @@ abstract class Component
             $view = str_replace('{{'.$propertyName.'}}', $this->$propertyName, $view);
         }
 
-        $js = $this->getJs();
+        $js = $this->useJs ? $this->getJs() : '';
 
         return $view . $js;
     }
@@ -111,6 +120,17 @@ abstract class Component
 
         for ($i = $start; $i <= $end; $i++) {
             $str .= $callback($i);
+        }
+
+        return $str;
+    }
+
+    public function repeat($component, $list)
+    {
+        $str = '';
+
+        for ($i = 0; $i < count($list); $i++) {
+            $str .= View::render($component, $list[$i], false);
         }
 
         return $str;
