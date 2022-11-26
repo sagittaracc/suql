@@ -45,6 +45,7 @@ abstract class Component
         $properties = (new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC);
         foreach ($properties as $property) {
             $propertyName = $property->name;
+            if (strpos($view, '{{'.$propertyName.'}}') === false) continue;
             $view = str_replace('{{'.$propertyName.'}}', $this->$propertyName, $view);
         }
 
