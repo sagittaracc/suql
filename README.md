@@ -10,6 +10,9 @@
   </a>
 </div>
 
+### SuQL
+SuQL (pronounced 'suckle') is a fullstack framework.
+
 ### Installation
 `composer require sagittaracc/suql`
 
