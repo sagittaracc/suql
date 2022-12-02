@@ -135,6 +135,15 @@ abstract class Component
         return new Button;
     }
 
+    public function inputValue($name)
+    {
+        $id = uniqid();
+
+        $this->scope->addVariable($name)->setCallback($id, 'function (el, value) { el.value = value }');
+
+        return ' id="'.$id.'"';
+    }
+
     public function range($start, $end, $callback)
     {
         $str = '';

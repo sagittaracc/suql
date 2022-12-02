@@ -16,7 +16,9 @@ class TodoList extends Component
                         type="text"
                         class="form-control"
                         placeholder="What needs to be done?"
-                        aria-describedby="button-add">
+                        aria-describedby="button-add"'.
+                        $this->inputValue('task')
+                        .'>
                     <button
                         type="button"
                         class="btn btn-primary">
