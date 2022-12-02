@@ -42,6 +42,9 @@ abstract class Component
     {
         $s = [];
         foreach ($obj as $prop => $value) {
+            if (is_null($value)) {
+                $value = "null";
+            }
             $s[] = "$prop:$value";
         }
         return $this->className().'.setState({'.implode(',', $s).'})';
@@ -142,6 +145,11 @@ abstract class Component
         $this->scope->addVariable($name)->setCallback($id, 'function (el, value) { el.value = value }');
 
         return ' id="'.$id.'"';
+    }
+
+    public function event($event, $callback)
+    {
+        return $event.'="'.$callback().'"';
     }
 
     public function range($start, $end, $callback)

@@ -21,7 +21,11 @@ class TodoList extends Component
                         .'>
                     <button
                         type="button"
-                        class="btn btn-primary">
+                        class="btn btn-primary"'.
+                        $this->event('onclick', function () {
+                            return $this->setState(['task' => null]);
+                        })
+                        .'>
                         <i class="bi bi-plus"></i>
                     </button>
                 </div>
