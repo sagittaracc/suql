@@ -97,6 +97,22 @@ abstract class Component
         return '<span id="'.$id.'">'.$value.'</span>';
     }
 
+    public function computedAttribute($name, $options)
+    {
+        foreach ($options as $attr => $callback) break;
+
+        $id = uniqid();
+
+        $params = $callback();
+        $template = $params[0];
+        $value = $params[1];
+        $value = str_replace('{{value}}', $value, $template);
+
+        $this->scope->addVariable($name)->setValue($value)->setCallback($id, 'function (el, value) { el.setAttribute("'.$attr.'", "'.$template.'".replace("{{value}}", value)) }');
+
+        return ' id="'.$id.'" '.$attr . '="'.$value.'"';
+    }
+
     public function textInput($name)
     {
         $id = uniqid();
