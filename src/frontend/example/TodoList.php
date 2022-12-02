@@ -32,10 +32,11 @@ class TodoList extends Component
                             <div
                                 class="progress-bar bg-warning"
                                 role="progressbar"'.
-                                $this->computedAttribute('progressWidth', [
-                                    'style' => function () {
-                                        return ['width: {{value}}%', $this->getProgress()];
-                                    }])
+                                $this->computedAttribute([
+                                    'progressWidth' => function () {
+                                        return ['style', 'width: {{value}}%', $this->getProgress()];
+                                    }
+                                ])
                                 .'
                                 aria-valuenow="33"
                                 aria-valuemin="0"
