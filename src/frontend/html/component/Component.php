@@ -99,19 +99,23 @@ abstract class Component
 
     public function computedAttribute($options)
     {
-        foreach ($options as $name => $callback) break;
-
         $id = uniqid();
 
-        $params = $callback();
-        $attr = $params[0];
-        $template = $params[1];
-        $value = $params[2];
-        $value = str_replace('{{value}}', $value, $template);
+        $html = ' id="'.$id.'"';
 
-        $this->scope->addVariable($name)->setValue($value)->setCallback($id, 'function (el, value) { el.setAttribute("'.$attr.'", "'.$template.'".replace("{{value}}", value)) }');
+        foreach ($options as $name => $callback) {
+            $params = $callback();
+            $attr = $params[0];
+            $template = $params[1];
+            $value = $params[2];
+            $value = str_replace('{{value}}', $value, $template);
+    
+            $this->scope->addVariable($name)->setValue($value)->setCallback($id, 'function (el, value) { el.setAttribute("'.$attr.'", "'.$template.'".replace("{{value}}", value)) }');
+            $html .= ' '.$attr.'="'.$value.'"';
+        }
 
-        return ' id="'.$id.'" '.$attr . '="'.$value.'"';
+
+        return $html;
     }
 
     public function textInput($name)
