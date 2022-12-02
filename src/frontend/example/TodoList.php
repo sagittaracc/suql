@@ -24,7 +24,7 @@ class TodoList extends Component
                     </button>
                 </div>
                 <div class="list-group mb-3">'.
-                    $this->repeat(Todo::class, $this->todoList).
+                    $this->repeat(Todo::class, 'todoList').
                 '</div>
                 <div class="row">
                     <div class="col text-start">

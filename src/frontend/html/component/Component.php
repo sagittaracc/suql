@@ -125,12 +125,14 @@ abstract class Component
         return $str;
     }
 
-    public function repeat($component, $list)
+    public function repeat($component, $prop)
     {
         $str = '';
 
-        for ($i = 0; $i < count($list); $i++) {
-            $str .= View::render($component, $list[$i], false);
+        $this->scope->addVariable($prop)->setValue($this->$prop);
+
+        for ($i = 0; $i < count($this->$prop); $i++) {
+            $str .= View::render($component, $this->$prop[$i], false);
         }
 
         return $str;
