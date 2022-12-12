@@ -1,4 +1,7 @@
-<div align="center"><img src="https://i.postimg.cc/bvpF0Xhd/suql.png" alt="suql-sugar-sql" border="0"></div>
+<div align="center">
+  <!--img src="https://i.postimg.cc/bvpF0Xhd/suql.png" alt="suql-sugar-sql" border="0"-->
+  <img src="https://i.postimg.cc/xTyCDwTp/4082150-200.png" alt="suckle" border="0">
+</div>
 <h1 align="center">SuQL</h1>
 <div align="center">
   <img src="https://img.shields.io/github/v/release/sagittaracc/suql" alt="GitHub release (latest by date)"/>
