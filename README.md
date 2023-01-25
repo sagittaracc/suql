@@ -22,7 +22,7 @@ SuQL (pronounced 'suckle') is a fullstack framework.
 You can read the documentation [here](https://github.com/sagittaracc/suql/blob/master/docs/index.md)
 
 ### Requirements
-PHP >= 7.3
+PHP >= 8.0
 
 ### Tests
 To run tests:
