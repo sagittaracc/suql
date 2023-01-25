@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9814eca48f326dd018b575e85a05a38",
+    "content-hash": "eb9b7b188203a19408aeb5d52d39bae4",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -596,6 +596,47 @@
                 "source": "https://github.com/sagittaracc/html/tree/v0.1"
             },
             "time": "2022-07-26T07:26:02+00:00"
+        },
+        {
+            "name": "sagittaracc/php-python-decorator",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sagittaracc/php-python-decorator.git",
+                "reference": "7166e60d75974325cc7a7f985a30dd037c7b1148"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sagittaracc/php-python-decorator/zipball/7166e60d75974325cc7a7f985a30dd037c7b1148",
+                "reference": "7166e60d75974325cc7a7f985a30dd037c7b1148",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sagittaracc\\PhpPythonDecorator\\": "src/",
+                    "Sagittaracc\\PhpPythonDecorator\\tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "sagittaracc",
+                    "email": "sagittaracc@gmail.com"
+                }
+            ],
+            "description": "Python style decorator for PHP",
+            "support": {
+                "issues": "https://github.com/sagittaracc/php-python-decorator/issues",
+                "source": "https://github.com/sagittaracc/php-python-decorator/tree/v1.4.0"
+            },
+            "time": "2023-01-16T10:54:58+00:00"
         },
         {
             "name": "sagittaracc/placeholder",
