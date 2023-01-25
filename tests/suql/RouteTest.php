@@ -14,4 +14,11 @@ final class RouteTest extends TestCase
         $expected = 'I am working with an element by id 1 and its name is yuriy';
         $this->assertEquals($expected, $actual);
     }
+
+    public function testFailRoute(): void
+    {
+        $this->expectExceptionMessage('404');
+        $app = new App();
+        $app->run('/site/main/fail');
+    }
 }
