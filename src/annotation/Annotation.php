@@ -2,6 +2,8 @@
 
 namespace suql\annotation;
 
+use suql\annotation\attributes\Table;
+
 /**
  * Разбор аннотаций
  * 
@@ -32,8 +34,14 @@ abstract class Annotation
     public function readBy($regex)
     {
         $model = new \ReflectionClass($this->modelNameToReadFrom);
-        $file = file_get_contents($model->getFileName());
-        preg_match($regex, $file, $matches);
-        return $matches;
+        $attributes = $model->getAttributes();
+        foreach ($attributes as $attribute) {
+            $instance = $attribute->newInstance();
+            if ($instance instanceof Table) {
+                return $instance;
+            }
+        }
+
+        return null;
     }
 }

@@ -26,14 +26,11 @@ class TableAnnotation extends Annotation
      */
     public function read()
     {
-        $matches = parent::readBy(self::REGEX);
+        $table = parent::readBy(self::REGEX);
 
-        if (!empty($matches)) {
-            $this->table = $matches['table'];
-
-            if (isset($matches['alias']) && !empty($matches['alias'])) {
-                $this->alias = $matches['alias'];
-            }
+        if ($table !== null) {
+            $this->table = $table->name;
+            $this->alias = $table->alias;
         }
 
         return $this;
