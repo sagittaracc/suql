@@ -13,8 +13,7 @@ class Route
     function __construct(
         public string $endpoint,
         public string $verb = 'GET'
-    ) {
-    }
+    ) {}
 }
 
 abstract class SuQLRoute
