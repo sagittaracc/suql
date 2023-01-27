@@ -2,10 +2,11 @@
 
 namespace test\suql\models;
 
+use suql\annotation\attributes\Table;
 use test\suql\models\tables\TestMySQLTable;
 use test\suql\schema\AppScheme;
 
-# [Table(name="table_16")]
+#[Table(name: "table_16")]
 class Query16 extends TestMySQLTable
 {
     protected static $schemeClass = AppScheme::class;

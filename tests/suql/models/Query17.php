@@ -2,9 +2,10 @@
 
 namespace test\suql\models;
 
+use suql\annotation\attributes\Table;
 use test\suql\models\tables\TestMySQLTable;
 
-# [Table(name="view_17")]
+#[Table(name: "view_17")]
 class Query17 extends TestMySQLTable
 {
     public function query()

@@ -2,11 +2,12 @@
 
 namespace test\suql\models;
 
+use suql\annotation\attributes\Table;
 use suql\builder\MySQLBuilder;
 use suql\syntax\entity\SuQLTable;
 use test\suql\schema\AppScheme;
 
-# [Table(name="products")]
+#[Table(name: "products")]
 class Products extends SuQLTable
 {
     protected static $schemeClass = AppScheme::class;
