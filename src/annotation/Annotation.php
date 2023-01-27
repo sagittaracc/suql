@@ -28,16 +28,14 @@ abstract class Annotation
     }
     /**
      * Разбор запрошенной аннотации по регулярному выражению
-     * @param string $regex
-     * @return array
      */
-    public function readBy($regex)
+    public function readBy(string $attributeClass)
     {
         $model = new \ReflectionClass($this->modelNameToReadFrom);
         $attributes = $model->getAttributes();
         foreach ($attributes as $attribute) {
             $instance = $attribute->newInstance();
-            if ($instance instanceof Table) {
+            if ($instance instanceof $attributeClass) {
                 return $instance;
             }
         }

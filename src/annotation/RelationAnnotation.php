@@ -62,9 +62,9 @@ class RelationAnnotation extends Annotation
     {
         $regex = str_replace('{SECOND_TABLE}', $this->tableNameToReadFor, static::REGEX);
         
-        $matches = parent::readBy($regex);
+        $matches = parent::readBy('');
 
-        if (!empty($matches)) {
+        if ($matches !== null) {
             $this->relation = $matches['relation'];
             $this->second_model = $matches['second_model'];
             $this->second_table = $this->tableNameToReadFor;

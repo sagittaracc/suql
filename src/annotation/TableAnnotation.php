@@ -2,6 +2,8 @@
 
 namespace suql\annotation;
 
+use suql\annotation\attributes\Table;
+
 /**
  * Разбор аннотаций таблиц
  * 
@@ -26,7 +28,7 @@ class TableAnnotation extends Annotation
      */
     public function read()
     {
-        $table = parent::readBy(self::REGEX);
+        $table = parent::readBy(Table::class);
 
         if ($table !== null) {
             $this->table = $table->name;
